@@ -664,11 +664,54 @@ function renderYearHeader() {
 
 /* ─── RENDER: DETAIL PANEL ─── */
 function renderDetail(game, event, color) {
+  const summaryHtml = Array.isArray(event.summary_items) && event.summary_items.length
+    ? `
+      <div class="d-section">
+        <div class="d-section-title">주요 업데이트</div>
+        <ul class="d-summary-list">
+          ${event.summary_items.map(item => `<li>${md(item)}</li>`).join("")}
+        </ul>
+      </div>
+    `
+    : "";
+
+  const impactHtml = event.impact
+    ? `
+      <div class="d-stats">
+        <div class="d-stat">
+          <span class="d-stat-lbl">영향도</span>
+          <span class="d-stat-val">${esc(event.impact)}</span>
+        </div>
+      </div>
+    `
+    : "";
+
+  const noteHtml = event.note
+    ? `
+      <div class="d-section">
+        <div class="d-section-title">주요 변경사항 메모</div>
+        <div class="d-note">${md(event.note)}</div>
+      </div>
+    `
+    : "";
+
+  const sourceHtml = event.source_url
+    ? `
+      <a class="d-link" href="${esc(event.source_url)}" target="_blank" rel="noopener noreferrer">
+        원문 패치노트 열기
+      </a>
+    `
+    : "";
+
   document.getElementById("detail").innerHTML = `
-    <div class="d-badge" style="border-color:${color};color:${color}">${"패치노트"}</div>
+    <div class="d-badge" style="border-color:${color};color:${color}">패치노트</div>
     <div class="d-game" style="color:${color}">◉ ${esc(game.name)}</div>
     <div class="d-title">${md(event.title)}</div>
     <div class="d-date">${hl(event.date_display)}</div>
+    ${impactHtml}
+    ${summaryHtml}
+    ${noteHtml}
+    ${sourceHtml}
   `;
 }
 

@@ -408,6 +408,32 @@ body {
   .detail-card { max-height: 200px; }
 }
 
+/* ── HORIZONTAL CONTROL TOOLBAR ── */
+.controls {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  padding-bottom: 2px;
+}
+.controls::-webkit-scrollbar { height: 4px; }
+.controls::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+.ctrl-row {
+  flex: 0 0 auto;
+  overflow: visible;
+}
+.controls .ctrl-row + .ctrl-row {
+  border-left: 1px solid var(--border);
+  padding-left: 10px;
+}
+.controls .zoom-ctrl { margin-left: 10px; }
+.controls .yr-jumps { margin-left: 8px; }
+
+/* ── IMPACT MULTI FILTER ── */
 .impact-row { gap: 8px; }
 .filter-label {
   flex-shrink: 0;
@@ -420,7 +446,7 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 .impact-btn {
   padding: 4px 9px;
@@ -444,6 +470,76 @@ body {
   background: #0f172a;
   color: white;
   border-color: #0f172a;
+}
+
+/* ── RESPONSIVE / MOBILE ── */
+@media (max-width: 860px) {
+  html, body {
+    height: auto;
+    min-height: 100%;
+    overflow: auto;
+  }
+  body { overflow-x: hidden; }
+  .page {
+    height: auto;
+    min-height: 100vh;
+    padding: 10px;
+    gap: 8px;
+  }
+  .header {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 6px 10px;
+  }
+  .header h1 {
+    font-size: 16px;
+  }
+  .legend {
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+  .controls {
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+  .search-wrap input { width: 108px; }
+  .zoom-ctrl input[type=range] { width: 72px; }
+  .minimap-sub { display: none; }
+  .shell {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
+  }
+  .timeline-card {
+    height: 62vh;
+    min-height: 420px;
+  }
+  .detail-card {
+    max-height: none;
+    min-height: 260px;
+  }
+  :root { --label-w: 150px; }
+  .game-label { padding-left: 12px; padding-right: 8px; }
+}
+
+@media (max-width: 560px) {
+  .page { padding: 8px; }
+  .header h1 { font-size: 15px; }
+  .timeline-card {
+    height: 56vh;
+    min-height: 360px;
+  }
+  .detail-card {
+    min-height: 240px;
+    padding: 12px;
+  }
+  :root { --label-w: 132px; }
+  .game-name { font-size: 11px; }
+  .game-rdt { font-size: 9px; }
+  .legend { font-size: 10px; gap: 8px; }
 }
 
 
@@ -534,7 +630,7 @@ body {
       <div id="gameFilters" class="game-filters"></div>
       <div class="yr-jumps" id="yrJumps"></div>
     </div>
-    <!-- CONTROLS ROW 3: IMPACT FILTER -->
+    <!-- IMPACT MULTI FILTER -->
     <div class="ctrl-row impact-row">
       <span class="filter-label">영향도</span>
       <div class="impact-filters" id="impactFilters">
@@ -606,7 +702,7 @@ const ROW_BOT = 18;
 let timelineW  = BASE_W;
 let activeGames = new Set(games.map(g => g.name));
 let activeType  = "all";
-let activeImpact = "all";
+let activeImpacts = null; // null = 전체, Set = 선택 영향도 복수 필터
 let searchQ     = "";
 let selNode     = null;
 
@@ -778,7 +874,7 @@ function renderRows() {
 
     const filtered = game.events.filter(ev => {
       if (activeType !== "all" && ev.type !== activeType) return false;
-      if (activeImpact !== "all" && ev.impact !== activeImpact) return false;
+      if (activeImpacts && !activeImpacts.has(ev.impact)) return false;
       if (searchQ) {
         const q = searchQ.toLowerCase();
         return ev.title.toLowerCase().includes(q) || ev.date_display.includes(q);
@@ -908,6 +1004,12 @@ function renderRows() {
         evEl.classList.add("selected");
         selNode = evEl;
         renderDetail(game, event, color);
+        if (window.matchMedia("(max-width: 860px)").matches) {
+          requestAnimationFrame(() => {
+            const detailCard = document.querySelector(".detail-card");
+            if (detailCard) detailCard.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+        }
       });
       track.appendChild(evEl);
 
@@ -937,8 +1039,9 @@ function renderMinimap() {
   barsEl.innerHTML = "";
 
   const quarters = [];
-  for (let yr = 2017; yr <= 2026; yr++)
+  YEARS.forEach(yr => {
     for (let q = 1; q <= 4; q++) quarters.push({yr, q});
+  });
 
   const counts = quarters.map(({yr, q}) => {
     let c = 0;
@@ -946,7 +1049,7 @@ function renderMinimap() {
       if (!activeGames.has(g.name)) return;
       g.events.forEach(ev => {
         if (activeType !== "all" && ev.type !== activeType) return;
-        if (activeImpact !== "all" && ev.impact !== activeImpact) return;
+        if (activeImpacts && !activeImpacts.has(ev.impact)) return;
         if (ev.year !== yr || ev.quarter !== q) return;
         if (searchQ && !(ev.title.toLowerCase().includes(searchQ.toLowerCase()) || ev.date_display.includes(searchQ))) return;
         c++;
@@ -970,8 +1073,9 @@ function renderMinimap() {
     bar.style.background = `hsl(${h},${s}%,${l}%)`;
     bar.title = `${yr} Q${q}: ${counts[i]}건`;
     bar.addEventListener("click", () => {
-      const frac = (yr - 2017 + (q - 1) / 4) / 10;
-      document.getElementById("viewport").scrollTo({left: frac * timelineW - 40, behavior: "smooth"});
+      const month = String((q - 1) * 3 + 1).padStart(2, "0");
+      const targetX = dx(`${yr}-${month}-01`);
+      document.getElementById("viewport").scrollTo({left: Math.max(0, targetX - 40), behavior: "smooth"});
     });
     barsEl.appendChild(bar);
   });
@@ -1056,16 +1160,37 @@ document.querySelectorAll(".type-btn").forEach(btn => {
   });
 });
 
-/* ─── SETUP: IMPACT FILTER ─── */
+/* ─── SETUP: IMPACT MULTI FILTER ─── */
+function updateImpactButtons() {
+  const allBtn = document.querySelector('.impact-btn[data-impact="all"]');
+  if (allBtn) allBtn.classList.toggle("active", activeImpacts === null);
+
+  document.querySelectorAll('.impact-btn:not([data-impact="all"])').forEach(btn => {
+    btn.classList.toggle("active", !!activeImpacts && activeImpacts.has(btn.dataset.impact));
+  });
+}
+
 document.querySelectorAll(".impact-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".impact-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    activeImpact = btn.dataset.impact;
+    const impact = btn.dataset.impact;
+
+    if (impact === "all") {
+      activeImpacts = null;
+    } else {
+      if (activeImpacts === null) activeImpacts = new Set();
+      if (activeImpacts.has(impact)) activeImpacts.delete(impact);
+      else activeImpacts.add(impact);
+
+      // 모든 개별 필터가 해제되면 전체 모드로 복귀
+      if (activeImpacts.size === 0) activeImpacts = null;
+    }
+
+    updateImpactButtons();
     renderRows();
     renderMinimap();
   });
 });
+updateImpactButtons();
 
 /* ─── SETUP: SEARCH ─── */
 const searchInput = document.getElementById("searchInput");

@@ -408,6 +408,45 @@ body {
   .detail-card { max-height: 200px; }
 }
 
+.impact-row { gap: 8px; }
+.filter-label {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 800;
+  color: #475569;
+  padding-left: 2px;
+}
+.impact-filters {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.impact-btn {
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: white;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--muted);
+  transition: all 0.13s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.impact-btn:hover:not(.active) {
+  border-color: #94a3b8;
+  color: var(--text);
+  background: #f8fafc;
+}
+.impact-btn.active {
+  background: #0f172a;
+  color: white;
+  border-color: #0f172a;
+}
+
+
 .d-section {
   margin-top: 10px;
   padding: 10px 11px;
@@ -495,6 +534,17 @@ body {
       <div id="gameFilters" class="game-filters"></div>
       <div class="yr-jumps" id="yrJumps"></div>
     </div>
+    <!-- CONTROLS ROW 3: IMPACT FILTER -->
+    <div class="ctrl-row impact-row">
+      <span class="filter-label">영향도</span>
+      <div class="impact-filters" id="impactFilters">
+        <button class="impact-btn active" data-impact="all">전체</button>
+        <button class="impact-btn" data-impact="최상">최상</button>
+        <button class="impact-btn" data-impact="상">상</button>
+        <button class="impact-btn" data-impact="중">중</button>
+        <button class="impact-btn" data-impact="하">하</button>
+      </div>
+    </div>
   </div>
 
   <!-- MINIMAP -->
@@ -556,6 +606,7 @@ const ROW_BOT = 18;
 let timelineW  = BASE_W;
 let activeGames = new Set(games.map(g => g.name));
 let activeType  = "all";
+let activeImpact = "all";
 let searchQ     = "";
 let selNode     = null;
 
@@ -727,6 +778,7 @@ function renderRows() {
 
     const filtered = game.events.filter(ev => {
       if (activeType !== "all" && ev.type !== activeType) return false;
+      if (activeImpact !== "all" && ev.impact !== activeImpact) return false;
       if (searchQ) {
         const q = searchQ.toLowerCase();
         return ev.title.toLowerCase().includes(q) || ev.date_display.includes(q);
@@ -894,6 +946,7 @@ function renderMinimap() {
       if (!activeGames.has(g.name)) return;
       g.events.forEach(ev => {
         if (activeType !== "all" && ev.type !== activeType) return;
+        if (activeImpact !== "all" && ev.impact !== activeImpact) return;
         if (ev.year !== yr || ev.quarter !== q) return;
         if (searchQ && !(ev.title.toLowerCase().includes(searchQ.toLowerCase()) || ev.date_display.includes(searchQ))) return;
         c++;
@@ -1000,6 +1053,17 @@ document.querySelectorAll(".type-btn").forEach(btn => {
     btn.classList.add("active");
     activeType = btn.dataset.type;
     renderRows(); renderMinimap();
+  });
+});
+
+/* ─── SETUP: IMPACT FILTER ─── */
+document.querySelectorAll(".impact-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".impact-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    activeImpact = btn.dataset.impact;
+    renderRows();
+    renderMinimap();
   });
 });
 

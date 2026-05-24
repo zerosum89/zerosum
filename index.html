@@ -301,18 +301,17 @@ body {
   cursor: pointer; user-select: none; z-index: 5;
 }
 .ev-card {
-  position: relative; min-height: 50px;
-  padding: 7px 9px 7px 26px;
+  position: relative; min-height: 42px;
+  padding: 10px 9px 9px 26px;
   background: white; border: 1.5px solid #e2e8f0;
   border-radius: 8px;
   box-shadow: 0 1px 2px rgba(15,23,42,0.04);
   transition: box-shadow 0.13s, transform 0.1s;
 }
 .ev-dot {
-  position: absolute; left: 9px; top: 12px;
+  position: absolute; left: 9px; top: 15px;
   width: 10px; height: 10px; border-radius: 50%;
 }
-.ev-date { font-size: 9.5px; color: var(--muted); margin-bottom: 2px; line-height: 1.2; }
 .ev-title {
   font-size: 10.5px; font-weight: 500; line-height: 1.4;
   word-break: keep-all; overflow-wrap: anywhere;
@@ -635,6 +634,75 @@ body {
 }
 
 
+/* ── COMPACT TOP BAR ── */
+.header,
+.minimap-hdr,
+.legend {
+  display: none !important;
+}
+
+.page {
+  padding: 6px 8px;
+  gap: 5px;
+}
+
+.controls {
+  gap: 8px;
+  padding-bottom: 0 !important;
+}
+
+.controls::-webkit-scrollbar {
+  height: 3px;
+}
+
+.ctrl-row {
+  min-height: 30px;
+}
+
+.search-wrap {
+  padding: 3px 8px;
+}
+
+.type-btn,
+.all-chip,
+.gchip,
+.yjbtn {
+  line-height: 1.2;
+}
+
+.minimap-section {
+  margin: 0;
+}
+
+.minimap-wrap {
+  height: 34px;
+  padding: 3px 8px 2px;
+  border-radius: 7px;
+}
+
+.shell {
+  gap: 6px;
+}
+
+.timeline-card,
+.detail-card {
+  border-radius: 10px;
+}
+
+@media (max-width: 860px) {
+  .page {
+    padding: 6px;
+    gap: 5px;
+  }
+  .controls {
+    padding-bottom: 2px !important;
+  }
+  .minimap-wrap {
+    height: 32px;
+  }
+}
+
+
 .d-section {
   margin-top: 10px;
   padding: 10px 11px;
@@ -687,12 +755,6 @@ body {
 </head>
 <body>
 <div class="page">
-
-  <!-- HEADER -->
-  <div class="header">
-    <h1>DB1 패치노트 원문 타임라인</h1>
-    <div class="legend">
-      <div class="legend-item"><span class="ldot release"></span>출시일</div>
       <div class="legend-item"><span class="ldot update"></span>업데이트</div>
     </div>
   </div>
@@ -727,10 +789,6 @@ body {
 
   <!-- MINIMAP -->
   <div class="minimap-section">
-    <div class="minimap-hdr">
-      <span>타임라인 밀도</span>
-      <span class="minimap-sub">월별 출시·패치 수 · 클릭하여 해당 시점으로 이동</span>
-    </div>
     <div class="minimap-wrap" id="minimapWrap">
       <div class="minimap-bars" id="minimapBars"></div>
       <div class="minimap-viewport-window" id="minimapViewportWindow"></div>
@@ -1070,7 +1128,6 @@ function renderRows() {
       evEl.innerHTML = `
         <div class="ev-card" style="border-color:${bdrColor}${event.type==='release'?`;box-shadow:0 1px 6px ${shadowClr}`:''}">
           <div class="ev-dot" style="background:${dotColor}"></div>
-          <div class="ev-date">${hl(event.date_display)}</div>
           <div class="ev-title">${md(event.title)}</div>
         </div>`;
 

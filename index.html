@@ -411,6 +411,29 @@ body {
 /* ── MONTH-BASED TIMELINE LAYOUT ── */
 .timeline-card { position: relative; }
 
+.minimap-bars {
+  position: relative;
+  z-index: 1;
+}
+.minimap-viewport-window {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 8px;
+  width: 40px;
+  border: 2px solid #2563eb;
+  background: rgba(37, 99, 235, 0.14);
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.45), 0 1px 4px rgba(15,23,42,0.15);
+  z-index: 5;
+  pointer-events: none;
+  transition: left 0.08s linear, width 0.08s linear;
+}
+.minimap-today-line,
+.minimap-today-lbl {
+  display: none !important;
+}
+
 .year-band {
   position: absolute;
   top: 0;
@@ -722,8 +745,7 @@ body {
     </div>
     <div class="minimap-wrap" id="minimapWrap">
       <div class="minimap-bars" id="minimapBars"></div>
-      <div class="minimap-today-line" id="minimapTodayLine"></div>
-      <div class="minimap-today-lbl" id="minimapTodayLbl">기준일</div>
+      <div class="minimap-viewport-window" id="minimapViewportWindow"></div>
     </div>
   </div>
 
@@ -1162,7 +1184,10 @@ function renderAll() {
   renderYearHeader();
   renderRows();
   renderMinimap();
-  requestAnimationFrame(updateCurrentYearIndicator);
+  requestAnimationFrame(() => {
+    updateCurrentYearIndicator();
+    updateMinimapViewportWindow();
+  });
 }
 
 /* ─── SETUP: GAME CHIPS ─── */
@@ -1452,10 +1477,69 @@ renderMinimap = function() {
     barsEl.appendChild(bar);
   });
 
-  const todayFrac = (TODAY - START) / TOTAL;
-  document.getElementById("minimapTodayLine").style.left = (todayFrac * 100) + "%";
-  document.getElementById("minimapTodayLbl").style.left  = (todayFrac * 100) + "%";
+  updateMinimapViewportWindow();
 };
+
+function updateMinimapViewportWindow() {
+  const vp = document.getElementById("viewport");
+  const wrap = document.getElementById("minimapWrap");
+  const win = document.getElementById("minimapViewportWindow");
+  if (!vp || !wrap || !win || !timelineW) return;
+
+  const labelW = parseFloat(
+    getComputedStyle(document.documentElement).getPropertyValue("--label-w")
+  ) || 196;
+
+  const innerLeft = 8;
+  const innerRight = 8;
+  const minimapInnerW = Math.max(1, wrap.clientWidth - innerLeft - innerRight);
+  const visibleTimelineW = Math.max(1, vp.clientWidth - labelW);
+  const scrollLeft = Math.max(0, vp.scrollLeft);
+  const totalTimelineW = Math.max(1, timelineW);
+
+  let leftPx = innerLeft + (scrollLeft / totalTimelineW) * minimapInnerW;
+  let widthPx = (visibleTimelineW / totalTimelineW) * minimapInnerW;
+
+  widthPx = Math.max(18, Math.min(minimapInnerW, widthPx));
+
+  if (leftPx + widthPx > innerLeft + minimapInnerW) {
+    leftPx = innerLeft + minimapInnerW - widthPx;
+  }
+
+  win.style.left = `${Math.max(innerLeft, leftPx)}px`;
+  win.style.width = `${widthPx}px`;
+}
+
+function setupMinimapViewportWindow() {
+  const vp = document.getElementById("viewport");
+  const wrap = document.getElementById("minimapWrap");
+  if (!vp || !wrap || wrap.dataset.viewportWindowBound === "1") return;
+
+  wrap.dataset.viewportWindowBound = "1";
+
+  vp.addEventListener("scroll", updateMinimapViewportWindow, { passive: true });
+  window.addEventListener("resize", updateMinimapViewportWindow);
+
+  wrap.addEventListener("click", event => {
+    if (event.target && event.target.classList && event.target.classList.contains("mbar")) return;
+
+    const rect = wrap.getBoundingClientRect();
+    const innerLeft = 8;
+    const innerRight = 8;
+    const usableW = Math.max(1, rect.width - innerLeft - innerRight);
+    const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left - innerLeft) / usableW));
+
+    const labelW = parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue("--label-w")
+    ) || 196;
+    const visibleTimelineW = Math.max(1, vp.clientWidth - labelW);
+    const targetLeft = ratio * timelineW - visibleTimelineW / 2;
+
+    vp.scrollTo({ left: Math.max(0, targetLeft), behavior: "smooth" });
+  });
+
+  updateMinimapViewportWindow();
+}
 
 function updateCurrentYearIndicator() {
   const badge = document.getElementById("currentYearIndicator");
@@ -1484,12 +1568,14 @@ function setupCurrentYearIndicator() {
   vp.addEventListener("scroll", updateCurrentYearIndicator, { passive: true });
   window.addEventListener("resize", updateCurrentYearIndicator);
   updateCurrentYearIndicator();
+  updateMinimapViewportWindow();
 }
 
 
 /* ─── INIT ─── */
 setupGameChips();
 setupYearJumps();
+setupMinimapViewportWindow();
 setupCurrentYearIndicator();
 renderAll();
 </script>

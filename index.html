@@ -634,7 +634,8 @@ body {
 }
 
 
-/* ── COMPACT TOP BAR ── */
+/* ── COMPACT TOP BAR / SAFE HIDE ── */
+/* DOM은 제거하지 않고 CSS로만 숨긴다. 정규식 DOM 제거 시 HTML 구조가 깨질 수 있음. */
 .header,
 .minimap-hdr,
 .legend {
@@ -755,6 +756,12 @@ body {
 </head>
 <body>
 <div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>DB1 패치노트 원문 타임라인</h1>
+    <div class="legend">
+      <div class="legend-item"><span class="ldot release"></span>출시일</div>
       <div class="legend-item"><span class="ldot update"></span>업데이트</div>
     </div>
   </div>
@@ -789,6 +796,10 @@ body {
 
   <!-- MINIMAP -->
   <div class="minimap-section">
+    <div class="minimap-hdr">
+      <span>타임라인 밀도</span>
+      <span class="minimap-sub">월별 출시·패치 수 · 클릭하여 해당 시점으로 이동</span>
+    </div>
     <div class="minimap-wrap" id="minimapWrap">
       <div class="minimap-bars" id="minimapBars"></div>
       <div class="minimap-viewport-window" id="minimapViewportWindow"></div>

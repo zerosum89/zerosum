@@ -472,7 +472,8 @@ body {
 .q-lbl {
   display: none !important;
 }
-\n
+
+
 /* ── HORIZONTAL CONTROL TOOLBAR ── */
 .controls {
   flex: 0 0 auto;
@@ -764,7 +765,8 @@ const END     = new Date("2026-12-31T23:59:59+09:00");
 const TODAY   = new Date("2026-05-24T00:00:00+09:00");
 const TOTAL   = END - START;
 const YEARS   = [2020,2021,2022,2023,2024,2025,2026];
-const MONTH_W = 260;\nconst BASE_W  = Math.max(10800, YEARS.length * 12 * MONTH_W);
+const MONTH_W = 260;
+const BASE_W  = Math.max(10800, YEARS.length * 12 * MONTH_W);
 const CARD_W  = 220;
 const CARD_GAP= 16;
 const MIN_DIST= CARD_W + CARD_GAP;

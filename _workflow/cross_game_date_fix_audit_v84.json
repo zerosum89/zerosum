@@ -1,0 +1,15 @@
+{
+  "version": "v84_cross_game_date_fix_rebuild_deploy",
+  "total_fix_candidates": 136,
+  "game_counts": {
+    "나크": 119,
+    "오딘": 17
+  },
+  "fields_to_update": [
+    "실제 패치일",
+    "항목명",
+    "패치노트 제목"
+  ],
+  "source": "cross_game_date_false_positive_candidates_v83.json",
+  "note": "Idempotent updates. Re-running overwrites same values."
+}

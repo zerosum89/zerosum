@@ -1,0 +1,23 @@
+[START] Patchnote View Model export/build v76_standard_general
+[DB] 36f3453a-cf42-8111-9282-c01dad5a0835
+[QUERY] batch=1 already=0
+[QUERY] batch=1 got=100 total=100
+[QUERY] batch=2 already=100
+[QUERY] batch=2 got=100 total=200
+[QUERY] batch=3 already=200
+[QUERY] batch=3 got=100 total=300
+[QUERY] batch=4 already=300
+[QUERY] batch=4 got=100 total=400
+[QUERY] batch=5 already=400
+[QUERY] batch=5 got=100 total=500
+[QUERY] batch=6 already=500
+[QUERY] batch=6 got=100 total=600
+[QUERY] batch=7 already=600
+[QUERY] batch=7 got=100 total=700
+[QUERY] batch=8 already=700
+[QUERY] batch=8 got=75 total=775
+[DONE] export/build complete
+queried_pages=775 updates=775 releases=5 body_summary=775 general_patch_summary=772 missing_body=0 bad_pages=0
+timeline=C:\Users\total\Downloads\patchnote_view_model_cross_game_date_fix_rebuild_deploy_v84\exports\timeline_data_view_model_v76_standard_general.json
+html=C:\Users\total\Downloads\patchnote_view_model_cross_game_date_fix_rebuild_deploy_v84\exports\index-2_view_model_v76_standard_general.html
+audit=C:\Users\total\Downloads\patchnote_view_model_cross_game_date_fix_rebuild_deploy_v84\exports\export_audit_v76_standard_general.json

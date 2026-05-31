@@ -1,0 +1,48 @@
+{
+  "version": "v83_cross_game_date_audit",
+  "rule": "월/일은 원문 제목의 패치/업데이트 날짜를 우선하고, 연도는 원문 게시 시점으로 앵커링한다. 12월 게시글의 1월 업데이트는 다음 해로 보정한다.",
+  "total_update_events": 775,
+  "raw_docs_checked": 775,
+  "games": {
+    "나크": {
+      "raw_docs": 155,
+      "current_event_matched": 155,
+      "inferred_date_success": 155,
+      "mismatch_count": 119
+    },
+    "나크글로벌": {
+      "raw_docs": 91,
+      "current_event_matched": 91,
+      "inferred_date_success": 91,
+      "mismatch_count": 0
+    },
+    "미르4": {
+      "raw_docs": 159,
+      "current_event_matched": 159,
+      "inferred_date_success": 159,
+      "mismatch_count": 0
+    },
+    "미르4글로벌": {
+      "raw_docs": 118,
+      "current_event_matched": 118,
+      "inferred_date_success": 118,
+      "mismatch_count": 0
+    },
+    "오딘": {
+      "raw_docs": 252,
+      "current_event_matched": 252,
+      "inferred_date_success": 252,
+      "mismatch_count": 17
+    }
+  },
+  "mismatch_total": 136,
+  "mismatch_by_game": {
+    "나크": 119,
+    "오딘": 17
+  },
+  "no_mismatch_games": [
+    "나크글로벌",
+    "미르4",
+    "미르4글로벌"
+  ]
+}

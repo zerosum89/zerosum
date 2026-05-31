@@ -1,0 +1,35 @@
+[START] Patchnote View Model export/build v96_semantic_light_tone
+[DB] 36f3453a-cf42-8111-9282-c01dad5a0835
+[QUERY] batch=1 already=0
+[QUERY] batch=1 got=100 total=100
+[QUERY] batch=2 already=100
+[QUERY] batch=2 got=100 total=200
+[QUERY] batch=3 already=200
+[QUERY] batch=3 got=100 total=300
+[QUERY] batch=4 already=300
+[QUERY] batch=4 got=100 total=400
+[QUERY] batch=5 already=400
+[QUERY] batch=5 got=100 total=500
+[QUERY] batch=6 already=500
+[QUERY] batch=6 got=100 total=600
+[QUERY] batch=7 already=600
+[QUERY] batch=7 got=100 total=700
+[QUERY] batch=8 already=700
+[QUERY] batch=8 got=75 total=775
+Traceback (most recent call last):
+  File "C:\Users\total\Downloads\patchnote_view_model_semantic_light_tone_v96\v96_pkg\export_and_build_patchnote_view_model_v96_semantic_light_tone.py", line 488, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\total\Downloads\patchnote_view_model_semantic_light_tone_v96\v96_pkg\export_and_build_patchnote_view_model_v96_semantic_light_tone.py", line 434, in main
+    releases = json.loads((root / args.release_events).read_text(encoding="utf-8"))
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\total\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py", line 546, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\total\AppData\Local\Programs\Python\Python313\Lib\pathlib\_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\total\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py", line 537, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\total\\Downloads\\patchnote_view_model_semantic_light_tone_v96\\v96_pkg\\release_events_v90.json'

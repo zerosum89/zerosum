@@ -1,0 +1,27 @@
+[QUERY] batch=1 got=100 total=100
+[QUERY] batch=2 got=100 total=200
+[QUERY] batch=3 got=100 total=300
+[QUERY] batch=4 got=100 total=400
+[QUERY] batch=5 got=100 total=500
+[QUERY] batch=6 got=100 total=600
+[QUERY] batch=7 got=100 total=700
+[QUERY] batch=8 got=78 total=778
+[STEP] Normalize game names by source URL
+[PROGRESS] processed=50/778 changed=50 unchanged=0 skipped=0 failed=0
+[PROGRESS] processed=100/778 changed=100 unchanged=0 skipped=0 failed=0
+[PROGRESS] processed=150/778 changed=150 unchanged=0 skipped=0 failed=0
+[PROGRESS] processed=200/778 changed=200 unchanged=0 skipped=0 failed=0
+[PROGRESS] processed=250/778 changed=250 unchanged=0 skipped=0 failed=0
+[PROGRESS] processed=300/778 changed=300 unchanged=0 skipped=0 failed=0
+[PROGRESS] processed=350/778 changed=350 unchanged=0 skipped=0 failed=0
+[PROGRESS] processed=400/778 changed=400 unchanged=0 skipped=0 failed=0
+[PROGRESS] processed=450/778 changed=450 unchanged=0 skipped=0 failed=0
+[PROGRESS] processed=500/778 changed=500 unchanged=0 skipped=0 failed=0
+[PROGRESS] processed=550/778 changed=550 unchanged=0 skipped=0 failed=0
+[PROGRESS] processed=600/778 changed=600 unchanged=0 skipped=0 failed=0
+[PROGRESS] processed=650/778 changed=650 unchanged=0 skipped=0 failed=0
+[PROGRESS] processed=700/778 changed=700 unchanged=0 skipped=0 failed=0
+[PROGRESS] processed=750/778 changed=750 unchanged=0 skipped=0 failed=0
+[DONE] Game name normalization complete: changed=778, unchanged=0, skipped=0
+[REPORT] C:\Users\total\Downloads\patchnote_view_model_game_name_split_v104\v104_game_name_split_pkg\reports\game_name_normalization_20260601_035927.json
+[REPORT] C:\Users\total\Downloads\patchnote_view_model_game_name_split_v104\v104_game_name_split_pkg\reports\game_name_normalization_20260601_035927.md

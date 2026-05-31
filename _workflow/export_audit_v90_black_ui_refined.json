@@ -1,0 +1,33 @@
+{
+  "version": "v90_black_ui_refined_export_build",
+  "database_id": "36f3453a-cf42-8111-9282-c01dad5a0835",
+  "queried_pages": 775,
+  "included_update_events": 775,
+  "release_events": 5,
+  "total_events": 780,
+  "body_summary_count": 775,
+  "general_patch_summary_count": 772,
+  "major_update_summary_count": 124,
+  "general_patch_summary_method_counts": {
+    "body_summary_standard": 775
+  },
+  "missing_body_summary_count": 0,
+  "missing_body_summary_samples": [],
+  "bad_page_count": 0,
+  "bad_page_samples": [],
+  "game_update_counts": {
+    "나크글로벌": 91,
+    "나크": 155,
+    "오딘": 252,
+    "미르4글로벌": 118,
+    "미르4": 159
+  },
+  "outputs": {
+    "timeline_json": "C:\\Users\\total\\Downloads\\patchnote_view_model_black_ui_refined_v90\\v90_pkg\\exports\\timeline_data_view_model_v90_black_ui_refined.json",
+    "html": "C:\\Users\\total\\Downloads\\patchnote_view_model_black_ui_refined_v90\\v90_pkg\\exports\\index-2_view_model_v90_black_ui_refined.html",
+    "audit": "C:\\Users\\total\\Downloads\\patchnote_view_model_black_ui_refined_v90\\v90_pkg\\exports\\export_audit_v90_black_ui_refined.json"
+  },
+  "created_at": "2026-05-31T22:35:17",
+  "legacy_note": "DB1/DB2 fields are not used. Legacy field cleanup is intentionally deferred.",
+  "ui_note": "General patch summary is standardized from body_summary taxonomy. Detected sections are fallback only."
+}

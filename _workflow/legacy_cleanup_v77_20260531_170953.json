@@ -1,0 +1,68 @@
+{
+  "version": "v77_legacy_cleanup",
+  "database_id": "36f3453a-cf42-8111-9282-c01dad5a0835",
+  "execute": true,
+  "database_title": "Patchnote View Model",
+  "target_properties_configured": [
+    "원본 DB1 Page ID",
+    "원본 DB1 URL",
+    "원문 해시"
+  ],
+  "target_properties_found": [
+    "원본 DB1 Page ID",
+    "원본 DB1 URL",
+    "원문 해시"
+  ],
+  "target_properties_missing": [],
+  "preserved_properties_present": [
+    "원문 요약",
+    "본문 요약"
+  ],
+  "property_count_before": 18,
+  "property_names_before": [
+    "HTML 노출",
+    "게임명",
+    "대표 핵심 신호",
+    "본문 요약",
+    "뷰모델 검수 상태",
+    "뷰모델 생성일",
+    "뷰모델 신뢰도",
+    "실제 패치일",
+    "원문 URL",
+    "원문 요약",
+    "원문 해시",
+    "원본 DB1 Page ID",
+    "원본 DB1 URL",
+    "원본 갱신일",
+    "주요 업데이트 요약",
+    "카드 요약",
+    "패치노트 제목",
+    "항목명"
+  ],
+  "created_at": "2026-05-31T17:09:54",
+  "property_count_after": 15,
+  "property_names_after": [
+    "HTML 노출",
+    "게임명",
+    "대표 핵심 신호",
+    "본문 요약",
+    "뷰모델 검수 상태",
+    "뷰모델 생성일",
+    "뷰모델 신뢰도",
+    "실제 패치일",
+    "원문 URL",
+    "원문 요약",
+    "원본 갱신일",
+    "주요 업데이트 요약",
+    "카드 요약",
+    "패치노트 제목",
+    "항목명"
+  ],
+  "removed_properties": [
+    "원본 DB1 Page ID",
+    "원본 DB1 URL",
+    "원문 해시"
+  ],
+  "still_present_after_remove": [],
+  "status": "success"
+}

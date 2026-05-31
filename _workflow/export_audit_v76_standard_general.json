@@ -1,0 +1,44 @@
+{
+  "version": "v76_standard_general_from_body_summary",
+  "source": "timeline_data_view_model_v73_from_notion_restore_general.json",
+  "included_update_events": 775,
+  "release_events": 5,
+  "total_events": 780,
+  "body_summary_count": 775,
+  "general_patch_summary_count": 775,
+  "major_update_summary_count": 124,
+  "general_patch_summary_method": "body_summary_prefix_score_priority_v76",
+  "label_count_distribution": {
+    "3": 119,
+    "2": 592,
+    "1": 64
+  },
+  "label_counts": {
+    "이벤트/보상 갱신": 325,
+    "편의성 개선": 288,
+    "콘텐츠/시스템 조정": 281,
+    "성장/장비 갱신": 218,
+    "경제/보상 조정": 217,
+    "클래스/전투 갱신": 90,
+    "상점/BM 갱신": 75,
+    "버그 수정": 64,
+    "서버/월드 조정": 47
+  },
+  "zero_label_count": 0,
+  "zero_label_samples": [],
+  "game_update_counts": {
+    "나크글로벌": 91,
+    "나크": 155,
+    "오딘": 252,
+    "미르4글로벌": 118,
+    "미르4": 159
+  },
+  "outputs": {
+    "timeline_json": "/mnt/data/timeline_data_view_model_v76_standard_general.json",
+    "html": "/mnt/data/index-2_view_model_v76_standard_general.html",
+    "audit": "/mnt/data/export_audit_v76_standard_general.json"
+  },
+  "created_at": "2026-05-31T07:53:17",
+  "legacy_note": "DB1/DB2 fields are not used. Legacy cleanup is deferred.",
+  "policy_note": "v76 does not attempt to exactly reproduce v65. It standardizes general_patch_summary from the body_summary taxonomy for repeatable future workflow."
+}

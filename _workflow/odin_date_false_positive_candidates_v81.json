@@ -1,0 +1,328 @@
+[
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/23",
+    "view_model_page_id": "36f3453a-cf42-8176-b73a-fcaf4e69f482",
+    "current_actual_patch_date": "2022-12-08",
+    "correct_actual_patch_date": "2021-12-08",
+    "current_item_name": "22.12.08 | 업데이트",
+    "correct_item_name": "21.12.08 | 업데이트",
+    "current_date_display": "22.12.08",
+    "correct_date_display": "21.12.08",
+    "post_date": "2021-12-07",
+    "raw_title": "12/8(수) 업데이트 상세 내역 안내 - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "12/8",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "PvE 콘텐츠: 월드 던전이 추가되거나 시즌이 갱신되어 서버 경쟁형 사냥과 전용 보상 구조가 확장되었습니다.",
+      "편의/UI: 파티 모집, 정보 표기, 자동 진행 등 반복 조작과 정보 확인 편의성이 개선되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/26",
+    "view_model_page_id": "36f3453a-cf42-81b8-ab4a-e095d8765f60",
+    "current_actual_patch_date": "2022-12-29",
+    "correct_actual_patch_date": "2021-12-29",
+    "current_item_name": "22.12.29 | 업데이트",
+    "correct_item_name": "21.12.29 | 업데이트",
+    "current_date_display": "22.12.29",
+    "correct_date_display": "21.12.29",
+    "post_date": "2021-12-28",
+    "raw_title": "12/29(수) 업데이트 상세 내역 안내 - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "12/29",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "PvE 콘텐츠: 월드 던전이 추가되거나 시즌이 갱신되어 서버 경쟁형 사냥과 전용 보상 구조가 확장되었습니다.",
+      "전투/밸런스: 클래스 각성 스킬과 주요 전투 효과의 피해량·상태이상·지속 시간이 조정되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/74",
+    "view_model_page_id": "36f3453a-cf42-81b5-8e43-e41b55e4e3ea",
+    "current_actual_patch_date": "2023-12-07",
+    "correct_actual_patch_date": "2022-12-07",
+    "current_item_name": "23.12.07 | 업데이트",
+    "correct_item_name": "22.12.07 | 업데이트",
+    "current_date_display": "23.12.07",
+    "correct_date_display": "22.12.07",
+    "post_date": "2022-12-06",
+    "raw_title": "12/7(수) 업데이트 상세 내역 안내 - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "12/7",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "편의/UI: 기타 변경 사항이 적용되어 콘텐츠 이용 흐름과 정보 확인 방식이 개선되었습니다.",
+      "이벤트/보상: 출석, 미션, 교환소 등 기간제 이벤트와 성장 지원 보상이 갱신되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/76",
+    "view_model_page_id": "36f3453a-cf42-816e-9c0b-e3288944f538",
+    "current_actual_patch_date": "2023-12-21",
+    "correct_actual_patch_date": "2022-12-21",
+    "current_item_name": "23.12.21 | 업데이트",
+    "correct_item_name": "22.12.21 | 업데이트",
+    "current_date_display": "23.12.21",
+    "correct_date_display": "22.12.21",
+    "post_date": "2022-12-21",
+    "raw_title": "12/21(수) 업데이트 상세 내역 안내 (수정) - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "12/21",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "PvP/전쟁: 길드·서버 단위 전쟁 콘텐츠의 시즌, 매칭, 진행 규칙, 보상 구조가 갱신되었습니다.",
+      "서버/월드: 서버 이전이 진행되어 캐릭터 이동 조건과 서버 재배치 흐름이 갱신되었습니다.",
+      "편의/UI: 용병 모집 및 가입 진행 방식 변경이 적용되어 콘텐츠 이용 흐름과 정보 확인 방식이 개선되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/80",
+    "view_model_page_id": "36f3453a-cf42-819f-b157-c884dbf5169c",
+    "current_actual_patch_date": "2022-01-11",
+    "correct_actual_patch_date": "2023-01-11",
+    "current_item_name": "22.01.11 | 업데이트",
+    "correct_item_name": "23.01.11 | 업데이트",
+    "current_date_display": "22.01.11",
+    "correct_date_display": "23.01.11",
+    "post_date": "2023-01-10",
+    "raw_title": "1/11(수) 업데이트 상세 내역 안내 - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "1/11",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "PvE 콘텐츠: 월드 던전이 추가되거나 시즌이 갱신되어 서버 경쟁형 사냥과 전용 보상 구조가 확장되었습니다.",
+      "PvP/전쟁: 길드·서버 단위 전쟁 콘텐츠의 시즌, 매칭, 진행 규칙, 보상 구조가 갱신되었습니다.",
+      "경제/거래: 제작식, 재화, 교환 보상 구성이 갱신되어 성장 재료 획득 루트가 조정되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/82",
+    "view_model_page_id": "36f3453a-cf42-8192-a2dc-d9fe54e7bfda",
+    "current_actual_patch_date": "2022-01-26",
+    "correct_actual_patch_date": "2023-01-26",
+    "current_item_name": "22.01.26 | 업데이트",
+    "correct_item_name": "23.01.26 | 업데이트",
+    "current_date_display": "22.01.26",
+    "correct_date_display": "23.01.26",
+    "post_date": "2023-01-25",
+    "raw_title": "1/26(목) 업데이트 상세 내역 안내 - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "1/26",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "PvP/전쟁: 길드·서버 단위 전쟁 콘텐츠의 시즌, 매칭, 진행 규칙, 보상 구조가 갱신되었습니다.",
+      "전투/밸런스: 클래스 각성 스킬과 주요 전투 효과의 피해량·상태이상·지속 시간이 조정되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/88",
+    "view_model_page_id": "36f3453a-cf42-81c7-96d9-d60d429c8869",
+    "current_actual_patch_date": "2022-03-08",
+    "correct_actual_patch_date": "2023-03-08",
+    "current_item_name": "22.03.08 | 업데이트",
+    "correct_item_name": "23.03.08 | 업데이트",
+    "current_date_display": "22.03.08",
+    "correct_date_display": "23.03.08",
+    "post_date": "2023-03-07",
+    "raw_title": "3/8(수) 업데이트 상세 내역 안내 - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "3/8",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "편의/UI: 기타 변경 사항이 적용되어 콘텐츠 이용 흐름과 정보 확인 방식이 개선되었습니다.",
+      "이벤트/보상: 출석, 미션, 교환소 등 기간제 이벤트와 성장 지원 보상이 갱신되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/123",
+    "view_model_page_id": "36f3453a-cf42-81f2-b833-e5ec7ca2de0a",
+    "current_actual_patch_date": "2024-11-08",
+    "correct_actual_patch_date": "2023-11-08",
+    "current_item_name": "24.11.08 | 업데이트",
+    "correct_item_name": "23.11.08 | 업데이트",
+    "current_date_display": "24.11.08",
+    "correct_date_display": "23.11.08",
+    "post_date": "2023-11-07",
+    "raw_title": "11/8(수) 업데이트 상세 내역 안내 - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "11/8",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "이벤트/보상: 출석, 미션, 교환소 등 기간제 이벤트와 성장 지원 보상이 갱신되었습니다.",
+      "콘텐츠: 수르트 서버 내 월드 콘텐츠 추가 관련 안내가 추가되어 관련 이용 목표와 보상 구조가 갱신되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/127",
+    "view_model_page_id": "36f3453a-cf42-81e7-89df-e7b30bfaa7db",
+    "current_actual_patch_date": "2024-12-06",
+    "correct_actual_patch_date": "2023-12-06",
+    "current_item_name": "24.12.06 | 업데이트",
+    "correct_item_name": "23.12.06 | 업데이트",
+    "current_date_display": "24.12.06",
+    "correct_date_display": "23.12.06",
+    "post_date": "2023-12-05",
+    "raw_title": "12/6(수) 업데이트 상세 내역 안내 (추가) - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "12/6",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "경제/거래: 제작식, 재화, 교환 보상 구성이 갱신되어 성장 재료 획득 루트가 조정되었습니다.",
+      "이벤트/보상: 출석, 미션, 교환소 등 기간제 이벤트와 성장 지원 보상이 갱신되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/129",
+    "view_model_page_id": "36f3453a-cf42-81b5-8966-fae35793d697",
+    "current_actual_patch_date": "2024-12-20",
+    "correct_actual_patch_date": "2023-12-20",
+    "current_item_name": "24.12.20 | 업데이트",
+    "correct_item_name": "23.12.20 | 업데이트",
+    "current_date_display": "24.12.20",
+    "correct_date_display": "23.12.20",
+    "post_date": "2023-12-19",
+    "raw_title": "12/20(수) 업데이트 상세 내역 안내 (추가) - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "12/20",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "클래스/직업: 신규 클래스 또는 전직 계열이 추가되어 직업 선택지와 관련 성장 요소가 확장되었습니다.",
+      "이벤트/보상: 출석, 미션, 교환소 등 기간제 이벤트와 성장 지원 보상이 갱신되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/147",
+    "view_model_page_id": "36f3453a-cf42-8131-aa97-dc497d3aabc2",
+    "current_actual_patch_date": "2024-06-19",
+    "correct_actual_patch_date": "2024-04-24",
+    "current_item_name": "24.06.19 | 업데이트",
+    "correct_item_name": "24.04.24 | 업데이트",
+    "current_date_display": "24.06.19",
+    "correct_date_display": "24.04.24",
+    "post_date": "2024-04-23",
+    "raw_title": "4월 4주차 업데이트 상세 내역 안내 - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "4/24",
+    "detection_method": "top_regular_maintenance_link_with_post_year_anchor",
+    "body_summary": [
+      "이벤트/보상: 출석, 미션, 교환소 등 기간제 이벤트와 성장 지원 보상이 갱신되었습니다.",
+      "버그 수정: 전투, UI, 퀘스트, 보상 지급 등 플레이에 영향을 주는 주요 오류가 수정되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/176",
+    "view_model_page_id": "36f3453a-cf42-811c-bf1f-f84d122ae7bd",
+    "current_actual_patch_date": "2025-11-13",
+    "correct_actual_patch_date": "2024-11-13",
+    "current_item_name": "25.11.13 | 업데이트",
+    "correct_item_name": "24.11.13 | 업데이트",
+    "current_date_display": "25.11.13",
+    "correct_date_display": "24.11.13",
+    "post_date": "2024-11-12",
+    "raw_title": "11/13(수) 업데이트 상세 내역 안내 - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "11/13",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "편의/UI: 파티 모집, 정보 표기, 자동 진행 등 반복 조작과 정보 확인 편의성이 개선되었습니다.",
+      "이벤트/보상: 출석, 미션, 교환소 등 기간제 이벤트와 성장 지원 보상이 갱신되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/180",
+    "view_model_page_id": "36f3453a-cf42-81e2-82db-fc9c884959be",
+    "current_actual_patch_date": "2025-12-11",
+    "correct_actual_patch_date": "2024-12-11",
+    "current_item_name": "25.12.11 | 업데이트",
+    "correct_item_name": "24.12.11 | 업데이트",
+    "current_date_display": "25.12.11",
+    "correct_date_display": "24.12.11",
+    "post_date": "2024-12-10",
+    "raw_title": "12/11(수) 업데이트 상세 내역 안내 - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "12/11",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "편의/UI: 기타 변경 사항이 적용되어 콘텐츠 이용 흐름과 정보 확인 방식이 개선되었습니다.",
+      "이벤트/보상: 출석, 미션, 교환소 등 기간제 이벤트와 성장 지원 보상이 갱신되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/181",
+    "view_model_page_id": "36f3453a-cf42-8174-9ae6-fed203276dd5",
+    "current_actual_patch_date": "2025-12-18",
+    "correct_actual_patch_date": "2024-12-18",
+    "current_item_name": "25.12.18 | 업데이트",
+    "correct_item_name": "24.12.18 | 업데이트",
+    "current_date_display": "25.12.18",
+    "correct_date_display": "24.12.18",
+    "post_date": "2024-12-17",
+    "raw_title": "12/18(수) 업데이트 상세 내역 안내 (수정) - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "12/18",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "클래스/직업: 신규 클래스 또는 전직 계열이 추가되어 직업 선택지와 관련 성장 요소가 확장되었습니다.",
+      "이벤트/보상: 출석, 미션, 교환소 등 기간제 이벤트와 성장 지원 보상이 갱신되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/183",
+    "view_model_page_id": "36f3453a-cf42-8113-b6bf-da68602d2258",
+    "current_actual_patch_date": "2024-01-01",
+    "correct_actual_patch_date": "2025-01-01",
+    "current_item_name": "24.01.01 | 업데이트",
+    "correct_item_name": "25.01.01 | 업데이트",
+    "current_date_display": "24.01.01",
+    "correct_date_display": "25.01.01",
+    "post_date": "2024-12-31",
+    "raw_title": "1/1(수) 업데이트 상세 내역 안내 - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "1/1",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "편의/UI: 기타 변경 사항이 적용되어 콘텐츠 이용 흐름과 정보 확인 방식이 개선되었습니다.",
+      "이벤트/보상: 출석, 미션, 교환소 등 기간제 이벤트와 성장 지원 보상이 갱신되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/229",
+    "view_model_page_id": "36f3453a-cf42-8103-bf29-ec7ac14a65fa",
+    "current_actual_patch_date": "2026-11-12",
+    "correct_actual_patch_date": "2025-11-12",
+    "current_item_name": "26.11.12 | 업데이트",
+    "correct_item_name": "25.11.12 | 업데이트",
+    "current_date_display": "26.11.12",
+    "correct_date_display": "25.11.12",
+    "post_date": "2025-11-11",
+    "raw_title": "11/12(수) 업데이트 상세 내역 안내 - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "11/12",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "PvP/전쟁: 길드·서버 단위 전쟁 콘텐츠의 시즌, 매칭, 진행 규칙, 보상 구조가 갱신되었습니다.",
+      "경제/거래: 월드 거래소 또는 거래 가능 품목이 추가되어 아이템 유통과 시장 이용 구조가 확장되었습니다.",
+      "콘텐츠: 신규 가호 보드가 추가되어 관련 이용 목표와 보상 구조가 갱신되었습니다."
+    ]
+  },
+  {
+    "game": "오딘",
+    "source_url": "https://m.cafe.daum.net/odin/DEH7/236",
+    "view_model_page_id": "36f3453a-cf42-8121-b78f-d2a2e0c2969f",
+    "current_actual_patch_date": "2026-12-31",
+    "correct_actual_patch_date": "2025-12-31",
+    "current_item_name": "26.12.31 | 업데이트",
+    "correct_item_name": "25.12.31 | 업데이트",
+    "current_date_display": "26.12.31",
+    "correct_date_display": "25.12.31",
+    "post_date": "2025-12-30",
+    "raw_title": "12/31(수) 업데이트 상세 내역 안내 (추가) - 업데이트 - 오딘: 발할라 라이징",
+    "date_token_used": "12/31",
+    "detection_method": "title_slash_update_date_with_post_year_anchor",
+    "body_summary": [
+      "PvE 콘텐츠: 탑형 도전 콘텐츠의 신규 시즌과 층 구성이 갱신되어 반복 클리어 보상이 재편되었습니다.",
+      "이벤트/보상: 출석, 미션, 교환소 등 기간제 이벤트와 성장 지원 보상이 갱신되었습니다."
+    ]
+  }
+]

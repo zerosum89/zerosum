@@ -1,0 +1,26 @@
+{
+  "target_game": "미르4글로벌",
+  "total_update_events": 778,
+  "general_patch_summary_count": 777,
+  "mir4_global_update_events": 119,
+  "mir4_global_body_summary_count": 119,
+  "mir4_global_general_patch_summary_count": 119,
+  "mir4_global_body_summary_standard_count": 119,
+  "mir4_global_missing_general_samples": [],
+  "mir4_global_wrong_method_samples": [],
+  "method_counts": {
+    "body_summary_standard": 778
+  },
+  "game_counts": {
+    "나크글로벌": 91,
+    "나크": 156,
+    "오딘": 253,
+    "미르4글로벌": 119,
+    "미르4": 159
+  },
+  "notes": [
+    "general_patch_summary is derived from body_summary prefixes during export/build.",
+    "general_patch_summary is not expected to exist as a Notion DB property."
+  ],
+  "blocking_issues": []
+}

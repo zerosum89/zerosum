@@ -65,65 +65,88 @@ const GAME_RELEASE_MAP = {
   '미르4':'2020-11-25'
 };
 const GAME_ORDER = ['나크글로벌','나크','오딘','미르4글로벌','미르4'];
-function normalizeSummaryLines(v){
+function splitLinesForTimeline(v){
   if(v == null) return [];
-  if(Array.isArray(v)) return v.map(x => typeof x === 'string' ? x : textOf(x)).filter(Boolean);
-  if(typeof v === 'string') return String(v).replaceAll(String.fromCharCode(13),'').split(String.fromCharCode(10)).map(s=>s.trim()).filter(Boolean);
-  return [textOf(v)].filter(Boolean);
+  if(Array.isArray(v)) return v.map(x => typeof x === 'string' ? x : textOf(x)).map(x => String(x || '').trim()).filter(Boolean);
+  const s = String(v || '').replaceAll(String.fromCharCode(13), '');
+  return s.split(String.fromCharCode(10)).map(x => x.trim()).filter(Boolean);
 }
-function toTimelineGroups(items){
-  const map = new Map();
-  for(const item of (items||[])){
-    const rawGame = item.game_name || item.game || item.gameName || 'Unknown';
-    const name = GAME_NAME_MAP[rawGame] || rawGame;
-    if(!map.has(name)){
-      const release = GAME_RELEASE_MAP[name] || '';
-      map.set(name, {name, release, release_display: formatShortDate(release), events: []});
+function shortDateDisplay(dateKey){
+  const s = String(dateKey || '');
+  if(s.length === 10) return s.slice(2,4)+'.'+s.slice(5,7)+'.'+s.slice(8,10);
+  return s;
+}
+function quarterOf(dateKey){
+  const m = Number(String(dateKey || '').slice(5,7));
+  return Math.floor((Math.max(1,m)-1)/3)+1;
+}
+function domainGeneral(lines){
+  const seen = new Set();
+  const out = [];
+  for(const line of splitLinesForTimeline(lines)){
+    const domain = String(line).split(':')[0].trim();
+    if(domain && domain.length <= 16 && !seen.has(domain)){
+      seen.add(domain);
+      out.push(domain + ' 갱신');
     }
-    const date = item.date_key || item.actual_date || item.date || '';
-    const year = Number(String(date).slice(0,4)) || item.year || 0;
-    const month = Number(String(date).slice(5,7)) || 1;
-    const event = {
-      date_key: date,
-      title: item.title || item.page_title || `${formatShortDate(date)} | 패치노트`,
-      type: item.type || 'update',
-      year,
-      quarter: item.quarter || Math.floor((month-1)/3)+1,
-      impact: item.impact || '패치노트',
-      source_url: item.source_url || item.url || '',
-      html_visible: item.html_visible !== false,
-      view_model_page_id: item.view_model_page_id || item.page_id || '',
-      representative_signals: normalizeSummaryLines(item.representative_signals || item.signals),
-      major_update_summary: normalizeSummaryLines(item.major_update_summary),
-      general_patch_summary: normalizeSummaryLines(item.general_patch_summary),
-      body_summary: normalizeSummaryLines(item.body_summary),
-      card_summary: item.card_summary || normalizeSummaryLines(item.body_summary)[0] || '',
-      game: name,
-      review_status: item.review_status || ''
-    };
-    map.get(name).events.push(event);
   }
-  const groups = Array.from(map.values());
-  groups.forEach(g => g.events.sort((a,b)=>String(a.date_key).localeCompare(String(b.date_key)) || String(a.title).localeCompare(String(b.title))));
-  groups.sort((a,b)=>{
-    const ia = GAME_ORDER.indexOf(a.name), ib = GAME_ORDER.indexOf(b.name);
-    return (ia < 0 ? 999 : ia) - (ib < 0 ? 999 : ib) || a.name.localeCompare(b.name);
-  });
-  return groups;
+  return out.length ? out.slice(0,4) : ['콘텐츠/시스템 조정'];
+}
+function normalizeFlatItem(item){
+  const raw = item && item.raw_properties ? item.raw_properties : {};
+  const date = item.actual_date || raw['실제 패치일'] || '';
+  const gameKey = item.game || raw['게임명'] || 'Unknown';
+  const gameName = GAME_NAME_MAP[gameKey] || gameKey;
+  const body = item.body_summary || raw['본문 요약'] || '';
+  const major = item.major_update_summary || raw['주요 업데이트 요약'] || '';
+  const signals = item.signals || raw['대표 핵심 신호'] || [];
+  return {
+    date_key: date,
+    title: item.title || raw['항목명'] || item.patchnote_title || raw['패치노트 제목'] || (shortDateDisplay(date)+' | 패치노트'),
+    type: 'update',
+    year: Number(String(date).slice(0,4)) || null,
+    quarter: quarterOf(date),
+    impact: '패치노트',
+    source_url: item.source_url || raw['원문 URL'] || '',
+    html_visible: item.html_exposed !== false && raw['HTML 노출'] !== false,
+    view_model_page_id: item.id || '',
+    representative_signals: splitLinesForTimeline(signals),
+    card_summary: item.card_summary || raw['카드 요약'] || '',
+    major_update_summary: splitLinesForTimeline(major),
+    general_patch_summary: domainGeneral(body),
+    general_patch_summary_method: 'body_summary_domain_from_data_json',
+    detected_sections_for_general: [],
+    game: gameName,
+    body_summary: splitLinesForTimeline(body)
+  };
 }
 function normalizeTimelinePayload(payload){
-  if(Array.isArray(payload)){
-    if(payload.length === 0) return [];
-    if(payload[0] && Array.isArray(payload[0].events)) return payload;
-    return toTimelineGroups(payload);
+  if(!Array.isArray(payload)) return [];
+  if(payload.length && payload[0] && Array.isArray(payload[0].events)) return payload;
+  const groups = new Map();
+  for(const item of payload){
+    const ev = normalizeFlatItem(item);
+    if(ev.html_visible === false || !ev.date_key) continue;
+    if(!groups.has(ev.game)){
+      const release = GAME_RELEASE_MAP[ev.game] || '';
+      const events = [];
+      if(release){
+        events.push({date_key: release, title: '출시', type: 'release', year: Number(release.slice(0,4)), quarter: quarterOf(release), impact:'', source_url:'', game: ev.game, major_update_summary:[], general_patch_summary:[], representative_signals:[]});
+      }
+      groups.set(ev.game, {name: ev.game, release, release_display: shortDateDisplay(release), events});
+    }
+    groups.get(ev.game).events.push(ev);
   }
-  if(payload && Array.isArray(payload.data)) return normalizeTimelinePayload(payload.data);
-  if(payload && Array.isArray(payload.items)) return normalizeTimelinePayload(payload.items);
-  if(payload && Array.isArray(payload.games)) return normalizeTimelinePayload(payload.games);
-  throw new Error('Unsupported data.json schema');
+  const arr = Array.from(groups.values());
+  arr.sort((a,b)=>{
+    const ia = GAME_ORDER.indexOf(a.name); const ib = GAME_ORDER.indexOf(b.name);
+    return (ia < 0 ? 999 : ia) - (ib < 0 ? 999 : ib) || a.name.localeCompare(b.name);
+  });
+  for(const g of arr){g.events.sort((a,b)=>String(a.date_key).localeCompare(String(b.date_key)) || String(a.title).localeCompare(String(b.title)));}
+  return arr;
 }
 async function loadDataJson(){
-  const response = await fetch('data.json', {cache: 'no-store'});
+  const response = await fetch('data.json', {cache:'no-store'});
   if(!response.ok) throw new Error('data.json load failed: '+response.status);
   const payload = await response.json();
   DATA = normalizeTimelinePayload(payload).filter(g => Array.isArray(g.events));
@@ -131,7 +154,6 @@ async function loadDataJson(){
   if(!DATA.length || !TOTAL_EVENTS) throw new Error('data.json contains no timeline events');
 }
 
-/* TOTAL_EVENTS is calculated after data.json fetch. */
 const $ = id => document.getElementById(id);
 
 const ALL_GAMES='전체 게임';
@@ -162,7 +184,7 @@ function matchEvent(e,g){
   }
   return true;
 }
-function allMonths(){let dates=[]; DATA.forEach(g=>(g.events||[]).forEach(e=>{if(e.date_key) dates.push(e.date_key)})); if(!dates.length) return []; let min=new Date(Math.min(...dates.map(d=>new Date(d+'T00:00:00')))); let max=new Date(Math.max(...dates.map(d=>new Date(d+'T00:00:00')))); let cur=new Date(min.getFullYear(),min.getMonth(),1); let end=new Date(max.getFullYear(),max.getMonth(),1); let months=[]; while(cur<=end){months.push(`${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,'0')}`); cur.setMonth(cur.getMonth()+1);} return months;}
+function allMonths(){let dates=[]; DATA.forEach(g=>g.events.forEach(e=>{if(e.date_key) dates.push(e.date_key)})); let min=new Date(Math.min(...dates.map(d=>new Date(d+'T00:00:00')))); let max=new Date(Math.max(...dates.map(d=>new Date(d+'T00:00:00')))); let cur=new Date(min.getFullYear(),min.getMonth(),1); let end=new Date(max.getFullYear(),max.getMonth(),1); let months=[]; while(cur<=end){months.push(`${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,'0')}`); cur.setMonth(cur.getMonth()+1);} return months;}
 let MONTHS = [];
 let GAME_BY_NAME = {};
 function refreshDerivedData(){
@@ -170,9 +192,8 @@ function refreshDerivedData(){
   document.documentElement.style.setProperty('--months', MONTHS.length);
   GAME_BY_NAME = Object.fromEntries(DATA.map(g=>[g.name,g]));
 }
-
 const SIGNAL_ORDER=['신규 대형 PvE','신규 대형 PvP','신규 클래스/직업','신규 서버/월드','신규 성장축','성장 시스템 확장','대형 BM 변경','최대 레벨 확장','경제/거래 구조 변화'];
-function availableCategories(){const set=new Set(); DATA.forEach(g=>(g.events||[]).forEach(e=>asArray(e.representative_signals).forEach(s=>{if(s) set.add(s)}))); return [ALL_CATEGORIES,...SIGNAL_ORDER.filter(s=>set.has(s)),...Array.from(set).filter(s=>!SIGNAL_ORDER.includes(s)).sort()];}
+function availableCategories(){const set=new Set(); DATA.forEach(g=>g.events.forEach(e=>asArray(e.representative_signals).forEach(s=>{if(s) set.add(s)}))); return [ALL_CATEGORIES,...SIGNAL_ORDER.filter(s=>set.has(s)),...Array.from(set).filter(s=>!SIGNAL_ORDER.includes(s)).sort()];}
 function renderControls(){
   const games=[ALL_GAMES,...DATA.map(g=>g.name)];
   const years=[ALL_YEARS,...new Set(MONTHS.map(m=>m.slice(0,4)))];
@@ -203,7 +224,7 @@ function clearDetail(){const side=$('side'); if(side) side.innerHTML=''; const c
 function openDetail(){const content=$('content'); if(content) content.classList.remove('no-side');}
 function group(values,kind,extra){return `<span class="group">${values.map(v=>`<button class="pill ${extra} ${isFilterActive(kind,v)?'active':''}" data-kind="${kind}" data-value="${v}">${v}</button>`).join('')}</span>`}
 function render(){ renderControls(); renderTimeline(); attachViewportListeners(); }
-function filteredEvents(){const out=[]; DATA.forEach(g=>(g.events||[]).forEach(e=>{if(matchEvent(e,g)) out.push({g,e});})); return out;}
+function filteredEvents(){const out=[]; DATA.forEach(g=>g.events.forEach(e=>{if(matchEvent(e,g)) out.push({g,e});})); return out;}
 function renderTimeline(){
   const root=$('timeline');
   let html=`<div class="month-header"><div class="corner">게임명</div>${MONTHS.map((m,i)=>`<div class="month">${Number(m.slice(5))}월</div>`).join('')}</div>`;
@@ -287,7 +308,7 @@ async function startApp(){
   }catch(err){
     console.error(err);
     const root = document.getElementById('timeline');
-    if(root) root.innerHTML = '<div style="padding:24px;color:#b91c1c;font-weight:700">data.json 로드 실패: '+String(err.message||err)+'</div>';
+    if(root) root.innerHTML = '<div style="padding:24px;color:#b91c1c;font-weight:700">data.json 로드 실패: '+String(err && err.message ? err.message : err)+'</div>';
   }
 }
 startApp();

@@ -68,8 +68,7 @@ const GAME_ORDER = ['나크글로벌','나크','오딘','미르4글로벌','미�
 function normalizeSummaryLines(v){
   if(v == null) return [];
   if(Array.isArray(v)) return v.map(x => typeof x === 'string' ? x : textOf(x)).filter(Boolean);
-  if(typeof v === 'string') return v.split(/?
-/).map(s=>s.trim()).filter(Boolean);
+  if(typeof v === 'string') return String(v).replaceAll(String.fromCharCode(13),'').split(String.fromCharCode(10)).map(s=>s.trim()).filter(Boolean);
   return [textOf(v)].filter(Boolean);
 }
 function toTimelineGroups(items){
@@ -173,7 +172,7 @@ function refreshDerivedData(){
 }
 
 const SIGNAL_ORDER=['신규 대형 PvE','신규 대형 PvP','신규 클래스/직업','신규 서버/월드','신규 성장축','성장 시스템 확장','대형 BM 변경','최대 레벨 확장','경제/거래 구조 변화'];
-function availableCategories(){const set=new Set(); DATA.forEach(g=>g.events.forEach(e=>asArray(e.representative_signals).forEach(s=>{if(s) set.add(s)}))); return [ALL_CATEGORIES,...SIGNAL_ORDER.filter(s=>set.has(s)),...Array.from(set).filter(s=>!SIGNAL_ORDER.includes(s)).sort()];}
+function availableCategories(){const set=new Set(); DATA.forEach(g=>(g.events||[]).forEach(e=>asArray(e.representative_signals).forEach(s=>{if(s) set.add(s)}))); return [ALL_CATEGORIES,...SIGNAL_ORDER.filter(s=>set.has(s)),...Array.from(set).filter(s=>!SIGNAL_ORDER.includes(s)).sort()];}
 function renderControls(){
   const games=[ALL_GAMES,...DATA.map(g=>g.name)];
   const years=[ALL_YEARS,...new Set(MONTHS.map(m=>m.slice(0,4)))];
@@ -204,7 +203,7 @@ function clearDetail(){const side=$('side'); if(side) side.innerHTML=''; const c
 function openDetail(){const content=$('content'); if(content) content.classList.remove('no-side');}
 function group(values,kind,extra){return `<span class="group">${values.map(v=>`<button class="pill ${extra} ${isFilterActive(kind,v)?'active':''}" data-kind="${kind}" data-value="${v}">${v}</button>`).join('')}</span>`}
 function render(){ renderControls(); renderTimeline(); attachViewportListeners(); }
-function filteredEvents(){const out=[]; DATA.forEach(g=>g.events.forEach(e=>{if(matchEvent(e,g)) out.push({g,e});})); return out;}
+function filteredEvents(){const out=[]; DATA.forEach(g=>(g.events||[]).forEach(e=>{if(matchEvent(e,g)) out.push({g,e});})); return out;}
 function renderTimeline(){
   const root=$('timeline');
   let html=`<div class="month-header"><div class="corner">게임명</div>${MONTHS.map((m,i)=>`<div class="month">${Number(m.slice(5))}월</div>`).join('')}</div>`;

@@ -50,16 +50,86 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans
 @media (max-width:860px){.minimap-section{top:44px}.minimap-wrap{height:30px}.mbar{min-width:3px}.content{grid-template-columns:1fr}.side{max-height:260px;border-top:1px solid var(--line)}}
 </style></head><body><div class="app"><div class="toolbar" id="controls"></div><div class="minimap-section"><div class="minimap-wrap" id="minimapWrap"><div class="minimap-bars" id="minimapBars"></div><div class="minimap-window" id="minimapWindow"></div><div class="minimap-empty" id="minimapEmpty" style="display:none">표시할 패치노트가 없습니다</div></div></div><div class="content no-side" id="content"><div class="timeline-wrap" id="viewport"><div class="timeline" id="timeline"></div></div><aside class="side" id="side"></aside></div></div><div class="floating-year" id="floatingYear"></div><script>let DATA = [];
 let TOTAL_EVENTS = 0;
+const GAME_NAME_MAP = {
+  'NightCrows_KR':'나크',
+  'NightCrows_Global':'나크글로벌',
+  'Odin_KR':'오딘',
+  'MIR4_Global':'미르4글로벌',
+  'MIR4_KR':'미르4'
+};
+const GAME_RELEASE_MAP = {
+  '나크글로벌':'2024-03-12',
+  '나크':'2023-04-27',
+  '오딘':'2021-06-29',
+  '미르4글로벌':'2021-08-26',
+  '미르4':'2020-11-25'
+};
+const GAME_ORDER = ['나크글로벌','나크','오딘','미르4글로벌','미르4'];
+function normalizeSummaryLines(v){
+  if(v == null) return [];
+  if(Array.isArray(v)) return v.map(x => typeof x === 'string' ? x : textOf(x)).filter(Boolean);
+  if(typeof v === 'string') return v.split(/?
+/).map(s=>s.trim()).filter(Boolean);
+  return [textOf(v)].filter(Boolean);
+}
+function toTimelineGroups(items){
+  const map = new Map();
+  for(const item of (items||[])){
+    const rawGame = item.game_name || item.game || item.gameName || 'Unknown';
+    const name = GAME_NAME_MAP[rawGame] || rawGame;
+    if(!map.has(name)){
+      const release = GAME_RELEASE_MAP[name] || '';
+      map.set(name, {name, release, release_display: formatShortDate(release), events: []});
+    }
+    const date = item.date_key || item.actual_date || item.date || '';
+    const year = Number(String(date).slice(0,4)) || item.year || 0;
+    const month = Number(String(date).slice(5,7)) || 1;
+    const event = {
+      date_key: date,
+      title: item.title || item.page_title || `${formatShortDate(date)} | 패치노트`,
+      type: item.type || 'update',
+      year,
+      quarter: item.quarter || Math.floor((month-1)/3)+1,
+      impact: item.impact || '패치노트',
+      source_url: item.source_url || item.url || '',
+      html_visible: item.html_visible !== false,
+      view_model_page_id: item.view_model_page_id || item.page_id || '',
+      representative_signals: normalizeSummaryLines(item.representative_signals || item.signals),
+      major_update_summary: normalizeSummaryLines(item.major_update_summary),
+      general_patch_summary: normalizeSummaryLines(item.general_patch_summary),
+      body_summary: normalizeSummaryLines(item.body_summary),
+      card_summary: item.card_summary || normalizeSummaryLines(item.body_summary)[0] || '',
+      game: name,
+      review_status: item.review_status || ''
+    };
+    map.get(name).events.push(event);
+  }
+  const groups = Array.from(map.values());
+  groups.forEach(g => g.events.sort((a,b)=>String(a.date_key).localeCompare(String(b.date_key)) || String(a.title).localeCompare(String(b.title))));
+  groups.sort((a,b)=>{
+    const ia = GAME_ORDER.indexOf(a.name), ib = GAME_ORDER.indexOf(b.name);
+    return (ia < 0 ? 999 : ia) - (ib < 0 ? 999 : ib) || a.name.localeCompare(b.name);
+  });
+  return groups;
+}
+function normalizeTimelinePayload(payload){
+  if(Array.isArray(payload)){
+    if(payload.length === 0) return [];
+    if(payload[0] && Array.isArray(payload[0].events)) return payload;
+    return toTimelineGroups(payload);
+  }
+  if(payload && Array.isArray(payload.data)) return normalizeTimelinePayload(payload.data);
+  if(payload && Array.isArray(payload.items)) return normalizeTimelinePayload(payload.items);
+  if(payload && Array.isArray(payload.games)) return normalizeTimelinePayload(payload.games);
+  throw new Error('Unsupported data.json schema');
+}
 async function loadDataJson(){
   const response = await fetch('data.json', {cache: 'no-store'});
   if(!response.ok) throw new Error('data.json load failed: '+response.status);
   const payload = await response.json();
-  if(Array.isArray(payload)) DATA = payload;
-  else if(Array.isArray(payload.data)) DATA = payload.data;
-  else if(Array.isArray(payload.items)) DATA = payload.items;
-  else if(Array.isArray(payload.games)) DATA = payload.games;
-  else throw new Error('Unsupported data.json schema');
-  TOTAL_EVENTS = DATA.reduce((n,g)=>n + ((g.events||[]).length), 0);
+  DATA = normalizeTimelinePayload(payload).filter(g => Array.isArray(g.events));
+  TOTAL_EVENTS = DATA.reduce((n,g)=>n + g.events.length, 0);
+  if(!DATA.length || !TOTAL_EVENTS) throw new Error('data.json contains no timeline events');
 }
 
 /* TOTAL_EVENTS is calculated after data.json fetch. */
@@ -93,7 +163,7 @@ function matchEvent(e,g){
   }
   return true;
 }
-function allMonths(){let dates=[]; DATA.forEach(g=>g.events.forEach(e=>{if(e.date_key) dates.push(e.date_key)})); let min=new Date(Math.min(...dates.map(d=>new Date(d+'T00:00:00')))); let max=new Date(Math.max(...dates.map(d=>new Date(d+'T00:00:00')))); let cur=new Date(min.getFullYear(),min.getMonth(),1); let end=new Date(max.getFullYear(),max.getMonth(),1); let months=[]; while(cur<=end){months.push(`${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,'0')}`); cur.setMonth(cur.getMonth()+1);} return months;}
+function allMonths(){let dates=[]; DATA.forEach(g=>(g.events||[]).forEach(e=>{if(e.date_key) dates.push(e.date_key)})); if(!dates.length) return []; let min=new Date(Math.min(...dates.map(d=>new Date(d+'T00:00:00')))); let max=new Date(Math.max(...dates.map(d=>new Date(d+'T00:00:00')))); let cur=new Date(min.getFullYear(),min.getMonth(),1); let end=new Date(max.getFullYear(),max.getMonth(),1); let months=[]; while(cur<=end){months.push(`${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,'0')}`); cur.setMonth(cur.getMonth()+1);} return months;}
 let MONTHS = [];
 let GAME_BY_NAME = {};
 function refreshDerivedData(){

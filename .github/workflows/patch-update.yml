@@ -68,7 +68,7 @@ on:
         required: false
         default: "14"
   schedule:
-    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v016.
+    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v017.
     - cron: "0 21 * * *"
 
 permissions:
@@ -125,19 +125,17 @@ jobs:
         run: |
           python scripts/patch_update_workflow.py
 
-      - name: Upload workflow artifacts
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: patch-update-artifacts
-          path: ${{ env.PATCH_WORKFLOW_ARTIFACT_DIR }}/
-          if-no-files-found: warn
-
       - name: Commit patch_view_model.json only
         if: ${{ env.DRY_RUN == 'false' && env.RUN_GIT_PUSH == 'true' }}
         run: |
+          mkdir -p "$PATCH_WORKFLOW_ARTIFACT_DIR"
+          result_file="$PATCH_WORKFLOW_ARTIFACT_DIR/git_deploy_result.json"
+
           if [ ! -f patch_view_model.json ]; then
             echo "[ERROR] patch_view_model.json was not generated."
+            cat > "$result_file" <<EOF
+          {"status":"FAILED","reason":"patch_view_model.json_missing"}
+          EOF
             exit 1
           fi
 
@@ -149,16 +147,64 @@ jobs:
           if [ -n "$bad_files" ]; then
             echo "[ERROR] Data-only deploy guard failed. Unexpected changed files:"
             echo "$bad_files"
+            python - <<'PY'
+          import json, os, subprocess, pathlib
+          changed = subprocess.run(['git','status','--porcelain'], text=True, capture_output=True).stdout.splitlines()
+          bad = [line[3:] if len(line)>3 else line for line in changed if (line[3:] if len(line)>3 else line) != 'patch_view_model.json']
+          pathlib.Path(os.environ['PATCH_WORKFLOW_ARTIFACT_DIR'], 'git_deploy_result.json').write_text(json.dumps({
+              'status':'FAILED',
+              'reason':'data_only_guard_failed',
+              'bad_files':bad,
+              'changed_files':[line[3:] if len(line)>3 else line for line in changed],
+              'github_sha':os.environ.get('GITHUB_SHA',''),
+              'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+          }, ensure_ascii=False, indent=2), encoding='utf-8')
+          PY
             exit 1
           fi
 
           git add patch_view_model.json
           if git diff --cached --quiet; then
             echo "[INFO] No patch_view_model.json changes to commit."
+            python - <<'PY'
+          import json, os, pathlib, subprocess
+          pathlib.Path(os.environ['PATCH_WORKFLOW_ARTIFACT_DIR'], 'git_deploy_result.json').write_text(json.dumps({
+              'status':'NO_CHANGES',
+              'reason':'no_patch_view_model_json_changes',
+              'committed':False,
+              'pushed':False,
+              'github_sha':os.environ.get('GITHUB_SHA',''),
+              'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+          }, ensure_ascii=False, indent=2), encoding='utf-8')
+          PY
             exit 0
           fi
 
           git config user.name "patch-update-actions"
           git config user.email "patch-update-actions@users.noreply.github.com"
           git commit -m "Update patch view model JSON"
+          commit_hash="$(git rev-parse --short HEAD)"
           git push
+          python - <<'PY'
+          import json, os, pathlib, subprocess
+          commit_hash = subprocess.run(['git','rev-parse','--short','HEAD'], text=True, capture_output=True).stdout.strip()
+          full_hash = subprocess.run(['git','rev-parse','HEAD'], text=True, capture_output=True).stdout.strip()
+          pathlib.Path(os.environ['PATCH_WORKFLOW_ARTIFACT_DIR'], 'git_deploy_result.json').write_text(json.dumps({
+              'status':'PUSHED',
+              'reason':'patch_view_model_json_committed',
+              'committed':True,
+              'pushed':True,
+              'commit_hash':commit_hash,
+              'commit_full_hash':full_hash,
+              'github_sha':os.environ.get('GITHUB_SHA',''),
+              'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+          }, ensure_ascii=False, indent=2), encoding='utf-8')
+          PY
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: patch-update-artifacts
+          path: ${{ env.PATCH_WORKFLOW_ARTIFACT_DIR }}/
+          if-no-files-found: warn

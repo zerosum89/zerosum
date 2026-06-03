@@ -8,6 +8,7 @@ import os
 import re
 import hashlib
 import sys
+import time
 import traceback
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -57,9 +58,11 @@ MAX_DETAIL_TEXT_CHARS = env_int("MAX_DETAIL_TEXT_CHARS", 40000)
 MAX_DETAIL_FETCHES = env_int("MAX_DETAIL_FETCHES", 20)
 RUN_TITLE_REPAIR = env_bool("RUN_TITLE_REPAIR", False)
 TITLE_REPAIR_WINDOW_DAYS = env_int("TITLE_REPAIR_WINDOW_DAYS", 14)
+POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
+POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v016"
+WORKFLOW_VERSION = "github_actions_v017"
 
 
 def canonical_url(url: str) -> str:
@@ -318,6 +321,65 @@ def export_patch_view_model() -> tuple[list[dict[str, Any]], str, bool]:
         "file_changed": file_changed,
     }, ensure_ascii=False, indent=2), encoding="utf-8")
     return items, source, file_changed
+
+
+def export_patch_view_model_with_retry(
+    expected_source_urls: list[str] | None = None,
+    min_items: int | None = None,
+    label: str = "export",
+) -> tuple[list[dict[str, Any]], str, bool]:
+    """Export Patch View Model and verify that recently written pages are visible.
+
+    Notion can expose newly created pages to subsequent database queries with a small delay.
+    v017 retries post-write export until created source URLs are present, preventing a run
+    from succeeding in Notion write but failing to update patch_view_model.json in the same run.
+    """
+    expected = [canonical_url(x) for x in (expected_source_urls or []) if x]
+    max_attempts = max(1, POST_WRITE_EXPORT_RETRY_COUNT)
+    wait_seconds = max(0, POST_WRITE_EXPORT_RETRY_SECONDS)
+    attempts: list[dict[str, Any]] = []
+    last_items: list[dict[str, Any]] = []
+    last_source = ""
+    last_changed = False
+    ok = False
+    missing: list[str] = []
+    for attempt in range(1, max_attempts + 1):
+        last_items, last_source, last_changed = export_patch_view_model()
+        item_urls = {canonical_url(x.get("source_url", "")) for x in last_items if x.get("source_url")}
+        missing = [x for x in expected if x not in item_urls]
+        min_ok = True if min_items is None else len(last_items) >= min_items
+        ok = (not missing) and min_ok
+        attempts.append({
+            "attempt": attempt,
+            "source": last_source,
+            "items": len(last_items),
+            "file_changed": last_changed,
+            "expected_source_url_count": len(expected),
+            "missing_expected_source_url_count": len(missing),
+            "missing_expected_source_urls": missing,
+            "min_items": min_items,
+            "min_items_ok": min_ok,
+            "ok": ok,
+        })
+        if ok:
+            break
+        if attempt < max_attempts and wait_seconds > 0:
+            log(f"[WAIT] {label} export verification not ready. retry={attempt + 1}/{max_attempts} after {wait_seconds}s")
+            time.sleep(wait_seconds)
+    result = {
+        "workflow_version": WORKFLOW_VERSION,
+        "label": label,
+        "passed": ok,
+        "max_attempts": max_attempts,
+        "wait_seconds": wait_seconds,
+        "expected_source_urls": expected,
+        "min_items": min_items,
+        "attempts": attempts,
+    }
+    (ART / f"{label}_export_verification.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    if expected and not ok:
+        raise RuntimeError(f"{label} export verification failed. Missing expected source URLs: {missing}")
+    return last_items, last_source, last_changed
 
 
 def ymd_key(v: Any) -> str:
@@ -1584,6 +1646,8 @@ def main() -> int:
         "max_detail_text_chars": MAX_DETAIL_TEXT_CHARS,
         "run_title_repair": RUN_TITLE_REPAIR,
         "title_repair_window_days": TITLE_REPAIR_WINDOW_DAYS,
+        "post_write_export_retry_count": POST_WRITE_EXPORT_RETRY_COUNT,
+        "post_write_export_retry_seconds": POST_WRITE_EXPORT_RETRY_SECONDS,
         **execution_identity(),
     }
     (ART / "effective_config.json").write_text(json.dumps(effective_config, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -1726,13 +1790,26 @@ def main() -> int:
         if invalid_candidate_rows and STRICT_DETAIL_URL_GUARD:
             notion_write_result["reason"] = "blocked_by_detail_url_guard"
         else:
+            pre_write_item_count = len(items)
             notion_write_result = write_new_patch_payloads_to_notion(payload_preview, items)
-            # After write, regenerate public JSON so a subsequent data-only commit includes newly created pages.
+            # After write, regenerate public JSON and verify newly created pages are visible.
             if notion_write_result.get("failed", 0) > 0:
                 (ART / "notion_write_result.json").write_text(json.dumps(notion_write_result, ensure_ascii=False, indent=2), encoding="utf-8")
                 write_csv(ART / "notion_write_summary.csv", notion_write_result.get("results", []))
                 raise RuntimeError("Notion write failed. See notion_write_result.json.")
-            items, export_source, file_changed = export_patch_view_model()
+            created_urls = [
+                r.get("source_url", "")
+                for r in notion_write_result.get("results", [])
+                if r.get("status") == "CREATED" and r.get("source_url")
+            ]
+            if created_urls:
+                items, export_source, file_changed = export_patch_view_model_with_retry(
+                    expected_source_urls=created_urls,
+                    min_items=pre_write_item_count + len(created_urls),
+                    label="post_write",
+                )
+            else:
+                items, export_source, file_changed = export_patch_view_model()
 
     title_repair_result = repair_recent_item_titles(items)
     (ART / "title_repair_result.json").write_text(json.dumps(title_repair_result, ensure_ascii=False, indent=2), encoding="utf-8")

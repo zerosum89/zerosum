@@ -56,7 +56,7 @@ MAX_DETAIL_TEXT_CHARS = env_int("MAX_DETAIL_TEXT_CHARS", 40000)
 MAX_DETAIL_FETCHES = env_int("MAX_DETAIL_FETCHES", 20)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v008"
+WORKFLOW_VERSION = "github_actions_v009"
 
 
 def canonical_url(url: str) -> str:
@@ -368,6 +368,115 @@ def extract_date_from_text(text: str) -> str:
         return f"{datetime.now(KST).year:04d}-{int(m.group(1)):02d}-{int(m.group(2)):02d}"
     return ""
 
+
+
+
+def year_from_fallback(fallback: str = "") -> int:
+    m = re.match(r"^(20\d{2})-", str(fallback or ""))
+    if m:
+        return int(m.group(1))
+    return datetime.now(KST).year
+
+
+def extract_effective_patch_date(title: str, text: str, fallback: str = "", profile: dict[str, Any] | None = None) -> str:
+    """Prefer the actual patch/update date over posted date.
+
+    v009 fixes pages like NightCrows KR where the detail page contains both
+    an effective patch-note title such as "6월 4일(목) 패치노트" and a
+    separate posted timestamp such as "2026.06.03 18:00". The effective
+    title date wins.
+    """
+    profile = profile or {}
+    year = year_from_fallback(fallback)
+    title = title or ""
+    lines = [x.strip() for x in (text or "").splitlines() if x.strip()]
+
+    # 1) Highest priority: line/title explicitly saying patch note/update.
+    priority_sources = [title] + lines[:80]
+    for src in priority_sources:
+        if not re.search(r"(패치노트|업데이트|patch\s*note|update)", src, re.I):
+            continue
+        m = re.search(r"(?:(20\d{2})[.\-/]\s*)?(\d{1,2})\s*월\s*(\d{1,2})\s*일", src)
+        if m:
+            yy = int(m.group(1)) if m.group(1) else year
+            return f"{yy:04d}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+        m = re.search(r"(20\d{2})[.\-/](\d{1,2})[.\-/](\d{1,2})", src)
+        if m:
+            return f"{int(m.group(1)):04d}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+        m = re.search(r"\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})(?:st|nd|rd|th)?\b", src, re.I)
+        if m:
+            months = {name.lower(): i for i, name in enumerate(["January","February","March","April","May","June","July","August","September","October","November","December"], 1)}
+            return f"{year:04d}-{months[m.group(1).lower()]:02d}-{int(m.group(2)):02d}"
+
+    # 2) Fallback: title date only, then row/list date.
+    title_date = extract_date_from_text(title)
+    if title_date:
+        return title_date
+    return fallback or extract_date_from_text("\n".join(lines[:40]))
+
+
+def compress_update_units_for_preview(units: list[dict[str, Any]], profile: dict[str, Any], title: str = "") -> list[dict[str, Any]]:
+    """Conservatively reduce oversized preview unit lists.
+
+    This is a preview compression layer, not a Notion write decision. It keeps
+    independent high-signal update units while avoiding 20-line KR patch cards
+    caused by every minor convenience heading being promoted to body_summary.
+    """
+    if len(units) <= 12:
+        return units
+    game = profile.get("game", "")
+
+    priority_keywords = [
+        "신규 무기 외형", "도미니언", "공명 카드", "기술 정보창", "에픽 던전",
+        "연금술", "파티 던전", "몬스터 스폰", "new system", "new artifact",
+        "new world battlefront", "potential", "world dungeon", "server transfer",
+        "creed", "lamp", "auber",
+    ]
+    selected: list[dict[str, Any]] = []
+    used = set()
+    for u in units:
+        hay = f"{u.get('source_heading','')} {u.get('summary_sentence','')}".lower()
+        if any(k.lower() in hay for k in priority_keywords):
+            key = norm_key(u.get("summary_sentence", ""))
+            if key not in used:
+                selected.append(u)
+                used.add(key)
+        if len(selected) >= 8:
+            break
+
+    # Add one aggregated convenience line when many convenience-only headings remain.
+    convenience_units = [u for u in units if u.get("domain") == "편의/UI" and norm_key(u.get("summary_sentence", "")) not in used]
+    aggregated_convenience = False
+    if convenience_units:
+        headings = [clean_heading_text(str(u.get("source_heading", ""))) for u in convenience_units[:5]]
+        agg = {
+            "order": min([int(u.get("order") or 999) for u in convenience_units] or [999]),
+            "domain": "편의/UI",
+            "source_heading": "편의 기능 개선 묶음",
+            "source_context_excerpt": " / ".join([h for h in headings if h])[:280],
+            "summary_sentence": "편의/UI: UI 숨기기, 입장권 사용, 지도 이동, 재화 표기 등 주요 편의 기능이 개선됩니다.",
+            "confidence": 0.78,
+            "compressed_from_count": len(convenience_units),
+        }
+        selected.append(agg)
+        aggregated_convenience = True
+
+    # Keep original order; fill up to 12 with earliest remaining if needed.
+    selected_keys = {norm_key(u.get("summary_sentence", "")) for u in selected}
+    for u in units:
+        if aggregated_convenience and u.get("domain") == "편의/UI":
+            continue
+        key = norm_key(u.get("summary_sentence", ""))
+        if key not in selected_keys:
+            selected.append(u)
+            selected_keys.add(key)
+        if len(selected) >= 12:
+            break
+
+    selected = sorted(selected, key=lambda u: int(u.get("order") or 999))[:12]
+    for u in selected:
+        u["preview_compression"] = "compressed_high_unit_count"
+    return selected
 
 def is_list_or_board_url(url: str, profile: dict[str, Any]) -> bool:
     c = profile_canonical_url(url, profile)
@@ -862,15 +971,15 @@ def audit_summary_candidates(title: str, units: list[dict[str, Any]], text: str)
 def make_rule_based_summary_preview(text: str, title: str, profile: dict[str, Any] | None = None) -> tuple[list[str], list[str], str, str, list[dict[str, Any]], list[str]]:
     """Create write-disabled summary candidates from detail text.
 
-    v008 upgrades v008's raw line extraction into profile-aware update-unit
-    candidates. It is still a preview generator, not final Notion write logic.
+    v009 adds effective-date priority extraction and high-unit compression.
+    It is still a preview generator, not final Notion write logic.
     """
     profile = profile or {}
     cleaned = clean_detail_text_for_summary(text, profile, title)
     blocks = extract_numbered_heading_blocks(cleaned, profile)
     units = [summary_sentence_from_heading(b, profile) for b in blocks]
-    # keep top-level content units; compress event/shop spillover by cap.
-    units = units[:20]
+    raw_unit_count = len(units)
+    units = compress_update_units_for_preview(units, profile, title)
     if not units:
         # Conservative fallback when numbered sections are not available.
         lines = [x.strip() for x in cleaned.splitlines() if x.strip()]
@@ -888,6 +997,10 @@ def make_rule_based_summary_preview(text: str, title: str, profile: dict[str, An
             if len(units) >= 6:
                 break
     status, flags = audit_summary_candidates(title, units, cleaned)
+    if raw_unit_count > len(units):
+        flags = [f for f in flags if f != "HIGH_UNIT_COUNT"]
+        flags.append(f"COMPRESSED_FROM_{raw_unit_count}_TO_{len(units)}")
+        status = "PASS" if all(str(f).startswith("COMPRESSED_FROM_") for f in flags) else ("REVIEW" if flags else "PASS")
     body = [u["summary_sentence"] for u in units[:12]]
     tags: list[str] = []
     for u in units:
@@ -935,13 +1048,17 @@ def fetch_detail_page(profile: dict[str, Any], row: dict[str, Any]) -> dict[str,
         text = text[:MAX_DETAIL_TEXT_CHARS]
         text_path = detail_dir / f"{base_name}.raw.txt"
         text_path.write_text(text, encoding="utf-8")
-        actual_date = extract_date_from_text("\n".join([title, text[:5000]])) or meta["actual_date"]
+        listed_actual_date = meta["actual_date"]
+        actual_date = extract_effective_patch_date(title, text, listed_actual_date, profile) or listed_actual_date
+        actual_date_source = "effective_patch_date" if actual_date and actual_date != listed_actual_date else "list_or_posted_date"
         cleaned_text = clean_detail_text_for_summary(text, profile, title)
         body, tags, card, qstatus, units, qflags = make_rule_based_summary_preview(text, title, profile)
         meta.update({
             "fetch_status": "PASS",
             "title": title,
             "actual_date": actual_date,
+            "listed_actual_date": listed_actual_date,
+            "actual_date_source": actual_date_source,
             "text_length": len(text),
             "summary_source_text_length": len(cleaned_text),
             "raw_html_path": str(html_path.relative_to(ART)),
@@ -1009,6 +1126,8 @@ def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dic
                 "game": res["game"],
                 "source_url": row["source_url"],
                 "actual_date": detail.get("actual_date") or row.get("actual_date") or None,
+                "listed_actual_date": detail.get("listed_actual_date") or row.get("actual_date") or None,
+                "actual_date_source": detail.get("actual_date_source", "list_candidate"),
                 "page_title": detail.get("title") or row.get("title") or "패치노트",
                 "anchor_source_url": res.get("anchor", {}).get("source_url"),
                 "anchor_actual_date": res.get("anchor", {}).get("actual_date"),
@@ -1024,7 +1143,7 @@ def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dic
                 "summary_quality_flags": detail.get("summary_quality_flags", []),
                 "summary_source_text_length": detail.get("summary_source_text_length", 0),
                 "quality_status": detail.get("quality_status", "PREVIEW_ONLY"),
-                "note": "v008 generates profile-aware summary quality preview only. Notion write remains disabled.",
+                "note": "v009 generates normalized detail summary quality preview only. Notion write remains disabled.",
             })
     return payloads
 
@@ -1053,7 +1172,7 @@ def main() -> int:
     (ART / "execution_identity.json").write_text(json.dumps(execution_identity(), ensure_ascii=False, indent=2), encoding="utf-8")
 
     if RUN_NOTION_WRITE:
-        raise RuntimeError("RUN_NOTION_WRITE=true is not supported in v008. Use detection/detail-fetch/summary-quality/export preview only.")
+        raise RuntimeError("RUN_NOTION_WRITE=true is not supported in v009. Use detection/detail-fetch/summary-quality/export preview only.")
 
     items, export_source, file_changed = export_patch_view_model()
     anchors = latest_anchor_by_game(items)
@@ -1088,13 +1207,15 @@ def main() -> int:
 
     detail_results = fetch_details_for_candidates(results, profiles)
     (ART / "detail_fetch_result.json").write_text(json.dumps({"workflow_version": WORKFLOW_VERSION, "fetch_detail_pages": FETCH_DETAIL_PAGES, "results": detail_results}, ensure_ascii=False, indent=2), encoding="utf-8")
-    write_csv(ART / "detail_fetch_summary.csv", [{"game": d.get("game", ""), "actual_date": d.get("actual_date", ""), "title": d.get("title", ""), "source_url": d.get("source_url", ""), "fetch_status": d.get("fetch_status", ""), "http_status": d.get("http_status", ""), "text_length": d.get("text_length", 0), "summary_source_text_length": d.get("summary_source_text_length", 0), "quality_status": d.get("quality_status", ""), "summary_quality_flags": ";".join(d.get("summary_quality_flags", []) or []), "raw_text_path": d.get("raw_text_path", "")} for d in detail_results])
+    write_csv(ART / "detail_fetch_summary.csv", [{"game": d.get("game", ""), "actual_date": d.get("actual_date", ""), "listed_actual_date": d.get("listed_actual_date", ""), "actual_date_source": d.get("actual_date_source", ""), "title": d.get("title", ""), "source_url": d.get("source_url", ""), "fetch_status": d.get("fetch_status", ""), "http_status": d.get("http_status", ""), "text_length": d.get("text_length", 0), "summary_source_text_length": d.get("summary_source_text_length", 0), "quality_status": d.get("quality_status", ""), "summary_quality_flags": ";".join(d.get("summary_quality_flags", []) or []), "raw_text_path": d.get("raw_text_path", "")} for d in detail_results])
     summary_quality_rows = []
     update_unit_rows = []
     for d in detail_results:
         summary_quality_rows.append({
             "game": d.get("game", ""),
             "actual_date": d.get("actual_date", ""),
+            "listed_actual_date": d.get("listed_actual_date", ""),
+            "actual_date_source": d.get("actual_date_source", ""),
             "title": d.get("title", ""),
             "source_url": d.get("source_url", ""),
             "quality_status": d.get("quality_status", ""),
@@ -1214,7 +1335,7 @@ def main() -> int:
         "processing_order = actual_date 오름차순(oldest-first)",
         "```",
         "",
-        "## v008 scope",
+        "## v009 scope",
         "",
         "- Explicit workflow identity: workflow_version, GITHUB_SHA, GITHUB_REF, run id, script SHA256",
         "- Detail URL guard: board/list URL candidates are written to invalid_url_candidates.csv",

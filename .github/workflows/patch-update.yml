@@ -68,7 +68,7 @@ on:
         required: false
         default: "14"
   schedule:
-    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v012.
+    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v013.
     - cron: "0 21 * * *"
 
 permissions:

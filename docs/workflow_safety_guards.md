@@ -30,7 +30,7 @@
 New URL candidates can be followed to detail pages in preview mode. The workflow stores raw HTML/TXT artifacts and creates conservative rule-based summary candidates. These candidates are not write-ready; Notion write remains disabled.
 
 
-## v012 additions
+## v013 additions
 
 - Workflow artifacts are written to `runner.temp` so `outputs/` is not seen as a repo change.
 - Data-only deploy guard allows only `patch_view_model.json` changes.

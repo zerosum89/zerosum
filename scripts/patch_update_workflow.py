@@ -59,7 +59,7 @@ RUN_TITLE_REPAIR = env_bool("RUN_TITLE_REPAIR", False)
 TITLE_REPAIR_WINDOW_DAYS = env_int("TITLE_REPAIR_WINDOW_DAYS", 14)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v011"
+WORKFLOW_VERSION = "github_actions_v012"
 
 
 def canonical_url(url: str) -> str:
@@ -407,7 +407,7 @@ def year_from_fallback(fallback: str = "") -> int:
 def extract_effective_patch_date(title: str, text: str, fallback: str = "", profile: dict[str, Any] | None = None) -> str:
     """Prefer the actual patch/update date over posted date.
 
-    v011 keeps the v010 date fix for pages like NightCrows KR where the detail page contains both
+    v012 keeps the v010 date fix for pages like NightCrows KR where the detail page contains both
     an effective patch-note title such as "6월 4일(목) 패치노트" and a
     separate posted timestamp such as "2026.06.03 18:00". The effective
     title date wins.
@@ -1378,7 +1378,7 @@ def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dic
                 "summary_quality_flags": detail.get("summary_quality_flags", []),
                 "summary_source_text_length": detail.get("summary_source_text_length", 0),
                 "quality_status": detail.get("quality_status", "PREVIEW_ONLY"),
-                "note": "v011 uses normalized item names, keeps artifacts outside the repo on Actions, and can create Notion pages only when dry_run=false and run_notion_write=true.",
+                "note": "v012 uses normalized item names, keeps artifacts outside the repo on Actions, and can create Notion pages only when dry_run=false and run_notion_write=true.",
             })
     return payloads
 
@@ -1396,7 +1396,7 @@ def repair_recent_item_titles(items: list[dict[str, Any]]) -> dict[str, Any]:
     """Optionally normalize recently created/migrated item titles.
 
     This is separate from new page creation. It is used to fix items created
-    before v011 that used source detail titles such as "Patch Note - June 2nd"
+    before v012 that used source detail titles such as "Patch Note - June 2nd"
     instead of the standard Notion item name "YY.MM.DD | 패치노트".
     """
     today_ord = datetime.now(KST).date().toordinal()
@@ -1696,7 +1696,7 @@ def main() -> int:
         "processing_order = actual_date 오름차순(oldest-first)",
         "```",
         "",
-        "## v011 scope",
+        "## v012 scope",
         "",
         "- Explicit workflow identity: workflow_version, GITHUB_SHA, GITHUB_REF, run id, script SHA256",
         "- Detail URL guard: board/list URL candidates are written to invalid_url_candidates.csv",

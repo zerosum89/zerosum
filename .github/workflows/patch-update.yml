@@ -68,7 +68,7 @@ on:
         required: false
         default: "14"
   schedule:
-    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v011.
+    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v012.
     - cron: "0 21 * * *"
 
 permissions:
@@ -100,7 +100,6 @@ jobs:
       MAX_DETAIL_FETCHES: ${{ github.event_name == 'workflow_dispatch' && inputs.max_detail_fetches || '20' }}
       RUN_TITLE_REPAIR: ${{ github.event_name == 'workflow_dispatch' && inputs.run_title_repair || 'false' }}
       TITLE_REPAIR_WINDOW_DAYS: ${{ github.event_name == 'workflow_dispatch' && inputs.title_repair_window_days || '14' }}
-      PATCH_WORKFLOW_ARTIFACT_DIR: ${{ runner.temp }}/patch_workflow_artifacts
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -116,6 +115,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements-actions.txt
+
+      - name: Prepare artifact directory
+        run: |
+          echo "PATCH_WORKFLOW_ARTIFACT_DIR=$RUNNER_TEMP/patch_workflow_artifacts" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/patch_workflow_artifacts"
 
       - name: Run patchnote workflow
         run: |

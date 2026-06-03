@@ -12,7 +12,7 @@ on:
           - "true"
           - "false"
       run_notion_write:
-        description: "Reserved. v006 keeps Notion write disabled."
+        description: "Reserved. v007 keeps Notion write disabled."
         required: true
         default: "false"
         type: choice
@@ -43,8 +43,20 @@ on:
         options:
           - "true"
           - "false"
+      fetch_detail_pages:
+        description: "true = fetch raw detail HTML/text for new URL candidates and create rule-based summary preview."
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+      max_detail_fetches:
+        description: "Safety cap for detail page fetches per workflow run."
+        required: false
+        default: "20"
   schedule:
-    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v006.
+    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v007.
     - cron: "0 21 * * *"
 
 permissions:
@@ -72,6 +84,8 @@ jobs:
       TARGET_GAMES: ${{ github.event_name == 'workflow_dispatch' && inputs.target_games || 'ALL' }}
       MAX_NEW_URLS_PER_GAME: ${{ github.event_name == 'workflow_dispatch' && inputs.max_new_urls_per_game || '20' }}
       STRICT_DETAIL_URL_GUARD: ${{ github.event_name == 'workflow_dispatch' && inputs.strict_detail_url_guard || 'true' }}
+      FETCH_DETAIL_PAGES: ${{ github.event_name == 'workflow_dispatch' && inputs.fetch_detail_pages || 'true' }}
+      MAX_DETAIL_FETCHES: ${{ github.event_name == 'workflow_dispatch' && inputs.max_detail_fetches || '20' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

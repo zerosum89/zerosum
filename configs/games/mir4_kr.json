@@ -1,7 +1,7 @@
 {
   "game": "MIR4_KR",
   "enabled": true,
-  "profile_status": "seed_detail_url_filter_v006",
+  "profile_status": "seed_detail_url_filter_v007",
   "list_url": "https://forum.mir4.co.kr/board/patchnote",
   "list_order": "newest_first",
   "canonical_host_aliases": [
@@ -31,5 +31,20 @@
     "공지",
     "이벤트"
   ],
-  "notes": "v006: cs.mir4.co.kr and forum.mir4.co.kr /post/{id} are compared as equivalent for anchor matching."
+  "notes": "v007: cs.mir4.co.kr and forum.mir4.co.kr /post/{id} are compared as equivalent for anchor matching. Detail fetch selectors are seed-level and artifacts remain preview-only.",
+  "detail_title_selectors": [
+    "h1",
+    ".view-title",
+    ".title",
+    ".tit"
+  ],
+  "detail_content_selectors": [
+    "article",
+    "main",
+    ".view_cont",
+    ".view-content",
+    ".content",
+    ".contents",
+    "body"
+  ]
 }

@@ -51,9 +51,12 @@ TARGET_GAMES = [x.strip() for x in os.environ.get("TARGET_GAMES", "ALL").split("
 MAX_NEW_URLS_PER_GAME = env_int("MAX_NEW_URLS_PER_GAME", 20)
 MAX_LIST_ITEMS = env_int("MAX_LIST_ITEMS", 80)
 STRICT_DETAIL_URL_GUARD = env_bool("STRICT_DETAIL_URL_GUARD", True)
+FETCH_DETAIL_PAGES = env_bool("FETCH_DETAIL_PAGES", True)
+MAX_DETAIL_TEXT_CHARS = env_int("MAX_DETAIL_TEXT_CHARS", 40000)
+MAX_DETAIL_FETCHES = env_int("MAX_DETAIL_FETCHES", 20)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v006"
+WORKFLOW_VERSION = "github_actions_v007"
 
 
 def canonical_url(url: str) -> str:
@@ -495,6 +498,221 @@ def detect_newer_than_anchor(profile: dict[str, Any], official_list: list[dict[s
     }
 
 
+
+def safe_slug(text: str, fallback: str = "item") -> str:
+    slug = re.sub(r"[^A-Za-z0-9_.-]+", "_", str(text or "")).strip("_")
+    return slug[:80] or fallback
+
+
+def normalize_visible_text(text: str) -> str:
+    text = re.sub(r"\r\n?", "\n", text or "")
+    text = re.sub(r"[ \t]+", " ", text)
+    lines = []
+    for line in text.splitlines():
+        t = line.strip()
+        if not t:
+            continue
+        # Drop highly repetitive navigation/footer fragments.
+        if re.fullmatch(r"[|·•\-_/\\]+", t):
+            continue
+        if len(t) <= 1:
+            continue
+        lines.append(t)
+    # De-duplicate adjacent or repeated boilerplate lines while preserving order.
+    out = []
+    seen_counts: dict[str, int] = {}
+    for line in lines:
+        key = norm_key(line)
+        seen_counts[key] = seen_counts.get(key, 0) + 1
+        if seen_counts[key] <= 2:
+            out.append(line)
+    return "\n".join(out)
+
+
+def extract_content_text_from_soup(soup: BeautifulSoup, profile: dict[str, Any]) -> str:
+    for tag in soup(["script", "style", "noscript", "svg", "canvas", "form"]):
+        tag.decompose()
+    selectors = profile.get("detail_content_selectors", []) or [
+        "article", "main", "#content", ".content", ".contents", ".view", ".view_cont", ".view-content", ".board-view", ".notice-view", "body"
+    ]
+    candidates = []
+    for selector in selectors:
+        try:
+            for node in soup.select(selector):
+                txt = normalize_visible_text(node.get_text("\n", strip=True))
+                if txt:
+                    candidates.append(txt)
+        except Exception:
+            continue
+    if not candidates:
+        candidates.append(normalize_visible_text(soup.get_text("\n", strip=True)))
+    return max(candidates, key=len) if candidates else ""
+
+
+def extract_detail_title(soup: BeautifulSoup, fallback: str, profile: dict[str, Any]) -> str:
+    selectors = profile.get("detail_title_selectors", []) or ["h1", ".title", ".tit", ".view-title", ".board-title"]
+    for selector in selectors:
+        try:
+            node = soup.select_one(selector)
+            if node:
+                txt = " ".join(node.get_text(" ", strip=True).split())
+                if txt and len(txt) >= 3:
+                    return txt
+        except Exception:
+            continue
+    if soup.title and soup.title.string:
+        txt = " ".join(soup.title.string.split())
+        if txt:
+            return txt
+    return fallback or "패치노트"
+
+
+DOMAIN_KEYWORDS: list[tuple[str, list[str]]] = [
+    ("신규/대형 업데이트", ["new class", "신규 클래스", "new server", "신규 서버", "new region", "신규 지역", "new chapter", "신규 챕터", "new system", "신규 시스템", "major update", "대규모"]),
+    ("클래스/스킬", ["class", "skill", "클래스", "직업", "스킬", "ability", "spell"]),
+    ("서버/월드", ["server", "world", "서버", "월드", "merge", "transfer", "이전", "통합"]),
+    ("PvP/전쟁", ["pvp", "battlefield", "war", "siege", "conquest", "guild war", "전쟁", "전장", "공성", "쟁탈", "격전지", "월드 던전"]),
+    ("PvE 콘텐츠", ["dungeon", "boss", "monster", "quest", "field", "raid", "던전", "보스", "몬스터", "퀘스트", "필드", "지역", "콘텐츠"]),
+    ("성장/장비", ["equipment", "gear", "item", "craft", "enhance", "growth", "artifact", "collection", "장비", "아이템", "제작", "강화", "성장", "수집", "아티팩트", "유물"]),
+    ("경제/보상", ["reward", "exchange", "shop", "drop", "currency", "보상", "교환", "상점", "드롭", "재화", "거래", "가격"]),
+    ("이벤트/보상", ["event", "mission", "check-in", "attendance", "이벤트", "미션", "출석", "기념", "교환소"]),
+    ("상점/BM", ["package", "pass", "product", "purchase", "shop", "패키지", "패스", "상품", "구매", "판매"]),
+    ("편의/UI", ["ui", "convenience", "display", "filter", "sort", "improved", "편의", "표시", "필터", "정렬", "개선"]),
+    ("버그 수정", ["fix", "issue", "bug", "error", "오류", "버그", "수정", "현상"]),
+]
+
+
+def classify_domain(line: str) -> str:
+    hay = line.lower()
+    for domain, words in DOMAIN_KEYWORDS:
+        if any(w.lower() in hay for w in words):
+            return domain
+    return "기타"
+
+
+def truncate_sentence(text: str, limit: int = 180) -> str:
+    t = " ".join(str(text or "").split())
+    if len(t) <= limit:
+        return t
+    return t[: limit - 1].rstrip() + "…"
+
+
+def make_rule_based_summary_preview(text: str, title: str) -> tuple[list[str], list[str], str, str]:
+    # This is intentionally conservative. It creates a preview candidate, not final write-ready Korean copy.
+    lines = [x.strip() for x in (text or "").splitlines() if x.strip()]
+    candidates = []
+    seen = set()
+    bad_markers = ["facebook", "youtube", "discord", "google play", "app store", "copyright", "privacy", "terms", "고객센터", "로그인"]
+    for line in lines:
+        raw = " ".join(line.split())
+        if len(raw) < 8 or len(raw) > 240:
+            continue
+        low = raw.lower()
+        if any(m in low for m in bad_markers):
+            continue
+        domain = classify_domain(raw)
+        if domain == "기타":
+            continue
+        key = norm_key(raw)[:80]
+        if key in seen:
+            continue
+        seen.add(key)
+        candidates.append((domain, raw))
+        if len(candidates) >= 8:
+            break
+    if not candidates:
+        fallback = truncate_sentence(title or "상세 원문 수집 완료", 120)
+        return [f"원문 수집: {fallback} 원문이 수집되었으며 update-unit 요약 검토가 필요합니다."], ["원문 수집"], fallback, "RAW_COLLECTED_REVIEW"
+    body = [f"{d}: {truncate_sentence(t, 170)}" for d, t in candidates[:6]]
+    tags = []
+    for d, _ in candidates:
+        if d not in tags:
+            tags.append(d)
+    card = " · ".join(tags[:4])
+    return body, tags, card, "RAW_COLLECTED_RULE_PREVIEW"
+
+
+def fetch_detail_page(profile: dict[str, Any], row: dict[str, Any]) -> dict[str, Any]:
+    game = profile.get("game", "game")
+    url = row.get("source_url") or row.get("url") or ""
+    safe_game = safe_slug(game, "game")
+    url_hash = hashlib.sha1(url.encode("utf-8")).hexdigest()[:12]
+    detail_dir = ART / "detail_pages" / safe_game
+    detail_dir.mkdir(parents=True, exist_ok=True)
+    base_name = f"{row.get('actual_date') or 'unknown'}_{url_hash}"
+    meta: dict[str, Any] = {
+        "game": game,
+        "source_url": url,
+        "url_hash": url_hash,
+        "fetch_status": "PENDING",
+        "http_status": None,
+        "title": row.get("title") or "패치노트",
+        "actual_date": row.get("actual_date") or "",
+        "text_length": 0,
+        "raw_html_path": "",
+        "raw_text_path": "",
+        "text_excerpt": "",
+        "body_summary_candidate": [],
+        "domain_tags_candidate": [],
+        "card_summary_candidate": "",
+        "quality_status": "FETCH_PENDING",
+    }
+    try:
+        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0 patch-update-actions detail-fetch"}, timeout=60)
+        meta["http_status"] = r.status_code
+        r.raise_for_status()
+        html = r.text
+        html_path = detail_dir / f"{base_name}.raw.html"
+        html_path.write_text(html, encoding="utf-8")
+        soup = BeautifulSoup(html, "lxml")
+        title = extract_detail_title(soup, meta["title"], profile)
+        text = extract_content_text_from_soup(soup, profile)
+        text = text[:MAX_DETAIL_TEXT_CHARS]
+        text_path = detail_dir / f"{base_name}.raw.txt"
+        text_path.write_text(text, encoding="utf-8")
+        actual_date = extract_date_from_text("\n".join([title, text[:5000]])) or meta["actual_date"]
+        body, tags, card, qstatus = make_rule_based_summary_preview(text, title)
+        meta.update({
+            "fetch_status": "PASS",
+            "title": title,
+            "actual_date": actual_date,
+            "text_length": len(text),
+            "raw_html_path": str(html_path.relative_to(ART)),
+            "raw_text_path": str(text_path.relative_to(ART)),
+            "text_excerpt": text[:1200],
+            "body_summary_candidate": body,
+            "domain_tags_candidate": tags,
+            "card_summary_candidate": card,
+            "quality_status": qstatus,
+        })
+    except Exception as exc:
+        meta.update({
+            "fetch_status": "FAILED",
+            "fetch_error": str(exc),
+            "quality_status": "DETAIL_FETCH_FAILED",
+        })
+    (detail_dir / f"{base_name}.meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+    return meta
+
+
+def fetch_details_for_candidates(results: list[dict[str, Any]], profiles: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    if not FETCH_DETAIL_PAGES:
+        return []
+    by_game = {p.get("game"): p for p in profiles}
+    detail_results = []
+    total = 0
+    for res in results:
+        profile = by_game.get(res.get("game"), {})
+        for row in res.get("new_urls", []) or []:
+            if total >= MAX_DETAIL_FETCHES:
+                break
+            detail_results.append(fetch_detail_page(profile, row))
+            total += 1
+        if total >= MAX_DETAIL_FETCHES:
+            break
+    return detail_results
+
+
 def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
     if not rows:
         path.write_text("", encoding="utf-8")
@@ -506,24 +724,35 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         w.writerows(rows)
 
 
-def make_payload_preview(results: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
+    detail_by_url = {d.get("source_url"): d for d in (detail_results or [])}
     payloads = []
     for res in results:
         for i, row in enumerate(res.get("new_urls", []), 1):
+            detail = detail_by_url.get(row.get("source_url"), {})
+            fetched = bool(detail)
+            body_summary = detail.get("body_summary_candidate") if fetched else "NEEDS_DETAIL_FETCH_AND_SUMMARY"
+            domain_tags = detail.get("domain_tags_candidate") if fetched else []
+            card_summary = detail.get("card_summary_candidate") if fetched else ""
             payloads.append({
                 "operation": "preview_new_patch_create",
                 "write_ready": False,
                 "game": res["game"],
                 "source_url": row["source_url"],
-                "actual_date": row.get("actual_date") or None,
-                "page_title": row.get("title") or "패치노트",
+                "actual_date": detail.get("actual_date") or row.get("actual_date") or None,
+                "page_title": detail.get("title") or row.get("title") or "패치노트",
                 "anchor_source_url": res.get("anchor", {}).get("source_url"),
                 "anchor_actual_date": res.get("anchor", {}).get("actual_date"),
                 "process_order": i,
-                "body_summary": "NEEDS_DETAIL_FETCH_AND_SUMMARY",
-                "domain_tags": [],
-                "card_summary": "",
-                "quality_status": "PREVIEW_ONLY",
+                "detail_fetch_status": detail.get("fetch_status", "NOT_FETCHED"),
+                "raw_html_path": detail.get("raw_html_path", ""),
+                "raw_text_path": detail.get("raw_text_path", ""),
+                "raw_text_excerpt": detail.get("text_excerpt", ""),
+                "body_summary": body_summary,
+                "domain_tags": domain_tags,
+                "card_summary": card_summary,
+                "quality_status": detail.get("quality_status", "PREVIEW_ONLY"),
+                "note": "v007 generates raw detail collection and rule-based summary candidates only. Notion write remains disabled.",
             })
     return payloads
 
@@ -543,13 +772,16 @@ def main() -> int:
         "openai_key_present": bool(os.environ.get("OPENAI_API_KEY")),
         "workflow_version": WORKFLOW_VERSION,
         "strict_detail_url_guard": STRICT_DETAIL_URL_GUARD,
+        "fetch_detail_pages": FETCH_DETAIL_PAGES,
+        "max_detail_fetches": MAX_DETAIL_FETCHES,
+        "max_detail_text_chars": MAX_DETAIL_TEXT_CHARS,
         **execution_identity(),
     }
     (ART / "effective_config.json").write_text(json.dumps(effective_config, ensure_ascii=False, indent=2), encoding="utf-8")
     (ART / "execution_identity.json").write_text(json.dumps(execution_identity(), ensure_ascii=False, indent=2), encoding="utf-8")
 
     if RUN_NOTION_WRITE:
-        raise RuntimeError("RUN_NOTION_WRITE=true is not supported in v006. Use detection/export preview only.")
+        raise RuntimeError("RUN_NOTION_WRITE=true is not supported in v007. Use detection/detail-fetch/export preview only.")
 
     items, export_source, file_changed = export_patch_view_model()
     anchors = latest_anchor_by_game(items)
@@ -582,7 +814,10 @@ def main() -> int:
             log(f"[WARN] {game} official list fetch failed: {exc}")
         results.append(res)
 
-    payload_preview = make_payload_preview(results)
+    detail_results = fetch_details_for_candidates(results, profiles)
+    (ART / "detail_fetch_result.json").write_text(json.dumps({"workflow_version": WORKFLOW_VERSION, "fetch_detail_pages": FETCH_DETAIL_PAGES, "results": detail_results}, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_csv(ART / "detail_fetch_summary.csv", [{"game": d.get("game", ""), "actual_date": d.get("actual_date", ""), "title": d.get("title", ""), "source_url": d.get("source_url", ""), "fetch_status": d.get("fetch_status", ""), "http_status": d.get("http_status", ""), "text_length": d.get("text_length", 0), "quality_status": d.get("quality_status", ""), "raw_text_path": d.get("raw_text_path", "")} for d in detail_results])
+    payload_preview = make_payload_preview(results, detail_results)
     summary_rows = [
         {
             "game": r["game"],
@@ -660,6 +895,8 @@ def main() -> int:
         f"- script_sha256: {execution_identity().get('script_sha256', '')}",
         f"- strict_detail_url_guard: {STRICT_DETAIL_URL_GUARD}",
         f"- invalid_url_candidate_count: {len(invalid_candidate_rows)}",
+        f"- fetch_detail_pages: {FETCH_DETAIL_PAGES}",
+        f"- detail_fetch_count: {len(detail_results)}",
         "",
         "## Detection summary",
         "",
@@ -678,7 +915,7 @@ def main() -> int:
         "processing_order = actual_date 오름차순(oldest-first)",
         "```",
         "",
-        "## v006 scope",
+        "## v007 scope",
         "",
         "- Explicit workflow identity: workflow_version, GITHUB_SHA, GITHUB_REF, run id, script SHA256",
         "- Detail URL guard: board/list URL candidates are written to invalid_url_candidates.csv",
@@ -686,6 +923,8 @@ def main() -> int:
         "- Notion DB export and patch_view_model.json generation",
         "- patch_view_model.json noisy commit prevention",
         "- newer-than-anchor URL detection preview",
+        "- raw detail HTML/TXT collection for new URL candidates",
+        "- rule-based body_summary/domain_tags/card_summary preview candidates",
         "- payload preview only",
         "- Notion write intentionally disabled",
         "- data-only commit guard for patch_view_model.json",

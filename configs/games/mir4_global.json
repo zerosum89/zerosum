@@ -1,7 +1,7 @@
 {
   "game": "MIR4_Global",
   "enabled": true,
-  "profile_status": "seed_detail_url_filter_v006",
+  "profile_status": "seed_detail_url_filter_v007",
   "list_url": "https://forum.mir4global.com/board/patchnote",
   "list_order": "newest_first",
   "url_include_patterns": [
@@ -25,5 +25,20 @@
     "Notice",
     "Event"
   ],
-  "notes": "v006: list/board URL is excluded; only numeric /post/{id} detail URLs are candidates."
+  "notes": "v007: list/board URL is excluded; only numeric /post/{id} detail URLs are candidates. Detail fetch selectors are seed-level and artifacts remain preview-only.",
+  "detail_title_selectors": [
+    "h1",
+    ".view-title",
+    ".title",
+    ".tit"
+  ],
+  "detail_content_selectors": [
+    "article",
+    "main",
+    ".view_cont",
+    ".view-content",
+    ".content",
+    ".contents",
+    "body"
+  ]
 }

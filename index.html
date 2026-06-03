@@ -49,6 +49,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:#edf2f8}::-webkit-scrollbar-thumb{background:#c8d4e6;border-radius:999px;border:2px solid #edf2f8}::-webkit-scrollbar-thumb:hover{background:#9db7df}
 @media (max-width:860px){.minimap-section{top:44px}.minimap-wrap{height:30px}.mbar{min-width:3px}.content{grid-template-columns:1fr}.side{max-height:260px;border-top:1px solid var(--line)}}
 </style><!-- hotfix: v035 game_name adapter for data.json flat list -->
+<!-- patch_view_model_template_deploy_v005: existing timeline UI preserved; patch_view_model.json View Model fields used. -->
 </head><body><div class="app"><div class="toolbar" id="controls"></div><div class="minimap-section"><div class="minimap-wrap" id="minimapWrap"><div class="minimap-bars" id="minimapBars"></div><div class="minimap-window" id="minimapWindow"></div><div class="minimap-empty" id="minimapEmpty" style="display:none">표시할 패치노트가 없습니다</div></div></div><div class="content no-side" id="content"><div class="timeline-wrap" id="viewport"><div class="timeline" id="timeline"></div></div><aside class="side" id="side"></aside></div></div><div class="floating-year" id="floatingYear"></div><script>let DATA = [];
 let TOTAL_EVENTS = 0;
 const GAME_NAME_MAP = {
@@ -81,26 +82,29 @@ function quarterOf(dateKey){
   const m = Number(String(dateKey || '').slice(5,7));
   return Math.floor((Math.max(1,m)-1)/3)+1;
 }
-function domainGeneral(lines){
+function deriveDomainTagsFromBody(lines){
   const seen = new Set();
   const out = [];
   for(const line of splitLinesForTimeline(lines)){
     const domain = String(line).split(':')[0].trim();
-    if(domain && domain.length <= 16 && !seen.has(domain)){
+    if(domain && domain.length <= 24 && !seen.has(domain)){
       seen.add(domain);
-      out.push(domain + ' 갱신');
+      out.push(domain);
     }
   }
-  return out.length ? out.slice(0,4) : ['콘텐츠/시스템 조정'];
+  return out.slice(0,12);
 }
+
 function normalizeFlatItem(item){
   const raw = item && item.raw_properties ? item.raw_properties : {};
   const date = item.actual_date || item.date || raw['실제 패치일'] || raw['actual_date'] || '';
   const gameKey = item.game_name || item.game || item.gameName || raw['게임명'] || raw['game_name'] || raw['game'] || 'Unknown';
   const gameName = GAME_NAME_MAP[String(gameKey).trim()] || String(gameKey || 'Unknown').trim();
   const body = item.body_summary || raw['본문 요약'] || raw['body_summary'] || '';
-  const major = item.major_update_summary || raw['주요 업데이트 요약'] || raw['major_update_summary'] || '';
-  const signals = item.signals || item.representative_signals || raw['대표 핵심 신호'] || [];
+  const major = item.main_updates || item.major_update_summary || raw['주요 업데이트'] || raw['주요 업데이트 요약'] || raw['main_updates'] || raw['major_update_summary'] || '';
+  const primary = item.primary_category || item.signals || item.representative_signals || raw['패치 카테고리'] || raw['대표 핵심 신호'] || raw['primary_category'] || [];
+  const domainTags = item.domain_tags || raw['관련 영역'] || raw['domain_tags'] || [];
+  const signals = primary;
   return {
     date_key: date,
     title: item.title || raw['항목명'] || item.patchnote_title || raw['패치노트 제목'] || item.page_title || (shortDateDisplay(date)+' | 패치노트'),
@@ -112,10 +116,11 @@ function normalizeFlatItem(item){
     html_visible: item.html_visible !== false && item.html_exposed !== false && raw['HTML 노출'] !== false,
     view_model_page_id: item.page_id || item.id || '',
     representative_signals: splitLinesForTimeline(signals),
+    primary_category: splitLinesForTimeline(primary),
     card_summary: item.card_summary || raw['카드 요약'] || '',
     major_update_summary: splitLinesForTimeline(major),
-    general_patch_summary: domainGeneral(body),
-    general_patch_summary_method: 'body_summary_domain_from_data_json',
+    main_updates: splitLinesForTimeline(major),
+    domain_tags: splitLinesForTimeline(domainTags).length ? splitLinesForTimeline(domainTags) : deriveDomainTagsFromBody(body),
     detected_sections_for_general: [],
     game: gameName,
     body_summary: splitLinesForTimeline(body)
@@ -137,7 +142,7 @@ function normalizeTimelinePayload(payload){
       const release = GAME_RELEASE_MAP[ev.game] || '';
       const events = [];
       if(release){
-        events.push({date_key: release, title: '출시', type: 'release', year: Number(release.slice(0,4)), quarter: quarterOf(release), impact:'', source_url:'', game: ev.game, major_update_summary:[], general_patch_summary:[], representative_signals:[]});
+        events.push({date_key: release, title: '출시', type: 'release', year: Number(release.slice(0,4)), quarter: quarterOf(release), impact:'', source_url:'', game: ev.game, major_update_summary:[], domain_tags:[], representative_signals:[]});
       }
       groups.set(ev.game, {name: ev.game, release, release_display: shortDateDisplay(release), events});
     }
@@ -152,7 +157,7 @@ function normalizeTimelinePayload(payload){
   return arr;
 }
 async function loadDataJson(){
-  const response = await fetch('data.json', {cache:'no-store'});
+  const response = await fetch('patch_view_model.json', {cache:'no-store'});
   if(!response.ok) throw new Error('data.json load failed: '+response.status);
   const payload = await response.json();
   DATA = normalizeTimelinePayload(payload).filter(g => Array.isArray(g.events));
@@ -173,7 +178,7 @@ function asArray(v){ if(!v) return []; if(Array.isArray(v)) return v; return [v]
 function textOf(v){ if(v==null) return ''; if(typeof v==='string') return v; if(typeof v==='object') return v.source_line || v.source || v.line || v.item_name || v.name || JSON.stringify(v); return String(v); }
 function cleanBullet(s){return String(s||'').replace(/^\s*[-•]\s*/,'').replace(/^\s*\d+[.)]\s*/,'').trim();}
 function isMajor(e){return asArray(e.major_update_summary).length>0 || !!e.card_summary || asArray(e.representative_signals).length>0;}
-function cardSummary(e){ if(isMajor(e)) return e.card_summary || asArray(e.major_update_summary).map(x=>cleanBullet(textOf(x)).split(':')[0]).join(' · '); return asArray(e.general_patch_summary).map(textOf).filter(Boolean).join(' · '); }
+function cardSummary(e){ if(isMajor(e)) return e.card_summary || asArray(e.major_update_summary).map(x=>cleanBullet(textOf(x)).split(':')[0]).join(' · '); return asArray(e.domain_tags).map(textOf).filter(Boolean).slice(0,4).join(' · '); }
 function hasAll(set, allValue){return set.has(allValue)}
 function selectedContains(set, value){return set.has(value)}
 function categoryMatch(e){return hasAll(state.categories,ALL_CATEGORIES) || asArray(e.representative_signals).some(s=>state.categories.has(s));}
@@ -185,7 +190,7 @@ function matchEvent(e,g){
   if(!categoryMatch(e)) return false;
   const q=state.q.trim().toLowerCase();
   if(q){
-    const hay=[g.name,e.title,formatShortDate(e.date_key),e.card_summary,...asArray(e.major_update_summary),...asArray(e.general_patch_summary),...asArray(e.body_summary),...asArray(e.representative_signals),e.note].map(textOf).join(' ').toLowerCase();
+    const hay=[g.name,e.title,formatShortDate(e.date_key),e.card_summary,...asArray(e.major_update_summary),...asArray(e.domain_tags),...asArray(e.body_summary),...asArray(e.representative_signals),e.note].map(textOf).join(' ').toLowerCase();
     if(!hay.includes(q)) return false;
   }
   return true;
@@ -294,12 +299,12 @@ function showDetail(game,idx){
   const signals=asArray(e.representative_signals).map(s=>`<span class="tag">${escapeHtml(s)}</span>`).join('');
   const majorItems=asArray(e.major_update_summary).map(textOf).map(cleanBullet).filter(Boolean);
   const bodyItems=asArray(e.body_summary).map(textOf).map(cleanBullet).filter(Boolean);
-  const generalItems=asArray(e.general_patch_summary).map(textOf).map(cleanBullet).filter(Boolean);
+  const tagItems = asArray(e.domain_tags).map(textOf).filter(Boolean);
   let html=`<div class="side-sub">선택 항목</div>${major?'<span class="tag">주요</span>':''}<div class="side-sub">${escapeHtml(g.name)}</div><div class="side-title">${escapeHtml(e.title||'')}</div>`;
   if(signals) html+=`<div class="box"><h3>패치 카테고리</h3>${signals}</div>`;
   if(majorItems.length) html+=box('주요 업데이트',majorItems);
   if(bodyItems.length) html+=box('본문 요약', bodyItems, 'primary');
-  if(generalItems.length) html+=box('일반 패치 요약', generalItems);
+  if(tagItems.length) html+=box('관련 영역', tagItems);
   if(e.source_url) html+=`<a class="source-btn" href="${escapeAttr(e.source_url)}" target="_blank">원문 패치노트 열기</a>`;
   $('side').innerHTML=html;
 }

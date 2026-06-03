@@ -1,0 +1,11 @@
+{
+  "game": "MIR4_KR",
+  "enabled": true,
+  "profile_status": "seed_from_official_list",
+  "list_url": "https://forum.mir4.co.kr/board/patchnote",
+  "list_order": "newest_first",
+  "url_include_patterns": ["/post/", "/board/patchnote"],
+  "title_include_patterns": ["패치노트"],
+  "title_exclude_patterns": ["공지", "이벤트"],
+  "notes": "Official patch note board seed. Detail selectors require profile audit before automatic write."
+}

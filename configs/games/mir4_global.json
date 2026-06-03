@@ -1,0 +1,11 @@
+{
+  "game": "MIR4_Global",
+  "enabled": true,
+  "profile_status": "seed_from_official_list",
+  "list_url": "https://forum.mir4global.com/board/patchnote",
+  "list_order": "newest_first",
+  "url_include_patterns": ["/post/", "/board/patchnote"],
+  "title_include_patterns": ["Patch Note"],
+  "title_exclude_patterns": ["Notice", "Event"],
+  "notes": "Official patch note board seed. Detail selectors require profile audit before automatic write."
+}

@@ -1,0 +1,11 @@
+{
+  "game": "NightCrows_KR",
+  "enabled": true,
+  "profile_status": "seed_from_official_list",
+  "list_url": "https://www.nightcrows.co.kr/news/release",
+  "list_order": "newest_first",
+  "url_include_patterns": ["/news/release"],
+  "title_include_patterns": ["패치노트"],
+  "title_exclude_patterns": ["공지사항", "이벤트"],
+  "notes": "Official release list seed. Detail selectors require profile audit before automatic write."
+}

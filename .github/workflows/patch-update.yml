@@ -1,0 +1,122 @@
+name: Patchnote Update Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "true = preview only. false = allow patch_view_model.json commit when run_git_push is true."
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+      run_notion_write:
+        description: "Reserved. v003 keeps Notion write disabled."
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+      run_git_push:
+        description: "Commit/push patch_view_model.json only when dry_run=false."
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+      target_games:
+        description: "ALL or comma-separated game keys, e.g. MIR4_Global,Odin_KR"
+        required: false
+        default: "ALL"
+      max_new_urls_per_game:
+        description: "Safety cap for newer-than-anchor URL candidates per game."
+        required: false
+        default: "20"
+  schedule:
+    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v003.
+    - cron: "0 21 * * *"
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: patchnote-update
+  cancel-in-progress: false
+
+jobs:
+  patch-update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'true' }}
+      RUN_NOTION_WRITE: ${{ github.event_name == 'workflow_dispatch' && inputs.run_notion_write || 'false' }}
+      RUN_GIT_PUSH: ${{ github.event_name == 'workflow_dispatch' && inputs.run_git_push || 'false' }}
+      TARGET_GAMES: ${{ github.event_name == 'workflow_dispatch' && inputs.target_games || 'ALL' }}
+      MAX_NEW_URLS_PER_GAME: ${{ github.event_name == 'workflow_dispatch' && inputs.max_new_urls_per_game || '20' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-actions.txt
+
+      - name: Run patchnote workflow
+        run: |
+          python scripts/patch_update_workflow.py
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: patch-update-artifacts
+          path: outputs/patch_workflow_artifacts/
+          if-no-files-found: warn
+
+      - name: Commit patch_view_model.json only
+        if: ${{ env.DRY_RUN == 'false' && env.RUN_GIT_PUSH == 'true' }}
+        run: |
+          if [ ! -f patch_view_model.json ]; then
+            echo "[ERROR] patch_view_model.json was not generated."
+            exit 1
+          fi
+
+          changed_files="$(git status --porcelain | awk '{print $2}')"
+          echo "Changed files:"
+          echo "$changed_files"
+
+          bad_files="$(echo "$changed_files" | grep -v '^patch_view_model.json$' | grep -v '^outputs/patch_workflow_artifacts/' || true)"
+          if [ -n "$bad_files" ]; then
+            echo "[ERROR] Data-only deploy guard failed. Unexpected changed files:"
+            echo "$bad_files"
+            exit 1
+          fi
+
+          git add patch_view_model.json
+          if git diff --cached --quiet; then
+            echo "[INFO] No patch_view_model.json changes to commit."
+            exit 0
+          fi
+
+          git config user.name "patch-update-actions"
+          git config user.email "patch-update-actions@users.noreply.github.com"
+          git commit -m "Update patch view model JSON"
+          git push

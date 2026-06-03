@@ -1,0 +1,11 @@
+{
+  "game": "NightCrows_Global",
+  "enabled": true,
+  "profile_status": "seed_from_official_list",
+  "list_url": "https://www.nightcrows.com/en/notice/release",
+  "list_order": "newest_first",
+  "url_include_patterns": ["/notice/"],
+  "title_include_patterns": ["Patch Note"],
+  "title_exclude_patterns": ["Maintenance", "Event", "Season Pass"],
+  "notes": "Official release list seed. Detail selectors require profile audit before automatic write."
+}

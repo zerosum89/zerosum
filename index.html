@@ -48,8 +48,8 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans
 .side{overflow:auto;background:#fff;padding:16px;border-left:1px solid var(--line);color:#142033}.empty-msg{padding:40px;color:#7a879b}.side-title{font-size:20px;font-weight:900;margin:8px 0;color:#142033}.side-sub{font-size:13px;color:var(--accent);font-weight:900;margin-bottom:4px}.tag{display:inline-block;border-radius:999px;background:#ffe4ef;color:#c2185b;border:1px solid #f8b6cf;padding:4px 8px;font-weight:900;margin-right:4px;margin-bottom:4px}.tag.neutral{background:#eef4ff;color:#34435c;border-color:#dce5f2}.box{border:1px solid var(--line);border-radius:14px;background:#f8fbff;padding:14px;margin:14px 0}.box.primary{background:#fff;border-color:#c7d8f2;box-shadow:var(--glow)}.box h3{font-size:14px;margin:0 0 10px;font-weight:900;color:#142033}.box ul{margin:0;padding-left:18px}.box li{margin:6px 0;line-height:1.48;color:#25324a}.source-btn{display:inline-block;margin-top:8px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:#26374f;text-decoration:none;font-weight:800}.source-btn:hover{border-color:#9db7df;background:#f8fbff}.meta{font-size:12px;color:#64748b}.no-results{padding:60px;text-align:center;color:#6b7890;font-weight:800}.review-meta{font-size:11px;color:#64748b;line-height:1.5}.filter-note{font-size:12px;color:#64748b}.floating-year{position:fixed;z-index:60;display:none;background:#17233a;color:#fff;border:1px solid #17233a;border-radius:6px;padding:3px 8px;font-weight:900;font-size:13px;pointer-events:none;box-shadow:0 8px 20px rgba(24,39,75,.18)}
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:#edf2f8}::-webkit-scrollbar-thumb{background:#c8d4e6;border-radius:999px;border:2px solid #edf2f8}::-webkit-scrollbar-thumb:hover{background:#9db7df}
 @media (max-width:860px){.minimap-section{top:44px}.minimap-wrap{height:30px}.mbar{min-width:3px}.content{grid-template-columns:1fr}.side{max-height:260px;border-top:1px solid var(--line)}}
-</style><!-- hotfix: v035 game_name adapter for data.json flat list -->
-<!-- patch_view_model_template_deploy_v005: existing timeline UI preserved; patch_view_model.json View Model fields used. -->
+</style><!-- patchnote timeline UI: restored stable timeline; standard patch_view_model.json source -->
+<!-- patch_view_model_html_restore_v007: existing timeline UI preserved; patch_view_model.json View Model fields used. -->
 </head><body><div class="app"><div class="toolbar" id="controls"></div><div class="minimap-section"><div class="minimap-wrap" id="minimapWrap"><div class="minimap-bars" id="minimapBars"></div><div class="minimap-window" id="minimapWindow"></div><div class="minimap-empty" id="minimapEmpty" style="display:none">표시할 패치노트가 없습니다</div></div></div><div class="content no-side" id="content"><div class="timeline-wrap" id="viewport"><div class="timeline" id="timeline"></div></div><aside class="side" id="side"></aside></div></div><div class="floating-year" id="floatingYear"></div><script>let DATA = [];
 let TOTAL_EVENTS = 0;
 const GAME_NAME_MAP = {
@@ -158,11 +158,11 @@ function normalizeTimelinePayload(payload){
 }
 async function loadDataJson(){
   const response = await fetch('patch_view_model.json', {cache:'no-store'});
-  if(!response.ok) throw new Error('data.json load failed: '+response.status);
+  if(!response.ok) throw new Error('patch_view_model.json load failed: '+response.status);
   const payload = await response.json();
   DATA = normalizeTimelinePayload(payload).filter(g => Array.isArray(g.events));
   TOTAL_EVENTS = DATA.reduce((n,g)=>n + g.events.length, 0);
-  if(!DATA.length || !TOTAL_EVENTS) throw new Error('data.json contains no timeline events');
+  if(!DATA.length || !TOTAL_EVENTS) throw new Error('patch_view_model.json contains no timeline events');
 }
 
 const $ = id => document.getElementById(id);
@@ -319,7 +319,7 @@ async function startApp(){
   }catch(err){
     console.error(err);
     const root = document.getElementById('timeline');
-    if(root) root.innerHTML = '<div style="padding:24px;color:#b91c1c;font-weight:700">data.json 로드 실패: '+String(err && err.message ? err.message : err)+'</div>';
+    if(root) root.innerHTML = '<div style="padding:24px;color:#b91c1c;font-weight:700">patch_view_model.json 로드 실패: '+String(err && err.message ? err.message : err)+'</div>';
   }
 }
 startApp();

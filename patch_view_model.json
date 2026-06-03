@@ -1,6 +1,6 @@
 {
   "schema_version": "patch_view_model_public_v001",
-  "generated_at": "2026-06-03T20:23:45+09:00",
+  "generated_at": "2026-06-03T20:37:09+09:00",
   "source": {
     "type": "notion_database_export",
     "database_id": "36f3453a..."

@@ -32,7 +32,7 @@
     "상품"
   ],
   "disable_until_profile_audit": false,
-  "notes": "v007: still profile-audit target. Candidate URLs must be detail-like only; automatic write remains disabled. Detail fetch selectors are seed-level and artifacts remain preview-only.",
+  "notes": "v008: still profile-audit target. Candidate URLs must be detail-like only; automatic write remains disabled. Detail fetch selectors are seed-level and artifacts remain preview-only.",
   "detail_title_selectors": [
     "h1",
     ".view-title",

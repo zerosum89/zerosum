@@ -1,7 +1,7 @@
 {
   "game": "NightCrows_KR",
   "enabled": true,
-  "profile_status": "seed_detail_url_filter_v007",
+  "profile_status": "seed_detail_url_filter_v008",
   "list_url": "https://www.nightcrows.co.kr/news/release",
   "list_order": "newest_first",
   "url_include_patterns": [
@@ -24,7 +24,7 @@
     "공지사항",
     "이벤트"
   ],
-  "notes": "v007: detail URL filter plus raw detail HTML/text fetch for preview payload artifacts.",
+  "notes": "v008: detail URL filter plus raw detail HTML/text fetch for preview payload artifacts.",
   "detail_title_selectors": [
     "h1",
     ".view-title",

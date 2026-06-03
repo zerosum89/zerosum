@@ -56,7 +56,7 @@ MAX_DETAIL_TEXT_CHARS = env_int("MAX_DETAIL_TEXT_CHARS", 40000)
 MAX_DETAIL_FETCHES = env_int("MAX_DETAIL_FETCHES", 20)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v007"
+WORKFLOW_VERSION = "github_actions_v008"
 
 
 def canonical_url(url: str) -> str:
@@ -550,20 +550,44 @@ def extract_content_text_from_soup(soup: BeautifulSoup, profile: dict[str, Any])
 
 
 def extract_detail_title(soup: BeautifulSoup, fallback: str, profile: dict[str, Any]) -> str:
-    selectors = profile.get("detail_title_selectors", []) or ["h1", ".title", ".tit", ".view-title", ".board-title"]
+    """Extract a display title for detail pages.
+
+    v008 avoids generic site chrome titles such as News/새소식 and prefers
+    patch-note-like lines from the visible page text when selectors are noisy.
+    """
+    generic = {"news", "notice", "release", "새소식", "공지사항", "패치노트", "night crows"}
+    selectors = profile.get("detail_title_selectors", []) or ["h1", ".view-title", ".title", ".tit", ".board-title"]
+    candidates: list[str] = []
     for selector in selectors:
         try:
-            node = soup.select_one(selector)
-            if node:
+            for node in soup.select(selector):
                 txt = " ".join(node.get_text(" ", strip=True).split())
                 if txt and len(txt) >= 3:
-                    return txt
+                    candidates.append(txt)
         except Exception:
             continue
     if soup.title and soup.title.string:
-        txt = " ".join(soup.title.string.split())
-        if txt:
-            return txt
+        candidates.append(" ".join(soup.title.string.split()))
+
+    visible = normalize_visible_text(soup.get_text("\n", strip=True))
+    for line in visible.splitlines()[:80]:
+        t = " ".join(line.split())
+        if not t:
+            continue
+        if re.search(r"Patch Note\s*[-–]\s*", t, re.I):
+            candidates.insert(0, t)
+        if re.search(r"\d{1,2}\s*월\s*\d{1,2}\s*일.*패치노트", t):
+            candidates.insert(0, t)
+        if re.search(r"\[패치노트\]", t):
+            continue
+
+    for txt in candidates:
+        key = txt.strip().lower()
+        if key in generic:
+            continue
+        if len(norm_key(txt)) < 4:
+            continue
+        return txt
     return fallback or "패치노트"
 
 
@@ -597,40 +621,281 @@ def truncate_sentence(text: str, limit: int = 180) -> str:
     return t[: limit - 1].rstrip() + "…"
 
 
-def make_rule_based_summary_preview(text: str, title: str) -> tuple[list[str], list[str], str, str]:
-    # This is intentionally conservative. It creates a preview candidate, not final write-ready Korean copy.
+TITLE_NOISE = {"news", "새소식", "patch note", "패치노트", "night crows", "nightcrows"}
+
+
+def clean_detail_text_for_summary(text: str, profile: dict[str, Any], title: str) -> str:
+    """Return the patch-note body area used for summary candidate generation.
+
+    This keeps raw_text artifacts untouched while giving the preview generator a
+    cleaner source. The function is deliberately rule-based and conservative.
+    """
     lines = [x.strip() for x in (text or "").splitlines() if x.strip()]
-    candidates = []
-    seen = set()
-    bad_markers = ["facebook", "youtube", "discord", "google play", "app store", "copyright", "privacy", "terms", "고객센터", "로그인"]
+    game = profile.get("game", "")
+    start_patterns = [
+        r"^Main Updates$",
+        r"^Update Details$",
+        r"^■\s*Content Updates",
+        r"^신규 추가 및 변경 사항$",
+        r"^업데이트 내용$",
+        r"^상세 내용$",
+    ]
+    end_patterns = [
+        r"^신규 이벤트$", r"^종료 이벤트$", r"^상품", r"^판매 상품", r"^이벤트/시즌패스 이름",
+        r"^Known Issues$", r"^Events?$", r"^Shop$", r"^Products?$", r"^Resolved Issues$",
+    ]
+    start_idx = 0
+    for i, line in enumerate(lines):
+        if any(re.search(p, line, re.I) for p in start_patterns):
+            start_idx = i
+            break
+    body = lines[start_idx:]
+    # Keep event names available but prevent large event tables from dominating summary preview.
+    clipped = []
+    for line in body:
+        if clipped and any(re.search(p, line, re.I) for p in end_patterns):
+            clipped.append(line)
+            break
+        clipped.append(line)
+    return "\n".join(clipped)
+
+
+def clean_heading_text(heading: str) -> str:
+    h = re.sub(r"^\s*\d{1,2}[.)]\s*", "", heading or "").strip()
+    h = re.sub(r"^[•◦\-]\s*", "", h).strip()
+    h = re.sub(r"\s+", " ", h)
+    return h
+
+
+def extract_numbered_heading_blocks(text: str, profile: dict[str, Any]) -> list[dict[str, Any]]:
+    lines = [x.strip() for x in (text or "").splitlines() if x.strip()]
+    blocks: list[dict[str, Any]] = []
+    current: dict[str, Any] | None = None
+    table_noise = {"lv", "level", "item name", "preview", "points obtained", "obtain location", "details", "class", "effect", "등급", "구분", "필요 수량", "효과", "분류", "상세 내용"}
     for line in lines:
-        raw = " ".join(line.split())
-        if len(raw) < 8 or len(raw) > 240:
+        # Top-level headings in NC pages are usually "1. ...". Avoid table rows like Lv. 10.
+        m = re.match(r"^(\d{1,2})\.\s+(.{3,120})$", line)
+        if m:
+            heading = clean_heading_text(line)
+            hkey = heading.lower().strip()
+            if hkey in table_noise or re.match(r"^lv\.?\s*\d+", hkey):
+                continue
+            if current:
+                blocks.append(current)
+            current = {"order": int(m.group(1)), "heading": heading, "lines": []}
             continue
-        low = raw.lower()
-        if any(m in low for m in bad_markers):
-            continue
-        domain = classify_domain(raw)
-        if domain == "기타":
-            continue
-        key = norm_key(raw)[:80]
+        if current:
+            # Stop giant table accumulation but keep nearby bullet lines.
+            if len(current["lines"]) < 16:
+                current["lines"].append(line)
+    if current:
+        blocks.append(current)
+    # de-duplicate duplicate Main Updates / Update Details headings.
+    out: list[dict[str, Any]] = []
+    seen = set()
+    for b in blocks:
+        key = norm_key(b.get("heading", ""))
         if key in seen:
             continue
         seen.add(key)
-        candidates.append((domain, raw))
-        if len(candidates) >= 8:
-            break
-    if not candidates:
-        fallback = truncate_sentence(title or "상세 원문 수집 완료", 120)
-        return [f"원문 수집: {fallback} 원문이 수집되었으며 update-unit 요약 검토가 필요합니다."], ["원문 수집"], fallback, "RAW_COLLECTED_REVIEW"
-    body = [f"{d}: {truncate_sentence(t, 170)}" for d, t in candidates[:6]]
-    tags = []
-    for d, _ in candidates:
-        if d not in tags:
-            tags.append(d)
-    card = " · ".join(tags[:4])
-    return body, tags, card, "RAW_COLLECTED_RULE_PREVIEW"
+        out.append(b)
+    return out[:30]
 
+
+def classify_heading_domain(heading: str, context: str = "") -> str:
+    h = f"{heading} {context}".lower()
+    # Specific NC mapping before generic keyword matching.
+    if any(x in h for x in ["world battlefront", "dominion", "battlefront", "점령전", "도미니언"]):
+        return "PvP/전쟁"
+    if any(x in h for x in ["world dungeon", "party dungeon", "epic dungeon", "dungeon", "파티 던전", "에픽 던전", "테네리스", "몬스터 스폰"]):
+        return "PvE 콘텐츠"
+    if any(x in h for x in ["class", "skill", "기술 정보창", "화포", "권갑", "클래스"]):
+        return "클래스/스킬"
+    if any(x in h for x in ["server transfer", "server", "서버 이전", "서버"]):
+        return "서버/월드"
+    if any(x in h for x in ["artifact", "inner armor", "weapon style", "weapon", "potential", "transcendence", "creed", "lamp", "무기 외형", "공명 카드", "연금술", "길드 연구"]):
+        return "성장/장비"
+    if any(x in h for x in ["merchant", "purchase limit", "npc merchant", "drop", "reward", "상점", "드랍", "보상", "창고 보관"]):
+        return "경제/보상"
+    if any(x in h for x in ["event", "events", "이벤트", "출석", "시즌패스"]):
+        return "이벤트/보상"
+    if any(x in h for x in ["ui", "preset", "search", "map", "display", "hide", "ticket", "auto", "emotion", "emote", "편의", "검색", "프리셋", "지도", "표기", "숨기기", "감정 표현", "자동", "입장권", "일괄 사용"]):
+        return "편의/UI"
+    return classify_domain(h)
+
+
+def quoted_subject(text: str) -> str:
+    m = re.search(r"[‘'\"]([^‘’'\"]{2,60})[’'\"]", text or "")
+    if m:
+        return m.group(1).strip()
+    m = re.search(r"‘([^’]{2,60})’", text or "")
+    return m.group(1).strip() if m else ""
+
+
+def summary_sentence_from_heading(block: dict[str, Any], profile: dict[str, Any]) -> dict[str, Any]:
+    heading = clean_heading_text(block.get("heading", ""))
+    context = " ".join(block.get("lines", [])[:5])
+    domain = classify_heading_domain(heading, context)
+    lang_ko = bool(re.search(r"[가-힣]", heading + context))
+    h = heading
+    low = h.lower()
+    subject = quoted_subject(h) or quoted_subject(context)
+    sentence = ""
+
+    if not lang_ko:
+        # English NC preview templates. Keep English names, Korean sentence frame.
+        if "new system" in low and subject:
+            sentence = f"{domain}: 신규 시스템 ‘{subject}’가 추가됩니다."
+        elif "new artifact" in low and subject:
+            sentence = f"성장/장비: 신규 아티팩트 ‘{subject}’가 추가됩니다."
+        elif "new world battlefront" in low and subject:
+            sentence = f"PvP/전쟁: 신규 월드 배틀프론트 ‘{subject}’가 추가됩니다."
+        elif "potential" in low and "5" in low:
+            sentence = "성장/장비: Potential 5번째 페이지가 추가되어 성장 구성이 확장됩니다."
+        elif "legendary inner armor" in low:
+            sentence = "성장/장비: 전설 등급 Inner Armor가 추가됩니다."
+        elif "purchase limit" in low and "merchant" in low:
+            sentence = "경제/보상: NPC Merchant 상점의 구매 제한이 조정됩니다."
+        elif "world dungeon" in low and "season" in low:
+            m = re.search(r"season\s*(\d+)", h, re.I)
+            season = f" 시즌 {m.group(1)}" if m else " 신규 시즌"
+            sentence = f"PvE 콘텐츠: World Dungeon{season}가 시작됩니다."
+        elif "server transfer" in low:
+            sentence = "서버/월드: Boost Camp 서버 이전이 시작됩니다."
+        elif "transcendence effect" in low:
+            sentence = "성장/장비: Lv.10 전설 탈것 및 무기 외형의 초월 효과가 개선됩니다."
+        elif "events" in low or "event" in low:
+            m = re.search(r"(\d+)\s+new events", h, re.I)
+            count = f" {m.group(1)}종" if m else ""
+            sentence = f"이벤트/보상: 신규 이벤트{count}이 추가됩니다."
+        elif "will be added" in low:
+            subj = subject or re.sub(r"will be added\.?", "", h, flags=re.I).strip(" :-")
+            sentence = f"{domain}: {subj}이 추가됩니다."
+        elif "will be adjusted" in low:
+            subj = re.sub(r"will be adjusted\.?", "", h, flags=re.I).strip(" :-")
+            sentence = f"{domain}: {subj}이 조정됩니다."
+        elif "will be improved" in low:
+            subj = re.sub(r"will be improved\.?", "", h, flags=re.I).strip(" :-")
+            sentence = f"{domain}: {subj}이 개선됩니다."
+        else:
+            sentence = f"{domain}: {truncate_sentence(h, 150)}"
+    else:
+        # Korean NC preview templates.
+        if "신규 무기 외형" in h or "무기 외형" in h:
+            sentence = "성장/장비: 클래스별 신규 무기 외형이 추가되고, 신화 등급 무기 외형 관련 성장 조건과 보유 효과가 확장됩니다."
+        elif "도미니언" in h:
+            sentence = "PvP/전쟁: 도미니언 점령전 전당 전투의 공성측 부활 지점이 변경됩니다."
+        elif "공명 카드" in h:
+            sentence = "성장/장비: 공명 카드 수집 목록 검색과 프리셋 기능이 추가됩니다."
+        elif "기술 정보창" in h:
+            sentence = "클래스/스킬: 화포와 권갑 클래스의 전환 상태에 따른 기술 정보창 표시가 개선됩니다."
+        elif "에픽 던전" in h or "테네리스" in h:
+            sentence = "PvE 콘텐츠: 에픽 던전 테네리스 해협의 난이도와 보상이 조정됩니다."
+        elif "연금술" in h:
+            sentence = "편의/UI: 연금술 원소 효과를 자동으로 변형할 수 있는 기능이 추가됩니다."
+        elif "감정 표현" in h:
+            sentence = "편의/UI: 유저 간 상호작용을 위한 캐릭터 감정 표현 9종이 추가됩니다."
+        elif "UI 숨기기" in h:
+            sentence = "편의/UI: 게임 내 UI를 숨기고 캐릭터를 감상할 수 있는 촬영 모드 기능이 추가됩니다."
+        elif "길드 연구" in h or "길드 연구소" in h:
+            sentence = "길드/성장: 길드 연구소 화면과 붉은 늑대 일지 재료 교환 기능이 개선됩니다."
+        elif "익명 지역" in h:
+            sentence = "PvP/전쟁: 익명 지역 입장 시 길드원이 아닌 파티원과의 파티 해제 규칙이 완화됩니다."
+        elif "창고 보관" in h:
+            sentence = "편의/UI: 창고에 보관한 아이템을 사용할 수 있는 콘텐츠 범위가 확장됩니다."
+        elif "파티 던전" in h:
+            sentence = "PvE 콘텐츠: 파티 던전 신규 시즌이 시작되고 보스 몬스터 ‘크라부스’가 등장합니다."
+        elif "던전 입장권" in h:
+            sentence = "편의/UI: 가방에서 던전 입장권 사용 시 해당 던전 입장 화면이 노출되도록 개선됩니다."
+        elif "일괄 사용" in h:
+            sentence = "편의/UI: 기술 특성 비급서와 성장 재료 등 일부 아이템의 일괄 사용 범위가 확장됩니다."
+        elif "지도" in h:
+            sentence = "편의/UI: 지도 지역 선택 시 카메라 이동과 지역 정보창 접기 동작이 개선됩니다."
+        elif "다이아" in h or "표기" in h:
+            sentence = "편의/UI: 화면 상단의 다이아와 미스틱 다이아가 분리되어 표시되도록 개선됩니다."
+        elif "시험의 탑" in h:
+            sentence = "편의/UI: 시험의 탑 클리어 보상 팝업 종료 시 자동 진행이 취소되도록 규칙이 변경됩니다."
+        elif "길드 지령" in h:
+            sentence = "편의/UI: 길드 지령서 자동 사용 설정이 지령서 부족이나 일일 한도 도달 후에도 유지되도록 개선됩니다."
+        elif "강화 효과" in h or "약화 효과" in h:
+            sentence = "편의/UI: 상태 이상·약화 효과·강화 효과 아이콘 표시 방식이 개선됩니다."
+        elif "몬스터 스폰" in h:
+            sentence = "PvE 콘텐츠: 넓은 사냥터에서 몬스터가 더 고르게 등장하도록 스폰 방식이 개선됩니다."
+        else:
+            sentence = f"{domain}: {truncate_sentence(h, 150)} 변경 사항이 반영됩니다."
+
+    if ":" in sentence:
+        domain = sentence.split(":", 1)[0].strip()
+    return {
+        "order": block.get("order"),
+        "domain": domain,
+        "source_heading": heading,
+        "source_context_excerpt": truncate_sentence(context, 280),
+        "summary_sentence": sentence,
+        "confidence": 0.82 if sentence and not sentence.endswith(h) else 0.65,
+    }
+
+
+def audit_summary_candidates(title: str, units: list[dict[str, Any]], text: str) -> tuple[str, list[str]]:
+    flags: list[str] = []
+    if norm_key(title) in {norm_key(x) for x in TITLE_NOISE}:
+        flags.append("GENERIC_TITLE")
+    if not units:
+        flags.append("NO_UPDATE_UNITS")
+    if len(units) > 18:
+        flags.append("HIGH_UNIT_COUNT")
+    for u in units:
+        sent = str(u.get("summary_sentence", ""))
+        after = sent.split(":", 1)[-1].strip()
+        if re.match(r"^\d+[.)]\s*", after):
+            flags.append("NUMBER_PREFIX_REMAINING")
+        if re.search(r"\b(PVP 명중|PVP 방어|Item Name|Preview|Points Obtained)\b", sent, re.I):
+            flags.append("TABLE_ROW_LEAK")
+        if len(after) < 10:
+            flags.append("TOO_SHORT_SUMMARY")
+    # dedupe flags
+    flags = list(dict.fromkeys(flags))
+    status = "PASS" if not flags else ("REVIEW" if flags != ["NO_UPDATE_UNITS"] else "FAIL")
+    return status, flags
+
+
+def make_rule_based_summary_preview(text: str, title: str, profile: dict[str, Any] | None = None) -> tuple[list[str], list[str], str, str, list[dict[str, Any]], list[str]]:
+    """Create write-disabled summary candidates from detail text.
+
+    v008 upgrades v008's raw line extraction into profile-aware update-unit
+    candidates. It is still a preview generator, not final Notion write logic.
+    """
+    profile = profile or {}
+    cleaned = clean_detail_text_for_summary(text, profile, title)
+    blocks = extract_numbered_heading_blocks(cleaned, profile)
+    units = [summary_sentence_from_heading(b, profile) for b in blocks]
+    # keep top-level content units; compress event/shop spillover by cap.
+    units = units[:20]
+    if not units:
+        # Conservative fallback when numbered sections are not available.
+        lines = [x.strip() for x in cleaned.splitlines() if x.strip()]
+        for line in lines[:80]:
+            domain = classify_domain(line)
+            if domain != "기타":
+                units.append({
+                    "order": len(units) + 1,
+                    "domain": domain,
+                    "source_heading": truncate_sentence(line, 120),
+                    "source_context_excerpt": "",
+                    "summary_sentence": f"{domain}: {truncate_sentence(line, 160)}",
+                    "confidence": 0.55,
+                })
+            if len(units) >= 6:
+                break
+    status, flags = audit_summary_candidates(title, units, cleaned)
+    body = [u["summary_sentence"] for u in units[:12]]
+    tags: list[str] = []
+    for u in units:
+        d = u.get("domain", "")
+        if d and d not in tags:
+            tags.append(d)
+    card = " · ".join(tags[:4]) if tags else truncate_sentence(title, 80)
+    return body, tags, card, status, units, flags
 
 def fetch_detail_page(profile: dict[str, Any], row: dict[str, Any]) -> dict[str, Any]:
     game = profile.get("game", "game")
@@ -671,18 +936,22 @@ def fetch_detail_page(profile: dict[str, Any], row: dict[str, Any]) -> dict[str,
         text_path = detail_dir / f"{base_name}.raw.txt"
         text_path.write_text(text, encoding="utf-8")
         actual_date = extract_date_from_text("\n".join([title, text[:5000]])) or meta["actual_date"]
-        body, tags, card, qstatus = make_rule_based_summary_preview(text, title)
+        cleaned_text = clean_detail_text_for_summary(text, profile, title)
+        body, tags, card, qstatus, units, qflags = make_rule_based_summary_preview(text, title, profile)
         meta.update({
             "fetch_status": "PASS",
             "title": title,
             "actual_date": actual_date,
             "text_length": len(text),
+            "summary_source_text_length": len(cleaned_text),
             "raw_html_path": str(html_path.relative_to(ART)),
             "raw_text_path": str(text_path.relative_to(ART)),
-            "text_excerpt": text[:1200],
+            "text_excerpt": cleaned_text[:1200],
             "body_summary_candidate": body,
             "domain_tags_candidate": tags,
             "card_summary_candidate": card,
+            "update_units_candidate": units,
+            "summary_quality_flags": qflags,
             "quality_status": qstatus,
         })
     except Exception as exc:
@@ -751,8 +1020,11 @@ def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dic
                 "body_summary": body_summary,
                 "domain_tags": domain_tags,
                 "card_summary": card_summary,
+                "update_units_candidate": detail.get("update_units_candidate", []),
+                "summary_quality_flags": detail.get("summary_quality_flags", []),
+                "summary_source_text_length": detail.get("summary_source_text_length", 0),
                 "quality_status": detail.get("quality_status", "PREVIEW_ONLY"),
-                "note": "v007 generates raw detail collection and rule-based summary candidates only. Notion write remains disabled.",
+                "note": "v008 generates profile-aware summary quality preview only. Notion write remains disabled.",
             })
     return payloads
 
@@ -781,7 +1053,7 @@ def main() -> int:
     (ART / "execution_identity.json").write_text(json.dumps(execution_identity(), ensure_ascii=False, indent=2), encoding="utf-8")
 
     if RUN_NOTION_WRITE:
-        raise RuntimeError("RUN_NOTION_WRITE=true is not supported in v007. Use detection/detail-fetch/export preview only.")
+        raise RuntimeError("RUN_NOTION_WRITE=true is not supported in v008. Use detection/detail-fetch/summary-quality/export preview only.")
 
     items, export_source, file_changed = export_patch_view_model()
     anchors = latest_anchor_by_game(items)
@@ -816,7 +1088,34 @@ def main() -> int:
 
     detail_results = fetch_details_for_candidates(results, profiles)
     (ART / "detail_fetch_result.json").write_text(json.dumps({"workflow_version": WORKFLOW_VERSION, "fetch_detail_pages": FETCH_DETAIL_PAGES, "results": detail_results}, ensure_ascii=False, indent=2), encoding="utf-8")
-    write_csv(ART / "detail_fetch_summary.csv", [{"game": d.get("game", ""), "actual_date": d.get("actual_date", ""), "title": d.get("title", ""), "source_url": d.get("source_url", ""), "fetch_status": d.get("fetch_status", ""), "http_status": d.get("http_status", ""), "text_length": d.get("text_length", 0), "quality_status": d.get("quality_status", ""), "raw_text_path": d.get("raw_text_path", "")} for d in detail_results])
+    write_csv(ART / "detail_fetch_summary.csv", [{"game": d.get("game", ""), "actual_date": d.get("actual_date", ""), "title": d.get("title", ""), "source_url": d.get("source_url", ""), "fetch_status": d.get("fetch_status", ""), "http_status": d.get("http_status", ""), "text_length": d.get("text_length", 0), "summary_source_text_length": d.get("summary_source_text_length", 0), "quality_status": d.get("quality_status", ""), "summary_quality_flags": ";".join(d.get("summary_quality_flags", []) or []), "raw_text_path": d.get("raw_text_path", "")} for d in detail_results])
+    summary_quality_rows = []
+    update_unit_rows = []
+    for d in detail_results:
+        summary_quality_rows.append({
+            "game": d.get("game", ""),
+            "actual_date": d.get("actual_date", ""),
+            "title": d.get("title", ""),
+            "source_url": d.get("source_url", ""),
+            "quality_status": d.get("quality_status", ""),
+            "unit_count": len(d.get("update_units_candidate", []) or []),
+            "domain_tags": " · ".join(d.get("domain_tags_candidate", []) or []),
+            "flags": ";".join(d.get("summary_quality_flags", []) or []),
+        })
+        for u in d.get("update_units_candidate", []) or []:
+            update_unit_rows.append({
+                "game": d.get("game", ""),
+                "actual_date": d.get("actual_date", ""),
+                "source_url": d.get("source_url", ""),
+                "order": u.get("order", ""),
+                "domain": u.get("domain", ""),
+                "source_heading": u.get("source_heading", ""),
+                "summary_sentence": u.get("summary_sentence", ""),
+                "confidence": u.get("confidence", ""),
+            })
+    (ART / "summary_quality_result.json").write_text(json.dumps({"workflow_version": WORKFLOW_VERSION, "results": summary_quality_rows}, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_csv(ART / "summary_quality_summary.csv", summary_quality_rows)
+    write_csv(ART / "update_units_preview.csv", update_unit_rows)
     payload_preview = make_payload_preview(results, detail_results)
     summary_rows = [
         {
@@ -915,7 +1214,7 @@ def main() -> int:
         "processing_order = actual_date 오름차순(oldest-first)",
         "```",
         "",
-        "## v007 scope",
+        "## v008 scope",
         "",
         "- Explicit workflow identity: workflow_version, GITHUB_SHA, GITHUB_REF, run id, script SHA256",
         "- Detail URL guard: board/list URL candidates are written to invalid_url_candidates.csv",
@@ -924,7 +1223,9 @@ def main() -> int:
         "- patch_view_model.json noisy commit prevention",
         "- newer-than-anchor URL detection preview",
         "- raw detail HTML/TXT collection for new URL candidates",
-        "- rule-based body_summary/domain_tags/card_summary preview candidates",
+        "- profile-aware update-unit candidate extraction",
+        "- body_summary/domain_tags/card_summary quality preview",
+        "- summary_quality_result.json, summary_quality_summary.csv, update_units_preview.csv artifacts",
         "- payload preview only",
         "- Notion write intentionally disabled",
         "- data-only commit guard for patch_view_model.json",

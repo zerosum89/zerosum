@@ -36,10 +36,10 @@ run_git_push=true
 run_notion_write=false
 ```
 
-v007 never performs Notion write.
+v008 never performs Notion write.
 
 
-## v007 실행 식별자 / URL 후보 검증
+## v008 실행 식별자 / URL 후보 검증
 
 - artifact에 `execution_identity.json`을 생성합니다.
 - `workflow_version`, `GITHUB_SHA`, `GITHUB_REF`, `GITHUB_RUN_ID`, `script_sha256`를 기록합니다.
@@ -47,6 +47,6 @@ v007 never performs Notion write.
 - `STRICT_DETAIL_URL_GUARD=true`이면 board/list URL이 신규 후보에 남는 즉시 workflow를 실패 처리합니다.
 
 
-## v007 addition
+## v008 addition
 
 New URL candidates can be followed to detail pages in preview mode. The workflow stores raw HTML/TXT artifacts and creates conservative rule-based summary candidates. These candidates are not write-ready; Notion write remains disabled.

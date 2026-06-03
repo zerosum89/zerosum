@@ -1,7 +1,7 @@
 {
   "game": "NightCrows_Global",
   "enabled": true,
-  "profile_status": "seed_detail_url_filter_v007",
+  "profile_status": "seed_detail_url_filter_v008",
   "list_url": "https://www.nightcrows.com/en/notice/release",
   "list_order": "newest_first",
   "url_include_patterns": [
@@ -25,7 +25,7 @@
     "Event",
     "Season Pass"
   ],
-  "notes": "v007: detail URL filter plus raw detail HTML/text fetch for preview payload artifacts.",
+  "notes": "v008: detail URL filter plus raw detail HTML/text fetch for preview payload artifacts.",
   "detail_title_selectors": [
     "h1",
     ".view-title",

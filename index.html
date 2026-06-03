@@ -48,7 +48,8 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans
 .side{overflow:auto;background:#fff;padding:16px;border-left:1px solid var(--line);color:#142033}.empty-msg{padding:40px;color:#7a879b}.side-title{font-size:20px;font-weight:900;margin:8px 0;color:#142033}.side-sub{font-size:13px;color:var(--accent);font-weight:900;margin-bottom:4px}.tag{display:inline-block;border-radius:999px;background:#ffe4ef;color:#c2185b;border:1px solid #f8b6cf;padding:4px 8px;font-weight:900;margin-right:4px;margin-bottom:4px}.tag.neutral{background:#eef4ff;color:#34435c;border-color:#dce5f2}.box{border:1px solid var(--line);border-radius:14px;background:#f8fbff;padding:14px;margin:14px 0}.box.primary{background:#fff;border-color:#c7d8f2;box-shadow:var(--glow)}.box h3{font-size:14px;margin:0 0 10px;font-weight:900;color:#142033}.box ul{margin:0;padding-left:18px}.box li{margin:6px 0;line-height:1.48;color:#25324a}.source-btn{display:inline-block;margin-top:8px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:#26374f;text-decoration:none;font-weight:800}.source-btn:hover{border-color:#9db7df;background:#f8fbff}.meta{font-size:12px;color:#64748b}.no-results{padding:60px;text-align:center;color:#6b7890;font-weight:800}.review-meta{font-size:11px;color:#64748b;line-height:1.5}.filter-note{font-size:12px;color:#64748b}.floating-year{position:fixed;z-index:60;display:none;background:#17233a;color:#fff;border:1px solid #17233a;border-radius:6px;padding:3px 8px;font-weight:900;font-size:13px;pointer-events:none;box-shadow:0 8px 20px rgba(24,39,75,.18)}
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:#edf2f8}::-webkit-scrollbar-thumb{background:#c8d4e6;border-radius:999px;border:2px solid #edf2f8}::-webkit-scrollbar-thumb:hover{background:#9db7df}
 @media (max-width:860px){.minimap-section{top:44px}.minimap-wrap{height:30px}.mbar{min-width:3px}.content{grid-template-columns:1fr}.side{max-height:260px;border-top:1px solid var(--line)}}
-</style></head><body><div class="app"><div class="toolbar" id="controls"></div><div class="minimap-section"><div class="minimap-wrap" id="minimapWrap"><div class="minimap-bars" id="minimapBars"></div><div class="minimap-window" id="minimapWindow"></div><div class="minimap-empty" id="minimapEmpty" style="display:none">표시할 패치노트가 없습니다</div></div></div><div class="content no-side" id="content"><div class="timeline-wrap" id="viewport"><div class="timeline" id="timeline"></div></div><aside class="side" id="side"></aside></div></div><div class="floating-year" id="floatingYear"></div><script>let DATA = [];
+</style><!-- hotfix: v035 game_name adapter for data.json flat list -->
+</head><body><div class="app"><div class="toolbar" id="controls"></div><div class="minimap-section"><div class="minimap-wrap" id="minimapWrap"><div class="minimap-bars" id="minimapBars"></div><div class="minimap-window" id="minimapWindow"></div><div class="minimap-empty" id="minimapEmpty" style="display:none">표시할 패치노트가 없습니다</div></div></div><div class="content no-side" id="content"><div class="timeline-wrap" id="viewport"><div class="timeline" id="timeline"></div></div><aside class="side" id="side"></aside></div></div><div class="floating-year" id="floatingYear"></div><script>let DATA = [];
 let TOTAL_EVENTS = 0;
 const GAME_NAME_MAP = {
   'NightCrows_KR':'나크',
@@ -94,22 +95,22 @@ function domainGeneral(lines){
 }
 function normalizeFlatItem(item){
   const raw = item && item.raw_properties ? item.raw_properties : {};
-  const date = item.actual_date || raw['실제 패치일'] || '';
-  const gameKey = item.game || raw['게임명'] || 'Unknown';
-  const gameName = GAME_NAME_MAP[gameKey] || gameKey;
-  const body = item.body_summary || raw['본문 요약'] || '';
-  const major = item.major_update_summary || raw['주요 업데이트 요약'] || '';
-  const signals = item.signals || raw['대표 핵심 신호'] || [];
+  const date = item.actual_date || item.date || raw['실제 패치일'] || raw['actual_date'] || '';
+  const gameKey = item.game_name || item.game || item.gameName || raw['게임명'] || raw['game_name'] || raw['game'] || 'Unknown';
+  const gameName = GAME_NAME_MAP[String(gameKey).trim()] || String(gameKey || 'Unknown').trim();
+  const body = item.body_summary || raw['본문 요약'] || raw['body_summary'] || '';
+  const major = item.major_update_summary || raw['주요 업데이트 요약'] || raw['major_update_summary'] || '';
+  const signals = item.signals || item.representative_signals || raw['대표 핵심 신호'] || [];
   return {
     date_key: date,
-    title: item.title || raw['항목명'] || item.patchnote_title || raw['패치노트 제목'] || (shortDateDisplay(date)+' | 패치노트'),
+    title: item.title || raw['항목명'] || item.patchnote_title || raw['패치노트 제목'] || item.page_title || (shortDateDisplay(date)+' | 패치노트'),
     type: 'update',
     year: Number(String(date).slice(0,4)) || null,
     quarter: quarterOf(date),
     impact: '패치노트',
-    source_url: item.source_url || raw['원문 URL'] || '',
-    html_visible: item.html_exposed !== false && raw['HTML 노출'] !== false,
-    view_model_page_id: item.id || '',
+    source_url: item.source_url || raw['원문 URL'] || raw['source_url'] || '',
+    html_visible: item.html_visible !== false && item.html_exposed !== false && raw['HTML 노출'] !== false,
+    view_model_page_id: item.page_id || item.id || '',
     representative_signals: splitLinesForTimeline(signals),
     card_summary: item.card_summary || raw['카드 요약'] || '',
     major_update_summary: splitLinesForTimeline(major),
@@ -121,10 +122,15 @@ function normalizeFlatItem(item){
   };
 }
 function normalizeTimelinePayload(payload){
-  if(!Array.isArray(payload)) return [];
-  if(payload.length && payload[0] && Array.isArray(payload[0].events)) return payload;
+  const items = Array.isArray(payload)
+    ? payload
+    : (payload && Array.isArray(payload.items)
+      ? payload.items
+      : (payload && Array.isArray(payload.records) ? payload.records : []));
+  if(!items.length) return [];
+  if(items[0] && Array.isArray(items[0].events)) return items;
   const groups = new Map();
-  for(const item of payload){
+  for(const item of items){
     const ev = normalizeFlatItem(item);
     if(ev.html_visible === false || !ev.date_key) continue;
     if(!groups.has(ev.game)){

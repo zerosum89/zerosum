@@ -59,7 +59,7 @@ RUN_TITLE_REPAIR = env_bool("RUN_TITLE_REPAIR", False)
 TITLE_REPAIR_WINDOW_DAYS = env_int("TITLE_REPAIR_WINDOW_DAYS", 14)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v015"
+WORKFLOW_VERSION = "github_actions_v016"
 
 
 def canonical_url(url: str) -> str:
@@ -855,7 +855,7 @@ def classify_heading_domain(heading: str, context: str = "") -> str:
         return "클래스/스킬"
     if any(x in h for x in ["server transfer", "server", "서버 이전", "서버"]):
         return "서버/월드"
-    if any(x in h for x in ["artifact", "inner armor", "weapon style", "weapon", "potential", "transcendence", "creed", "lamp", "무기 외형", "공명 카드", "연금술", "길드 연구"]):
+    if any(x in h for x in ["artifact", "inner armor", "weapon style", "weapon", "potential", "transcendence", "creed", "lamp", "무기 외형", "공명 카드", "연금술", "길드 연구", "현신도", "신편", "정령", "성장 콘텐츠"]):
         return "성장/장비"
     if any(x in h for x in ["merchant", "purchase limit", "npc merchant", "drop", "reward", "상점", "드랍", "보상", "창고 보관"]):
         return "경제/보상"
@@ -874,6 +874,77 @@ def quoted_subject(text: str) -> str:
     return m.group(1).strip() if m else ""
 
 
+
+def mir4_kr_summary_sentence(heading: str, context: str) -> dict[str, Any] | None:
+    """MIR4_KR-specific rule templates for update-unit preview.
+
+    v016 fixes the 2026-06-04 MIR4_KR candidate quality issue where generic
+    numbered headings such as "성장 콘텐츠" were classified as 편의/UI and
+    sentences ended with the filler phrase "변경 사항이 반영됩니다".
+    """
+    h = clean_heading_text(heading)
+    hay = f"{h} {context}"
+    sentence = ""
+    domain = ""
+
+    if "현신도" in hay:
+        domain = "성장/장비"
+        sentence = "성장/장비: 신규 성장 콘텐츠 ‘현신도’가 추가되어 신편 복원과 결속을 통해 능력치를 획득할 수 있습니다."
+    elif "천리전령 마루" in hay or ("전설 정령" in hay and "소환" in hay):
+        domain = "성장/장비"
+        sentence = "성장/장비: 전설 정령 특별 소환 대상이 ‘천리전령 마루’로 변경됩니다."
+    elif "초여름의 산들바람" in hay:
+        domain = "이벤트/보상"
+        sentence = "이벤트/보상: ‘초여름의 산들바람’ 이벤트가 시작되어 출석 및 선물 상자 보상이 제공됩니다."
+    elif "레벨 제한 상품" in hay and "정렬" in hay:
+        domain = "편의/UI"
+        sentence = "편의/UI: 상점의 레벨 제한 상품 정렬 방식이 개선됩니다."
+    elif "결투장" in hay and "히든 모드" in hay:
+        domain = "버그 수정"
+        sentence = "버그 수정: 결투장 히든 모드에서 특정 경로로 캐릭터 정보를 확인할 수 있던 문제가 수정됩니다."
+    elif "균열된 비정봉 11층" in hay and ("칼이 향하는 곳" in hay or "진행되지" in hay):
+        domain = "버그 수정"
+        sentence = "버그 수정: 균열된 비정봉 11층의 원정대 주간 임무 ‘칼이 향하는 곳 1~3’ 진행 문제가 수정됩니다."
+    elif "균열된 비정봉 12층" in hay and ("행운 드랍" in hay or "드랍 연출" in hay):
+        domain = "버그 수정"
+        sentence = "버그 수정: 균열된 비정봉 12층에서 공허·생령 몬스터 처치 시 행운 드랍 연출이 비정상적으로 노출되던 문제가 수정됩니다."
+
+    if not sentence:
+        return None
+    return {
+        "domain": domain,
+        "summary_sentence": sentence,
+        "confidence": 0.9,
+        "profile_rule": "MIR4_KR_v016",
+    }
+
+
+def normalize_units_for_profile(units: list[dict[str, Any]], profile: dict[str, Any], title: str = "") -> list[dict[str, Any]]:
+    game = profile.get("game", "")
+    if game != "MIR4_KR":
+        return units
+
+    normalized: list[dict[str, Any]] = []
+    seen = set()
+    for u in units:
+        heading = str(u.get("source_heading", ""))
+        context = str(u.get("source_context_excerpt", ""))
+        repl = mir4_kr_summary_sentence(heading, context)
+        if repl:
+            u = dict(u)
+            u["domain"] = repl["domain"]
+            u["summary_sentence"] = repl["summary_sentence"]
+            u["confidence"] = repl["confidence"]
+            u["profile_rule"] = repl["profile_rule"]
+        sent = str(u.get("summary_sentence", ""))
+        # Drop generic duplicate "성장 콘텐츠" if a specific 현신도 sentence is already present.
+        key = norm_key(sent)
+        if key in seen:
+            continue
+        seen.add(key)
+        normalized.append(u)
+    return normalized
+
 def summary_sentence_from_heading(block: dict[str, Any], profile: dict[str, Any]) -> dict[str, Any]:
     heading = clean_heading_text(block.get("heading", ""))
     context = " ".join(block.get("lines", [])[:5])
@@ -883,6 +954,19 @@ def summary_sentence_from_heading(block: dict[str, Any], profile: dict[str, Any]
     low = h.lower()
     subject = quoted_subject(h) or quoted_subject(context)
     sentence = ""
+
+    if profile.get("game") == "MIR4_KR":
+        repl = mir4_kr_summary_sentence(heading, context)
+        if repl:
+            return {
+                "order": block.get("order"),
+                "domain": repl["domain"],
+                "source_heading": heading,
+                "source_context_excerpt": truncate_sentence(context, 280),
+                "summary_sentence": repl["summary_sentence"],
+                "confidence": repl["confidence"],
+                "profile_rule": repl["profile_rule"],
+            }
 
     if not lang_ko:
         # English NC preview templates. Keep English names, Korean sentence frame.
@@ -993,6 +1077,10 @@ def audit_summary_candidates(title: str, units: list[dict[str, Any]], text: str)
             flags.append("NUMBER_PREFIX_REMAINING")
         if re.search(r"\b(PVP 명중|PVP 방어|Item Name|Preview|Points Obtained)\b", sent, re.I):
             flags.append("TABLE_ROW_LEAK")
+        if "변경 사항이 반영됩니다" in sent:
+            flags.append("FILLER_PHRASE_REMAINING")
+        if sent.startswith("기타:"):
+            flags.append("GENERIC_DOMAIN_REMAINING")
         if len(after) < 10:
             flags.append("TOO_SHORT_SUMMARY")
     # dedupe flags
@@ -1011,6 +1099,7 @@ def make_rule_based_summary_preview(text: str, title: str, profile: dict[str, An
     cleaned = clean_detail_text_for_summary(text, profile, title)
     blocks = extract_numbered_heading_blocks(cleaned, profile)
     units = [summary_sentence_from_heading(b, profile) for b in blocks]
+    units = normalize_units_for_profile(units, profile, title)
     raw_unit_count = len(units)
     units = compress_update_units_for_preview(units, profile, title)
     if not units:
@@ -1385,7 +1474,7 @@ def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dic
                 "summary_quality_flags": detail.get("summary_quality_flags", []),
                 "summary_source_text_length": detail.get("summary_source_text_length", 0),
                 "quality_status": detail.get("quality_status", "PREVIEW_ONLY"),
-                "note": "v015 forces Notion item names to YY.MM.DD | 패치노트 for new writes, preserves source_page_title, and repairs recent raw 항목명 values when requested.",
+                "note": "v016 keeps YY.MM.DD | 패치노트 item names and adds MIR4_KR profile-aware update-unit summary repair.",
             })
     return payloads
 
@@ -1703,7 +1792,7 @@ def main() -> int:
         "processing_order = actual_date 오름차순(oldest-first)",
         "```",
         "",
-        "## v015 scope",
+        "## v016 scope",
         "",
         "- Explicit workflow identity: workflow_version, GITHUB_SHA, GITHUB_REF, run id, script SHA256",
         "- Detail URL guard: board/list URL candidates are written to invalid_url_candidates.csv",
@@ -1719,6 +1808,7 @@ def main() -> int:
         "- Notion write is guarded: only dry_run=false and run_notion_write=true creates pages",
         "- data-only commit guard for patch_view_model.json",
         "- v015 title handling: read raw Notion 항목명, export normalized display title, and repair recent raw titles",
+        "- v016 MIR4_KR summary repair: 현신도/전설 정령/초여름 이벤트/상점 정렬/주요 버그 수정 문장화 보강",
     ]
     (ART / "workflow_report.md").write_text("\n".join(report), encoding="utf-8")
 

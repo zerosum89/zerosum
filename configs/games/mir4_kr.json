@@ -1,7 +1,7 @@
 {
   "game": "MIR4_KR",
   "enabled": true,
-  "profile_status": "seed_detail_url_filter_v008",
+  "profile_status": "mir4_kr_summary_repair_v016",
   "list_url": "https://forum.mir4.co.kr/board/patchnote",
   "list_order": "newest_first",
   "canonical_host_aliases": [
@@ -31,7 +31,7 @@
     "공지",
     "이벤트"
   ],
-  "notes": "v008: cs.mir4.co.kr and forum.mir4.co.kr /post/{id} are compared as equivalent for anchor matching. Detail fetch selectors are seed-level and artifacts remain preview-only.",
+  "notes": "v016: cs/forum host alias 유지. Detail URL filter 유지. MIR4_KR update-unit summary repair: 현신도/전설 정령/초여름 이벤트/상점 정렬/주요 버그 수정 문장화 보강.",
   "detail_title_selectors": [
     "h1",
     ".view-title",

@@ -40,3 +40,10 @@ New URL candidates can be followed to detail pages in preview mode. The workflow
 ## v015 title rule
 
 신규 Patch View Model page의 Notion title property(`항목명`)는 원문 제목이 아니라 `actual_date` 기반 `YY.MM.DD | 패치노트`로 생성합니다. 원문 제목은 `source_page_title`로 보존합니다.
+
+
+## v016 MIR4_KR summary repair
+
+- MIR4_KR 신규 패치 요약 후보에서 `현신도`는 성장/장비로 분류합니다.
+- `변경 사항이 반영됩니다` filler 문구가 남으면 품질 플래그를 부여합니다.
+- MIR4_KR 신규 write는 summary preview 확인 후 진행합니다.

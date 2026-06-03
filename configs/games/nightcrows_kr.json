@@ -1,11 +1,28 @@
 {
   "game": "NightCrows_KR",
   "enabled": true,
-  "profile_status": "seed_from_official_list",
+  "profile_status": "seed_detail_url_filter_v004",
   "list_url": "https://www.nightcrows.co.kr/news/release",
   "list_order": "newest_first",
-  "url_include_patterns": ["/news/release"],
-  "title_include_patterns": ["패치노트"],
-  "title_exclude_patterns": ["공지사항", "이벤트"],
-  "notes": "Official release list seed. Detail selectors require profile audit before automatic write."
+  "url_include_patterns": [
+    "/news/release"
+  ],
+  "detail_url_include_patterns": [
+    "/news/release/\\d+$"
+  ],
+  "detail_url_exclude_patterns": [
+    "/news/release$",
+    "/news$"
+  ],
+  "list_url_exclude_patterns": [
+    "/news/release$"
+  ],
+  "title_include_patterns": [
+    "패치노트"
+  ],
+  "title_exclude_patterns": [
+    "공지사항",
+    "이벤트"
+  ],
+  "notes": "v004: release list URL is excluded; only numeric release detail URLs are candidates."
 }

@@ -12,7 +12,7 @@ on:
           - "true"
           - "false"
       run_notion_write:
-        description: "Reserved. v003 keeps Notion write disabled."
+        description: "Reserved. v004 keeps Notion write disabled."
         required: true
         default: "false"
         type: choice
@@ -36,7 +36,7 @@ on:
         required: false
         default: "20"
   schedule:
-    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v003.
+    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v004.
     - cron: "0 21 * * *"
 
 permissions:

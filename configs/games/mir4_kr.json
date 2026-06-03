@@ -1,11 +1,35 @@
 {
   "game": "MIR4_KR",
   "enabled": true,
-  "profile_status": "seed_from_official_list",
+  "profile_status": "seed_detail_url_filter_v004",
   "list_url": "https://forum.mir4.co.kr/board/patchnote",
   "list_order": "newest_first",
-  "url_include_patterns": ["/post/", "/board/patchnote"],
-  "title_include_patterns": ["패치노트"],
-  "title_exclude_patterns": ["공지", "이벤트"],
-  "notes": "Official patch note board seed. Detail selectors require profile audit before automatic write."
+  "canonical_host_aliases": [
+    {
+      "from": "cs.mir4.co.kr",
+      "to": "forum.mir4.co.kr"
+    }
+  ],
+  "url_include_patterns": [
+    "/post/"
+  ],
+  "detail_url_include_patterns": [
+    "/post/\\d+$"
+  ],
+  "detail_url_exclude_patterns": [
+    "/board/",
+    "/notice/",
+    "/event/"
+  ],
+  "list_url_exclude_patterns": [
+    "/board/patchnote$"
+  ],
+  "title_include_patterns": [
+    "패치노트"
+  ],
+  "title_exclude_patterns": [
+    "공지",
+    "이벤트"
+  ],
+  "notes": "v004: cs.mir4.co.kr and forum.mir4.co.kr /post/{id} are compared as equivalent for anchor matching."
 }

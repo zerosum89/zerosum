@@ -36,4 +36,4 @@ run_git_push=true
 run_notion_write=false
 ```
 
-v003 never performs Notion write.
+v004 never performs Notion write.

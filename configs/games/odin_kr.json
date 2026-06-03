@@ -4,8 +4,33 @@
   "profile_status": "needs_profile_audit",
   "list_url": "https://odin.game.daum.net/",
   "list_order": "newest_first",
-  "url_include_patterns": ["odin.game.daum.net"],
-  "title_include_patterns": ["업데이트", "상세 내역 안내"],
-  "title_exclude_patterns": ["이벤트", "공지사항", "상품"],
-  "notes": "Home/news seed only. Dedicated news/list endpoint and detail selectors must be audited before automatic write."
+  "url_include_patterns": [
+    "odin.game.daum.net",
+    "m.cafe.daum.net/odin"
+  ],
+  "detail_url_include_patterns": [
+    "/odin/DEH7/\\d+$",
+    "/news/[^/]+/\\d+$"
+  ],
+  "detail_url_exclude_patterns": [
+    "/$",
+    "/news$",
+    "/notice$"
+  ],
+  "list_url_exclude_patterns": [
+    "^https://odin\\.game\\.daum\\.net$",
+    "^https://odin\\.game\\.daum\\.net/$"
+  ],
+  "title_include_patterns": [
+    "업데이트",
+    "상세 내역 안내",
+    "패치노트"
+  ],
+  "title_exclude_patterns": [
+    "이벤트",
+    "공지사항",
+    "상품"
+  ],
+  "disable_until_profile_audit": false,
+  "notes": "v004: still profile-audit target. Candidate URLs must be detail-like only; automatic write remains disabled."
 }

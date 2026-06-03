@@ -21,7 +21,7 @@ new_url_candidates = all official URLs newer than anchor
 processing_order = oldest-first
 ```
 
-## v003 scope
+## v004 scope
 
 - Notion write: disabled
 - HTML change: forbidden

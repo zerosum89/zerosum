@@ -51,7 +51,7 @@ MAX_NEW_URLS_PER_GAME = env_int("MAX_NEW_URLS_PER_GAME", 20)
 MAX_LIST_ITEMS = env_int("MAX_LIST_ITEMS", 80)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v003"
+WORKFLOW_VERSION = "github_actions_v004"
 
 
 def canonical_url(url: str) -> str:
@@ -65,6 +65,20 @@ def canonical_url(url: str) -> str:
         return urlunparse((scheme, host, path, "", "", ""))
     except Exception:
         return url.split("?")[0].split("#")[0].rstrip("/")
+
+
+def profile_canonical_url(url: str, profile: dict[str, Any] | None = None) -> str:
+    c = canonical_url(url)
+    if not profile:
+        return c
+    for rule in profile.get("canonical_host_aliases", []) or []:
+        src = str(rule.get("from", "")).lower()
+        dst = str(rule.get("to", "")).lower()
+        if src and dst:
+            p = urlparse(c)
+            if p.netloc.lower() == src:
+                c = urlunparse((p.scheme, dst, p.path, "", "", ""))
+    return c
 
 
 def norm_key(s: str) -> str:
@@ -314,7 +328,42 @@ def extract_date_from_text(text: str) -> str:
     m = re.search(r"(\d{2})[.\-/](\d{1,2})[.\-/](\d{1,2})", text)
     if m:
         return f"20{int(m.group(1)):02d}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+    m = re.search(r"\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})(?:st|nd|rd|th)?\b", text, re.I)
+    if m:
+        months = {name.lower(): i for i, name in enumerate(["January","February","March","April","May","June","July","August","September","October","November","December"], 1)}
+        return f"{datetime.now(KST).year:04d}-{months[m.group(1).lower()]:02d}-{int(m.group(2)):02d}"
+    m = re.search(r"(\d{1,2})\s*월\s*(\d{1,2})\s*일", text)
+    if m:
+        return f"{datetime.now(KST).year:04d}-{int(m.group(1)):02d}-{int(m.group(2)):02d}"
     return ""
+
+
+def is_list_or_board_url(url: str, profile: dict[str, Any]) -> bool:
+    c = profile_canonical_url(url, profile)
+    list_url = profile_canonical_url(profile.get("list_url", ""), profile)
+    if list_url and c == list_url:
+        return True
+    p = urlparse(c)
+    path = re.sub(r"/+$", "", p.path or "")
+    for pattern in compile_patterns(profile.get("list_url_exclude_patterns", [])):
+        if pattern.search(c) or pattern.search(path):
+            return True
+    return False
+
+
+def is_detail_url(url: str, profile: dict[str, Any]) -> bool:
+    if not url or is_list_or_board_url(url, profile):
+        return False
+    c = profile_canonical_url(url, profile)
+    p = urlparse(c)
+    path = p.path or ""
+    include = compile_patterns(profile.get("detail_url_include_patterns", []))
+    exclude = compile_patterns(profile.get("detail_url_exclude_patterns", []))
+    if include and not any(rx.search(c) or rx.search(path) for rx in include):
+        return False
+    if exclude and any(rx.search(c) or rx.search(path) for rx in exclude):
+        return False
+    return True
 
 
 def fetch_official_list(profile: dict[str, Any]) -> list[dict[str, Any]]:
@@ -333,36 +382,44 @@ def fetch_official_list(profile: dict[str, Any]) -> list[dict[str, Any]]:
     base = list_url
     out = []
     seen = set()
+    rejected = []
     for a in soup.find_all("a"):
         href = a.get("href")
         if not href:
             continue
-        url = canonical_url(urljoin(base, href))
+        url = profile_canonical_url(urljoin(base, href), profile)
         if not url or url in seen:
             continue
         title = " ".join(a.get_text(" ", strip=True).split())
         path = urlparse(url).path
         hay = f"{title} {url}"
+        reject_reason = ""
         if url_patterns and not any(p.search(path) or p.search(url) for p in url_patterns):
-            continue
-        if title_patterns and not any(p.search(hay) for p in title_patterns):
-            continue
-        if exclude_patterns and any(p.search(hay) for p in exclude_patterns):
+            reject_reason = "url_include_mismatch"
+        elif title_patterns and not any(p.search(hay) for p in title_patterns):
+            reject_reason = "title_include_mismatch"
+        elif exclude_patterns and any(p.search(hay) for p in exclude_patterns):
+            reject_reason = "title_exclude_match"
+        elif not is_detail_url(url, profile):
+            reject_reason = "not_detail_url"
+        if reject_reason:
+            rejected.append({"url": url, "title": title, "reason": reject_reason})
             continue
         seen.add(url)
         out.append({"url": url, "canonical_url": url, "title": title, "actual_date": extract_date_from_text(hay)})
+    (ART / f"rejected_links_{safe_game}.json").write_text(json.dumps(rejected[:200], ensure_ascii=False, indent=2), encoding="utf-8")
     return out[:MAX_LIST_ITEMS]
 
 
 def detect_newer_than_anchor(profile: dict[str, Any], official_list: list[dict[str, Any]], anchor: dict[str, Any] | None) -> dict[str, Any]:
     game = profile.get("game", "")
     order = profile.get("list_order", "newest_first")
-    anchor_c = canonical_url((anchor or {}).get("source_url", ""))
+    anchor_c = profile_canonical_url((anchor or {}).get("source_url", ""), profile)
     rows = []
     seen = set()
     for i, x in enumerate(official_list):
-        c = canonical_url(x.get("canonical_url") or x.get("url") or "")
-        if not c or c in seen:
+        c = profile_canonical_url(x.get("canonical_url") or x.get("url") or "", profile)
+        if not c or c in seen or not is_detail_url(c, profile):
             continue
         seen.add(c)
         rows.append({
@@ -403,6 +460,7 @@ def detect_newer_than_anchor(profile: dict[str, Any], official_list: list[dict[s
         "status": status,
         "reason": reason,
         "anchor": anchor or {},
+        "anchor_canonical_for_profile": anchor_c,
         "list_count": len(rows),
         "new_count": len(candidates),
         "new_urls": candidates,
@@ -460,7 +518,7 @@ def main() -> int:
     (ART / "effective_config.json").write_text(json.dumps(effective_config, ensure_ascii=False, indent=2), encoding="utf-8")
 
     if RUN_NOTION_WRITE:
-        raise RuntimeError("RUN_NOTION_WRITE=true is not supported in v003. Use detection/export preview only.")
+        raise RuntimeError("RUN_NOTION_WRITE=true is not supported in v004. Use detection/export preview only.")
 
     items, export_source, file_changed = export_patch_view_model()
     anchors = latest_anchor_by_game(items)
@@ -551,11 +609,11 @@ def main() -> int:
         "",
         "```text",
         "anchor = 게임별 마지막 적재 패치노트",
-        "new_url_candidates = anchor보다 최신인 URL 전체",
+        "new_url_candidates = anchor보다 최신인 detail URL 전체",
         "processing_order = actual_date 오름차순(oldest-first)",
         "```",
         "",
-        "## v003 scope",
+        "## v004 scope",
         "",
         "- Notion DB export and patch_view_model.json generation",
         "- patch_view_model.json noisy commit prevention",

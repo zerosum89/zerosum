@@ -59,7 +59,7 @@ RUN_TITLE_REPAIR = env_bool("RUN_TITLE_REPAIR", False)
 TITLE_REPAIR_WINDOW_DAYS = env_int("TITLE_REPAIR_WINDOW_DAYS", 14)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v014"
+WORKFLOW_VERSION = "github_actions_v015"
 
 
 def canonical_url(url: str) -> str:
@@ -182,7 +182,7 @@ def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
         card_summary = " · ".join(domain_tags[:4]) if domain_tags else ""
 
     actual_date = str(pick(raw, ["actual_date", "실제 패치일", "패치일", "날짜", "Date"], ""))[:10]
-    # v014: Notion title property in this DB is "항목명".  Earlier versions did
+    # v015: Notion title property in this DB is "항목명".  Earlier versions did
     # not read that key, so title repair saw an already-normalized fallback and
     # found zero candidates. Keep the raw Notion title separately for repair,
     # while exposing a normalized display title to patch_view_model.json.
@@ -414,7 +414,7 @@ def year_from_fallback(fallback: str = "") -> int:
 def extract_effective_patch_date(title: str, text: str, fallback: str = "", profile: dict[str, Any] | None = None) -> str:
     """Prefer the actual patch/update date over posted date.
 
-    v014 keeps the v010 date fix for pages like NightCrows KR where the detail page contains both
+    v015 keeps the v010 date fix for pages like NightCrows KR where the detail page contains both
     an effective patch-note title such as "6월 4일(목) 패치노트" and a
     separate posted timestamp such as "2026.06.03 18:00". The effective
     title date wins.
@@ -1385,7 +1385,7 @@ def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dic
                 "summary_quality_flags": detail.get("summary_quality_flags", []),
                 "summary_source_text_length": detail.get("summary_source_text_length", 0),
                 "quality_status": detail.get("quality_status", "PREVIEW_ONLY"),
-                "note": "v014 forces Notion item names to YY.MM.DD | 패치노트 for new writes, preserves source_page_title, and repairs recent raw 항목명 values when requested.",
+                "note": "v015 forces Notion item names to YY.MM.DD | 패치노트 for new writes, preserves source_page_title, and repairs recent raw 항목명 values when requested.",
             })
     return payloads
 
@@ -1403,7 +1403,7 @@ def repair_recent_item_titles(items: list[dict[str, Any]]) -> dict[str, Any]:
     """Optionally normalize recently created/migrated item titles.
 
     This is separate from new page creation. It is used to fix items created
-    before v014 that used source detail titles such as "Patch Note - June 2nd"
+    before v015 that used source detail titles such as "Patch Note - June 2nd"
     instead of the standard Notion item name "YY.MM.DD | 패치노트".
     """
     today_ord = datetime.now(KST).date().toordinal()
@@ -1447,7 +1447,7 @@ def repair_recent_item_titles(items: list[dict[str, Any]]) -> dict[str, Any]:
     token = os.environ.get("NOTION_TOKEN", "").strip()
     if not token:
         raise RuntimeError("RUN_TITLE_REPAIR=true requires NOTION_TOKEN.")
-    schema = notion_get_database_schema()
+    schema = notion_retrieve_database()
     title_name, _title_meta = find_title_schema_prop(schema)
     session = requests.Session()
     headers = {
@@ -1703,7 +1703,7 @@ def main() -> int:
         "processing_order = actual_date 오름차순(oldest-first)",
         "```",
         "",
-        "## v014 scope",
+        "## v015 scope",
         "",
         "- Explicit workflow identity: workflow_version, GITHUB_SHA, GITHUB_REF, run id, script SHA256",
         "- Detail URL guard: board/list URL candidates are written to invalid_url_candidates.csv",
@@ -1718,7 +1718,7 @@ def main() -> int:
         "- payload preview only",
         "- Notion write is guarded: only dry_run=false and run_notion_write=true creates pages",
         "- data-only commit guard for patch_view_model.json",
-        "- v014 title handling: read raw Notion 항목명, export normalized display title, and repair recent raw titles",
+        "- v015 title handling: read raw Notion 항목명, export normalized display title, and repair recent raw titles",
     ]
     (ART / "workflow_report.md").write_text("\n".join(report), encoding="utf-8")
 

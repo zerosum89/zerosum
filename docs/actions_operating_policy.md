@@ -42,6 +42,6 @@ processing_order = oldest-first
 New URL candidates can be followed to detail pages in preview mode. The workflow stores raw HTML/TXT artifacts and creates conservative rule-based summary candidates. These candidates are not write-ready; Notion write remains disabled.
 
 
-## v014 title rule
+## v015 title rule
 
 신규 Patch View Model page의 Notion title property(`항목명`)는 원문 제목이 아니라 `actual_date` 기반 `YY.MM.DD | 패치노트`로 생성합니다. 원문 제목은 `source_page_title`로 보존합니다.

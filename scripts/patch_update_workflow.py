@@ -56,7 +56,7 @@ MAX_DETAIL_TEXT_CHARS = env_int("MAX_DETAIL_TEXT_CHARS", 40000)
 MAX_DETAIL_FETCHES = env_int("MAX_DETAIL_FETCHES", 20)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v009"
+WORKFLOW_VERSION = "github_actions_v010"
 
 
 def canonical_url(url: str) -> str:
@@ -381,7 +381,7 @@ def year_from_fallback(fallback: str = "") -> int:
 def extract_effective_patch_date(title: str, text: str, fallback: str = "", profile: dict[str, Any] | None = None) -> str:
     """Prefer the actual patch/update date over posted date.
 
-    v009 fixes pages like NightCrows KR where the detail page contains both
+    v010 fixes pages like NightCrows KR where the detail page contains both
     an effective patch-note title such as "6월 4일(목) 패치노트" and a
     separate posted timestamp such as "2026.06.03 18:00". The effective
     title date wins.
@@ -971,7 +971,7 @@ def audit_summary_candidates(title: str, units: list[dict[str, Any]], text: str)
 def make_rule_based_summary_preview(text: str, title: str, profile: dict[str, Any] | None = None) -> tuple[list[str], list[str], str, str, list[dict[str, Any]], list[str]]:
     """Create write-disabled summary candidates from detail text.
 
-    v009 adds effective-date priority extraction and high-unit compression.
+    v010 adds effective-date priority extraction and high-unit compression.
     It is still a preview generator, not final Notion write logic.
     """
     profile = profile or {}
@@ -1099,6 +1099,210 @@ def fetch_details_for_candidates(results: list[dict[str, Any]], profiles: list[d
     return detail_results
 
 
+
+def notion_headers() -> dict[str, str]:
+    token = os.environ.get("NOTION_TOKEN", "").strip()
+    if not token:
+        raise RuntimeError("NOTION_TOKEN is missing.")
+    return {
+        "Authorization": f"Bearer {token}",
+        "Notion-Version": NOTION_VERSION,
+        "Content-Type": "application/json",
+    }
+
+
+def notion_database_id() -> str:
+    database_id = os.environ.get("NOTION_DATABASE_ID", "").strip()
+    if not database_id:
+        raise RuntimeError("NOTION_DATABASE_ID is missing.")
+    return database_id
+
+
+def notion_retrieve_database() -> dict[str, Any]:
+    database_id = notion_database_id()
+    r = requests.get(f"https://api.notion.com/v1/databases/{database_id}", headers=notion_headers(), timeout=60)
+    if r.status_code >= 400:
+        raise RuntimeError(f"Notion database retrieve failed: HTTP {r.status_code}: {r.text[:500]}")
+    return r.json()
+
+
+def find_schema_prop(schema: dict[str, Any], candidates: list[str], preferred_types: set[str] | None = None) -> tuple[str, dict[str, Any]] | tuple[str, None]:
+    props = schema.get("properties") or {}
+    norm = {norm_key(k): k for k in props.keys()}
+    for c in candidates:
+        actual = norm.get(norm_key(c))
+        if actual and (not preferred_types or (props[actual] or {}).get("type") in preferred_types):
+            return actual, props[actual]
+    for name, meta in props.items():
+        if preferred_types and (meta or {}).get("type") in preferred_types and norm_key(name) in {norm_key(c) for c in candidates}:
+            return name, meta
+    return "", None
+
+
+def find_title_schema_prop(schema: dict[str, Any]) -> tuple[str, dict[str, Any]]:
+    props = schema.get("properties") or {}
+    for name, meta in props.items():
+        if (meta or {}).get("type") == "title":
+            return name, meta
+    raise RuntimeError("Target Notion database has no title property.")
+
+
+def rich_text_chunks(text: str, limit: int = 1900) -> list[dict[str, Any]]:
+    text = str(text or "")
+    if not text:
+        return []
+    return [{"type": "text", "text": {"content": text[i:i+limit]}} for i in range(0, len(text), limit)]
+
+
+def notion_value_for_type(prop_type: str, value: Any) -> dict[str, Any] | None:
+    if value is None or value == "" or value == []:
+        return None
+    if prop_type == "title":
+        return {"title": rich_text_chunks(str(value), 1900)[:10]}
+    if prop_type == "rich_text":
+        if isinstance(value, list):
+            text = "\n".join(f"• {x}" for x in value if str(x).strip())
+        else:
+            text = str(value)
+        return {"rich_text": rich_text_chunks(text, 1900)[:80]}
+    if prop_type == "date":
+        return {"date": {"start": str(value)[:10]}}
+    if prop_type == "url":
+        return {"url": str(value)}
+    if prop_type == "select":
+        if isinstance(value, list):
+            value = value[0] if value else ""
+        value = str(value).strip()
+        return {"select": {"name": value}} if value else None
+    if prop_type == "multi_select":
+        vals = listify(value)
+        return {"multi_select": [{"name": str(v)[:100]} for v in vals[:50] if str(v).strip()]}
+    if prop_type == "checkbox":
+        return {"checkbox": bool(value)}
+    if prop_type == "number":
+        try:
+            return {"number": float(value)}
+        except Exception:
+            return None
+    return None
+
+
+def add_prop_if_exists(properties: dict[str, Any], schema: dict[str, Any], candidates: list[str], value: Any, preferred_types: set[str] | None = None) -> str:
+    name, meta = find_schema_prop(schema, candidates, preferred_types)
+    if not name or not meta:
+        return ""
+    val = notion_value_for_type((meta or {}).get("type", ""), value)
+    if val is not None:
+        properties[name] = val
+        return name
+    return ""
+
+
+def payload_to_notion_properties(schema: dict[str, Any], payload: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
+    properties: dict[str, Any] = {}
+    written: list[str] = []
+    title_name, title_meta = find_title_schema_prop(schema)
+    title_value = payload.get("page_title") or payload.get("title") or "패치노트"
+    title_prop = notion_value_for_type("title", title_value)
+    if title_prop:
+        properties[title_name] = title_prop
+        written.append(title_name)
+
+    mappings = [
+        (["game", "게임", "게임명", "Game"], payload.get("game"), {"select", "rich_text", "multi_select"}),
+        (["actual_date", "실제 패치일", "패치일", "날짜", "Date"], payload.get("actual_date"), {"date", "rich_text"}),
+        (["source_url", "원문 URL", "URL", "url", "링크", "원문링크"], payload.get("source_url"), {"url", "rich_text"}),
+        (["importance", "중요도", "Importance"], "major" if payload.get("quality_status") == "PASS" and (payload.get("domain_tags") or []) else "normal", {"select", "rich_text"}),
+        (["primary_category", "패치 카테고리", "대표 카테고리", "대표 핵심 신호"], payload.get("domain_tags", [])[:2], {"multi_select", "rich_text", "select"}),
+        (["main_updates", "주요 업데이트", "주요 업데이트 요약"], payload.get("body_summary", [])[:3], {"rich_text", "multi_select"}),
+        (["body_summary", "본문 요약", "Body Summary"], payload.get("body_summary", []), {"rich_text"}),
+        (["domain_tags", "관련 영역", "도메인 태그", "Domain Tags"], payload.get("domain_tags", []), {"multi_select", "rich_text"}),
+        (["card_summary", "카드 요약", "Card Summary"], payload.get("card_summary", ""), {"rich_text"}),
+        (["actual_date_source", "실제 패치일 근거", "날짜 근거"], payload.get("actual_date_source", ""), {"select", "rich_text"}),
+        (["listed_actual_date", "게시일", "목록 날짜"], payload.get("listed_actual_date", ""), {"date", "rich_text"}),
+        (["quality_status", "품질 상태", "Quality Status"], payload.get("quality_status", ""), {"select", "rich_text"}),
+        (["view_model_version", "View Model Version", "생성 규칙 버전"], SCHEMA_VERSION + "/" + WORKFLOW_VERSION, {"select", "rich_text"}),
+    ]
+    for candidates, value, types in mappings:
+        name = add_prop_if_exists(properties, schema, candidates, value, types)
+        if name:
+            written.append(name)
+    return properties, written
+
+
+def payload_quality_ok(payload: dict[str, Any]) -> tuple[bool, str]:
+    if payload.get("detail_fetch_status") != "PASS":
+        return False, "detail_fetch_not_pass"
+    if payload.get("quality_status") != "PASS":
+        return False, "summary_quality_not_pass"
+    if not payload.get("source_url"):
+        return False, "missing_source_url"
+    if not payload.get("actual_date"):
+        return False, "missing_actual_date"
+    if not payload.get("body_summary") or payload.get("body_summary") == "NEEDS_DETAIL_FETCH_AND_SUMMARY":
+        return False, "missing_body_summary"
+    if not payload.get("domain_tags"):
+        return False, "missing_domain_tags"
+    return True, "ok"
+
+
+def write_new_patch_payloads_to_notion(payloads: list[dict[str, Any]], existing_items: list[dict[str, Any]]) -> dict[str, Any]:
+    database_id = notion_database_id()
+    existing_urls = {canonical_url(x.get("source_url", "")) for x in existing_items if x.get("source_url")}
+    schema = notion_retrieve_database()
+    results = []
+    created = 0
+    skipped = 0
+    failed = 0
+    session = requests.Session()
+    headers = notion_headers()
+    for payload in payloads:
+        row = {
+            "game": payload.get("game", ""),
+            "source_url": payload.get("source_url", ""),
+            "actual_date": payload.get("actual_date", ""),
+            "page_title": payload.get("page_title", ""),
+        }
+        ok, reason = payload_quality_ok(payload)
+        if not ok:
+            row.update({"status": "SKIPPED", "reason": reason})
+            skipped += 1
+            results.append(row)
+            continue
+        cu = canonical_url(payload.get("source_url", ""))
+        if cu in existing_urls:
+            row.update({"status": "SKIPPED", "reason": "duplicate_source_url"})
+            skipped += 1
+            results.append(row)
+            continue
+        try:
+            props, written_props = payload_to_notion_properties(schema, payload)
+            body = {"parent": {"database_id": database_id}, "properties": props}
+            r = session.post("https://api.notion.com/v1/pages", headers=headers, json=body, timeout=60)
+            if r.status_code >= 400:
+                failed += 1
+                row.update({"status": "FAILED", "reason": f"HTTP {r.status_code}: {r.text[:500]}", "written_properties": written_props})
+            else:
+                data = r.json()
+                created += 1
+                existing_urls.add(cu)
+                row.update({"status": "CREATED", "page_id": data.get("id", ""), "written_properties": written_props, "reason": ""})
+        except Exception as exc:
+            failed += 1
+            row.update({"status": "FAILED", "reason": str(exc)})
+        results.append(row)
+
+    return {
+        "workflow_version": WORKFLOW_VERSION,
+        "target_database": database_id,
+        "write_attempted": True,
+        "created": created,
+        "skipped": skipped,
+        "failed": failed,
+        "results": results,
+        "write_ready": failed == 0,
+    }
+
 def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
     if not rows:
         path.write_text("", encoding="utf-8")
@@ -1143,7 +1347,7 @@ def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dic
                 "summary_quality_flags": detail.get("summary_quality_flags", []),
                 "summary_source_text_length": detail.get("summary_source_text_length", 0),
                 "quality_status": detail.get("quality_status", "PREVIEW_ONLY"),
-                "note": "v009 generates normalized detail summary quality preview only. Notion write remains disabled.",
+                "note": "v010 generates normalized detail summary and can create Notion pages only when dry_run=false and run_notion_write=true.",
             })
     return payloads
 
@@ -1170,9 +1374,6 @@ def main() -> int:
     }
     (ART / "effective_config.json").write_text(json.dumps(effective_config, ensure_ascii=False, indent=2), encoding="utf-8")
     (ART / "execution_identity.json").write_text(json.dumps(execution_identity(), ensure_ascii=False, indent=2), encoding="utf-8")
-
-    if RUN_NOTION_WRITE:
-        raise RuntimeError("RUN_NOTION_WRITE=true is not supported in v009. Use detection/detail-fetch/summary-quality/export preview only.")
 
     items, export_source, file_changed = export_patch_view_model()
     anchors = latest_anchor_by_game(items)
@@ -1294,8 +1495,36 @@ def main() -> int:
     (ART / "detail_url_guard.json").write_text(json.dumps(detail_url_guard, ensure_ascii=False, indent=2), encoding="utf-8")
     write_csv(ART / "invalid_url_candidates.csv", invalid_candidate_rows)
 
+    notion_write_result = {
+        "workflow_version": WORKFLOW_VERSION,
+        "target_database": os.environ.get("NOTION_DATABASE_ID", ""),
+        "write_attempted": False,
+        "dry_run": DRY_RUN,
+        "run_notion_write": RUN_NOTION_WRITE,
+        "created": 0,
+        "skipped": 0,
+        "failed": 0,
+        "results": [],
+        "reason": "write disabled unless dry_run=false and run_notion_write=true",
+        "write_ready": False,
+    }
+    if RUN_NOTION_WRITE and not DRY_RUN:
+        if invalid_candidate_rows and STRICT_DETAIL_URL_GUARD:
+            notion_write_result["reason"] = "blocked_by_detail_url_guard"
+        else:
+            notion_write_result = write_new_patch_payloads_to_notion(payload_preview, items)
+            # After write, regenerate public JSON so a subsequent data-only commit includes newly created pages.
+            if notion_write_result.get("failed", 0) > 0:
+                (ART / "notion_write_result.json").write_text(json.dumps(notion_write_result, ensure_ascii=False, indent=2), encoding="utf-8")
+                write_csv(ART / "notion_write_summary.csv", notion_write_result.get("results", []))
+                raise RuntimeError("Notion write failed. See notion_write_result.json.")
+            items, export_source, file_changed = export_patch_view_model()
+    (ART / "notion_write_result.json").write_text(json.dumps(notion_write_result, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_csv(ART / "notion_write_summary.csv", notion_write_result.get("results", []))
+
+    payload_write_ready = bool((not DRY_RUN) and RUN_NOTION_WRITE and notion_write_result.get("failed", 0) == 0 and notion_write_result.get("created", 0) >= 0)
     (ART / "new_url_detection_result.json").write_text(json.dumps({"generated_at": started, "workflow_version": WORKFLOW_VERSION, "execution_identity": execution_identity(), "detail_url_guard": detail_url_guard, "results": results}, ensure_ascii=False, indent=2), encoding="utf-8")
-    (ART / "new_patch_payload_preview.json").write_text(json.dumps({"write_ready": False, "workflow_version": WORKFLOW_VERSION, "detail_url_guard": detail_url_guard, "payloads": payload_preview}, ensure_ascii=False, indent=2), encoding="utf-8")
+    (ART / "new_patch_payload_preview.json").write_text(json.dumps({"write_ready": payload_write_ready, "workflow_version": WORKFLOW_VERSION, "detail_url_guard": detail_url_guard, "notion_write_result": notion_write_result, "payloads": payload_preview}, ensure_ascii=False, indent=2), encoding="utf-8")
     write_csv(ART / "new_url_detection_summary.csv", summary_rows)
     write_csv(ART / "new_url_candidates.csv", url_rows)
 
@@ -1311,6 +1540,10 @@ def main() -> int:
         f"- public_items: {len(items)}",
         f"- patch_view_model_changed: {file_changed}",
         f"- payload_preview_count: {len(payload_preview)}",
+        f"- notion_write_attempted: {notion_write_result.get('write_attempted', False)}",
+        f"- notion_write_created: {notion_write_result.get('created', 0)}",
+        f"- notion_write_skipped: {notion_write_result.get('skipped', 0)}",
+        f"- notion_write_failed: {notion_write_result.get('failed', 0)}",
         f"- github_sha: {os.environ.get('GITHUB_SHA', '')}",
         f"- script_sha256: {execution_identity().get('script_sha256', '')}",
         f"- strict_detail_url_guard: {STRICT_DETAIL_URL_GUARD}",
@@ -1335,7 +1568,7 @@ def main() -> int:
         "processing_order = actual_date 오름차순(oldest-first)",
         "```",
         "",
-        "## v009 scope",
+        "## v010 scope",
         "",
         "- Explicit workflow identity: workflow_version, GITHUB_SHA, GITHUB_REF, run id, script SHA256",
         "- Detail URL guard: board/list URL candidates are written to invalid_url_candidates.csv",
@@ -1348,7 +1581,7 @@ def main() -> int:
         "- body_summary/domain_tags/card_summary quality preview",
         "- summary_quality_result.json, summary_quality_summary.csv, update_units_preview.csv artifacts",
         "- payload preview only",
-        "- Notion write intentionally disabled",
+        "- Notion write is guarded: only dry_run=false and run_notion_write=true creates pages",
         "- data-only commit guard for patch_view_model.json",
     ]
     (ART / "workflow_report.md").write_text("\n".join(report), encoding="utf-8")

@@ -28,3 +28,10 @@
 ## v009 addition
 
 New URL candidates can be followed to detail pages in preview mode. The workflow stores raw HTML/TXT artifacts and creates conservative rule-based summary candidates. These candidates are not write-ready; Notion write remains disabled.
+
+
+## v011 additions
+
+- Workflow artifacts are written to `runner.temp` so `outputs/` is not seen as a repo change.
+- Data-only deploy guard allows only `patch_view_model.json` changes.
+- New Notion page item names use `YY.MM.DD | 패치노트`.

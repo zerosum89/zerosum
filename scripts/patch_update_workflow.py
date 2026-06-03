@@ -19,7 +19,8 @@ from bs4 import BeautifulSoup
 
 KST = timezone(timedelta(hours=9))
 ROOT = Path.cwd()
-ART = ROOT / "outputs" / "patch_workflow_artifacts"
+ART_ENV = os.environ.get("PATCH_WORKFLOW_ARTIFACT_DIR", "").strip()
+ART = Path(ART_ENV).expanduser() if ART_ENV else (ROOT / "outputs" / "patch_workflow_artifacts")
 ART.mkdir(parents=True, exist_ok=True)
 LOG_PATH = ART / "workflow.log"
 
@@ -54,9 +55,11 @@ STRICT_DETAIL_URL_GUARD = env_bool("STRICT_DETAIL_URL_GUARD", True)
 FETCH_DETAIL_PAGES = env_bool("FETCH_DETAIL_PAGES", True)
 MAX_DETAIL_TEXT_CHARS = env_int("MAX_DETAIL_TEXT_CHARS", 40000)
 MAX_DETAIL_FETCHES = env_int("MAX_DETAIL_FETCHES", 20)
+RUN_TITLE_REPAIR = env_bool("RUN_TITLE_REPAIR", False)
+TITLE_REPAIR_WINDOW_DAYS = env_int("TITLE_REPAIR_WINDOW_DAYS", 14)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v010"
+WORKFLOW_VERSION = "github_actions_v011"
 
 
 def canonical_url(url: str) -> str:
@@ -185,6 +188,7 @@ def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
         title = f"{date} | 패치노트"
 
     return {
+        "page_id": page.get("id", ""),
         "game": str(pick(raw, ["game", "게임", "게임명", "Game"], "")),
         "actual_date": actual_date,
         "title": title,
@@ -371,6 +375,28 @@ def extract_date_from_text(text: str) -> str:
 
 
 
+
+
+def normalized_patch_page_title(actual_date: str, fallback_title: str = "") -> str:
+    """Return the standard Notion item name used by existing Patch View Model pages.
+
+    Standard: YY.MM.DD | 패치노트.
+    This keeps newly detected pages aligned with the historical item-name rule
+    instead of using source titles such as "Patch Note - June 2nd" or
+    "6월 4일(목) 패치노트" as the Notion title.
+    """
+    date = (actual_date or "").strip()
+    if not re.match(r"^20\d{2}-\d{2}-\d{2}$", date):
+        date = extract_date_from_text(fallback_title or "")
+    if re.match(r"^20\d{2}-\d{2}-\d{2}$", date):
+        yy = int(date[2:4])
+        mm = int(date[5:7])
+        dd = int(date[8:10])
+        return f"{yy:02d}.{mm:02d}.{dd:02d} | 패치노트"
+    title = (fallback_title or "").strip()
+    return title if title else "패치노트"
+
+
 def year_from_fallback(fallback: str = "") -> int:
     m = re.match(r"^(20\d{2})-", str(fallback or ""))
     if m:
@@ -381,7 +407,7 @@ def year_from_fallback(fallback: str = "") -> int:
 def extract_effective_patch_date(title: str, text: str, fallback: str = "", profile: dict[str, Any] | None = None) -> str:
     """Prefer the actual patch/update date over posted date.
 
-    v010 fixes pages like NightCrows KR where the detail page contains both
+    v011 keeps the v010 date fix for pages like NightCrows KR where the detail page contains both
     an effective patch-note title such as "6월 4일(목) 패치노트" and a
     separate posted timestamp such as "2026.06.03 18:00". The effective
     title date wins.
@@ -596,6 +622,7 @@ def detect_newer_than_anchor(profile: dict[str, Any], official_list: list[dict[s
 
     candidates = sorted(candidates, key=lambda r: (r.get("actual_date") or "9999-99-99", r.get("list_index", 0)))[:MAX_NEW_URLS_PER_GAME]
     return {
+        "page_id": page.get("id", ""),
         "game": game,
         "status": status,
         "reason": reason,
@@ -1324,15 +1351,19 @@ def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dic
             body_summary = detail.get("body_summary_candidate") if fetched else "NEEDS_DETAIL_FETCH_AND_SUMMARY"
             domain_tags = detail.get("domain_tags_candidate") if fetched else []
             card_summary = detail.get("card_summary_candidate") if fetched else ""
+            source_page_title = detail.get("title") or row.get("title") or "패치노트"
+            final_actual_date = detail.get("actual_date") or row.get("actual_date") or None
             payloads.append({
                 "operation": "preview_new_patch_create",
                 "write_ready": False,
                 "game": res["game"],
                 "source_url": row["source_url"],
-                "actual_date": detail.get("actual_date") or row.get("actual_date") or None,
+                "actual_date": final_actual_date,
                 "listed_actual_date": detail.get("listed_actual_date") or row.get("actual_date") or None,
                 "actual_date_source": detail.get("actual_date_source", "list_candidate"),
-                "page_title": detail.get("title") or row.get("title") or "패치노트",
+                "source_page_title": source_page_title,
+                "page_title": normalized_patch_page_title(final_actual_date or "", source_page_title),
+                "item_name_rule": "YY.MM.DD | 패치노트",
                 "anchor_source_url": res.get("anchor", {}).get("source_url"),
                 "anchor_actual_date": res.get("anchor", {}).get("actual_date"),
                 "process_order": i,
@@ -1347,9 +1378,94 @@ def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dic
                 "summary_quality_flags": detail.get("summary_quality_flags", []),
                 "summary_source_text_length": detail.get("summary_source_text_length", 0),
                 "quality_status": detail.get("quality_status", "PREVIEW_ONLY"),
-                "note": "v010 generates normalized detail summary and can create Notion pages only when dry_run=false and run_notion_write=true.",
+                "note": "v011 uses normalized item names, keeps artifacts outside the repo on Actions, and can create Notion pages only when dry_run=false and run_notion_write=true.",
             })
     return payloads
+
+
+
+
+def date_to_ordinal(date_str: str) -> int:
+    try:
+        return datetime.strptime(str(date_str)[:10], "%Y-%m-%d").toordinal()
+    except Exception:
+        return 0
+
+
+def repair_recent_item_titles(items: list[dict[str, Any]]) -> dict[str, Any]:
+    """Optionally normalize recently created/migrated item titles.
+
+    This is separate from new page creation. It is used to fix items created
+    before v011 that used source detail titles such as "Patch Note - June 2nd"
+    instead of the standard Notion item name "YY.MM.DD | 패치노트".
+    """
+    today_ord = datetime.now(KST).date().toordinal()
+    min_ord = today_ord - max(0, TITLE_REPAIR_WINDOW_DAYS)
+    rows = []
+    for item in items:
+        actual_date = str(item.get("actual_date", ""))[:10]
+        page_id = item.get("page_id", "")
+        current = str(item.get("title", ""))
+        target = normalized_patch_page_title(actual_date, current)
+        ordv = date_to_ordinal(actual_date)
+        if not page_id or not actual_date or not ordv or ordv < min_ord:
+            continue
+        if current == target:
+            continue
+        if TARGET_GAMES and "ALL" not in TARGET_GAMES and item.get("game") not in TARGET_GAMES:
+            continue
+        rows.append({
+            "page_id": page_id,
+            "game": item.get("game", ""),
+            "actual_date": actual_date,
+            "source_url": item.get("source_url", ""),
+            "previous_title": current,
+            "new_title": target,
+            "status": "PREVIEW" if DRY_RUN or not RUN_TITLE_REPAIR else "PENDING",
+        })
+
+    result = {
+        "workflow_version": WORKFLOW_VERSION,
+        "run_title_repair": RUN_TITLE_REPAIR,
+        "dry_run": DRY_RUN,
+        "title_repair_window_days": TITLE_REPAIR_WINDOW_DAYS,
+        "candidate_count": len(rows),
+        "updated": 0,
+        "failed": 0,
+        "results": rows,
+    }
+    if not rows or DRY_RUN or not RUN_TITLE_REPAIR:
+        return result
+
+    token = os.environ.get("NOTION_TOKEN", "").strip()
+    if not token:
+        raise RuntimeError("RUN_TITLE_REPAIR=true requires NOTION_TOKEN.")
+    schema = notion_get_database_schema()
+    title_name, _title_meta = find_title_schema_prop(schema)
+    session = requests.Session()
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Notion-Version": NOTION_VERSION,
+        "Content-Type": "application/json",
+    }
+    for row in rows:
+        try:
+            properties = {title_name: notion_value_for_type("title", row["new_title"])}
+            r = session.patch(f"https://api.notion.com/v1/pages/{row['page_id']}", headers=headers, json={"properties": properties}, timeout=60)
+            if r.status_code >= 300:
+                row["status"] = "FAILED"
+                row["reason"] = r.text[:500]
+                result["failed"] += 1
+            else:
+                row["status"] = "UPDATED"
+                result["updated"] += 1
+        except Exception as exc:
+            row["status"] = "FAILED"
+            row["reason"] = str(exc)
+            result["failed"] += 1
+    if result["failed"]:
+        raise RuntimeError("Title repair failed for one or more pages. See title_repair_result.json.")
+    return result
 
 
 def main() -> int:
@@ -1370,6 +1486,8 @@ def main() -> int:
         "fetch_detail_pages": FETCH_DETAIL_PAGES,
         "max_detail_fetches": MAX_DETAIL_FETCHES,
         "max_detail_text_chars": MAX_DETAIL_TEXT_CHARS,
+        "run_title_repair": RUN_TITLE_REPAIR,
+        "title_repair_window_days": TITLE_REPAIR_WINDOW_DAYS,
         **execution_identity(),
     }
     (ART / "effective_config.json").write_text(json.dumps(effective_config, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -1519,6 +1637,13 @@ def main() -> int:
                 write_csv(ART / "notion_write_summary.csv", notion_write_result.get("results", []))
                 raise RuntimeError("Notion write failed. See notion_write_result.json.")
             items, export_source, file_changed = export_patch_view_model()
+
+    title_repair_result = repair_recent_item_titles(items)
+    (ART / "title_repair_result.json").write_text(json.dumps(title_repair_result, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_csv(ART / "title_repair_summary.csv", title_repair_result.get("results", []))
+    if title_repair_result.get("updated", 0) > 0:
+        items, export_source, file_changed = export_patch_view_model()
+
     (ART / "notion_write_result.json").write_text(json.dumps(notion_write_result, ensure_ascii=False, indent=2), encoding="utf-8")
     write_csv(ART / "notion_write_summary.csv", notion_write_result.get("results", []))
 
@@ -1536,6 +1661,7 @@ def main() -> int:
         f"- DRY_RUN: {DRY_RUN}",
         f"- RUN_NOTION_WRITE: {RUN_NOTION_WRITE}",
         f"- RUN_GIT_PUSH: {RUN_GIT_PUSH}",
+        f"- RUN_TITLE_REPAIR: {RUN_TITLE_REPAIR}",
         f"- export_source: {export_source}",
         f"- public_items: {len(items)}",
         f"- patch_view_model_changed: {file_changed}",
@@ -1544,6 +1670,8 @@ def main() -> int:
         f"- notion_write_created: {notion_write_result.get('created', 0)}",
         f"- notion_write_skipped: {notion_write_result.get('skipped', 0)}",
         f"- notion_write_failed: {notion_write_result.get('failed', 0)}",
+        f"- title_repair_candidates: {title_repair_result.get('candidate_count', 0)}",
+        f"- title_repair_updated: {title_repair_result.get('updated', 0)}",
         f"- github_sha: {os.environ.get('GITHUB_SHA', '')}",
         f"- script_sha256: {execution_identity().get('script_sha256', '')}",
         f"- strict_detail_url_guard: {STRICT_DETAIL_URL_GUARD}",
@@ -1568,7 +1696,7 @@ def main() -> int:
         "processing_order = actual_date 오름차순(oldest-first)",
         "```",
         "",
-        "## v010 scope",
+        "## v011 scope",
         "",
         "- Explicit workflow identity: workflow_version, GITHUB_SHA, GITHUB_REF, run id, script SHA256",
         "- Detail URL guard: board/list URL candidates are written to invalid_url_candidates.csv",

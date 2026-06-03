@@ -55,8 +55,20 @@ on:
         description: "Safety cap for detail page fetches per workflow run."
         required: false
         default: "20"
+      run_title_repair:
+        description: "true = normalize recent Notion item names to YY.MM.DD | 패치노트 when dry_run=false."
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+      title_repair_window_days:
+        description: "Only repair item titles whose actual_date is within this many days."
+        required: false
+        default: "14"
   schedule:
-    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v010.
+    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v011.
     - cron: "0 21 * * *"
 
 permissions:
@@ -86,6 +98,9 @@ jobs:
       STRICT_DETAIL_URL_GUARD: ${{ github.event_name == 'workflow_dispatch' && inputs.strict_detail_url_guard || 'true' }}
       FETCH_DETAIL_PAGES: ${{ github.event_name == 'workflow_dispatch' && inputs.fetch_detail_pages || 'true' }}
       MAX_DETAIL_FETCHES: ${{ github.event_name == 'workflow_dispatch' && inputs.max_detail_fetches || '20' }}
+      RUN_TITLE_REPAIR: ${{ github.event_name == 'workflow_dispatch' && inputs.run_title_repair || 'false' }}
+      TITLE_REPAIR_WINDOW_DAYS: ${{ github.event_name == 'workflow_dispatch' && inputs.title_repair_window_days || '14' }}
+      PATCH_WORKFLOW_ARTIFACT_DIR: ${{ runner.temp }}/patch_workflow_artifacts
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -111,7 +126,7 @@ jobs:
         if: always()
         with:
           name: patch-update-artifacts
-          path: outputs/patch_workflow_artifacts/
+          path: ${{ env.PATCH_WORKFLOW_ARTIFACT_DIR }}/
           if-no-files-found: warn
 
       - name: Commit patch_view_model.json only
@@ -126,7 +141,7 @@ jobs:
           echo "Changed files:"
           echo "$changed_files"
 
-          bad_files="$(echo "$changed_files" | grep -v '^patch_view_model.json$' | grep -v '^outputs/patch_workflow_artifacts/' || true)"
+          bad_files="$(echo "$changed_files" | grep -v '^patch_view_model.json$' || true)"
           if [ -n "$bad_files" ]; then
             echo "[ERROR] Data-only deploy guard failed. Unexpected changed files:"
             echo "$bad_files"

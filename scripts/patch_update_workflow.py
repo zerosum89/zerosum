@@ -59,7 +59,7 @@ RUN_TITLE_REPAIR = env_bool("RUN_TITLE_REPAIR", False)
 TITLE_REPAIR_WINDOW_DAYS = env_int("TITLE_REPAIR_WINDOW_DAYS", 14)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v013"
+WORKFLOW_VERSION = "github_actions_v014"
 
 
 def canonical_url(url: str) -> str:
@@ -182,7 +182,13 @@ def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
         card_summary = " · ".join(domain_tags[:4]) if domain_tags else ""
 
     actual_date = str(pick(raw, ["actual_date", "실제 패치일", "패치일", "날짜", "Date"], ""))[:10]
-    title = str(pick(raw, ["title", "표시 제목", "정규화 제목", "패치 제목", "Name", "제목"], ""))
+    # v014: Notion title property in this DB is "항목명".  Earlier versions did
+    # not read that key, so title repair saw an already-normalized fallback and
+    # found zero candidates. Keep the raw Notion title separately for repair,
+    # while exposing a normalized display title to patch_view_model.json.
+    raw_title = str(pick(raw, ["항목명", "title", "표시 제목", "정규화 제목", "패치 제목", "Name", "제목"], ""))
+    normalized_title = normalized_patch_page_title(actual_date, raw_title)
+    title = normalized_title or raw_title
     if not title:
         date = actual_date.replace("-", ".")[2:] if actual_date else "--.--.--"
         title = f"{date} | 패치노트"
@@ -192,6 +198,7 @@ def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
         "game": str(pick(raw, ["game", "게임", "게임명", "Game"], "")),
         "actual_date": actual_date,
         "title": title,
+        "raw_title": raw_title,
         "source_url": str(pick(raw, ["source_url", "원문 URL", "URL", "url", "링크", "원문링크"], "")),
         "importance": str(pick(raw, ["importance", "중요도", "Importance"], "normal") or "normal"),
         "primary_category": listify(pick(raw, ["primary_category", "패치 카테고리", "대표 카테고리", "대표 핵심 신호"], [])),
@@ -407,7 +414,7 @@ def year_from_fallback(fallback: str = "") -> int:
 def extract_effective_patch_date(title: str, text: str, fallback: str = "", profile: dict[str, Any] | None = None) -> str:
     """Prefer the actual patch/update date over posted date.
 
-    v013 keeps the v010 date fix for pages like NightCrows KR where the detail page contains both
+    v014 keeps the v010 date fix for pages like NightCrows KR where the detail page contains both
     an effective patch-note title such as "6월 4일(목) 패치노트" and a
     separate posted timestamp such as "2026.06.03 18:00". The effective
     title date wins.
@@ -1238,6 +1245,7 @@ def payload_to_notion_properties(schema: dict[str, Any], payload: dict[str, Any]
         (["game", "게임", "게임명", "Game"], payload.get("game"), {"select", "rich_text", "multi_select"}),
         (["actual_date", "실제 패치일", "패치일", "날짜", "Date"], payload.get("actual_date"), {"date", "rich_text"}),
         (["source_url", "원문 URL", "URL", "url", "링크", "원문링크"], payload.get("source_url"), {"url", "rich_text"}),
+        (["source_page_title", "원문 제목", "Source Page Title"], payload.get("source_page_title", ""), {"rich_text"}),
         (["importance", "중요도", "Importance"], "major" if payload.get("quality_status") == "PASS" and (payload.get("domain_tags") or []) else "normal", {"select", "rich_text"}),
         (["primary_category", "패치 카테고리", "대표 카테고리", "대표 핵심 신호"], payload.get("domain_tags", [])[:2], {"multi_select", "rich_text", "select"}),
         (["main_updates", "주요 업데이트", "주요 업데이트 요약"], payload.get("body_summary", [])[:3], {"rich_text", "multi_select"}),
@@ -1377,7 +1385,7 @@ def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dic
                 "summary_quality_flags": detail.get("summary_quality_flags", []),
                 "summary_source_text_length": detail.get("summary_source_text_length", 0),
                 "quality_status": detail.get("quality_status", "PREVIEW_ONLY"),
-                "note": "v013 uses normalized item names, keeps artifacts outside the repo on Actions, and can create Notion pages only when dry_run=false and run_notion_write=true.",
+                "note": "v014 forces Notion item names to YY.MM.DD | 패치노트 for new writes, preserves source_page_title, and repairs recent raw 항목명 values when requested.",
             })
     return payloads
 
@@ -1395,7 +1403,7 @@ def repair_recent_item_titles(items: list[dict[str, Any]]) -> dict[str, Any]:
     """Optionally normalize recently created/migrated item titles.
 
     This is separate from new page creation. It is used to fix items created
-    before v013 that used source detail titles such as "Patch Note - June 2nd"
+    before v014 that used source detail titles such as "Patch Note - June 2nd"
     instead of the standard Notion item name "YY.MM.DD | 패치노트".
     """
     today_ord = datetime.now(KST).date().toordinal()
@@ -1404,7 +1412,7 @@ def repair_recent_item_titles(items: list[dict[str, Any]]) -> dict[str, Any]:
     for item in items:
         actual_date = str(item.get("actual_date", ""))[:10]
         page_id = item.get("page_id", "")
-        current = str(item.get("title", ""))
+        current = str(item.get("raw_title") or item.get("title", ""))
         target = normalized_patch_page_title(actual_date, current)
         ordv = date_to_ordinal(actual_date)
         if not page_id or not actual_date or not ordv or ordv < min_ord:
@@ -1695,7 +1703,7 @@ def main() -> int:
         "processing_order = actual_date 오름차순(oldest-first)",
         "```",
         "",
-        "## v013 scope",
+        "## v014 scope",
         "",
         "- Explicit workflow identity: workflow_version, GITHUB_SHA, GITHUB_REF, run id, script SHA256",
         "- Detail URL guard: board/list URL candidates are written to invalid_url_candidates.csv",
@@ -1710,6 +1718,7 @@ def main() -> int:
         "- payload preview only",
         "- Notion write is guarded: only dry_run=false and run_notion_write=true creates pages",
         "- data-only commit guard for patch_view_model.json",
+        "- v014 title handling: read raw Notion 항목명, export normalized display title, and repair recent raw titles",
     ]
     (ART / "workflow_report.md").write_text("\n".join(report), encoding="utf-8")
 

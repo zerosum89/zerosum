@@ -2,7 +2,7 @@
 
 각 게임별 공식 패치노트 목록 수집 profile입니다.
 
-v004 범위:
+v006 범위:
 - 공식 목록 URL seed
 - 목록 정렬 방향
 - URL / 제목 include-exclude 패턴

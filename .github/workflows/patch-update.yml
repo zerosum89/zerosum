@@ -12,7 +12,7 @@ on:
           - "true"
           - "false"
       run_notion_write:
-        description: "Reserved. v004 keeps Notion write disabled."
+        description: "Reserved. v006 keeps Notion write disabled."
         required: true
         default: "false"
         type: choice
@@ -35,8 +35,16 @@ on:
         description: "Safety cap for newer-than-anchor URL candidates per game."
         required: false
         default: "20"
+      strict_detail_url_guard:
+        description: "true = fail run if any board/list URL survives as a new candidate."
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
   schedule:
-    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v004.
+    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v006.
     - cron: "0 21 * * *"
 
 permissions:
@@ -63,6 +71,7 @@ jobs:
       RUN_GIT_PUSH: ${{ github.event_name == 'workflow_dispatch' && inputs.run_git_push || 'false' }}
       TARGET_GAMES: ${{ github.event_name == 'workflow_dispatch' && inputs.target_games || 'ALL' }}
       MAX_NEW_URLS_PER_GAME: ${{ github.event_name == 'workflow_dispatch' && inputs.max_new_urls_per_game || '20' }}
+      STRICT_DETAIL_URL_GUARD: ${{ github.event_name == 'workflow_dispatch' && inputs.strict_detail_url_guard || 'true' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

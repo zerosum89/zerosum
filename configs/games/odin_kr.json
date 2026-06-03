@@ -32,5 +32,5 @@
     "상품"
   ],
   "disable_until_profile_audit": false,
-  "notes": "v004: still profile-audit target. Candidate URLs must be detail-like only; automatic write remains disabled."
+  "notes": "v006: still profile-audit target. Candidate URLs must be detail-like only; automatic write remains disabled."
 }

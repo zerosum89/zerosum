@@ -6,6 +6,7 @@ import csv
 import json
 import os
 import re
+import hashlib
 import sys
 import traceback
 from datetime import datetime, timezone, timedelta
@@ -49,9 +50,10 @@ RUN_GIT_PUSH = env_bool("RUN_GIT_PUSH", False)
 TARGET_GAMES = [x.strip() for x in os.environ.get("TARGET_GAMES", "ALL").split(",") if x.strip()]
 MAX_NEW_URLS_PER_GAME = env_int("MAX_NEW_URLS_PER_GAME", 20)
 MAX_LIST_ITEMS = env_int("MAX_LIST_ITEMS", 80)
+STRICT_DETAIL_URL_GUARD = env_bool("STRICT_DETAIL_URL_GUARD", True)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v004"
+WORKFLOW_VERSION = "github_actions_v006"
 
 
 def canonical_url(url: str) -> str:
@@ -239,6 +241,32 @@ def existing_json_items() -> list[dict[str, Any]]:
 
 def stable_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return sorted(items, key=lambda x: (str(x.get("game", "")), str(x.get("actual_date", "")), str(x.get("source_url", ""))))
+
+
+def file_sha256(path: Path) -> str:
+    try:
+        h = hashlib.sha256()
+        with path.open("rb") as f:
+            for chunk in iter(lambda: f.read(1024 * 1024), b""):
+                h.update(chunk)
+        return h.hexdigest()
+    except Exception:
+        return ""
+
+
+def execution_identity() -> dict[str, Any]:
+    script_path = Path(__file__).resolve()
+    return {
+        "workflow_version": WORKFLOW_VERSION,
+        "github_sha": os.environ.get("GITHUB_SHA", ""),
+        "github_ref": os.environ.get("GITHUB_REF", ""),
+        "github_run_id": os.environ.get("GITHUB_RUN_ID", ""),
+        "github_run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT", ""),
+        "github_workflow": os.environ.get("GITHUB_WORKFLOW", ""),
+        "github_event_name": os.environ.get("GITHUB_EVENT_NAME", ""),
+        "script_path": str(script_path),
+        "script_sha256": file_sha256(script_path),
+    }
 
 
 def export_patch_view_model() -> tuple[list[dict[str, Any]], str, bool]:
@@ -514,11 +542,14 @@ def main() -> int:
         "notion_database_id_present": bool(os.environ.get("NOTION_DATABASE_ID")),
         "openai_key_present": bool(os.environ.get("OPENAI_API_KEY")),
         "workflow_version": WORKFLOW_VERSION,
+        "strict_detail_url_guard": STRICT_DETAIL_URL_GUARD,
+        **execution_identity(),
     }
     (ART / "effective_config.json").write_text(json.dumps(effective_config, ensure_ascii=False, indent=2), encoding="utf-8")
+    (ART / "execution_identity.json").write_text(json.dumps(execution_identity(), ensure_ascii=False, indent=2), encoding="utf-8")
 
     if RUN_NOTION_WRITE:
-        raise RuntimeError("RUN_NOTION_WRITE=true is not supported in v004. Use detection/export preview only.")
+        raise RuntimeError("RUN_NOTION_WRITE=true is not supported in v006. Use detection/export preview only.")
 
     items, export_source, file_changed = export_patch_view_model()
     anchors = latest_anchor_by_game(items)
@@ -578,8 +609,38 @@ def main() -> int:
                 "detection_status": r.get("status", ""),
             })
 
-    (ART / "new_url_detection_result.json").write_text(json.dumps({"generated_at": started, "results": results}, ensure_ascii=False, indent=2), encoding="utf-8")
-    (ART / "new_patch_payload_preview.json").write_text(json.dumps({"write_ready": False, "payloads": payload_preview}, ensure_ascii=False, indent=2), encoding="utf-8")
+    invalid_candidate_rows = []
+    for r in results:
+        profile = next((p for p in profiles if p.get("game") == r.get("game")), {})
+        for u in r.get("new_urls", []):
+            su = u.get("source_url", "")
+            invalid_reason = ""
+            if is_list_or_board_url(su, profile):
+                invalid_reason = "list_or_board_url_candidate"
+            elif not is_detail_url(su, profile):
+                invalid_reason = "not_detail_url_candidate"
+            if invalid_reason:
+                invalid_candidate_rows.append({
+                    "game": r.get("game", ""),
+                    "source_url": su,
+                    "title": u.get("title", ""),
+                    "actual_date": u.get("actual_date", ""),
+                    "reason": invalid_reason,
+                })
+
+    detail_url_guard = {
+        "workflow_version": WORKFLOW_VERSION,
+        "strict_detail_url_guard": STRICT_DETAIL_URL_GUARD,
+        "invalid_candidate_count": len(invalid_candidate_rows),
+        "invalid_candidates": invalid_candidate_rows,
+        "passed": len(invalid_candidate_rows) == 0,
+        "rule": "new_url_candidates must be detail URLs only; board/list URLs are rejected before payload preview.",
+    }
+    (ART / "detail_url_guard.json").write_text(json.dumps(detail_url_guard, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_csv(ART / "invalid_url_candidates.csv", invalid_candidate_rows)
+
+    (ART / "new_url_detection_result.json").write_text(json.dumps({"generated_at": started, "workflow_version": WORKFLOW_VERSION, "execution_identity": execution_identity(), "detail_url_guard": detail_url_guard, "results": results}, ensure_ascii=False, indent=2), encoding="utf-8")
+    (ART / "new_patch_payload_preview.json").write_text(json.dumps({"write_ready": False, "workflow_version": WORKFLOW_VERSION, "detail_url_guard": detail_url_guard, "payloads": payload_preview}, ensure_ascii=False, indent=2), encoding="utf-8")
     write_csv(ART / "new_url_detection_summary.csv", summary_rows)
     write_csv(ART / "new_url_candidates.csv", url_rows)
 
@@ -595,6 +656,10 @@ def main() -> int:
         f"- public_items: {len(items)}",
         f"- patch_view_model_changed: {file_changed}",
         f"- payload_preview_count: {len(payload_preview)}",
+        f"- github_sha: {os.environ.get('GITHUB_SHA', '')}",
+        f"- script_sha256: {execution_identity().get('script_sha256', '')}",
+        f"- strict_detail_url_guard: {STRICT_DETAIL_URL_GUARD}",
+        f"- invalid_url_candidate_count: {len(invalid_candidate_rows)}",
         "",
         "## Detection summary",
         "",
@@ -613,8 +678,11 @@ def main() -> int:
         "processing_order = actual_date 오름차순(oldest-first)",
         "```",
         "",
-        "## v004 scope",
+        "## v006 scope",
         "",
+        "- Explicit workflow identity: workflow_version, GITHUB_SHA, GITHUB_REF, run id, script SHA256",
+        "- Detail URL guard: board/list URL candidates are written to invalid_url_candidates.csv",
+        "- Rejected link artifacts are emitted per game profile",
         "- Notion DB export and patch_view_model.json generation",
         "- patch_view_model.json noisy commit prevention",
         "- newer-than-anchor URL detection preview",
@@ -627,6 +695,9 @@ def main() -> int:
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary_path:
         Path(summary_path).write_text("\n".join(report), encoding="utf-8")
+
+    if invalid_candidate_rows and STRICT_DETAIL_URL_GUARD:
+        raise RuntimeError(f"Detail URL guard failed: {len(invalid_candidate_rows)} invalid candidate URL(s). See detail_url_guard.json and invalid_url_candidates.csv.")
 
     log("[DONE] workflow completed")
     return 0

@@ -62,7 +62,7 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v018"
+WORKFLOW_VERSION = "github_actions_v019"
 
 
 def canonical_url(url: str) -> str:
@@ -616,32 +616,77 @@ def fetch_official_list(profile: dict[str, Any]) -> list[dict[str, Any]]:
     exclude_patterns = compile_patterns(profile.get("title_exclude_patterns", []))
     base = list_url
     out = []
-    seen = set()
     rejected = []
-    for a in soup.find_all("a"):
+
+    # v019: Some official landing pages expose the same detail URL multiple times.
+    # Example: Odin_KR may expose cafe.daum.net/odin/DEH7/258 once as
+    # "6/3(수) 업데이트 상세 내역 안내" and once as "업데이트&이벤트 안내".
+    # Do not reject the URL just because one duplicate anchor has an excluded
+    # promotional title. Group duplicate URLs first, then let an include-title
+    # anchor win over generic/excluded duplicate titles.
+    grouped: dict[str, dict[str, Any]] = {}
+    for list_index, a in enumerate(soup.find_all("a")):
         href = a.get("href")
         if not href:
             continue
         url = profile_canonical_url(urljoin(base, href), profile)
-        if not url or url in seen:
+        if not url:
             continue
         title = " ".join(a.get_text(" ", strip=True).split())
+        if url not in grouped:
+            grouped[url] = {"url": url, "canonical_url": url, "titles": [], "list_index": list_index}
+        grouped[url]["titles"].append({"title": title, "list_index": list_index})
+
+    for url, entry in grouped.items():
         path = urlparse(url).path
-        hay = f"{title} {url}"
+        titles = entry.get("titles") or []
+        title_rows = []
+        for t in titles:
+            title = t.get("title", "")
+            hay = f"{title} {url}"
+            title_rows.append({
+                "title": title,
+                "hay": hay,
+                "include_match": bool(title_patterns and any(rx.search(hay) for rx in title_patterns)),
+                "exclude_match": bool(exclude_patterns and any(rx.search(hay) for rx in exclude_patterns)),
+                "actual_date": extract_date_from_text(hay),
+                "list_index": t.get("list_index", entry.get("list_index", 0)),
+            })
+
         reject_reason = ""
-        if url_patterns and not any(p.search(path) or p.search(url) for p in url_patterns):
+        if url_patterns and not any(rx.search(path) or rx.search(url) for rx in url_patterns):
             reject_reason = "url_include_mismatch"
-        elif title_patterns and not any(p.search(hay) for p in title_patterns):
-            reject_reason = "title_include_mismatch"
-        elif exclude_patterns and any(p.search(hay) for p in exclude_patterns):
-            reject_reason = "title_exclude_match"
         elif not is_detail_url(url, profile):
             reject_reason = "not_detail_url"
+        else:
+            # Include-title wins over excluded duplicate title.
+            include_rows = [x for x in title_rows if x["include_match"]]
+            if title_patterns and not include_rows:
+                reject_reason = "title_include_mismatch"
+            elif not include_rows and any(x["exclude_match"] for x in title_rows):
+                reject_reason = "title_exclude_match"
+
         if reject_reason:
-            rejected.append({"url": url, "title": title, "reason": reject_reason})
+            rejected.append({
+                "url": url,
+                "titles": [x.get("title", "") for x in title_rows],
+                "reason": reject_reason,
+            })
             continue
-        seen.add(url)
-        out.append({"url": url, "canonical_url": url, "title": title, "actual_date": extract_date_from_text(hay)})
+
+        include_rows = [x for x in title_rows if x["include_match"]]
+        date_rows = [x for x in (include_rows or title_rows) if x.get("actual_date")]
+        selected = (date_rows or include_rows or title_rows or [{"title": "", "actual_date": "", "list_index": entry.get("list_index", 0)}])[0]
+        out.append({
+            "url": url,
+            "canonical_url": url,
+            "title": selected.get("title", ""),
+            "actual_date": selected.get("actual_date") or extract_date_from_text(" ".join(x.get("title", "") for x in title_rows)),
+            "list_index": selected.get("list_index", entry.get("list_index", 0)),
+            "title_candidates": [x.get("title", "") for x in title_rows if x.get("title")],
+        })
+
+    out = sorted(out, key=lambda x: int(x.get("list_index") or 0))
     (ART / f"rejected_links_{safe_game}.json").write_text(json.dumps(rejected[:200], ensure_ascii=False, indent=2), encoding="utf-8")
     return out[:MAX_LIST_ITEMS]
 

@@ -1,7 +1,7 @@
 {
   "game": "Odin_KR",
   "enabled": true,
-  "profile_status": "audited_homepage_recent_news_v018",
+  "profile_status": "audited_homepage_recent_news_v019",
   "list_url": "https://odin.game.daum.net/odin/",
   "list_order": "newest_first",
   "url_include_patterns": [
@@ -41,7 +41,7 @@
     "모아보기"
   ],
   "disable_until_profile_audit": false,
-  "notes": "v018: official homepage /odin/ recent news exposes update detail links to cafe.daum.net/odin/DEH7/{id}. Anchor may be outside the short homepage window, so newer-than-anchor date fallback is allowed for detection preview. Detail fetch remains preview-gated because Daum Cafe may block unauthenticated direct fetch in some environments.",
+  "notes": "v019: duplicate detail links are grouped before title filtering; include-title anchors win over promotional/excluded duplicate titles. v018: official homepage /odin/ recent news exposes update detail links to cafe.daum.net/odin/DEH7/{id}. Anchor may be outside the short homepage window, so newer-than-anchor date fallback is allowed for detection preview. Detail fetch remains preview-gated because Daum Cafe may block unauthenticated direct fetch in some environments.",
   "detail_title_selectors": [
     "h1",
     ".view-title",

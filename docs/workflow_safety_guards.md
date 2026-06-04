@@ -47,3 +47,10 @@ New URL candidates can be followed to detail pages in preview mode. The workflow
 - MIR4_KR 신규 패치 요약 후보에서 `현신도`는 성장/장비로 분류합니다.
 - `변경 사항이 반영됩니다` filler 문구가 남으면 품질 플래그를 부여합니다.
 - MIR4_KR 신규 write는 summary preview 확인 후 진행합니다.
+
+## v024 추가 guard
+
+- schedule은 repository variable 없이는 write/deploy를 수행하지 않는다.
+- artifact `operation_mode_guard.json`에 실제 적용된 실행 모드가 기록된다.
+- artifact 보존 기간은 14일로 설정한다.
+- `Print effective operation mode` step에서 실행 모드를 로그로 노출한다.

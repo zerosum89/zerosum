@@ -68,7 +68,7 @@ on:
         required: false
         default: "14"
   schedule:
-    # 21:00 UTC = 06:00 KST. Schedule runs are preview-only in v022.
+    # 21:00 UTC = 06:00 KST. Schedule runs are preview-by-default in v024; set repository variable PATCH_UPDATE_SCHEDULE_MODE=write_deploy to enable automatic write/deploy.
     - cron: "0 21 * * *"
 
 permissions:
@@ -90,16 +90,17 @@ jobs:
       NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
       NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'true' }}
-      RUN_NOTION_WRITE: ${{ github.event_name == 'workflow_dispatch' && inputs.run_notion_write || 'false' }}
-      RUN_GIT_PUSH: ${{ github.event_name == 'workflow_dispatch' && inputs.run_git_push || 'false' }}
-      TARGET_GAMES: ${{ github.event_name == 'workflow_dispatch' && inputs.target_games || 'ALL' }}
-      MAX_NEW_URLS_PER_GAME: ${{ github.event_name == 'workflow_dispatch' && inputs.max_new_urls_per_game || '20' }}
-      STRICT_DETAIL_URL_GUARD: ${{ github.event_name == 'workflow_dispatch' && inputs.strict_detail_url_guard || 'true' }}
-      FETCH_DETAIL_PAGES: ${{ github.event_name == 'workflow_dispatch' && inputs.fetch_detail_pages || 'true' }}
-      MAX_DETAIL_FETCHES: ${{ github.event_name == 'workflow_dispatch' && inputs.max_detail_fetches || '20' }}
-      RUN_TITLE_REPAIR: ${{ github.event_name == 'workflow_dispatch' && inputs.run_title_repair || 'false' }}
-      TITLE_REPAIR_WINDOW_DAYS: ${{ github.event_name == 'workflow_dispatch' && inputs.title_repair_window_days || '14' }}
+      SCHEDULE_OPERATION_MODE: ${{ vars.PATCH_UPDATE_SCHEDULE_MODE || 'preview' }}
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || (vars.PATCH_UPDATE_SCHEDULE_MODE == 'write_deploy' && 'false' || 'true') }}
+      RUN_NOTION_WRITE: ${{ github.event_name == 'workflow_dispatch' && inputs.run_notion_write || (vars.PATCH_UPDATE_SCHEDULE_MODE == 'write_deploy' && 'true' || 'false') }}
+      RUN_GIT_PUSH: ${{ github.event_name == 'workflow_dispatch' && inputs.run_git_push || (vars.PATCH_UPDATE_SCHEDULE_MODE == 'write_deploy' && 'true' || 'false') }}
+      TARGET_GAMES: ${{ github.event_name == 'workflow_dispatch' && inputs.target_games || (vars.PATCH_UPDATE_TARGET_GAMES || 'ALL') }}
+      MAX_NEW_URLS_PER_GAME: ${{ github.event_name == 'workflow_dispatch' && inputs.max_new_urls_per_game || (vars.PATCH_UPDATE_MAX_NEW_URLS_PER_GAME || '20') }}
+      STRICT_DETAIL_URL_GUARD: ${{ github.event_name == 'workflow_dispatch' && inputs.strict_detail_url_guard || (vars.PATCH_UPDATE_STRICT_DETAIL_URL_GUARD || 'true') }}
+      FETCH_DETAIL_PAGES: ${{ github.event_name == 'workflow_dispatch' && inputs.fetch_detail_pages || (vars.PATCH_UPDATE_FETCH_DETAIL_PAGES || 'true') }}
+      MAX_DETAIL_FETCHES: ${{ github.event_name == 'workflow_dispatch' && inputs.max_detail_fetches || (vars.PATCH_UPDATE_MAX_DETAIL_FETCHES || '20') }}
+      RUN_TITLE_REPAIR: ${{ github.event_name == 'workflow_dispatch' && inputs.run_title_repair || (vars.PATCH_UPDATE_RUN_TITLE_REPAIR || 'false') }}
+      TITLE_REPAIR_WINDOW_DAYS: ${{ github.event_name == 'workflow_dispatch' && inputs.title_repair_window_days || (vars.PATCH_UPDATE_TITLE_REPAIR_WINDOW_DAYS || '14') }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -120,6 +121,15 @@ jobs:
         run: |
           echo "PATCH_WORKFLOW_ARTIFACT_DIR=$RUNNER_TEMP/patch_workflow_artifacts" >> "$GITHUB_ENV"
           mkdir -p "$RUNNER_TEMP/patch_workflow_artifacts"
+
+      - name: Print effective operation mode
+        run: |
+          echo "event=$GITHUB_EVENT_NAME"
+          echo "schedule_operation_mode=$SCHEDULE_OPERATION_MODE"
+          echo "DRY_RUN=$DRY_RUN"
+          echo "RUN_NOTION_WRITE=$RUN_NOTION_WRITE"
+          echo "RUN_GIT_PUSH=$RUN_GIT_PUSH"
+          echo "TARGET_GAMES=$TARGET_GAMES"
 
       - name: Run patchnote workflow
         run: |
@@ -208,3 +218,4 @@ jobs:
           name: patch-update-artifacts
           path: ${{ env.PATCH_WORKFLOW_ARTIFACT_DIR }}/
           if-no-files-found: warn
+          retention-days: 14

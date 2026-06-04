@@ -58,11 +58,13 @@ MAX_DETAIL_TEXT_CHARS = env_int("MAX_DETAIL_TEXT_CHARS", 40000)
 MAX_DETAIL_FETCHES = env_int("MAX_DETAIL_FETCHES", 20)
 RUN_TITLE_REPAIR = env_bool("RUN_TITLE_REPAIR", False)
 TITLE_REPAIR_WINDOW_DAYS = env_int("TITLE_REPAIR_WINDOW_DAYS", 14)
+SCHEDULE_OPERATION_MODE = os.environ.get("SCHEDULE_OPERATION_MODE", "preview").strip() or "preview"
+IS_SCHEDULE_RUN = os.environ.get("GITHUB_EVENT_NAME", "") == "schedule"
 POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v022"
+WORKFLOW_VERSION = "github_actions_v024"
 
 
 def canonical_url(url: str) -> str:
@@ -2029,12 +2031,25 @@ def main() -> int:
         "max_detail_text_chars": MAX_DETAIL_TEXT_CHARS,
         "run_title_repair": RUN_TITLE_REPAIR,
         "title_repair_window_days": TITLE_REPAIR_WINDOW_DAYS,
+        "schedule_operation_mode": SCHEDULE_OPERATION_MODE,
+        "is_schedule_run": IS_SCHEDULE_RUN,
         "post_write_export_retry_count": POST_WRITE_EXPORT_RETRY_COUNT,
         "post_write_export_retry_seconds": POST_WRITE_EXPORT_RETRY_SECONDS,
         **execution_identity(),
     }
     (ART / "effective_config.json").write_text(json.dumps(effective_config, ensure_ascii=False, indent=2), encoding="utf-8")
     (ART / "execution_identity.json").write_text(json.dumps(execution_identity(), ensure_ascii=False, indent=2), encoding="utf-8")
+    (ART / "operation_mode_guard.json").write_text(json.dumps({
+        "workflow_version": WORKFLOW_VERSION,
+        "event_name": os.environ.get("GITHUB_EVENT_NAME", ""),
+        "is_schedule_run": IS_SCHEDULE_RUN,
+        "schedule_operation_mode": SCHEDULE_OPERATION_MODE,
+        "dry_run": DRY_RUN,
+        "run_notion_write": RUN_NOTION_WRITE,
+        "run_git_push": RUN_GIT_PUSH,
+        "target_games": TARGET_GAMES,
+        "guard_note": "Scheduled runs default to preview unless repository variable PATCH_UPDATE_SCHEDULE_MODE is set to write_deploy."
+    }, ensure_ascii=False, indent=2), encoding="utf-8")
 
     items, export_source, file_changed = export_patch_view_model()
     anchors = latest_anchor_by_game(items)
@@ -2214,6 +2229,8 @@ def main() -> int:
         "",
         f"- generated_at: {started}",
         f"- workflow_version: {WORKFLOW_VERSION}",
+        f"- event_name: {os.environ.get('GITHUB_EVENT_NAME', '')}",
+        f"- schedule_operation_mode: {SCHEDULE_OPERATION_MODE}",
         f"- DRY_RUN: {DRY_RUN}",
         f"- RUN_NOTION_WRITE: {RUN_NOTION_WRITE}",
         f"- RUN_GIT_PUSH: {RUN_GIT_PUSH}",

@@ -57,3 +57,17 @@ New URL candidates can be followed to detail pages in preview mode. The workflow
 - MIR4_KR 신규 패치 요약 후보에서 `현신도`는 성장/장비로 분류합니다.
 - `변경 사항이 반영됩니다` filler 문구가 남으면 품질 플래그를 부여합니다.
 - MIR4_KR 신규 write는 summary preview 확인 후 진행합니다.
+
+## v024 schedule 운영 설정
+
+정기 실행은 매일 06:00 KST 전후에 실행된다. 기본값은 preview-only이다.
+
+자동 write/deploy까지 켜려면 repository variable을 추가한다.
+
+```text
+Settings → Secrets and variables → Actions → Variables → New repository variable
+Name: PATCH_UPDATE_SCHEDULE_MODE
+Value: write_deploy
+```
+
+초기 안정화 기간에는 이 variable을 만들지 않거나 `preview`로 둔다.

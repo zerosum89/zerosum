@@ -62,7 +62,7 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v019"
+WORKFLOW_VERSION = "github_actions_v020"
 
 
 def canonical_url(url: str) -> str:
@@ -432,6 +432,11 @@ def extract_date_from_text(text: str) -> str:
     m = re.search(r"(\d{2})[.\-/](\d{1,2})[.\-/](\d{1,2})", text)
     if m:
         return f"20{int(m.group(1)):02d}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+    # v020: Odin KR homepage uses short M/D titles such as "6/3(수) 업데이트 상세 내역 안내".
+    # Parse only when the surrounding title text indicates a patch/update notice to avoid URL-like false positives.
+    m = re.search(r"(?<!\d)(\d{1,2})\s*/\s*(\d{1,2})(?:\s*\([^)]+\))?\s*(?:업데이트|패치노트|상세\s*내역)", text)
+    if m:
+        return f"{datetime.now(KST).year:04d}-{int(m.group(1)):02d}-{int(m.group(2)):02d}"
     m = re.search(r"\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})(?:st|nd|rd|th)?\b", text, re.I)
     if m:
         months = {name.lower(): i for i, name in enumerate(["January","February","March","April","May","June","July","August","September","October","November","December"], 1)}
@@ -618,7 +623,7 @@ def fetch_official_list(profile: dict[str, Any]) -> list[dict[str, Any]]:
     out = []
     rejected = []
 
-    # v019: Some official landing pages expose the same detail URL multiple times.
+    # v020: Some official landing pages expose the same detail URL multiple times.
     # Example: Odin_KR may expose cafe.daum.net/odin/DEH7/258 once as
     # "6/3(수) 업데이트 상세 내역 안내" and once as "업데이트&이벤트 안내".
     # Do not reject the URL just because one duplicate anchor has an excluded
@@ -691,6 +696,24 @@ def fetch_official_list(profile: dict[str, Any]) -> list[dict[str, Any]]:
     return out[:MAX_LIST_ITEMS]
 
 
+
+def comparable_numeric_suffix(url: str, profile: dict[str, Any]) -> int | None:
+    """Return numeric trailing post id for profile-scoped detail URLs.
+
+    v020: Odin KR official homepage can expose only one short recent item, while
+    the stored anchor is outside the visible list. If the detail URL pattern is
+    stable and monotonically increasing (e.g. /DEH7/258 after /DEH7/257), use it
+    as a profile-gated fallback after date fallback.
+    """
+    try:
+        c = profile_canonical_url(url or "", profile)
+        m = re.search(r"/([A-Za-z0-9]+)/(\d+)(?:$|[/?#])", c)
+        if not m:
+            return None
+        return int(m.group(2))
+    except Exception:
+        return None
+
 def detect_newer_than_anchor(profile: dict[str, Any], official_list: list[dict[str, Any]], anchor: dict[str, Any] | None) -> dict[str, Any]:
     game = profile.get("game", "")
     order = profile.get("list_order", "newest_first")
@@ -727,12 +750,24 @@ def detect_newer_than_anchor(profile: dict[str, Any], official_list: list[dict[s
     elif anchor and idx is None:
         ad = anchor.get("actual_date", "")
         candidates = [r for r in rows if r.get("actual_date") and ad and r["actual_date"] > ad]
+        numeric_fallback_used = False
+        if not candidates and profile.get("anchor_missing_numeric_id_fallback_as_pass"):
+            anchor_id = comparable_numeric_suffix(anchor_c, profile)
+            if anchor_id is not None:
+                numeric_candidates = []
+                for r in rows:
+                    rid = comparable_numeric_suffix(r.get("source_url", ""), profile)
+                    if rid is not None and rid > anchor_id:
+                        numeric_candidates.append(r)
+                if numeric_candidates:
+                    candidates = numeric_candidates
+                    numeric_fallback_used = True
         if candidates and profile.get("anchor_missing_date_fallback_as_pass"):
-            # v018: Some official landing pages expose only a short recent-news window.
+            # v018/v020: Some official landing pages expose only a short recent-news window.
             # The stored anchor can fall outside that visible window; in that case,
-            # date fallback is acceptable when the profile explicitly opts in.
-            status = "PASS_DATE_FALLBACK_SHORT_LIST"
-            reason = "anchor_url_not_found_short_list_date_fallback"
+            # profile-gated date or numeric-id fallback is acceptable.
+            status = "PASS_NUMERIC_ID_FALLBACK_SHORT_LIST" if numeric_fallback_used else "PASS_DATE_FALLBACK_SHORT_LIST"
+            reason = "anchor_url_not_found_short_list_numeric_id_fallback" if numeric_fallback_used else "anchor_url_not_found_short_list_date_fallback"
         else:
             status = "REVIEW_ANCHOR_MISSING_DATE_FALLBACK" if candidates else "REVIEW_ANCHOR_MISSING"
             reason = "anchor_url_not_found"

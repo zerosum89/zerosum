@@ -1,4 +1,4 @@
-# Odin_KR profile audit v019
+# Odin_KR profile audit v020
 
 ## Purpose
 
@@ -20,7 +20,7 @@ candidate = detail URL under cafe.daum.net/odin/DEH7/{id}
 newer-than-anchor = actual_date > anchor.actual_date
 ```
 
-The homepage exposes a short recent-news window, so the stored anchor may not appear in the visible list. v019 allows profile-specific date fallback:
+The homepage exposes a short recent-news window, so the stored anchor may not appear in the visible list. v020 allows profile-specific date fallback:
 
 ```json
 "anchor_missing_date_fallback_as_pass": true

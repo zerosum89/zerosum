@@ -104,6 +104,8 @@ function normalizeFlatItem(item){
   const major = item.main_updates || item.major_update_summary || raw['주요 업데이트'] || raw['주요 업데이트 요약'] || raw['main_updates'] || raw['major_update_summary'] || '';
   const primary = item.primary_category || item.signals || item.representative_signals || raw['패치 카테고리'] || raw['대표 핵심 신호'] || raw['primary_category'] || [];
   const domainTags = item.domain_tags || raw['관련 영역'] || raw['domain_tags'] || [];
+
+  const importance = item.importance || raw['importance'] || raw['중요도'] || raw['Importance'] || 'normal';
   const signals = primary;
   return {
     date_key: date,
@@ -116,6 +118,7 @@ function normalizeFlatItem(item){
     source_url: item.source_url || raw['원문 URL'] || raw['source_url'] || '',
     html_visible: item.html_visible !== false && item.html_exposed !== false && raw['HTML 노출'] !== false,
     view_model_page_id: item.page_id || item.id || '',
+  importance: String(importance || 'normal').toLowerCase(),
     representative_signals: splitLinesForTimeline(signals),
     primary_category: splitLinesForTimeline(primary),
     card_summary: item.card_summary || raw['카드 요약'] || '',
@@ -178,9 +181,7 @@ function formatShortDate(dateKey){const s=String(dateKey||''); if(/^\d{4}-\d{2}-
 function asArray(v){ if(!v) return []; if(Array.isArray(v)) return v; return [v]; }
 function textOf(v){ if(v==null) return ''; if(typeof v==='string') return v; if(typeof v==='object') return v.source_line || v.source || v.line || v.item_name || v.name || JSON.stringify(v); return String(v); }
 function cleanBullet(s){return String(s||'').replace(/^\s*[-•]\s*/,'').replace(/^\s*\d+[.)]\s*/,'').trim();}
-function isMajor(e){
-  return String(e.importance || '').toLowerCase() === 'major';
-}
+function isMajor(e){return String(e.importance||'').toLowerCase()==='major';}
   return true;
 }
 function allMonths(){let dates=[]; DATA.forEach(g=>g.events.forEach(e=>{if(e.date_key) dates.push(e.date_key)})); let min=new Date(Math.min(...dates.map(d=>new Date(d+'T00:00:00')))); let max=new Date(Math.max(...dates.map(d=>new Date(d+'T00:00:00')))); let cur=new Date(min.getFullYear(),min.getMonth(),1); let end=new Date(max.getFullYear(),max.getMonth(),1); let months=[]; while(cur<=end){months.push(`${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,'0')}`); cur.setMonth(cur.getMonth()+1);} return months;}

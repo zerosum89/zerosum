@@ -62,7 +62,7 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v020"
+WORKFLOW_VERSION = "github_actions_v021"
 
 
 def canonical_url(url: str) -> str:
@@ -1281,6 +1281,120 @@ def make_rule_based_summary_preview(text: str, title: str, profile: dict[str, An
     card = " · ".join(tags[:4]) if tags else truncate_sentence(title, 80)
     return body, tags, card, status, units, flags
 
+
+def is_odin_kr_profile(profile: dict[str, Any]) -> bool:
+    return str(profile.get("game", "")).lower() == "odin_kr"
+
+
+def odin_detail_fetch_urls(url: str, html: str | None = None) -> list[str]:
+    """Return conservative Daum Cafe URL variants for Odin KR detail pages.
+
+    The desktop cafe URL can return only a Daum Cafe shell in GitHub Actions.
+    Try mobile and _c21_/bbs_read variants and later select the variant with a
+    real article body. This is profile-gated to Odin_KR only.
+    """
+    urls: list[str] = []
+
+    def add(u: str) -> None:
+        u = (u or "").strip().replace("&amp;", "&")
+        if u and u not in urls:
+            urls.append(u)
+
+    add(url)
+    for text in [url, html or ""]:
+        for m in re.finditer(r"https?://[^\s'\"<>]+_c21_/bbs_read\?[^\s'\"<>]+", text or "", re.I):
+            add(m.group(0))
+        for m in re.finditer(r"https?://(?:m\.)?cafe\.daum\.net/odin/DEH7/(\d+)", text or "", re.I):
+            num = m.group(1)
+            add(f"https://m.cafe.daum.net/odin/DEH7/{num}")
+            add(f"https://cafe.daum.net/odin/DEH7/{num}")
+            # Official Odin cafe grpid observed in canonical og:url.
+            add(f"https://cafe.daum.net/_c21_/bbs_read?grpid=1YvZ5&fldid=DEH7&datanum={num}")
+            add(f"https://m.cafe.daum.net/_c21_/bbs_read?grpid=1YvZ5&fldid=DEH7&datanum={num}")
+        for m in re.finditer(r"[?&]fldid=DEH7&(?:amp;)?datanum=(\d+)", text or "", re.I):
+            num = m.group(1)
+            add(f"https://cafe.daum.net/_c21_/bbs_read?grpid=1YvZ5&fldid=DEH7&datanum={num}")
+            add(f"https://m.cafe.daum.net/_c21_/bbs_read?grpid=1YvZ5&fldid=DEH7&datanum={num}")
+    return urls
+
+
+def score_detail_text(text: str, profile: dict[str, Any]) -> tuple[int, list[str]]:
+    flags: list[str] = []
+    t = normalize_visible_text(text or "")
+    score = len(t)
+    if len(t) < 300:
+        flags.append("TEXT_TOO_SHORT")
+        score -= 1000
+    if norm_key(t) in {"daum카페", "daumcafe"} or t.strip() in {"Daum 카페", "Daum Cafe"}:
+        flags.append("DAUM_CAFE_SHELL_ONLY")
+        score -= 5000
+    if is_odin_kr_profile(profile):
+        odin_keywords = ["업데이트 상세 내역", "주요 안내 사항", "개선 사항", "오류 수정", "신규 이벤트", "상품 추가", "신규 클래스", "챕터", "길드"]
+        hits = sum(1 for k in odin_keywords if k in t)
+        if hits:
+            score += hits * 500
+        else:
+            flags.append("ODIN_BODY_KEYWORD_MISSING")
+            score -= 700
+    return score, flags
+
+
+def fetch_url_with_headers(url: str, referer: str = "") -> requests.Response:
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36 patch-update-actions detail-fetch",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.7,en;q=0.6",
+        "Cache-Control": "no-cache",
+    }
+    if referer:
+        headers["Referer"] = referer
+    return requests.get(url, headers=headers, timeout=60, allow_redirects=True)
+
+
+def fetch_detail_html_variants(profile: dict[str, Any], url: str) -> dict[str, Any]:
+    """Fetch detail page variants and select the best article body candidate."""
+    variant_records: list[dict[str, Any]] = []
+    urls = [url]
+    first_html = ""
+    if is_odin_kr_profile(profile):
+        # First fetch is used to discover og:url / canonical _c21_ links.
+        try:
+            r0 = fetch_url_with_headers(url)
+            first_html = r0.text
+            variant_records.append({"url": url, "http_status": r0.status_code, "final_url": r0.url, "html": first_html, "prefetch": True})
+            urls = odin_detail_fetch_urls(url, first_html)
+        except Exception as exc:
+            variant_records.append({"url": url, "http_status": None, "final_url": "", "html": "", "prefetch": True, "error": str(exc)})
+            urls = odin_detail_fetch_urls(url, "")
+
+    for u in urls:
+        # Avoid duplicating the prefetch original URL as a second full request.
+        if variant_records and variant_records[0].get("url") == u and variant_records[0].get("html"):
+            continue
+        try:
+            r = fetch_url_with_headers(u, referer=url)
+            variant_records.append({"url": u, "http_status": r.status_code, "final_url": r.url, "html": r.text})
+        except Exception as exc:
+            variant_records.append({"url": u, "http_status": None, "final_url": "", "html": "", "error": str(exc)})
+
+    best: dict[str, Any] | None = None
+    public_records: list[dict[str, Any]] = []
+    for i, rec in enumerate(variant_records):
+        html = rec.get("html") or ""
+        soup = BeautifulSoup(html, "lxml") if html else BeautifulSoup("", "lxml")
+        text = extract_content_text_from_soup(soup, profile) if html else ""
+        score, flags = score_detail_text(text, profile)
+        pub = {k: v for k, v in rec.items() if k != "html"}
+        pub.update({"variant_index": i, "text_length": len(text), "score": score, "flags": flags, "text_excerpt": normalize_visible_text(text)[:300]})
+        public_records.append(pub)
+        candidate = {"variant_index": i, "url": rec.get("url", ""), "http_status": rec.get("http_status"), "final_url": rec.get("final_url", ""), "html": html, "soup": soup, "text": text, "score": score, "flags": flags}
+        if best is None or score > int(best.get("score", -10**9)):
+            best = candidate
+
+    if best is None:
+        best = {"variant_index": -1, "url": url, "http_status": None, "final_url": "", "html": "", "soup": BeautifulSoup("", "lxml"), "text": "", "score": -9999, "flags": ["NO_FETCH_VARIANTS"]}
+    return {"best": best, "variants": public_records}
+
 def fetch_detail_page(profile: dict[str, Any], row: dict[str, Any]) -> dict[str, Any]:
     game = profile.get("game", "game")
     url = row.get("source_url") or row.get("url") or ""
@@ -1307,18 +1421,43 @@ def fetch_detail_page(profile: dict[str, Any], row: dict[str, Any]) -> dict[str,
         "quality_status": "FETCH_PENDING",
     }
     try:
-        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0 patch-update-actions detail-fetch"}, timeout=60)
-        meta["http_status"] = r.status_code
-        r.raise_for_status()
-        html = r.text
-        html_path = detail_dir / f"{base_name}.raw.html"
-        html_path.write_text(html, encoding="utf-8")
-        soup = BeautifulSoup(html, "lxml")
-        title = extract_detail_title(soup, meta["title"], profile)
-        text = extract_content_text_from_soup(soup, profile)
-        text = text[:MAX_DETAIL_TEXT_CHARS]
+        variant_info = fetch_detail_html_variants(profile, url)
+        (detail_dir / f"{base_name}.variants.json").write_text(json.dumps(variant_info.get("variants", []), ensure_ascii=False, indent=2), encoding="utf-8")
+        best = variant_info.get("best") or {}
+        html = best.get("html") or ""
+        soup = best.get("soup") or BeautifulSoup(html, "lxml")
+        text = best.get("text") or ""
+        http_status = best.get("http_status")
+        meta["http_status"] = http_status
+        meta["selected_fetch_url"] = best.get("url", url)
+        meta["selected_final_url"] = best.get("final_url", "")
+        meta["selected_variant_index"] = best.get("variant_index", -1)
+        meta["detail_fetch_flags"] = best.get("flags", []) or []
+        meta["detail_fetch_score"] = best.get("score", 0)
+        if html:
+            html_path = detail_dir / f"{base_name}.raw.html"
+            html_path.write_text(html, encoding="utf-8")
+        else:
+            html_path = detail_dir / f"{base_name}.raw.html"
+            html_path.write_text("", encoding="utf-8")
+        text = (text or "")[:MAX_DETAIL_TEXT_CHARS]
         text_path = detail_dir / f"{base_name}.raw.txt"
         text_path.write_text(text, encoding="utf-8")
+        if len(normalize_visible_text(text)) < 300 or "DAUM_CAFE_SHELL_ONLY" in (best.get("flags", []) or []):
+            meta.update({
+                "fetch_status": "FAILED",
+                "fetch_error": "detail_body_too_short_or_shell_only",
+                "text_length": len(text),
+                "raw_html_path": str(html_path.relative_to(ART)),
+                "raw_text_path": str(text_path.relative_to(ART)),
+                "text_excerpt": normalize_visible_text(text)[:1200],
+                "quality_status": "DETAIL_FETCH_FAILED",
+                "summary_quality_flags": list(best.get("flags", []) or []) + ["DETAIL_BODY_TOO_SHORT"],
+            })
+            (detail_dir / f"{base_name}.meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+            return meta
+
+        title = extract_detail_title(soup, meta["title"], profile)
         listed_actual_date = meta["actual_date"]
         actual_date = extract_effective_patch_date(title, text, listed_actual_date, profile) or listed_actual_date
         actual_date_source = "effective_patch_date" if actual_date and actual_date != listed_actual_date else "list_or_posted_date"
@@ -1339,7 +1478,7 @@ def fetch_detail_page(profile: dict[str, Any], row: dict[str, Any]) -> dict[str,
             "domain_tags_candidate": tags,
             "card_summary_candidate": card,
             "update_units_candidate": units,
-            "summary_quality_flags": qflags,
+            "summary_quality_flags": (qflags or []) + list(best.get("flags", []) or []),
             "quality_status": qstatus,
         })
     except Exception as exc:
@@ -1347,10 +1486,10 @@ def fetch_detail_page(profile: dict[str, Any], row: dict[str, Any]) -> dict[str,
             "fetch_status": "FAILED",
             "fetch_error": str(exc),
             "quality_status": "DETAIL_FETCH_FAILED",
+            "traceback": traceback.format_exc(),
         })
     (detail_dir / f"{base_name}.meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
     return meta
-
 
 def fetch_details_for_candidates(results: list[dict[str, Any]], profiles: list[dict[str, Any]]) -> list[dict[str, Any]]:
     if not FETCH_DETAIL_PAGES:

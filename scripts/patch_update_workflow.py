@@ -62,7 +62,7 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v021"
+WORKFLOW_VERSION = "github_actions_v022"
 
 
 def canonical_url(url: str) -> str:
@@ -915,12 +915,139 @@ def truncate_sentence(text: str, limit: int = 180) -> str:
 TITLE_NOISE = {"news", "새소식", "patch note", "패치노트", "night crows", "nightcrows"}
 
 
+
+ODIN_NAV_NOISE_PATTERNS = [
+    r"^CAFE$", r"^업데이트$", r"^앱으로보기$", r"^\[업데이트\]$", r"^작성자$", r"^작성시간$", r"^조회수$", r"^목록$", r"^댓글$", r"^글자크기", r"^이전글$", r"^다음글$", r"^수정$", r"^저작자 표시$", r"^전체보기$", r"^PC화면$", r"^카페앱$", r"^서비스 약관$", r"^개인정보처리방침$", r"^AXZ Corp\.$",
+    r"^카페 만들기$", r"^카페검색$", r"^카페 메뉴$", r"^내카페$", r"^내소식$", r"^에러$", r"^고객센터$", r"^맨위로$",
+    r"^CM토르$", r"^\d{2}\.\d{2}\.\d{2}$", r"^[0-9,]+$", r"^\d+$"
+]
+
+
+def html_to_visible_text_for_odin(text: str) -> str:
+    """Daum Cafe _c21_ responses may put article body HTML in text fields.
+    Convert any HTML-like source into visible text before summary extraction.
+    """
+    raw = text or ""
+    if "<" in raw and ">" in raw:
+        soup = BeautifulSoup(raw, "lxml")
+        for tag in soup(["script", "style", "noscript", "svg", "canvas", "form"]):
+            tag.decompose()
+        raw = soup.get_text("\n", strip=True)
+    return normalize_visible_text(raw)
+
+
+def clean_odin_kr_article_text(text: str) -> str:
+    """Extract the actual Odin KR patch article body from Daum Cafe text.
+
+    v022 prevents HTML/comment/navigation leakage by preferring the article span
+    between the patch detail intro and the closing thanks sentence. It is used
+    for variant scoring, raw text artifact selection, and summary generation.
+    """
+    visible = html_to_visible_text_for_odin(text)
+    lines = [x.strip() for x in visible.splitlines() if x.strip()]
+    filtered: list[str] = []
+    for line in lines:
+        t = re.sub(r"\s+", " ", line).strip()
+        if not t:
+            continue
+        if any(re.search(p, t, re.I) for p in ODIN_NAV_NOISE_PATTERNS):
+            continue
+        if t.startswith("<") or "data-ke-" in t or "cafeattach" in t or "figure-img" in t:
+            continue
+        if re.search(r"(서비스 약관|청소년보호정책|상거래피해구제신청|카페 검색|댓글\s*\d*)", t):
+            continue
+        # Drop obvious user comment fragments from Daum Cafe comment area.
+        if any(x in t for x in ["에효", "패스권도 그냥", "너무하네", "댓글쓰기", "답글"]):
+            continue
+        filtered.append(t)
+
+    if not filtered:
+        return ""
+
+    # Prefer body starting near the explicit guide phrase or title banner.
+    start_idx = 0
+    start_markers = [
+        "업데이트에 대한 자세한 내용",
+        "업데이트 상세 내역 안내",
+        "6/3(수) 업데이트 상세 내역 안내",
+    ]
+    for i, line in enumerate(filtered):
+        if any(m in line for m in start_markers):
+            start_idx = i
+            break
+
+    body = filtered[start_idx:]
+    out: list[str] = []
+    for line in body:
+        out.append(line)
+        if "감사합니다" in line:
+            break
+    # If thanks was not captured, still stop before obvious next/previous/comment chrome.
+    if out and not any("감사합니다" in x for x in out):
+        clipped = []
+        for line in out:
+            if line in {"이전글", "다음글", "목록"} or line.startswith("댓글"):
+                break
+            clipped.append(line)
+        out = clipped
+
+    # De-duplicate and keep sufficiently informative lines.
+    final: list[str] = []
+    seen = set()
+    for line in out:
+        key = norm_key(line)
+        if key in seen:
+            continue
+        seen.add(key)
+        final.append(line)
+    return "\n".join(final)
+
+
+def odin_kr_summary_units_from_text(text: str) -> list[dict[str, Any]]:
+    """Profile-aware Odin KR preview units for the 6/3 update style.
+
+    This remains conservative: event/BM-heavy updates are summarized as a few
+    independent units and will not emit comment/footer noise.
+    """
+    t = clean_odin_kr_article_text(text)
+    units: list[dict[str, Any]] = []
+
+    def add(order: int, domain: str, sentence: str, heading: str) -> None:
+        if sentence not in [u.get("summary_sentence") for u in units]:
+            units.append({
+                "order": order,
+                "domain": domain,
+                "source_heading": heading,
+                "source_context_excerpt": truncate_sentence(t, 280),
+                "summary_sentence": sentence,
+                "confidence": 0.86,
+                "profile_rule": "Odin_KR_v022",
+            })
+
+    order = 1
+    if "서버 침공전" in t:
+        add(order, "PvP/전쟁", "PvP/전쟁: 서버 침공전이 6/3 10:00~23:59 일정으로 진행됩니다.", "서버 침공전")
+        order += 1
+    if "신규 이벤트" in t or "이벤트" in t:
+        add(order, "이벤트/보상", "이벤트/보상: 신규 이벤트가 추가되어 기간제 참여 보상과 지원 혜택이 갱신됩니다.", "신규 이벤트")
+        order += 1
+    if "신규 상품" in t or "상품 추가" in t or "상품" in t:
+        add(order, "상점/BM", "상점/BM: 신규 상품 구성이 추가되어 상점 판매 항목이 갱신됩니다.", "신규 상품")
+        order += 1
+    if "교환" in t or "보상" in t:
+        add(order, "경제/보상", "경제/보상: 이벤트 및 교환 보상 구성이 갱신됩니다.", "보상/교환")
+        order += 1
+    return units
+
+
 def clean_detail_text_for_summary(text: str, profile: dict[str, Any], title: str) -> str:
     """Return the patch-note body area used for summary candidate generation.
 
     This keeps raw_text artifacts untouched while giving the preview generator a
     cleaner source. The function is deliberately rule-based and conservative.
     """
+    if is_odin_kr_profile(profile):
+        return clean_odin_kr_article_text(text)
     lines = [x.strip() for x in (text or "").splitlines() if x.strip()]
     game = profile.get("game", "")
     start_patterns = [
@@ -1246,6 +1373,20 @@ def make_rule_based_summary_preview(text: str, title: str, profile: dict[str, An
     """
     profile = profile or {}
     cleaned = clean_detail_text_for_summary(text, profile, title)
+    if is_odin_kr_profile(profile):
+        units = odin_kr_summary_units_from_text(cleaned)
+        status, flags = audit_summary_candidates(title, units, cleaned)
+        body = [u["summary_sentence"] for u in units[:12]]
+        tags = []
+        for u in units:
+            d = u.get("domain") or classify_domain(u.get("summary_sentence", ""))
+            if d and d not in tags:
+                tags.append(d)
+        card = " · ".join(tags[:4]) if tags else truncate_sentence(title, 80)
+        if len(body) < 2:
+            status = "REVIEW" if body else "FAIL"
+            flags = list(dict.fromkeys(flags + ["ODIN_UNIT_COUNT_LOW"]))
+        return body, tags, card, status, units, flags
     blocks = extract_numbered_heading_blocks(cleaned, profile)
     units = [summary_sentence_from_heading(b, profile) for b in blocks]
     units = normalize_units_for_profile(units, profile, title)
@@ -1321,6 +1462,8 @@ def odin_detail_fetch_urls(url: str, html: str | None = None) -> list[str]:
 def score_detail_text(text: str, profile: dict[str, Any]) -> tuple[int, list[str]]:
     flags: list[str] = []
     t = normalize_visible_text(text or "")
+    if is_odin_kr_profile(profile):
+        t = clean_odin_kr_article_text(t)
     score = len(t)
     if len(t) < 300:
         flags.append("TEXT_TOO_SHORT")
@@ -1329,13 +1472,19 @@ def score_detail_text(text: str, profile: dict[str, Any]) -> tuple[int, list[str
         flags.append("DAUM_CAFE_SHELL_ONLY")
         score -= 5000
     if is_odin_kr_profile(profile):
-        odin_keywords = ["업데이트 상세 내역", "주요 안내 사항", "개선 사항", "오류 수정", "신규 이벤트", "상품 추가", "신규 클래스", "챕터", "길드"]
+        odin_keywords = ["업데이트 상세 내역", "업데이트에 대한 자세한 내용", "신규 이벤트", "신규 상품", "서버 침공전", "감사합니다"]
         hits = sum(1 for k in odin_keywords if k in t)
         if hits:
             score += hits * 500
         else:
             flags.append("ODIN_BODY_KEYWORD_MISSING")
             score -= 700
+        if "<div" in t or "figure-img" in t or "cafeattach" in t:
+            flags.append("HTML_LEAK_IN_TEXT")
+            score -= 3000
+        if any(x in t for x in ["이전글", "저작자 표시", "에효", "패스권도 그냥", "댓글쓰기"]):
+            flags.append("DAUM_COMMENT_OR_NAV_LEAK")
+            score -= 2500
     return score, flags
 
 
@@ -1383,7 +1532,15 @@ def fetch_detail_html_variants(profile: dict[str, Any], url: str) -> dict[str, A
         html = rec.get("html") or ""
         soup = BeautifulSoup(html, "lxml") if html else BeautifulSoup("", "lxml")
         text = extract_content_text_from_soup(soup, profile) if html else ""
+        if is_odin_kr_profile(profile):
+            text = clean_odin_kr_article_text(text)
         score, flags = score_detail_text(text, profile)
+        if is_odin_kr_profile(profile) and re.search(r"https?://m\.cafe\.daum\.net/odin/DEH7/\d+", str(rec.get("url", "")), re.I) and len(text) >= 800:
+            score += 1200
+            flags = list(flags) + ["ODIN_MOBILE_TEXT_PREFERRED"]
+        if is_odin_kr_profile(profile) and "_c21_/bbs_read" in str(rec.get("url", "")):
+            score -= 400
+            flags = list(flags) + ["ODIN_C21_HTML_VARIANT"]
         pub = {k: v for k, v in rec.items() if k != "html"}
         pub.update({"variant_index": i, "text_length": len(text), "score": score, "flags": flags, "text_excerpt": normalize_visible_text(text)[:300]})
         public_records.append(pub)
@@ -1762,7 +1919,7 @@ def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dic
                 "summary_quality_flags": detail.get("summary_quality_flags", []),
                 "summary_source_text_length": detail.get("summary_source_text_length", 0),
                 "quality_status": detail.get("quality_status", "PREVIEW_ONLY"),
-                "note": "v016 keeps YY.MM.DD | 패치노트 item names and adds MIR4_KR profile-aware update-unit summary repair.",
+                "note": "v022 keeps YY.MM.DD | 패치노트 item names and adds Odin_KR Daum Cafe body cleanup / mobile variant preference.",
             })
     return payloads
 
@@ -2111,7 +2268,7 @@ def main() -> int:
         "- Notion write is guarded: only dry_run=false and run_notion_write=true creates pages",
         "- data-only commit guard for patch_view_model.json",
         "- v015 title handling: read raw Notion 항목명, export normalized display title, and repair recent raw titles",
-        "- v016 MIR4_KR summary repair: 현신도/전설 정령/초여름 이벤트/상점 정렬/주요 버그 수정 문장화 보강",
+        "- v022 Odin_KR summary repair: Daum Cafe body cleanup, mobile text preference, article span extraction",
     ]
     (ART / "workflow_report.md").write_text("\n".join(report), encoding="utf-8")
 

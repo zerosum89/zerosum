@@ -64,7 +64,7 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v024"
+WORKFLOW_VERSION = "github_actions_v036"
 
 
 def canonical_url(url: str) -> str:
@@ -2269,7 +2269,7 @@ def main() -> int:
         "processing_order = actual_date 오름차순(oldest-first)",
         "```",
         "",
-        "## v016 scope",
+        f"## {WORKFLOW_VERSION} scope",
         "",
         "- Explicit workflow identity: workflow_version, GITHUB_SHA, GITHUB_REF, run id, script SHA256",
         "- Detail URL guard: board/list URL candidates are written to invalid_url_candidates.csv",
@@ -2286,6 +2286,7 @@ def main() -> int:
         "- data-only commit guard for patch_view_model.json",
         "- v015 title handling: read raw Notion 항목명, export normalized display title, and repair recent raw titles",
         "- v022 Odin_KR summary repair: Daum Cafe body cleanup, mobile text preference, article span extraction",
+"- v036 scheduled no-change deploy guard: no commit when patch_view_model.json is unchanged and report scope uses WORKFLOW_VERSION",
     ]
     (ART / "workflow_report.md").write_text("\n".join(report), encoding="utf-8")
 

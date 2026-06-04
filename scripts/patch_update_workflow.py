@@ -62,7 +62,7 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v017"
+WORKFLOW_VERSION = "github_actions_v018"
 
 
 def canonical_url(url: str) -> str:
@@ -682,8 +682,15 @@ def detect_newer_than_anchor(profile: dict[str, Any], official_list: list[dict[s
     elif anchor and idx is None:
         ad = anchor.get("actual_date", "")
         candidates = [r for r in rows if r.get("actual_date") and ad and r["actual_date"] > ad]
-        status = "REVIEW_ANCHOR_MISSING_DATE_FALLBACK" if candidates else "REVIEW_ANCHOR_MISSING"
-        reason = "anchor_url_not_found"
+        if candidates and profile.get("anchor_missing_date_fallback_as_pass"):
+            # v018: Some official landing pages expose only a short recent-news window.
+            # The stored anchor can fall outside that visible window; in that case,
+            # date fallback is acceptable when the profile explicitly opts in.
+            status = "PASS_DATE_FALLBACK_SHORT_LIST"
+            reason = "anchor_url_not_found_short_list_date_fallback"
+        else:
+            status = "REVIEW_ANCHOR_MISSING_DATE_FALLBACK" if candidates else "REVIEW_ANCHOR_MISSING"
+            reason = "anchor_url_not_found"
     else:
         candidates = []
         status = "REVIEW_NO_ANCHOR"

@@ -1,25 +1,31 @@
 {
   "game": "Odin_KR",
   "enabled": true,
-  "profile_status": "needs_profile_audit",
-  "list_url": "https://odin.game.daum.net/",
+  "profile_status": "audited_homepage_recent_news_v018",
+  "list_url": "https://odin.game.daum.net/odin/",
   "list_order": "newest_first",
   "url_include_patterns": [
-    "odin.game.daum.net",
-    "m.cafe.daum.net/odin"
+    "cafe\\.daum\\.net/odin",
+    "m\\.cafe\\.daum\\.net/odin"
   ],
   "detail_url_include_patterns": [
-    "/odin/DEH7/\\d+$",
-    "/news/[^/]+/\\d+$"
+    "https?://(?:m\\.)?cafe\\.daum\\.net/odin/DEH7/\\d+$",
+    "/odin/DEH7/\\d+$"
   ],
   "detail_url_exclude_patterns": [
+    "/odin/DEH7$",
+    "/odin$",
     "/$",
     "/news$",
     "/notice$"
   ],
   "list_url_exclude_patterns": [
     "^https://odin\\.game\\.daum\\.net$",
-    "^https://odin\\.game\\.daum\\.net/$"
+    "^https://odin\\.game\\.daum\\.net/$",
+    "^https://odin\\.game\\.daum\\.net/odin$",
+    "^https://odin\\.game\\.daum\\.net/odin/$",
+    "^https://(?:m\\.)?cafe\\.daum\\.net/odin/?$",
+    "^https://(?:m\\.)?cafe\\.daum\\.net/odin/DEH7/?$"
   ],
   "title_include_patterns": [
     "업데이트",
@@ -27,17 +33,22 @@
     "패치노트"
   ],
   "title_exclude_patterns": [
+    "이 벤 트",
     "이벤트",
     "공지사항",
-    "상품"
+    "상품",
+    "점검",
+    "모아보기"
   ],
   "disable_until_profile_audit": false,
-  "notes": "v008: still profile-audit target. Candidate URLs must be detail-like only; automatic write remains disabled. Detail fetch selectors are seed-level and artifacts remain preview-only.",
+  "notes": "v018: official homepage /odin/ recent news exposes update detail links to cafe.daum.net/odin/DEH7/{id}. Anchor may be outside the short homepage window, so newer-than-anchor date fallback is allowed for detection preview. Detail fetch remains preview-gated because Daum Cafe may block unauthenticated direct fetch in some environments.",
   "detail_title_selectors": [
     "h1",
     ".view-title",
     ".title",
-    ".tit"
+    ".tit",
+    ".article_tit",
+    ".txt_title"
   ],
   "detail_content_selectors": [
     "article",
@@ -46,6 +57,16 @@
     ".view-content",
     ".content",
     ".contents",
+    ".article_view",
+    ".article",
     "body"
-  ]
+  ],
+  "canonical_host_aliases": [
+    {
+      "from": "m.cafe.daum.net",
+      "to": "cafe.daum.net"
+    }
+  ],
+  "anchor_missing_date_fallback_as_pass": true,
+  "short_list_scope": "odin_official_homepage_recent_news"
 }

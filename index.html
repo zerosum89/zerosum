@@ -108,6 +108,7 @@ function normalizeFlatItem(item){
   return {
     date_key: date,
     title: item.title || raw['항목명'] || item.patchnote_title || raw['패치노트 제목'] || item.page_title || (shortDateDisplay(date)+' | 패치노트'),
+    importance: item.importance || raw['importance'] || raw['중요도'] || 'normal',
     type: 'update',
     year: Number(String(date).slice(0,4)) || null,
     quarter: quarterOf(date),
@@ -177,22 +178,9 @@ function formatShortDate(dateKey){const s=String(dateKey||''); if(/^\d{4}-\d{2}-
 function asArray(v){ if(!v) return []; if(Array.isArray(v)) return v; return [v]; }
 function textOf(v){ if(v==null) return ''; if(typeof v==='string') return v; if(typeof v==='object') return v.source_line || v.source || v.line || v.item_name || v.name || JSON.stringify(v); return String(v); }
 function cleanBullet(s){return String(s||'').replace(/^\s*[-•]\s*/,'').replace(/^\s*\d+[.)]\s*/,'').trim();}
-function isMajor(e){return asArray(e.major_update_summary).length>0 || !!e.card_summary || asArray(e.representative_signals).length>0;}
-function cardSummary(e){ if(isMajor(e)) return e.card_summary || asArray(e.major_update_summary).map(x=>cleanBullet(textOf(x)).split(':')[0]).join(' · '); return asArray(e.domain_tags).map(textOf).filter(Boolean).slice(0,4).join(' · '); }
-function hasAll(set, allValue){return set.has(allValue)}
-function selectedContains(set, value){return set.has(value)}
-function categoryMatch(e){return hasAll(state.categories,ALL_CATEGORIES) || asArray(e.representative_signals).some(s=>state.categories.has(s));}
-function gameMatch(g){return hasAll(state.games,ALL_GAMES) || state.games.has(g.name);}
-function matchEvent(e,g){
-  if(e.html_visible===false) return false;
-  if(!gameMatch(g)) return false;
-  if(state.year!==ALL_YEARS && y(e.date_key)!==state.year) return false;
-  if(!categoryMatch(e)) return false;
-  const q=state.q.trim().toLowerCase();
-  if(q){
-    const hay=[g.name,e.title,formatShortDate(e.date_key),e.card_summary,...asArray(e.major_update_summary),...asArray(e.domain_tags),...asArray(e.body_summary),...asArray(e.representative_signals),e.note].map(textOf).join(' ').toLowerCase();
-    if(!hay.includes(q)) return false;
-  }
+function isMajor(e){
+  return String(e.importance || '').toLowerCase() === 'major';
+}
   return true;
 }
 function allMonths(){let dates=[]; DATA.forEach(g=>g.events.forEach(e=>{if(e.date_key) dates.push(e.date_key)})); let min=new Date(Math.min(...dates.map(d=>new Date(d+'T00:00:00')))); let max=new Date(Math.max(...dates.map(d=>new Date(d+'T00:00:00')))); let cur=new Date(min.getFullYear(),min.getMonth(),1); let end=new Date(max.getFullYear(),max.getMonth(),1); let months=[]; while(cur<=end){months.push(`${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,'0')}`); cur.setMonth(cur.getMonth()+1);} return months;}

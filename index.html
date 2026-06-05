@@ -50,7 +50,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans
 @media (max-width:860px){.minimap-section{top:44px}.minimap-wrap{height:30px}.mbar{min-width:3px}.content{grid-template-columns:1fr}.side{max-height:260px;border-top:1px solid var(--line)}}
 
 
-/* v038 UI fixes: right panel spacing, tag wrapping, sticky clipping, selected state, major summary text */
+/* v038/v039 UI fixes: right panel spacing, tag wrapping, sticky clipping, major badge/selection, major summary text */
 :root {
   --v038-detail-panel-space: 380px;
 }
@@ -107,27 +107,28 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans
   border-color: #4B78FF !important;
   box-shadow: 0 0 0 2px rgba(75, 120, 255, 0.22) !important;
 }
+.event-card.major,
 .event-card.major.selected,
-.event-card.major.is-selected,
-.patch-card.major.selected,
-.patch-card.major.is-selected,
-.card.major.selected,
-.card.major.is-selected {
-  border-left-color: #4B78FF !important;
+.event-card.major.is-selected {
+  border-left-width: 1px !important;
+  border-left-style: solid !important;
+  border-left-color: #dce5f2 !important;
 }
-.event-card.selected .major-badge,
-.event-card.is-selected .major-badge,
-.event-card.selected .badge-major,
-.event-card.is-selected .badge-major,
-.patch-card.is-selected .major-badge,
-.patch-card.selected .major-badge,
-.card.is-selected .major-badge,
-.card.selected .major-badge,
-.patch-card.is-selected .badge-major,
-.patch-card.selected .badge-major,
-.card.is-selected .badge-major,
-.card.selected .badge-major {
-  display: none !important;
+.event-card.major.selected,
+.event-card.major.is-selected {
+  border-color: #4B78FF !important;
+}
+.event-card.selected .domain-summary,
+.event-card.selected .domain-tag,
+.event-card.is-selected .domain-summary,
+.event-card.is-selected .domain-tag {
+  font-weight: 400 !important;
+}
+.domain-more {
+  display: inline-block;
+  white-space: nowrap;
+  color: #66758f;
+  font-weight: 800;
 }
 .summary-major-text,
 .body-summary-major,
@@ -396,9 +397,14 @@ function cardSummaryHtml(e){
     const sum=cardSummary(e);
     return sum?`<div class="summary major-text"><span class="major-badge in-summary">주요</span>${escapeHtml(sum)}</div>`:'';
   }
-  const tags=asArray(e.domain_tags).map(textOf).filter(Boolean).slice(0,4);
+  const tags=asArray(e.domain_tags).map(textOf).filter(Boolean);
   if(tags.length){
-    return `<div class="summary domain-summary">${tags.map(t=>`<span class="domain-tag">${escapeHtml(t)}</span>`).join('<span class="domain-separator"> · </span>')}</div>`;
+    const limit=3;
+    const shown=tags.slice(0,limit);
+    const extra=Math.max(0,tags.length-shown.length);
+    let html=shown.map(t=>`<span class="domain-tag">${escapeHtml(t)}</span>`).join('<span class="domain-separator"> · </span>');
+    if(extra>0) html+=`<span class="domain-separator"> · </span><span class="domain-more">+${extra}</span>`;
+    return `<div class="summary domain-summary">${html}</div>`;
   }
   const sum=cardSummary(e);
   return sum?`<div class="summary">${escapeHtml(sum)}</div>`:'';

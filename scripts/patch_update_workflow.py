@@ -64,7 +64,7 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v037"
+WORKFLOW_VERSION = "github_actions_v039"
 
 
 def canonical_url(url: str) -> str:

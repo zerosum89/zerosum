@@ -64,11 +64,11 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v044"
+WORKFLOW_VERSION = "github_actions_v045"
 
 
-DERIVED_DATA_VERSION = "patch_view_model.derived.major_policy_v044"
-MAJOR_POLICY_VERSION = "major_policy_v044"
+DERIVED_DATA_VERSION = "patch_view_model.derived.major_policy_v045"
+MAJOR_POLICY_VERSION = "major_policy_v045"
 def canonical_url(url: str) -> str:
     if not url:
         return ""
@@ -298,107 +298,93 @@ def _rx(text: str, pattern: str) -> bool:
     return re.search(pattern, text, flags=re.IGNORECASE) is not None
 
 
-def _minor_only_context(text: str) -> bool:
-    """Operational/sales/reward/minor contexts that must not become Major alone."""
-    return _has_any(text, [
-        "신규 시즌", "시즌 시작", "시즌 종료", "시즌이 시작", "시즌이 갱신", "새 시즌", "시즌 보상",
-        "이벤트", "출석", "미션", "교환소", "쿠폰", "보상", "상자", "패키지", "상품", "상점", "판매", "구매",
+def _non_structural_markers() -> list[str]:
+    """Change-type exclusions. These are generic rules, not page/date exceptions."""
+    return [
+        "신규 시즌", "시즌 시작", "시즌이 시작", "새 시즌", "시즌 갱신", "시즌이 갱신", "시즌 종료", "시즌 보상",
+        "이벤트", "출석", "미션", "교환소", "쿠폰", "상자", "패키지", "상품", "상점", "판매", "구매", "혜택", "출시 기념",
         "지급", "회수", "보전", "삭제", "기간", "일정", "확률", "수량", "랭킹", "매칭", "시드", "포인트", "정산",
-        "버그", "오류", "수정", "개선", "텍스트", "표시", "연출", "사운드", "안내", "알림", "UI", "편의",
-        "외형", "형상", "코스튬", "스킨", "프리셋", "검색", "일부", "소폭", "밸런스", "수치", "효과 조정",
-    ])
+        "버그", "오류", "수정", "개선", "텍스트", "표시", "연출", "사운드", "안내", "알림", "UI", "편의", "검색", "프리셋", "자동",
+        "외형", "형상", "코스튬", "스킨", "의상", "아바타", "탈것", "보조 장비",
+        "수집 목록", "아이템 수집", "수집 25종", "잠금 기능", "획득처 정보", "기술 정보창",
+        "신규 지속 기술", "공통 신규 지속 기술", "일부", "소폭", "밸런스", "수치", "효과 조정", "난이도", "단계", "층",
+        "툴팁", "문구", "버튼", "아이콘", "색상",
+    ]
 
 
-def _structural_verb(text: str) -> bool:
-    return _has_any(text, ["추가", "도입", "신설", "오픈", "확장", "개편", "재편", "통합", "구조 변경", "구조가 변경", "구조가 개편", "전면 개편", "대규모 개편"])
-
-
-def _new_or_added_core_content(text: str, nouns: str) -> bool:
-    # Require a concrete content noun and an add/expand verb. Generic "신규 및 변경 사항" is not enough.
-    if _has_any(text, ["신규 및 변경 사항", "추가되거나 시즌이 갱신", "시즌이 갱신", "보상 갱신"]):
-        return False
-    return (
-        _rx(text, rf"(신규|새로운).{{0,18}}({nouns})")
-        or _rx(text, rf"({nouns}).{{0,18}}(추가|도입|신설|오픈|확장)")
-    )
+def _has_non_structural_context(text: str, extra: list[str] | None = None) -> bool:
+    return _has_any(text, _non_structural_markers() + list(extra or []))
 
 
 def major_type_for_line(line: str) -> str | None:
-    """Return a Major type only for concrete structural game changes.
+    """Return Major type for structural update-units only.
 
-    v044 keeps Major as true/false only. It does not use MajorLevel and does not
-    hardcode dates, titles, or specific patch pages. The source of truth is the
-    body_summary/update-unit sentence. Domain tags, card_summary, title text, and
-    legacy importance are not sufficient.
+    v045 keeps Major as a strict true/false derived judgement.
+    Source of truth is the body_summary/update-unit sentence only.
+    Legacy importance, domain tags, card_summary, source title, and the word
+    "신규" alone must not create Major.
 
-    Major requires both:
-    1) a concrete structural target, and
-    2) a structural add/rework action.
-
-    "신규" alone is insufficient. New seasons, events, products/BM, cosmetics,
-    convenience/UI features, rewards, bug fixes, item grant/recovery, and minor
-    tuning remain non-Major unless the same unit explicitly states a core
-    structural change.
+    Major requires both a concrete core target and a structural action.
+    Explicitly non-structural change types such as season renewal, event/reward,
+    BM/product, cosmetic/appearance, convenience/UI, bug fixes, item grant/recovery,
+    minor balance, stages/floors/difficulty and search/preset/helper features are
+    rejected by rule rather than by hardcoded patch exceptions.
     """
     _text, d, combined = _major_text(line)
+    text = combined
 
-    # Always reject generic operational rows unless a stricter allow pattern below matches.
-    generic_minor = _minor_only_context(combined)
+    pve_exclude = ["시즌", "새 시즌", "시즌 시작", "시즌이 시작", "시즌 갱신", "시즌이 갱신", "보스 교체", "신규 서버"]
+    if not _has_non_structural_context(text, pve_exclude):
+        if _rx(text, r"(신규|새로운).{0,16}(챕터|지역|대륙|필드|월드|정규 콘텐츠|PvE 콘텐츠)"):
+            return "new_pve_content"
+        if _rx(text, r"(챕터|지역|대륙|필드|정규 콘텐츠|PvE 콘텐츠).{0,16}(추가|도입|신설|오픈)"):
+            return "new_pve_content"
+        if _rx(text, r"(신규|새로운).{0,20}(정규 던전|파티 던전|월드 던전|던전|레이드|보스 콘텐츠|보스 몬스터|보스)"):
+            return "new_pve_content"
+        if _rx(text, r"(정규 던전|파티 던전|월드 던전|던전|레이드|보스 콘텐츠|보스 몬스터).{0,20}(추가|도입|신설|오픈)"):
+            return "new_pve_content"
+        if _rx(text, r"(메인 퀘스트|서브 퀘스트).{0,16}(추가|도입|신설)") and _has_any(text, ["챕터", "지역", "대륙"]):
+            return "new_pve_content"
 
-    # PvE: 신규 챕터/지역/대륙/필드/정규 던전/레이드/보스/정규 PvE 추가는 Major.
-    pve_nouns = "챕터|지역|대륙|필드|정규 던전|파티 던전|월드 던전|던전|레이드|보스|메인 퀘스트|서브 퀘스트|PvE 콘텐츠"
-    if _new_or_added_core_content(combined, pve_nouns):
-        if not _has_any(combined, ["이벤트 던전", "이벤트 콘텐츠"]):
-            if not (_has_any(combined, ["시즌", "보상"]) and not _rx(combined, rf"(신규|새로운).{{0,18}}({pve_nouns})")):
-                return "new_pve_content"
-
-    # PvP/war: 신규 전쟁·점령·공성·월드 PvP 구조 추가/신설/개편만 Major.
-    pvp_nouns = "전쟁|전장|점령전|공성전|수성전|쟁탈전|월드 PvP|PvP 콘텐츠|경쟁 콘텐츠|전쟁 콘텐츠|전장 콘텐츠"
-    if (
-        _rx(combined, rf"(신규|새로운).{{0,18}}({pvp_nouns})")
-        or _rx(combined, rf"({pvp_nouns}).{{0,18}}(추가|도입|신설|오픈)")
-        or (_rx(combined, rf"({pvp_nouns}).{{0,18}}(구조|규칙|방식).{{0,18}}(개편|재편|대규모 변경)") and not generic_minor)
-        or _has_any(combined, ["서버 단위 경쟁 구조", "전쟁 구조가 추가", "점령 구조가 추가", "공성 구조가 추가"])
-    ):
-        if not _has_any(combined, ["시즌", "매칭", "시드", "포인트", "정산", "랭킹", "보상만", "이벤트"]):
+    if not _has_non_structural_context(text, ["시즌", "새 시즌", "시즌 시작", "시즌이 시작"]):
+        if _rx(text, r"(신규|새로운).{0,18}(전쟁 콘텐츠|전장 콘텐츠|점령전|공성전|수성전|쟁탈전|월드 PvP|PvP 콘텐츠|경쟁 콘텐츠|월드 격전지|격전지)"):
+            return "new_pvp_war"
+        if _rx(text, r"(전쟁 콘텐츠|전장 콘텐츠|점령전|공성전|수성전|쟁탈전|월드 PvP|PvP 콘텐츠|경쟁 콘텐츠|월드 격전지|격전지).{0,18}(추가|도입|신설|오픈)"):
+            return "new_pvp_war"
+        if _rx(text, r"(전쟁|점령|공성|수성|쟁탈|경쟁).{0,12}(구조|규칙|방식).{0,18}(전면 개편|대규모 개편|개편|재편|변경)"):
             return "new_pvp_war"
 
-    # Class/skill: 신규 클래스/전직/직업/태세 or skill-system-scale rework.
-    if (
-        _rx(combined, r"(신규|새로운).{0,18}(클래스|직업|전직|태세)")
-        or _rx(combined, r"(클래스|직업|전직|태세).{0,18}(추가|도입|신설)")
-        or _rx(combined, r"(스킬 체계|스킬 시스템|클래스 구조|전직 구조).{0,18}(추가|도입|개편|재편)")
-        or _has_any(combined, ["대규모 스킬 개편"])
-    ):
-        if not _has_any(combined, ["일부", "수치", "효과 조정", "밸런스", "오류", "버그"]):
+    if not _has_non_structural_context(text, ["전설 보조 장비", "지속 기술", "기술 추가", "스킬 추가"]):
+        if _rx(text, r"(신규|새로운).{0,16}(클래스|직업|전직)"):
+            return "class_skill_system"
+        if _rx(text, r"(클래스|직업|전직).{0,8}(추가|도입|신설)") and not _rx(text, r"(클래스별|전 클래스|클래스 공통)"):
+            return "class_skill_system"
+        if _rx(text, r"(스킬 체계|스킬 시스템|클래스 구조|전직 구조|태세 시스템).{0,18}(추가|도입|전면 개편|대규모 개편|개편|재편)"):
+            return "class_skill_system"
+        if _rx(text, r"(신규|새로운).{0,16}태세") and not _has_any(text, ["능력치 조정", "표시", "전환 상태"]):
             return "class_skill_system"
 
-    # Growth: 신규 성장축/system/장비 부위/stat axis. Cosmetics and reward/shop updates are excluded.
-    growth_nouns = "성장 시스템|성장축|장비 부위|방어구 파츠|장비 파츠|각반|내갑|스테이터스|능력치|각성 시스템|강화 시스템|유물 시스템|장비 체계"
-    if (
-        _rx(combined, rf"(신규|새로운).{{0,18}}({growth_nouns})")
-        or _rx(combined, rf"({growth_nouns}).{{0,18}}(추가|도입|신설|확장|개편)")
-        or _has_any(combined, ["성장 단계가 확장", "장기 성장축이 확장"])
-    ):
-        if not _has_any(combined, ["쿠폰", "상자", "상품", "패키지", "상점", "외형", "형상", "스킨", "코스튬", "보상", "지급", "회수"]):
+    growth_exclude = ["수집", "획득처", "잠금", "유지할 수 있는 기능", "정보가 추가"]
+    if not _has_non_structural_context(text, growth_exclude):
+        if _rx(text, r"(신규|새로운).{0,18}(성장 시스템|성장축|장비 부위|방어구 파츠|장비 파츠|스탯 축|스테이터스|각성 시스템|강화 시스템|계승 시스템|장비 체계)"):
+            return "new_growth_axis"
+        if _rx(text, r"(성장 시스템|성장축|장비 부위|방어구 파츠|장비 파츠|스탯 축|스테이터스|각성 시스템|강화 시스템|계승 시스템|장비 체계).{0,18}(추가|도입|신설|확장|개편)"):
+            return "new_growth_axis"
+        if _has_any(text, ["성장 단계가 확장", "장기 성장축이 확장", "장비 축복 시스템이 추가", "수호정령이 새롭게 추가"]):
             return "new_growth_axis"
 
-    # Server/world: only actual server/world restructuring, not transfer item operations.
-    if (
-        _has_any(combined, ["서버 통합", "월드군 재편", "서버군 재편", "신규 서버군", "신규 월드군"])
-        or _rx(combined, r"(서버 구조|월드 구조|서버 이전 구조|서버 매칭 구조).{0,18}(개편|재편|변경|통합)")
-    ):
-        if not _has_any(combined, ["이전권", "회수", "지급", "보상", "기간 연장", "삭제"]):
+    if not _has_non_structural_context(text):
+        if _has_any(text, ["서버 통합", "월드군 재편", "서버군 재편", "신규 서버군", "신규 월드군"]):
+            return "server_world_structure"
+        if _rx(text, r"(서버 구조|월드 구조|서버 이전 구조|서버 매칭 구조).{0,18}(개편|재편|변경|통합)"):
             return "server_world_structure"
 
-    # Economy/crafting: structural economy/crafting/trading system changes only.
-    if _rx(combined, r"(제작 구조|거래 구조|경제 구조|재화 구조|교환 구조|거래소 구조|제작 시스템|거래 시스템|재화 흐름|소모 구조|획득 구조).{0,20}(추가|도입|개편|재편|변경)"):
-        if not _has_any(combined, ["상점", "상품", "패키지", "보상", "교환소", "이벤트", "쿠폰"]):
+    if not _has_non_structural_context(text, ["품목", "구성"]):
+        if _rx(text, r"(제작 구조|거래 구조|경제 구조|재화 구조|교환 구조|거래소 구조|제작 시스템|거래 시스템|재화 흐름|소모 구조|획득 구조).{0,20}(추가|도입|개편|재편|변경)"):
             return "economy_crafting_system"
 
-    # Major rule rework: require explicit structural rework wording, not generic changes/tuning.
-    if _rx(combined, r"(진행 구조|보상 구조|참여 구조|규칙 구조|콘텐츠 구조|핵심 규칙).{0,20}(전면 개편|대규모 개편|개편|재편|변경)"):
-        if not generic_minor:
+    if not _has_non_structural_context(text):
+        if _rx(text, r"(진행 구조|보상 구조|참여 구조|규칙 구조|콘텐츠 구조|핵심 규칙).{0,20}(전면 개편|대규모 개편|개편|재편|변경)"):
             return "major_rule_rework"
 
     return None

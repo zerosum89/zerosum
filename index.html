@@ -405,6 +405,119 @@ function cardSummary(e){
   }
   return asArray(e.domain_tags).map(textOf).filter(Boolean).slice(0,4).join(' · ');
 }
+function hasAll(set, allValue){return set.has(allValue)}
+function selectedContains(set, value){return set.has(value)}
+function categoryMatch(e){return hasAll(state.categories,ALL_CATEGORIES) || asArray(e.representative_signals).some(s=>state.categories.has(s));}
+function gameMatch(g){return hasAll(state.games,ALL_GAMES) || state.games.has(g.name);}
+function matchEvent(e,g){
+  if(e.html_visible===false) return false;
+  if(!gameMatch(g)) return false;
+  if(state.year!==ALL_YEARS && y(e.date_key)!==state.year) return false;
+  if(!categoryMatch(e)) return false;
+  const q=state.q.trim().toLowerCase();
+  if(q){
+    const hay=[g.name,e.title,formatShortDate(e.date_key),e.card_summary,...asArray(e.major_update_summary),...asArray(e.domain_tags),...asArray(e.body_summary),...asArray(e.representative_signals),e.note].map(textOf).join(' ').toLowerCase();
+    if(!hay.includes(q)) return false;
+  }
+  return true;
+}
+function allMonths(){let dates=[]; DATA.forEach(g=>g.events.forEach(e=>{if(e.date_key) dates.push(e.date_key)})); let min=new Date(Math.min(...dates.map(d=>new Date(d+'T00:00:00')))); let max=new Date(Math.max(...dates.map(d=>new Date(d+'T00:00:00')))); let cur=new Date(min.getFullYear(),min.getMonth(),1); let end=new Date(max.getFullYear(),max.getMonth(),1); let months=[]; while(cur<=end){months.push(`${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,'0')}`); cur.setMonth(cur.getMonth()+1);} return months;}
+let MONTHS = [];
+let GAME_BY_NAME = {};
+function refreshDerivedData(){
+  MONTHS = allMonths();
+  document.documentElement.style.setProperty('--months', MONTHS.length);
+  GAME_BY_NAME = Object.fromEntries(DATA.map(g=>[g.name,g]));
+}
+const SIGNAL_ORDER=['신규 대형 PvE','신규 대형 PvP','신규 클래스/직업','신규 서버/월드','신규 성장축','성장 시스템 확장','대형 BM 변경','최대 레벨 확장','경제/거래 구조 변화'];
+function availableCategories(){const set=new Set(); DATA.forEach(g=>g.events.forEach(e=>asArray(e.representative_signals).forEach(s=>{if(s) set.add(s)}))); return [ALL_CATEGORIES,...SIGNAL_ORDER.filter(s=>set.has(s)),...Array.from(set).filter(s=>!SIGNAL_ORDER.includes(s)).sort()];}
+function renderControls(){
+  const games=[ALL_GAMES,...DATA.map(g=>g.name)];
+  const years=[ALL_YEARS,...new Set(MONTHS.map(m=>m.slice(0,4)))];
+  const categories=availableCategories();
+  const ctl=$('controls');
+  ctl.innerHTML=`<input class="search" id="search" placeholder="출시일·패치노트·본문 요약 검색..." value="${state.q.replaceAll('"','&quot;')}">`+ group(games,'games','game')+ group(years,'year','')+ `<span class="group-label">패치 카테고리</span>`+group(categories,'categories','');
+  $('search').addEventListener('input',e=>{state.q=e.target.value; clearDetail(); renderTimeline();});
+  ctl.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{handleFilterClick(b.dataset.kind,b.dataset.value); updateControlsActive(); clearDetail(); renderTimeline();});
+}
+function handleFilterClick(kind,value){
+  if(kind==='games') return toggleMulti(state.games,value,ALL_GAMES);
+  if(kind==='categories') return toggleMulti(state.categories,value,ALL_CATEGORIES);
+  state[kind]=value;
+}
+function toggleMulti(set,value,allValue){
+  if(value===allValue){set.clear(); set.add(allValue); return;}
+  if(set.has(allValue)) set.clear();
+  if(set.has(value)) set.delete(value); else set.add(value);
+  if(set.size===0) set.add(allValue);
+}
+function isFilterActive(kind,value){
+  if(kind==='games') return selectedContains(state.games,value);
+  if(kind==='categories') return selectedContains(state.categories,value);
+  return state[kind]===value;
+}
+function updateControlsActive(){document.querySelectorAll('[data-kind]').forEach(b=>{b.classList.toggle('active', isFilterActive(b.dataset.kind,b.dataset.value));});}
+function clearDetail(){const side=$('side'); if(side) side.innerHTML=''; const content=$('content'); if(content) content.classList.add('no-side'); document.querySelectorAll('.event-card.selected').forEach(c=>c.classList.remove('selected'));}
+function openDetail(){const content=$('content'); if(content) content.classList.remove('no-side');}
+function group(values,kind,extra){return `<span class="group">${values.map(v=>`<button class="pill ${extra} ${isFilterActive(kind,v)?'active':''}" data-kind="${kind}" data-value="${v}">${v}</button>`).join('')}</span>`}
+function render(){ renderControls(); renderTimeline(); attachViewportListeners(); }
+function filteredEvents(){const out=[]; DATA.forEach(g=>g.events.forEach(e=>{if(matchEvent(e,g)) out.push({g,e});})); return out;}
+function renderTimeline(){
+  const root=$('timeline');
+  let html=`<div class="month-header"><div class="corner">게임명</div>${MONTHS.map((m,i)=>`<div class="month">${Number(m.slice(5))}월</div>`).join('')}</div>`;
+  let visibleCount=0;
+  for(const g of DATA){
+    if(!gameMatch(g)) continue;
+    let byMonth={};
+    for(let idx=0; idx<g.events.length; idx++){const e=g.events[idx]; if(matchEvent(e,g)){ (byMonth[ym(e.date_key)] ||= []).push({e,idx}); visibleCount++; }}
+    html+=`<div class="game-row"><div class="game-label"><div class="game-name">${g.name}</div><div class="release">출시일 ${g.release_display||''}</div></div>`;
+    for(const m of MONTHS){ const es=(byMonth[m]||[]).sort((a,b)=>String(a.e.date_key).localeCompare(String(b.e.date_key))); html+=`<div class="cell">${es.map(({e,idx})=>cardHtml(e,g,idx)).join('')}</div>`; }
+    html+=`</div>`;
+  }
+  if(!visibleCount) html+=`<div class="no-results">조건에 맞는 항목이 없습니다.</div>`;
+  root.innerHTML=html;
+  const counter=$('counter'); if(counter) counter.textContent=`표시 ${visibleCount}건 / 전체 ${TOTAL_EVENTS}건`;
+  root.querySelectorAll('.event-card').forEach(c=>c.onclick=(ev)=>{ev.stopPropagation(); root.querySelectorAll('.event-card.selected').forEach(x=>x.classList.remove('selected')); c.classList.add('selected'); showDetail(c.dataset.game,c.dataset.idx);});
+  renderMinimap();
+  updateMinimapViewport();
+  updateFloatingYear();
+}
+function monthCounts(){const counts=Object.fromEntries(MONTHS.map(m=>[m,0])); filteredEvents().forEach(({e})=>{const m=ym(e.date_key); if(m in counts) counts[m]++;}); return counts;}
+function scrollToMonth(month){const idx=MONTHS.indexOf(month); if(idx<0) return; const viewport=$('viewport'); const cellW=getMonthCellWidth(); const labelW=getLabelWidth(); viewport.scrollTo({left:Math.max(0,labelW+idx*cellW-40), behavior:'smooth'});}
+function getMonthCellWidth(){const m=document.querySelector('.month'); return m?m.getBoundingClientRect().width:230;}
+function getLabelWidth(){const c=document.querySelector('.corner'); return c?c.getBoundingClientRect().width:180;}
+function renderMinimap(){
+  const bars=$('minimapBars'); if(!bars) return;
+  const counts=monthCounts(); const max=Math.max(1,...Object.values(counts)); const curYear=state.year;
+  bars.innerHTML=MONTHS.map((m,i)=>{const c=counts[m]||0; const h=Math.max(8, Math.round((c/max)*100)); const cls=[c?'':'empty', m.endsWith('-01')?'year-start':'', (curYear!=='전체'&&m.startsWith(curYear))?'active-year':''].join(' '); return `<div class="mbar ${cls}" title="${m} · ${c}건" data-month="${m}" style="height:${c? h:8}%"></div>`;}).join('');
+  bars.querySelectorAll('.mbar').forEach(b=>b.onclick=()=>scrollToMonth(b.dataset.month));
+  const empty=$('minimapEmpty'); if(empty) empty.style.display=Object.values(counts).some(v=>v>0)?'none':'flex';
+}
+function updateMinimapViewport(){
+  const viewport=$('viewport'), win=$('minimapWindow'), wrap=$('minimapWrap');
+  if(!viewport||!win||!wrap) return;
+  const maxScroll=Math.max(1, viewport.scrollWidth-viewport.clientWidth);
+  const ratio=viewport.scrollLeft/maxScroll;
+  const widthRatio=Math.min(1, viewport.clientWidth/Math.max(1,viewport.scrollWidth));
+  const innerW=wrap.clientWidth;
+  const w=Math.max(28, innerW*widthRatio);
+  const left=Math.max(0, Math.min(innerW-w, ratio*(innerW-w)));
+  win.style.width=w+'px'; win.style.left=left+'px';
+}
+function updateFloatingYear(){
+  const viewport=$('viewport'), fy=$('floatingYear');
+  if(!viewport||!fy||!MONTHS.length) return;
+  const rect=viewport.getBoundingClientRect();
+  if(rect.width<=0||rect.height<=0){fy.style.display='none';return;}
+  const labelW=getLabelWidth(); const cellW=getMonthCellWidth();
+  let idx=Math.floor(Math.max(0, viewport.scrollLeft-labelW)/Math.max(1,cellW));
+  idx=Math.max(0, Math.min(MONTHS.length-1, idx));
+  fy.textContent=MONTHS[idx].slice(0,4);
+  fy.style.left=(rect.left+labelW+12)+'px';
+  fy.style.top=(rect.top+11)+'px';
+  fy.style.display='block';
+}
+function attachViewportListeners(){const viewport=$('viewport'); if(viewport&&!viewport.dataset.minimapBound){const sync=()=>{updateMinimapViewport(); updateFloatingYear();}; viewport.addEventListener('scroll',sync,{passive:true}); viewport.addEventListener('click',e=>{if(!e.target.closest('.event-card')) clearDetail();}); window.addEventListener('resize',sync); viewport.dataset.minimapBound='1';}}
 function cardSummaryHtml(e){
   const major=isMajor(e);
   if(major){

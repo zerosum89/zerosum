@@ -50,7 +50,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans
 @media (max-width:860px){.minimap-section{top:44px}.minimap-wrap{height:30px}.mbar{min-width:3px}.content{grid-template-columns:1fr}.side{max-height:260px;border-top:1px solid var(--line)}}
 
 
-/* v038/v039 UI fixes: right panel spacing, tag wrapping, sticky clipping, major badge/selection, major summary text */
+/* v038-v040 UI fixes: right panel spacing, tag wrapping, sticky clipping, major badge/selection, major-group summary text */
 :root {
   --v038-detail-panel-space: 380px;
 }
@@ -124,15 +124,33 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans
 .event-card.is-selected .domain-tag {
   font-weight: 400 !important;
 }
+.event-card .summary.domain-summary {
+  display: flex !important;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: unset !important;
+}
+.domain-tags-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+  word-break: keep-all;
+}
 .domain-more {
   display: inline-block;
   white-space: nowrap;
   color: #66758f;
   font-weight: 800;
+  flex: 0 0 auto;
 }
 .summary-major-text,
 .body-summary-major,
-.v038-major-summary-line {
+.v038-major-summary-line,
+.v040-major-summary-line {
   color: #C00000 !important;
   font-weight: 600;
 }
@@ -191,6 +209,87 @@ function deriveDomainTagsFromBody(lines){
   return out.slice(0,12);
 }
 
+function majorTypeForLine(line){
+  const text=String(line||'');
+  const domain=text.includes(':') ? text.split(':',1)[0].trim() : '';
+  const has=(patterns)=>patterns.some(p=>text.includes(p));
+  const isEvent=/^(이벤트|이벤트\/보상|상점\/BM|상점|보상)/.test(domain);
+  const majorBM=has(['수집 효과','능력치','성장축','전용 장비','아이템 수집','제작 구조','거래 구조']);
+  if(isEvent && !majorBM) return null;
+  if(domain.includes('PvP') || has(['공성','수성','전쟁','점령','쟁탈','서버 침공','전장','월드 던전','경쟁 콘텐츠'])) return 'new_pvp_war';
+  if(domain.includes('클래스') || has(['클래스','전직','스킬','태세'])) return 'class_skill_system';
+  if(domain.includes('서버') || has(['서버 이전','서버 통합','신규 서버','월드군','서버군'])) return 'server_world_structure';
+  if(domain.includes('성장') || domain.includes('장비') || has(['성장 시스템','방어구','무기 형상','유물','능력치','스테이터스','강화','각성','아이템 수집','도감','전용 장비'])) return 'new_growth_axis';
+  if(domain.includes('경제') || domain.includes('거래') || has(['제작','거래소','재화','교환 구조','경제'])) return 'economy_crafting_system';
+  if(domain.includes('PvE') || has(['챕터','지역','던전','보스','레이드','성채','탑','퀘스트','대륙'])) return 'new_pve_content';
+  if(has(['개편','구조','규칙','보상 구조','진행 구조'])) return 'major_rule_rework';
+  return null;
+}
+function domainForMajorType(type, fallback){
+  const map={
+    new_pve_content:'PvE 콘텐츠', new_pvp_war:'PvP/전쟁', new_growth_axis:'성장/장비',
+    class_skill_system:'클래스/스킬', server_world_structure:'서버/월드',
+    economy_crafting_system:'경제/거래', major_rule_rework:fallback||'시스템'
+  };
+  return map[type] || fallback || '시스템';
+}
+function extractMajorTargets(lines){
+  const out=[];
+  const seen=new Set();
+  for(const raw of lines){
+    const line=cleanBullet(textOf(raw));
+    const body=line.includes(':') ? line.split(':').slice(1).join(':').trim() : line;
+    const quoted=[...body.matchAll(/[‘'\"]([^‘’'\"]{2,24})[’'\"]/g)].map(m=>m[1].trim());
+    const candidates=quoted.length ? quoted : [body.replace(/(이|가|을|를|으로|로)?\s*(추가|개편|변경|조정|확장|시작|진행).*$/,'').trim()];
+    for(let c of candidates){
+      c=c.replace(/^(신규|새로운)\s+/,'').replace(/^(기간제|일반)\s+/,'').trim();
+      if(c.length>=2 && c.length<=32 && !seen.has(c)){
+        seen.add(c); out.push(c);
+      }
+    }
+  }
+  return out.slice(0,3);
+}
+function buildMajorGroupText(type, lines){
+  const domain=domainForMajorType(type, (String(lines[0]||'').split(':')[0]||'').trim());
+  if(lines.length===1) return cleanBullet(textOf(lines[0]));
+  const targets=extractMajorTargets(lines);
+  const targetText=targets.length ? targets.join(', ')+' 관련 ' : '';
+  const templates={
+    new_pve_content:`${domain}: ${targetText}콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다.`,
+    new_pvp_war:`${domain}: ${targetText}전쟁·경쟁 구조가 추가·개편되어 PvP 참여 흐름과 보상 경쟁이 확장됩니다.`,
+    new_growth_axis:`${domain}: ${targetText}성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다.`,
+    class_skill_system:`${domain}: ${targetText}클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다.`,
+    server_world_structure:`${domain}: ${targetText}서버·월드 구조가 변경되어 이전·매칭·진행 범위가 조정됩니다.`,
+    economy_crafting_system:`${domain}: ${targetText}제작·거래·재화 구조가 추가·개편되어 아이템 획득과 경제 흐름이 조정됩니다.`,
+    major_rule_rework:`${domain}: ${targetText}콘텐츠 규칙과 진행 구조가 개편되어 플레이 흐름과 보상 기준이 조정됩니다.`
+  };
+  return templates[type] || `${domain}: ${targetText}주요 변경이 적용됩니다.`;
+}
+function deriveMajorSummaryGroupsFromBody(bodyLines){
+  const groups={};
+  asArray(bodyLines).map(textOf).map(cleanBullet).forEach((line,idx)=>{
+    const type=majorTypeForLine(line);
+    if(!type) return;
+    if(!groups[type]) groups[type]={major_type:type, domain:domainForMajorType(type,(line.split(':')[0]||'').trim()), source_unit_indices:[], source_unit_count:0, _lines:[]};
+    groups[type].source_unit_indices.push(idx);
+    groups[type].source_unit_count += 1;
+    groups[type]._lines.push(line);
+  });
+  return Object.values(groups).map(g=>({
+    major_type:g.major_type,
+    domain:g.domain,
+    text:buildMajorGroupText(g.major_type,g._lines),
+    source_unit_count:g.source_unit_count,
+    source_unit_indices:g.source_unit_indices
+  }));
+}
+function normalizeMajorSummaryGroups(e){
+  let groups=asArray(e.major_summary_groups).filter(x=>x && typeof x==='object' && textOf(x.text));
+  if(!groups.length) groups=deriveMajorSummaryGroupsFromBody(e.body_summary||[]);
+  return groups;
+}
+
 function normalizeFlatItem(item){
   const raw = item && item.raw_properties ? item.raw_properties : {};
   const date = item.actual_date || item.date || raw['실제 패치일'] || raw['actual_date'] || '';
@@ -222,7 +321,12 @@ function normalizeFlatItem(item){
     domain_tags: splitLinesForTimeline(domainTags).length ? splitLinesForTimeline(domainTags) : deriveDomainTagsFromBody(body),
     detected_sections_for_general: [],
     game: gameName,
-    body_summary: splitLinesForTimeline(body)
+    body_summary: splitLinesForTimeline(body),
+    major_summary_groups: Array.isArray(item.major_summary_groups) ? item.major_summary_groups : [],
+    major_group_count: Number(item.major_group_count || 0),
+    major_summary_indices: Array.isArray(item.major_summary_indices) ? item.major_summary_indices : [],
+    derived_importance: item.derived_importance || raw['derived_importance'] || '',
+    display_importance: item.display_importance || raw['display_importance'] || ''
   };
 }
 function normalizeTimelinePayload(payload){
@@ -276,121 +380,31 @@ function formatShortDate(dateKey){const s=String(dateKey||''); if(/^\d{4}-\d{2}-
 function asArray(v){ if(!v) return []; if(Array.isArray(v)) return v; return [v]; }
 function textOf(v){ if(v==null) return ''; if(typeof v==='string') return v; if(typeof v==='object') return v.source_line || v.source || v.line || v.item_name || v.name || JSON.stringify(v); return String(v); }
 function cleanBullet(s){return String(s||'').replace(/^\s*[-•]\s*/,'').replace(/^\s*\d+[.)]\s*/,'').trim();}
-function isMajor(e){return String(e.importance||'').toLowerCase()==='major';}
-function cardSummary(e){ if(isMajor(e)) return e.card_summary || asArray(e.major_update_summary).map(x=>cleanBullet(textOf(x)).split(':')[0]).join(' · '); return asArray(e.domain_tags).map(textOf).filter(Boolean).slice(0,4).join(' · '); }
-function hasAll(set, allValue){return set.has(allValue)}
-function selectedContains(set, value){return set.has(value)}
-function categoryMatch(e){return hasAll(state.categories,ALL_CATEGORIES) || asArray(e.representative_signals).some(s=>state.categories.has(s));}
-function gameMatch(g){return hasAll(state.games,ALL_GAMES) || state.games.has(g.name);}
-function matchEvent(e,g){
-  if(e.html_visible===false) return false;
-  if(!gameMatch(g)) return false;
-  if(state.year!==ALL_YEARS && y(e.date_key)!==state.year) return false;
-  if(!categoryMatch(e)) return false;
-  const q=state.q.trim().toLowerCase();
-  if(q){
-    const hay=[g.name,e.title,formatShortDate(e.date_key),e.card_summary,...asArray(e.major_update_summary),...asArray(e.domain_tags),...asArray(e.body_summary),...asArray(e.representative_signals),e.note].map(textOf).join(' ').toLowerCase();
-    if(!hay.includes(q)) return false;
+function hasV040MajorFields(e){
+  return e && (Array.isArray(e.major_summary_groups) || Number(e.major_group_count||0)>0 || e.derived_importance || e.display_importance);
+}
+function getMajorGroups(e){
+  const groups=normalizeMajorSummaryGroups(e||{});
+  e.major_summary_groups=groups;
+  e.major_group_count=groups.length;
+  if(!e.display_importance) e.display_importance=groups.length ? 'major' : (e.derived_importance||'normal');
+  return groups;
+}
+function isMajor(e){
+  const groups=getMajorGroups(e);
+  if(groups.length>0) return true;
+  // Legacy fallback until the next v040 export rewrites patch_view_model.json.
+  return !hasV040MajorFields(e) && String(e.importance||'').toLowerCase()==='major';
+}
+function cardSummary(e){
+  if(isMajor(e)){
+    const groups=getMajorGroups(e);
+    if(e.card_summary) return e.card_summary;
+    if(groups.length) return groups.map(g=>g.domain).filter(Boolean).slice(0,3).join(' · ')+(groups.length>3?` · +${groups.length-3}`:'');
+    return asArray(e.major_update_summary).map(x=>cleanBullet(textOf(x)).split(':')[0]).join(' · ');
   }
-  return true;
+  return asArray(e.domain_tags).map(textOf).filter(Boolean).slice(0,4).join(' · ');
 }
-function allMonths(){let dates=[]; DATA.forEach(g=>g.events.forEach(e=>{if(e.date_key) dates.push(e.date_key)})); let min=new Date(Math.min(...dates.map(d=>new Date(d+'T00:00:00')))); let max=new Date(Math.max(...dates.map(d=>new Date(d+'T00:00:00')))); let cur=new Date(min.getFullYear(),min.getMonth(),1); let end=new Date(max.getFullYear(),max.getMonth(),1); let months=[]; while(cur<=end){months.push(`${cur.getFullYear()}-${String(cur.getMonth()+1).padStart(2,'0')}`); cur.setMonth(cur.getMonth()+1);} return months;}
-let MONTHS = [];
-let GAME_BY_NAME = {};
-function refreshDerivedData(){
-  MONTHS = allMonths();
-  document.documentElement.style.setProperty('--months', MONTHS.length);
-  GAME_BY_NAME = Object.fromEntries(DATA.map(g=>[g.name,g]));
-}
-const SIGNAL_ORDER=['신규 대형 PvE','신규 대형 PvP','신규 클래스/직업','신규 서버/월드','신규 성장축','성장 시스템 확장','대형 BM 변경','최대 레벨 확장','경제/거래 구조 변화'];
-function availableCategories(){const set=new Set(); DATA.forEach(g=>g.events.forEach(e=>asArray(e.representative_signals).forEach(s=>{if(s) set.add(s)}))); return [ALL_CATEGORIES,...SIGNAL_ORDER.filter(s=>set.has(s)),...Array.from(set).filter(s=>!SIGNAL_ORDER.includes(s)).sort()];}
-function renderControls(){
-  const games=[ALL_GAMES,...DATA.map(g=>g.name)];
-  const years=[ALL_YEARS,...new Set(MONTHS.map(m=>m.slice(0,4)))];
-  const categories=availableCategories();
-  const ctl=$('controls');
-  ctl.innerHTML=`<input class="search" id="search" placeholder="출시일·패치노트·본문 요약 검색..." value="${state.q.replaceAll('"','&quot;')}">`+ group(games,'games','game')+ group(years,'year','')+ `<span class="group-label">패치 카테고리</span>`+group(categories,'categories','');
-  $('search').addEventListener('input',e=>{state.q=e.target.value; clearDetail(); renderTimeline();});
-  ctl.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{handleFilterClick(b.dataset.kind,b.dataset.value); updateControlsActive(); clearDetail(); renderTimeline();});
-}
-function handleFilterClick(kind,value){
-  if(kind==='games') return toggleMulti(state.games,value,ALL_GAMES);
-  if(kind==='categories') return toggleMulti(state.categories,value,ALL_CATEGORIES);
-  state[kind]=value;
-}
-function toggleMulti(set,value,allValue){
-  if(value===allValue){set.clear(); set.add(allValue); return;}
-  if(set.has(allValue)) set.clear();
-  if(set.has(value)) set.delete(value); else set.add(value);
-  if(set.size===0) set.add(allValue);
-}
-function isFilterActive(kind,value){
-  if(kind==='games') return selectedContains(state.games,value);
-  if(kind==='categories') return selectedContains(state.categories,value);
-  return state[kind]===value;
-}
-function updateControlsActive(){document.querySelectorAll('[data-kind]').forEach(b=>{b.classList.toggle('active', isFilterActive(b.dataset.kind,b.dataset.value));});}
-function clearDetail(){const side=$('side'); if(side) side.innerHTML=''; const content=$('content'); if(content) content.classList.add('no-side'); document.querySelectorAll('.event-card.selected').forEach(c=>c.classList.remove('selected'));}
-function openDetail(){const content=$('content'); if(content) content.classList.remove('no-side');}
-function group(values,kind,extra){return `<span class="group">${values.map(v=>`<button class="pill ${extra} ${isFilterActive(kind,v)?'active':''}" data-kind="${kind}" data-value="${v}">${v}</button>`).join('')}</span>`}
-function render(){ renderControls(); renderTimeline(); attachViewportListeners(); }
-function filteredEvents(){const out=[]; DATA.forEach(g=>g.events.forEach(e=>{if(matchEvent(e,g)) out.push({g,e});})); return out;}
-function renderTimeline(){
-  const root=$('timeline');
-  let html=`<div class="month-header"><div class="corner">게임명</div>${MONTHS.map((m,i)=>`<div class="month">${Number(m.slice(5))}월</div>`).join('')}</div>`;
-  let visibleCount=0;
-  for(const g of DATA){
-    if(!gameMatch(g)) continue;
-    let byMonth={};
-    for(let idx=0; idx<g.events.length; idx++){const e=g.events[idx]; if(matchEvent(e,g)){ (byMonth[ym(e.date_key)] ||= []).push({e,idx}); visibleCount++; }}
-    html+=`<div class="game-row"><div class="game-label"><div class="game-name">${g.name}</div><div class="release">출시일 ${g.release_display||''}</div></div>`;
-    for(const m of MONTHS){ const es=(byMonth[m]||[]).sort((a,b)=>String(a.e.date_key).localeCompare(String(b.e.date_key))); html+=`<div class="cell">${es.map(({e,idx})=>cardHtml(e,g,idx)).join('')}</div>`; }
-    html+=`</div>`;
-  }
-  if(!visibleCount) html+=`<div class="no-results">조건에 맞는 항목이 없습니다.</div>`;
-  root.innerHTML=html;
-  const counter=$('counter'); if(counter) counter.textContent=`표시 ${visibleCount}건 / 전체 ${TOTAL_EVENTS}건`;
-  root.querySelectorAll('.event-card').forEach(c=>c.onclick=(ev)=>{ev.stopPropagation(); root.querySelectorAll('.event-card.selected').forEach(x=>x.classList.remove('selected')); c.classList.add('selected'); showDetail(c.dataset.game,c.dataset.idx);});
-  renderMinimap();
-  updateMinimapViewport();
-  updateFloatingYear();
-}
-function monthCounts(){const counts=Object.fromEntries(MONTHS.map(m=>[m,0])); filteredEvents().forEach(({e})=>{const m=ym(e.date_key); if(m in counts) counts[m]++;}); return counts;}
-function scrollToMonth(month){const idx=MONTHS.indexOf(month); if(idx<0) return; const viewport=$('viewport'); const cellW=getMonthCellWidth(); const labelW=getLabelWidth(); viewport.scrollTo({left:Math.max(0,labelW+idx*cellW-40), behavior:'smooth'});}
-function getMonthCellWidth(){const m=document.querySelector('.month'); return m?m.getBoundingClientRect().width:230;}
-function getLabelWidth(){const c=document.querySelector('.corner'); return c?c.getBoundingClientRect().width:180;}
-function renderMinimap(){
-  const bars=$('minimapBars'); if(!bars) return;
-  const counts=monthCounts(); const max=Math.max(1,...Object.values(counts)); const curYear=state.year;
-  bars.innerHTML=MONTHS.map((m,i)=>{const c=counts[m]||0; const h=Math.max(8, Math.round((c/max)*100)); const cls=[c?'':'empty', m.endsWith('-01')?'year-start':'', (curYear!=='전체'&&m.startsWith(curYear))?'active-year':''].join(' '); return `<div class="mbar ${cls}" title="${m} · ${c}건" data-month="${m}" style="height:${c? h:8}%"></div>`;}).join('');
-  bars.querySelectorAll('.mbar').forEach(b=>b.onclick=()=>scrollToMonth(b.dataset.month));
-  const empty=$('minimapEmpty'); if(empty) empty.style.display=Object.values(counts).some(v=>v>0)?'none':'flex';
-}
-function updateMinimapViewport(){
-  const viewport=$('viewport'), win=$('minimapWindow'), wrap=$('minimapWrap');
-  if(!viewport||!win||!wrap) return;
-  const maxScroll=Math.max(1, viewport.scrollWidth-viewport.clientWidth);
-  const ratio=viewport.scrollLeft/maxScroll;
-  const widthRatio=Math.min(1, viewport.clientWidth/Math.max(1,viewport.scrollWidth));
-  const innerW=wrap.clientWidth;
-  const w=Math.max(28, innerW*widthRatio);
-  const left=Math.max(0, Math.min(innerW-w, ratio*(innerW-w)));
-  win.style.width=w+'px'; win.style.left=left+'px';
-}
-function updateFloatingYear(){
-  const viewport=$('viewport'), fy=$('floatingYear');
-  if(!viewport||!fy||!MONTHS.length) return;
-  const rect=viewport.getBoundingClientRect();
-  if(rect.width<=0||rect.height<=0){fy.style.display='none';return;}
-  const labelW=getLabelWidth(); const cellW=getMonthCellWidth();
-  let idx=Math.floor(Math.max(0, viewport.scrollLeft-labelW)/Math.max(1,cellW));
-  idx=Math.max(0, Math.min(MONTHS.length-1, idx));
-  fy.textContent=MONTHS[idx].slice(0,4);
-  fy.style.left=(rect.left+labelW+12)+'px';
-  fy.style.top=(rect.top+11)+'px';
-  fy.style.display='block';
-}
-function attachViewportListeners(){const viewport=$('viewport'); if(viewport&&!viewport.dataset.minimapBound){const sync=()=>{updateMinimapViewport(); updateFloatingYear();}; viewport.addEventListener('scroll',sync,{passive:true}); viewport.addEventListener('click',e=>{if(!e.target.closest('.event-card')) clearDetail();}); window.addEventListener('resize',sync); viewport.dataset.minimapBound='1';}}
 function cardSummaryHtml(e){
   const major=isMajor(e);
   if(major){
@@ -402,32 +416,37 @@ function cardSummaryHtml(e){
     const limit=3;
     const shown=tags.slice(0,limit);
     const extra=Math.max(0,tags.length-shown.length);
-    let html=shown.map(t=>`<span class="domain-tag">${escapeHtml(t)}</span>`).join('<span class="domain-separator"> · </span>');
-    if(extra>0) html+=`<span class="domain-separator"> · </span><span class="domain-more">+${extra}</span>`;
+    const tagText=shown.map(t=>escapeHtml(t)).join(' · ');
+    let html=`<span class="domain-tags-text">${tagText}</span>`;
+    if(extra>0) html+=`<span class="domain-more">+${extra}</span>`;
     return `<div class="summary domain-summary">${html}</div>`;
   }
   const sum=cardSummary(e);
   return sum?`<div class="summary">${escapeHtml(sum)}</div>`:'';
 }
 function cardHtml(e,g,idx){ const major=isMajor(e); const rel=e.type==='release'; return `<div class="event-card ${major?'major':''} ${rel?'release-card':''}" data-game="${g.name}" data-idx="${idx}"><div class="title-line"><span class="dot"></span><span class="date-title">${escapeHtml(e.title||'')}</span></div>${cardSummaryHtml(e)}</div>`; }
-function isMajorSummaryLine(text, majorItems, signals){
-  const src=[...asArray(majorItems), ...asArray(signals)].map(textOf).map(cleanBullet).join(' ');
-  const stop=new Set(['신규','대형','추가','변경','개선','콘텐츠','업데이트','패치','안내','주요','보상']);
-  const tokens=[...new Set(String(src||'').replace(/\s+/g,' ').split(/[^0-9A-Za-z가-힣]+/).map(x=>x.trim()).filter(x=>x.length>=3&&!stop.has(x)))];
-  const target=String(text||'');
-  return tokens.length>0 && tokens.some(t=>target.includes(t));
+function displayBodyItems(e){
+  const bodyItems=asArray(e.body_summary).map(textOf).map(cleanBullet).filter(Boolean);
+  const groups=getMajorGroups(e);
+  if(!groups.length) return bodyItems.map(text=>({text, major:false}));
+  const skip=new Set();
+  groups.forEach(g=>asArray(g.source_unit_indices).forEach(i=>skip.add(Number(i))));
+  const out=groups.map(g=>({text:cleanBullet(textOf(g.text)), major:true, major_type:g.major_type})).filter(x=>x.text);
+  bodyItems.forEach((line,idx)=>{if(!skip.has(idx)) out.push({text:line, major:false});});
+  return out;
 }
-function box(title,items,extra='', majorItems=[], signals=[]){return `<div class="box ${extra}"><h3>${escapeHtml(title)}</h3><ul>${items.map(i=>`<li class="${extra==='primary'&&isMajorSummaryLine(i,majorItems,signals)?'v038-major-summary-line':''}">${escapeHtml(i)}</li>`).join('')}</ul></div>`}
+function box(title,items,extra=''){
+  const normalized=items.map(i=> typeof i==='object' ? i : {text:String(i||''), major:false}).filter(i=>i.text);
+  return `<div class="box ${extra}"><h3>${escapeHtml(title)}</h3><ul>${normalized.map(i=>`<li class="${extra==='primary'&&i.major?'v040-major-summary-line':''}">${escapeHtml(i.text)}</li>`).join('')}</ul></div>`
+}
 function showDetail(game,idx){
   openDetail();
   const g=GAME_BY_NAME[game], e=g.events[Number(idx)]; const major=isMajor(e);
-  const signals=asArray(e.representative_signals).map(textOf).filter(Boolean);
-  const majorItems=asArray(e.major_update_summary).map(textOf).map(cleanBullet).filter(Boolean);
-  const bodyItems=asArray(e.body_summary).map(textOf).map(cleanBullet).filter(Boolean);
+  const bodyItems=displayBodyItems(e);
   const tagItems = asArray(e.domain_tags).map(textOf).filter(Boolean);
   let html=`<div class="side-sub">선택 항목</div>${major?'<span class="tag">주요</span>':''}<div class="side-sub">${escapeHtml(g.name)}</div><div class="side-title">${escapeHtml(e.title||'')}</div>`;
   if(e.source_url) html+=`<a class="source-btn v038-source-link-under-title" href="${escapeAttr(e.source_url)}" target="_blank">원문 패치노트 열기</a>`;
-  if(bodyItems.length) html+=box('본문 요약', bodyItems, 'primary', majorItems, signals);
+  if(bodyItems.length) html+=box('본문 요약', bodyItems, 'primary');
   if(tagItems.length) html+=box('관련 영역', tagItems);
   $('side').innerHTML=html;
 }

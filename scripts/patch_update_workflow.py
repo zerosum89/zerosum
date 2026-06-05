@@ -64,7 +64,7 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v039"
+WORKFLOW_VERSION = "github_actions_v040"
 
 
 def canonical_url(url: str) -> str:
@@ -168,6 +168,143 @@ def listify(v: Any) -> list[str]:
     if ";" in text:
         return [x.strip() for x in text.split(";") if x.strip()]
     return [text]
+
+
+MAJOR_TYPE_ORDER = [
+    "new_pve_content",
+    "new_pvp_war",
+    "new_growth_axis",
+    "class_skill_system",
+    "server_world_structure",
+    "economy_crafting_system",
+    "major_rule_rework",
+]
+
+
+def clean_summary_line(line: Any) -> str:
+    text = str(line or "").strip()
+    text = re.sub(r"^[-•*]\s*", "", text).strip()
+    return text
+
+
+def summary_domain(line: str) -> str:
+    return line.split(":", 1)[0].strip() if ":" in line else ""
+
+
+def _has_any(text: str, words: list[str]) -> bool:
+    return any(w in text for w in words)
+
+
+def major_type_for_line(line: str) -> str | None:
+    text = clean_summary_line(line)
+    domain = summary_domain(text)
+    is_event_or_bm = domain.startswith(("이벤트", "이벤트/보상", "상점/BM", "상점", "보상"))
+    bm_major = _has_any(text, ["수집 효과", "능력치", "성장축", "전용 장비", "아이템 수집", "제작 구조", "거래 구조"])
+    if is_event_or_bm and not bm_major:
+        return None
+    if "PvP" in domain or _has_any(text, ["공성", "수성", "전쟁", "점령", "쟁탈", "서버 침공", "전장", "월드 던전", "경쟁 콘텐츠"]):
+        return "new_pvp_war"
+    if "클래스" in domain or _has_any(text, ["클래스", "전직", "스킬", "태세"]):
+        return "class_skill_system"
+    if "서버" in domain or _has_any(text, ["서버 이전", "서버 통합", "신규 서버", "월드군", "서버군"]):
+        return "server_world_structure"
+    if "성장" in domain or "장비" in domain or _has_any(text, ["성장 시스템", "방어구", "무기 형상", "유물", "능력치", "스테이터스", "강화", "각성", "아이템 수집", "도감", "전용 장비"]):
+        return "new_growth_axis"
+    if "경제" in domain or "거래" in domain or _has_any(text, ["제작", "거래소", "재화", "교환 구조", "경제"]):
+        return "economy_crafting_system"
+    if "PvE" in domain or _has_any(text, ["챕터", "지역", "던전", "보스", "레이드", "성채", "탑", "퀘스트", "대륙"]):
+        return "new_pve_content"
+    if _has_any(text, ["개편", "구조", "규칙", "보상 구조", "진행 구조"]):
+        return "major_rule_rework"
+    return None
+
+
+def domain_for_major_type(major_type: str, fallback: str = "") -> str:
+    return {
+        "new_pve_content": "PvE 콘텐츠",
+        "new_pvp_war": "PvP/전쟁",
+        "new_growth_axis": "성장/장비",
+        "class_skill_system": "클래스/스킬",
+        "server_world_structure": "서버/월드",
+        "economy_crafting_system": "경제/거래",
+        "major_rule_rework": fallback or "시스템",
+    }.get(major_type, fallback or "시스템")
+
+
+def extract_major_targets(lines: list[str]) -> list[str]:
+    out: list[str] = []
+    seen: set[str] = set()
+    for line in lines:
+        body = line.split(":", 1)[1].strip() if ":" in line else line
+        quoted = re.findall(r"[‘'\"]([^‘’'\"]{2,24})[’'\"]", body)
+        candidates = quoted or [re.sub(r"(이|가|을|를|으로|로)?\s*(추가|개편|변경|조정|확장|시작|진행).*$", "", body).strip()]
+        for cand in candidates:
+            c = re.sub(r"^(신규|새로운|기간제|일반)\s+", "", cand).strip()
+            if 2 <= len(c) <= 32 and c not in seen:
+                seen.add(c)
+                out.append(c)
+            if len(out) >= 3:
+                return out
+    return out
+
+
+def build_major_group_text(major_type: str, lines: list[str]) -> str:
+    first_domain = summary_domain(lines[0]) if lines else ""
+    domain = domain_for_major_type(major_type, first_domain)
+    if len(lines) == 1:
+        return clean_summary_line(lines[0])
+    targets = extract_major_targets(lines)
+    target_text = (", ".join(targets) + " 관련 ") if targets else ""
+    templates = {
+        "new_pve_content": f"{domain}: {target_text}콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다.",
+        "new_pvp_war": f"{domain}: {target_text}전쟁·경쟁 구조가 추가·개편되어 PvP 참여 흐름과 보상 경쟁이 확장됩니다.",
+        "new_growth_axis": f"{domain}: {target_text}성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다.",
+        "class_skill_system": f"{domain}: {target_text}클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다.",
+        "server_world_structure": f"{domain}: {target_text}서버·월드 구조가 변경되어 이전·매칭·진행 범위가 조정됩니다.",
+        "economy_crafting_system": f"{domain}: {target_text}제작·거래·재화 구조가 추가·개편되어 아이템 획득과 경제 흐름이 조정됩니다.",
+        "major_rule_rework": f"{domain}: {target_text}콘텐츠 규칙과 진행 구조가 개편되어 플레이 흐름과 보상 기준이 조정됩니다.",
+    }
+    return templates.get(major_type, f"{domain}: {target_text}주요 변경이 적용됩니다.")
+
+
+def derive_major_summary_groups(body_summary: list[str]) -> list[dict[str, Any]]:
+    grouped: dict[str, dict[str, Any]] = {}
+    for idx, raw_line in enumerate(body_summary):
+        line = clean_summary_line(raw_line)
+        major_type = major_type_for_line(line)
+        if not major_type:
+            continue
+        item = grouped.setdefault(major_type, {
+            "major_type": major_type,
+            "domain": domain_for_major_type(major_type, summary_domain(line)),
+            "source_unit_count": 0,
+            "source_unit_indices": [],
+            "_lines": [],
+        })
+        item["source_unit_count"] += 1
+        item["source_unit_indices"].append(idx)
+        item["_lines"].append(line)
+    out: list[dict[str, Any]] = []
+    for major_type in MAJOR_TYPE_ORDER:
+        item = grouped.get(major_type)
+        if not item:
+            continue
+        lines = item.pop("_lines")
+        item["text"] = build_major_group_text(major_type, lines)
+        out.append(item)
+    return out
+
+
+def enrich_major_highlight_fields(item: dict[str, Any]) -> dict[str, Any]:
+    body_summary = listify(item.get("body_summary", []))
+    groups = derive_major_summary_groups(body_summary)
+    item["major_summary_groups"] = groups
+    item["major_group_count"] = len(groups)
+    item["major_summary_indices"] = list(range(len(groups)))
+    item["derived_importance"] = "major" if groups else "normal"
+    item["display_importance"] = item["derived_importance"]
+    item["importance_source"] = "derived_from_major_summary_groups_v040"
+    return item
 
 
 def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
@@ -300,6 +437,8 @@ def export_patch_view_model() -> tuple[list[dict[str, Any]], str, bool]:
         items = existing_json_items()
         source = "existing_patch_view_model_json" if items else "empty"
         log(f"[STEP] Existing patch_view_model.json fallback loaded: {len(items)} items")
+
+    items = [enrich_major_highlight_fields(dict(x)) for x in items]
 
     current_items = existing_json_items()
     file_changed = stable_items(current_items) != stable_items(items)

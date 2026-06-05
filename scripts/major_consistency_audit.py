@@ -7,11 +7,10 @@ import re
 from pathlib import Path
 from typing import Any
 
-AUDIT_VERSION = "github_actions_v048"
+AUDIT_VERSION = "github_actions_v052"
 HIGHLIGHT_POLICY = (
-    "major_group: body_summary update-units are classified as major only when they describe "
-    "structural game changes; generic domain and 신규-word matches are blocked. Multiple major units of the same type are grouped into one "
-    "red summary sentence. Card major state is derived from major_group_count >= 1."
+    "v052: card Major display is sourced from Patch View Model DB importance. "
+    "Derived major groups are audit/review candidates only; DB normal rows suppress visible major groups and red highlights."
 )
 
 MAJOR_TYPE_ORDER = [
@@ -443,37 +442,35 @@ def main() -> int:
         game = _get(row, "game", "game_name", "게임명")
         source_url = _get(row, "source_url", "url", "원문 URL")
         importance = (_get(row, "importance", "중요도", "Importance") or "normal").lower()
-        display_importance = (_get(row, "display_importance", "derived_importance") or "").lower()
+        display_importance = (_get(row, "display_importance") or importance or "normal").lower()
         body_lines = _lines(row.get("body_summary") or row.get("bodySummary") or _get(row, "body_summary", "본문 요약"))
         stored_groups = row.get("major_summary_groups") if isinstance(row.get("major_summary_groups"), list) else []
-        groups = stored_groups or derive_groups(body_lines)
-        major_group_count = int(row.get("major_group_count") or len(groups) or 0)
-        card_major = (display_importance == "major") or (major_group_count >= 1)
-        derived_major = len(groups) >= 1
-        red_line_count = len(groups)
-        source_unit_total = sum(int(g.get("source_unit_count") or len(g.get("source_unit_indices") or [])) for g in groups if isinstance(g, dict))
-        event_bm_only = bool(groups) and all(major_type_for_line(body_lines[i]) is None for i in range(len(body_lines)) if False)
+        derived_groups = derive_groups(body_lines)
+        db_major = importance == "major"
+        card_major = display_importance == "major"
+        visible_groups = stored_groups if db_major else []
+        derived_major = len(derived_groups) >= 1
+        red_line_count = len(visible_groups)
+        source_unit_total = sum(int(g.get("source_unit_count") or len(g.get("source_unit_indices") or [])) for g in visible_groups if isinstance(g, dict))
 
         issues: list[str] = []
         reviews: list[str] = []
-        if derived_major and not card_major:
-            issues.append("major_group_exists_but_card_major_false")
-        if card_major and not derived_major:
-            issues.append("card_major_true_but_major_group_missing")
-        if major_group_count != len(groups):
-            issues.append("major_group_count_mismatch")
+        if card_major != db_major:
+            issues.append("display_importance_not_equal_db_importance")
+        if not db_major and stored_groups:
+            issues.append("db_normal_but_visible_major_groups_present")
+        if db_major and not visible_groups:
+            reviews.append("db_major_without_highlight_candidate")
+        if not db_major and derived_major:
+            reviews.append("suppressed_derived_major_candidate")
+        if db_major and derived_major and not visible_groups:
+            issues.append("db_major_derived_groups_not_visible")
         if red_line_count > 3:
-            reviews.append("major_group_count_over_3")
+            reviews.append("visible_major_group_count_over_3")
         if derived_major and any(x in " / ".join(body_lines) for x in ["시즌", "이벤트", "상품", "외형", "편의", "쿠폰", "보상"]):
-            reviews.append("check_structural_major_context")
-        if body_lines and red_line_count >= len(body_lines):
-            reviews.append("all_body_lines_would_be_highlighted")
-        if source_unit_total > red_line_count and red_line_count == source_unit_total:
-            reviews.append("major_units_not_grouped")
-        if importance == "major" and not derived_major:
-            reviews.append("legacy_importance_major_but_derived_normal")
-        if importance != "major" and derived_major:
-            reviews.append("legacy_importance_normal_but_derived_major")
+            reviews.append("derived_candidate_check_structural_context")
+        if body_lines and red_line_count >= len(body_lines) and red_line_count > 0:
+            reviews.append("all_body_lines_highlighted")
 
         if issues:
             issue_count += 1
@@ -487,13 +484,18 @@ def main() -> int:
             "title": title,
             "source_url": source_url,
             "legacy_importance": importance,
-            "display_importance": display_importance or ("major" if derived_major else "normal"),
+            "display_importance": display_importance,
             "card_major": card_major,
             "derived_major": derived_major,
-            "major_group_count": len(groups),
+            "visible_major_group_count": len(visible_groups),
+            "derived_major_group_count": len(derived_groups),
+            "major_group_count": len(visible_groups),
             "major_source_unit_total": source_unit_total,
-            "major_types": " / ".join(str(g.get("major_type", "")) for g in groups if isinstance(g, dict)),
-            "major_group_text_preview": " / ".join(str(g.get("text", "")) for g in groups if isinstance(g, dict))[:500],
+            "visible_major_types": " / ".join(str(g.get("major_type", "")) for g in visible_groups if isinstance(g, dict)),
+            "derived_major_types": " / ".join(str(g.get("major_type", "")) for g in derived_groups if isinstance(g, dict)),
+            "major_types": " / ".join(str(g.get("major_type", "")) for g in visible_groups if isinstance(g, dict)),
+            "major_group_text_preview": " / ".join(str(g.get("text", "")) for g in visible_groups if isinstance(g, dict))[:500],
+            "derived_group_text_preview": " / ".join(str(g.get("text", "")) for g in derived_groups if isinstance(g, dict))[:500],
             "body_summary_preview": " / ".join(body_lines[:6])[:500],
             "issues": ";".join(issues),
             "reviews": ";".join(reviews),
@@ -508,19 +510,20 @@ def main() -> int:
         "highlight_policy": HIGHLIGHT_POLICY,
         "rows": rows,
     }
+    fieldnames = [
+        "game", "title", "source_url", "legacy_importance", "display_importance", "card_major", "derived_major",
+        "visible_major_group_count", "derived_major_group_count", "major_group_count", "major_source_unit_total",
+        "visible_major_types", "derived_major_types", "major_types", "major_group_text_preview", "derived_group_text_preview",
+        "body_summary_preview", "issues", "reviews", "highlight_policy",
+    ]
     for base in ["major_highlight_audit", "major_consistency_audit"]:
         (art / f"{base}.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-        fieldnames = [
-            "game", "title", "source_url", "legacy_importance", "display_importance", "card_major", "derived_major",
-            "major_group_count", "major_source_unit_total", "major_types", "major_group_text_preview",
-            "body_summary_preview", "issues", "reviews", "highlight_policy",
-        ]
         with (art / f"{base}.csv").open("w", encoding="utf-8-sig", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
             writer.writeheader()
             writer.writerows(rows)
     write_major_quality_audit_xlsx(art / "major_quality_audit.xlsx", payload, rows)
-    print(f"[v047] major/highlight audit rows={len(rows)} issues={issue_count} reviews={review_count} xlsx=major_quality_audit.xlsx")
+    print(f"[v052] major/highlight audit rows={len(rows)} issues={issue_count} reviews={review_count} xlsx=major_quality_audit.xlsx")
     return 0
 
 

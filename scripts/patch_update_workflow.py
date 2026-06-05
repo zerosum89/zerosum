@@ -64,11 +64,11 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v048"
+WORKFLOW_VERSION = "github_actions_v052"
 
 
-DERIVED_DATA_VERSION = "patch_view_model.derived.major_policy_v048"
-MAJOR_POLICY_VERSION = "major_policy_v048"
+DERIVED_DATA_VERSION = "patch_view_model.derived.db_importance_display_v052"
+MAJOR_POLICY_VERSION = "major_policy_v052_db_importance_display"
 def canonical_url(url: str) -> str:
     if not url:
         return ""
@@ -549,18 +549,32 @@ def derive_major_summary_groups(body_summary: list[str]) -> list[dict[str, Any]]
         out.append(item)
     return out
 
-
 def enrich_major_highlight_fields(item: dict[str, Any]) -> dict[str, Any]:
-    body_summary = listify(item.get("body_summary", []))
-    groups = derive_major_summary_groups(body_summary)
-    item["major_summary_groups"] = groups
-    item["major_group_count"] = len(groups)
-    item["major_summary_indices"] = list(range(len(groups)))
-    item["derived_importance"] = "major" if groups else "normal"
-    item["display_importance"] = item["derived_importance"]
-    item["importance_source"] = "derived_from_body_summary_structural_major_groups_v048"
-    return item
+    """v052: card Major display follows Patch View Model DB importance.
 
+    Derived major groups are still computed as audit/review candidates, but they do not
+    promote a card to Major by themselves. Red highlight groups are exposed only when
+    DB importance is major, so DB normal rows cannot re-promote themselves during export
+    or in the browser fallback path.
+    """
+    body_summary = listify(item.get("body_summary", []))
+    derived_groups = derive_major_summary_groups(body_summary)
+    legacy_importance = str(item.get("importance", "normal") or "normal").strip().lower()
+    db_major = legacy_importance == "major"
+
+    item["derived_major_candidate_groups"] = derived_groups
+    item["derived_major_candidate_count"] = len(derived_groups)
+    item["derived_importance"] = "major" if derived_groups else "normal"
+    item["display_importance"] = "major" if db_major else "normal"
+    item["importance_source"] = "db_importance_v052"
+    item["suppressed_derived_major_candidate"] = (not db_major and len(derived_groups) > 0)
+    item["major_without_highlight_candidate"] = (db_major and len(derived_groups) == 0)
+
+    visible_groups = derived_groups if db_major else []
+    item["major_summary_groups"] = visible_groups
+    item["major_group_count"] = len(visible_groups)
+    item["major_summary_indices"] = list(range(len(visible_groups)))
+    return item
 
 def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
     raw = {k: parse_notion_property(v) for k, v in (page.get("properties") or {}).items()}

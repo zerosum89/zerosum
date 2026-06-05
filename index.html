@@ -384,17 +384,15 @@ function hasV040MajorFields(e){
   return e && (Array.isArray(e.major_summary_groups) || Number(e.major_group_count||0)>0 || e.derived_importance || e.display_importance);
 }
 function getMajorGroups(e){
-  const groups=normalizeMajorSummaryGroups(e||{});
+  const dbMajor=String((e&&e.importance)||(e&&e.display_importance)||'normal').toLowerCase()==='major';
+  const groups=dbMajor ? normalizeMajorSummaryGroups(e||{}) : [];
   e.major_summary_groups=groups;
   e.major_group_count=groups.length;
-  if(!e.display_importance) e.display_importance=groups.length ? 'major' : (e.derived_importance||'normal');
+  e.display_importance=dbMajor ? 'major' : 'normal';
   return groups;
 }
 function isMajor(e){
-  const groups=getMajorGroups(e);
-  if(groups.length>0) return true;
-  // Legacy fallback until the next v040 export rewrites patch_view_model.json.
-  return !hasV040MajorFields(e) && String(e.importance||'').toLowerCase()==='major';
+  return String((e&&e.importance)||(e&&e.display_importance)||'normal').toLowerCase()==='major';
 }
 function cardSummary(e){
   if(isMajor(e)){

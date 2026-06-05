@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-AUDIT_VERSION = "github_actions_v047"
+AUDIT_VERSION = "github_actions_v048"
 HIGHLIGHT_POLICY = (
     "major_group: body_summary update-units are classified as major only when they describe "
     "structural game changes; generic domain and 신규-word matches are blocked. Multiple major units of the same type are grouped into one "
@@ -269,8 +269,14 @@ def _major_evidence_ok(text: str, *, require_target: bool = True) -> bool:
 
 
 def _is_specific_pve_structural_add(text: str) -> bool:
-    """v047: PvE Major requires target + content type + structural add/open action."""
+    """v048: PvE Major requires target + content type + structural add/open action, and excludes elite/generic monster additions and existing-content server openings."""
     if not _major_evidence_ok(text):
+        return False
+    # v048: existing content opened for a new server is operational availability, not a new dungeon/content structure.
+    if _rx(text, r"(신규 서버|새 서버|서버).{0,24}(월드 던전|파티 던전|던전).{0,24}(오픈|개방|열립니다|오픈됩니다|개방됩니다)"):
+        return False
+    # v048: elite/generic monster additions are not Major unless explicitly framed as a regular boss/raid/world-boss content addition.
+    if _has_any(text, ["정예 몬스터", "일반 몬스터", "몬스터 4종", "몬스터 추가", "사냥 대상"]) and not _rx(text, r"(신규|새로운).{0,18}(레이드|필드 보스|월드 보스|보스 콘텐츠)"):
         return False
     if _has_non_structural_context(text, [
         "시즌", "보스 교체", "난이도", "단계", "층", "이벤트", "임무", "의뢰", "페이지", "자동 이동", "노출",
@@ -299,7 +305,7 @@ def _is_specific_pve_structural_add(text: str) -> bool:
 def major_type_for_line(line: str) -> str | None:
     """Return Major type for structural update-units only.
 
-    v047 keeps Major as a strict boolean derived judgement.
+    v048 keeps Major as a strict boolean derived judgement.
     Source of truth is the body_summary/update-unit sentence only.
     PvE Major is further tightened: it requires concrete target + content type + add/open action.
     Reward/material explanations, mission/page/auto-move UI flow, generic related-content templates,
@@ -314,10 +320,11 @@ def major_type_for_line(line: str) -> str | None:
     if _is_specific_pve_structural_add(text):
         return "new_pve_content"
 
-    if not _has_non_structural_context(text, ["시즌", "매칭", "랭킹", "포인트", "보상"]) and _major_evidence_ok(text):
-        if _rx(text, r"(신규|새로운).{0,20}(전쟁 콘텐츠|전장 콘텐츠|점령전|공성전|수성전|쟁탈전|월드 PvP|PvP 콘텐츠|경쟁 콘텐츠|월드 격전지|격전지)"):
+    # v048: PvE monster additions must not be promoted to PvP/war just because they happen in a combat area.
+    if not _has_non_structural_context(text, ["시즌", "매칭", "랭킹", "포인트", "보상", "몬스터", "정예 몬스터", "사냥 대상"]) and _major_evidence_ok(text):
+        if _rx(text, r"(신규|새로운).{0,20}(전쟁 콘텐츠|전장 콘텐츠|점령전|공성전|수성전|쟁탈전|월드 PvP|PvP 콘텐츠|경쟁 콘텐츠|월드 격전지)"):
             return "new_pvp_war"
-        if _rx(text, r"(전쟁 콘텐츠|전장 콘텐츠|점령전|공성전|수성전|쟁탈전|월드 PvP|PvP 콘텐츠|경쟁 콘텐츠|월드 격전지|격전지).{0,20}(추가|도입|신설|오픈|개방)"):
+        if _rx(text, r"(전쟁 콘텐츠|전장 콘텐츠|점령전|공성전|수성전|쟁탈전|월드 PvP|PvP 콘텐츠|경쟁 콘텐츠|월드 격전지).{0,20}(추가|도입|신설|오픈|개방)"):
             return "new_pvp_war"
         if _rx(text, r"(전쟁|점령|공성|수성|쟁탈|경쟁).{0,12}(구조|규칙|방식).{0,20}(전면 개편|대규모 개편|개편|재편|변경)"):
             return "new_pvp_war"

@@ -1,6 +1,6 @@
 {
   "schema_version": "patch_view_model.v1",
-  "generated_at": "2026-06-05T23:05:04.325833+09:00",
+  "generated_at": "2026-06-06T00:04:21.516063+09:00",
   "source": "notion_db",
   "workflow_version": "github_actions_v048",
   "derived_data_version": "patch_view_model.derived.major_policy_v048",
@@ -11046,7 +11046,7 @@
       "title": "23.06.08 | 패치노트",
       "raw_title": "23.06.08 | 패치노트",
       "source_url": "https://cs.mir4.co.kr/post/82988",
-      "importance": "major",
+      "importance": "normal",
       "primary_category": [],
       "main_updates": [],
       "body_summary": [
@@ -14856,7 +14856,7 @@
       "title": "22.06.29 | 패치노트",
       "raw_title": "22.06.29 | 업데이트",
       "source_url": "https://m.cafe.daum.net/odin/DEH7/50",
-      "importance": "major",
+      "importance": "normal",
       "primary_category": [],
       "main_updates": [],
       "body_summary": [
@@ -17617,7 +17617,7 @@
       "title": "23.09.26 | 패치노트",
       "raw_title": "23.09.26 | 업데이트",
       "source_url": "https://m.cafe.daum.net/odin/DEH7/117",
-      "importance": "major",
+      "importance": "normal",
       "primary_category": [],
       "main_updates": [],
       "body_summary": [

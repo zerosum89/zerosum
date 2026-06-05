@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-AUDIT_VERSION = "github_actions_v042"
+AUDIT_VERSION = "github_actions_v043"
 HIGHLIGHT_POLICY = (
     "major_group: body_summary update-units are classified as major only when they describe "
     "structural game changes; generic domain and 신규-word matches are blocked. Multiple major units of the same type are grouped into one "
@@ -89,7 +89,7 @@ def has_any(text: str, words: list[str]) -> bool:
     return any(w in text for w in words)
 
 
-# v042: compatibility for workflow script and audit script naming.
+# v043: compatibility for workflow script and audit script naming.
 try:
     _has_any
 except NameError:
@@ -101,7 +101,7 @@ except NameError:
 STRUCTURAL_ADD_ACTIONS = ["신규", "새로운", "추가", "도입", "신설", "오픈", "확장"]
 STRUCTURAL_REWORK_ACTIONS = ["개편", "재편", "통합", "구조 변경", "구조가 변경", "구조가 개편", "규칙 변경", "방식 변경", "대규모"]
 
-# v042: these markers describe operational, reward, sales, season, cosmetic,
+# v043: these markers describe operational, reward, sales, season, cosmetic,
 # bug-fix, minor tuning, or convenience updates. They do not make a unit major
 # by themselves. They also suppress broad noun/action matching unless a
 # stronger structural allow phrase is present.
@@ -182,7 +182,7 @@ def _structural_added_or_reworked(text: str, nouns: list[str]) -> bool:
 def major_type_for_line(line: str) -> str | None:
     """Return a major type only for structural game changes.
 
-    v042 does not use MajorLevel and does not hardcode dates/titles. Major is
+    v043 does not use MajorLevel and does not hardcode dates/titles. Major is
     true only when a unit adds or substantially reworks a core playable,
     growth, class/skill, PvP/war, server/world, economy/crafting, or rule
     structure. Generic domain matches and the word "신규" are insufficient.
@@ -339,7 +339,7 @@ def main() -> int:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(rows)
-    print(f"[v042] major/highlight audit rows={len(rows)} issues={issue_count} reviews={review_count}")
+    print(f"[v043] major/highlight audit rows={len(rows)} issues={issue_count} reviews={review_count}")
     return 0
 
 

@@ -64,9 +64,11 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v042"
+WORKFLOW_VERSION = "github_actions_v043"
 
 
+DERIVED_DATA_VERSION = "patch_view_model.derived.major_policy_v043"
+MAJOR_POLICY_VERSION = "major_policy_v043"
 def canonical_url(url: str) -> str:
     if not url:
         return ""
@@ -195,7 +197,7 @@ def _has_any(text: str, words: list[str]) -> bool:
     return any(w in text for w in words)
 
 
-# v042: compatibility for workflow script and audit script naming.
+# v043: compatibility for workflow script and audit script naming.
 try:
     _has_any
 except NameError:
@@ -207,7 +209,7 @@ except NameError:
 STRUCTURAL_ADD_ACTIONS = ["신규", "새로운", "추가", "도입", "신설", "오픈", "확장"]
 STRUCTURAL_REWORK_ACTIONS = ["개편", "재편", "통합", "구조 변경", "구조가 변경", "구조가 개편", "규칙 변경", "방식 변경", "대규모"]
 
-# v042: these markers describe operational, reward, sales, season, cosmetic,
+# v043: these markers describe operational, reward, sales, season, cosmetic,
 # bug-fix, minor tuning, or convenience updates. They do not make a unit major
 # by themselves. They also suppress broad noun/action matching unless a
 # stronger structural allow phrase is present.
@@ -288,7 +290,7 @@ def _structural_added_or_reworked(text: str, nouns: list[str]) -> bool:
 def major_type_for_line(line: str) -> str | None:
     """Return a major type only for structural game changes.
 
-    v042 does not use MajorLevel and does not hardcode dates/titles. Major is
+    v043 does not use MajorLevel and does not hardcode dates/titles. Major is
     true only when a unit adds or substantially reworks a core playable,
     growth, class/skill, PvP/war, server/world, economy/crafting, or rule
     structure. Generic domain matches and the word "신규" are insufficient.
@@ -426,7 +428,7 @@ def enrich_major_highlight_fields(item: dict[str, Any]) -> dict[str, Any]:
     item["major_summary_indices"] = list(range(len(groups)))
     item["derived_importance"] = "major" if groups else "normal"
     item["display_importance"] = item["derived_importance"]
-    item["importance_source"] = "derived_from_structural_major_summary_groups_v042"
+    item["importance_source"] = "derived_from_structural_major_summary_groups_v043"
     return item
 
 
@@ -518,6 +520,19 @@ def existing_json_items() -> list[dict[str, Any]]:
     return []
 
 
+
+def existing_json_derived_data_version() -> str:
+    path = ROOT / "patch_view_model.json"
+    if not path.exists():
+        return ""
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if isinstance(data, dict):
+            return str(data.get("derived_data_version") or data.get("major_policy_version") or "")
+    except Exception:
+        return ""
+    return ""
+
 def stable_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return sorted(items, key=lambda x: (str(x.get("game", "")), str(x.get("actual_date", "")), str(x.get("source_url", ""))))
 
@@ -564,8 +579,11 @@ def export_patch_view_model() -> tuple[list[dict[str, Any]], str, bool]:
     items = [enrich_major_highlight_fields(dict(x)) for x in items]
 
     current_items = existing_json_items()
-    file_changed = stable_items(current_items) != stable_items(items)
+    source_items_changed = stable_items(current_items) != stable_items(items)
     existing_path = ROOT / "patch_view_model.json"
+    existing_derived_data_version = existing_json_derived_data_version()
+    derived_data_version_changed = existing_derived_data_version != DERIVED_DATA_VERSION
+    file_changed = source_items_changed or derived_data_version_changed
 
     if not file_changed and existing_path.exists():
         log("[STEP] patch_view_model.json unchanged; existing file preserved to avoid noisy commits")
@@ -574,14 +592,29 @@ def export_patch_view_model() -> tuple[list[dict[str, Any]], str, bool]:
             "schema_version": SCHEMA_VERSION,
             "generated_at": datetime.now(KST).isoformat(),
             "source": source,
+            "workflow_version": WORKFLOW_VERSION,
+            "derived_data_version": DERIVED_DATA_VERSION,
+            "major_policy_version": MAJOR_POLICY_VERSION,
             "items": items,
         }
         existing_path.write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding="utf-8")
-        log(f"[STEP] patch_view_model.json written: changed={file_changed}")
+        log(
+            "[STEP] patch_view_model.json written: "
+            f"source_items_changed={source_items_changed}, "
+            f"derived_data_version_changed={derived_data_version_changed}, "
+            f"existing_derived_data_version={existing_derived_data_version or 'none'}, "
+            f"new_derived_data_version={DERIVED_DATA_VERSION}"
+        )
 
     (ART / "patch_view_model_export_summary.json").write_text(json.dumps({
         "source": source,
         "items": len(items),
+        "source_items_changed": source_items_changed,
+        "derived_items_changed": derived_data_version_changed,
+        "derived_data_version_changed": derived_data_version_changed,
+        "existing_derived_data_version": existing_derived_data_version,
+        "derived_data_version": DERIVED_DATA_VERSION,
+        "major_policy_version": MAJOR_POLICY_VERSION,
         "file_changed": file_changed,
     }, ensure_ascii=False, indent=2), encoding="utf-8")
     return items, source, file_changed
@@ -2499,8 +2532,8 @@ def main() -> int:
         f"- RUN_TITLE_REPAIR: {RUN_TITLE_REPAIR}",
         f"- export_source: {export_source}",
         f"- public_items: {len(items)}",
-        f"- patch_view_model_stable_items_changed: {file_changed}",
-        "- patch_view_model_changed_note: stable item comparison only; git_deploy_result records actual file diff before push",
+        f"- patch_view_model_changed: {file_changed}",
+        "- patch_view_model_change_note: true means source items changed or derived_data_version changed; see patch_view_model_export_summary.json",
         f"- payload_preview_count: {len(payload_preview)}",
         f"- notion_write_attempted: {notion_write_result.get('write_attempted', False)}",
         f"- notion_write_created: {notion_write_result.get('created', 0)}",
@@ -2534,9 +2567,9 @@ def main() -> int:
         "",
         f"## {WORKFLOW_VERSION} scope",
         "",
-        "- v042 strict major detection: Major is allowed only for structural game changes, not domain-only matches",
-        "- v042 major grouping: structurally-qualified units of the same major_type are summarized into one red sentence",
-        "- v042 hardcoding guard: date/title-specific exception lists are not used for major filtering",
+        "- v043 strict major detection: Major is allowed only for structural game changes, not domain-only matches",
+        "- v043 major grouping: structurally-qualified units of the same major_type are summarized into one red sentence",
+        "- v043 hardcoding guard: date/title-specific exception lists are not used for major filtering",
         "- Explicit workflow identity: workflow_version, GITHUB_SHA, GITHUB_REF, run id, script SHA256",
         "- Detail URL guard: board/list URL candidates are written to invalid_url_candidates.csv",
         "- Rejected link artifacts are emitted per game profile",

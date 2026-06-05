@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-AUDIT_VERSION = "github_actions_v046"
+AUDIT_VERSION = "github_actions_v047"
 HIGHLIGHT_POLICY = (
     "major_group: body_summary update-units are classified as major only when they describe "
     "structural game changes; generic domain and 신규-word matches are blocked. Multiple major units of the same type are grouped into one "
@@ -190,6 +190,10 @@ def _rx(text: str, pattern: str) -> bool:
     return re.search(pattern, text, flags=re.IGNORECASE) is not None
 
 
+def _has_all(text: str, markers: list[str]) -> bool:
+    return all(m in text for m in markers)
+
+
 def _non_structural_markers() -> list[str]:
     """Change-type exclusions. Generic rules only; no date/page hardcoding."""
     return [
@@ -213,12 +217,27 @@ def _is_ambiguous_or_template_major_text(text: str) -> bool:
     """Reject vague/template-like summary sentences as Major evidence."""
     generic_markers = [
         "신규 및 변경 사항", "관련 이용 목표", "관련 이용", "신규/변경", "주요 변경", "다양한",
+        "관련 콘텐츠", "공략 구간", "플레이 목표", "관련 콘텐츠가 추가", "관련 콘텐츠가 추가·개편",
         "신규 필드·지역 또는 전용 사냥 구역", "월드 던전이 추가되거나 시즌이 갱신",
         "추가되거나", "또는", "보상 구조가 갱신", "보상 구조가 조정", "보상 구조가 확장",
         "보상 구성이 갱신", "보상 구성이 조정", "구성이 갱신", "구성이 개선",
-        "이용 흐름과 정보 확인 방식", "성장 재료 획득 루트가 조정",
+        "이용 흐름과 정보 확인 방식", "성장 재료 획득 루트가 조정", "신규/변경 사항",
     ]
     return _has_any(text, generic_markers)
+
+
+def _is_reward_or_material_explanation(text: str) -> bool:
+    """Reward/drop/material sentences are not Major evidence by themselves."""
+    reward_markers = [
+        "처치하면", "획득", "드랍", "드롭", "재료", "보상", "입장 비용", "구매 횟수", "교환", "상점",
+        "제작의 키 재료", "제작 재료", "획득 루트", "획득처", "아이템을 획득", "보상으로",
+    ]
+    return _has_any(text, reward_markers)
+
+
+def _is_ui_or_mission_flow(text: str) -> bool:
+    ui_markers = ["임무 페이지", "의뢰 페이지", "페이지", "노출", "자동 이동", "자동이동", "화면", "탭", "필터", "정렬", "표시"]
+    return _has_any(text, ui_markers)
 
 
 def _has_concrete_target(text: str) -> bool:
@@ -240,43 +259,65 @@ def _has_concrete_target(text: str) -> bool:
 def _major_evidence_ok(text: str, *, require_target: bool = True) -> bool:
     if _is_ambiguous_or_template_major_text(text):
         return False
+    if _is_reward_or_material_explanation(text):
+        return False
+    if _is_ui_or_mission_flow(text):
+        return False
     if require_target and not _has_concrete_target(text):
         return False
     return True
 
 
+def _is_specific_pve_structural_add(text: str) -> bool:
+    """v047: PvE Major requires target + content type + structural add/open action."""
+    if not _major_evidence_ok(text):
+        return False
+    if _has_non_structural_context(text, [
+        "시즌", "보스 교체", "난이도", "단계", "층", "이벤트", "임무", "의뢰", "페이지", "자동 이동", "노출",
+        "몬스터", "정예 몬스터", "일반 몬스터", "재료", "보상", "드랍", "처치하면",
+    ]):
+        # Keep explicit named boss/raid exceptions below; generic monster/reward/flow sentences stay excluded.
+        if not _rx(text, r"(신규|새로운).{0,18}(레이드|필드 보스|월드 보스|보스 콘텐츠)"):
+            return False
+    action = r"(추가|도입|신설|오픈|개방|공개|열립니다|추가됩니다|오픈됩니다|개방됩니다)"
+    # Chapter/region/world field additions.
+    if _rx(text, rf"(신규|새로운).{{0,18}}([A-Za-z가-힣0-9·'‘’\" ]{{2,40}})?(챕터|지역|대륙|필드){{1}}.{{0,18}}{action}"):
+        return True
+    if _rx(text, rf"(챕터|지역|대륙|필드).{{0,18}}{action}") and _rx(text, r"(신규|새로운|새 |오픈|개방)"):
+        return True
+    # Regular dungeon/raid/boss content additions. Do not accept season refreshes or difficulty/stage additions.
+    if _rx(text, rf"(신규|새로운).{{0,22}}(정규 던전|파티 던전|월드 던전|던전|레이드|필드 보스|월드 보스|보스 콘텐츠).{{0,22}}{action}"):
+        return True
+    if _rx(text, rf"(정규 던전|파티 던전|월드 던전|던전|레이드|필드 보스|월드 보스|보스 콘텐츠).{{0,22}}{action}") and _rx(text, r"(신규|새로운|새 |오픈|개방)"):
+        return True
+    # Main/sub quests only count when tied to a concrete new chapter/region, not as ordinary mission UI/flow.
+    if _rx(text, rf"(메인 퀘스트|서브 퀘스트).{{0,18}}{action}") and _has_any(text, ["챕터", "지역", "대륙"]):
+        return True
+    return False
+
+
 def major_type_for_line(line: str) -> str | None:
     """Return Major type for structural update-units only.
 
-    v046 keeps Major as a strict boolean derived judgement.
+    v047 keeps Major as a strict boolean derived judgement.
     Source of truth is the body_summary/update-unit sentence only.
-    Major requires a concrete structural target and an add/rework action.
-    Vague template sentences, mixed 'added or season renewed' phrasing,
-    season/event/BM/cosmetic/convenience/reward/bug/minor changes are rejected
-    by rule rather than by patch-specific hardcoding.
+    PvE Major is further tightened: it requires concrete target + content type + add/open action.
+    Reward/material explanations, mission/page/auto-move UI flow, generic related-content templates,
+    season/stage/difficulty additions, cosmetic/function adjustments, and mixed 'or/added or season renewed'
+    sentences are rejected by rule rather than by patch-specific hardcoding.
     """
     _text, d, combined = _major_text(line)
     text = combined
     if _is_ambiguous_or_template_major_text(text):
         return None
 
-    pve_exclude = ["시즌", "보스 교체", "난이도", "단계", "층", "이벤트"]
-    if not _has_non_structural_context(text, pve_exclude) and _major_evidence_ok(text):
-        if _rx(text, r"(신규|새로운|오픈).{0,18}(챕터|지역|대륙|필드|정규 콘텐츠|PvE 콘텐츠)"):
-            return "new_pve_content"
-        if _rx(text, r"(챕터|지역|대륙|필드|정규 콘텐츠|PvE 콘텐츠).{0,18}(추가|도입|신설|오픈)"):
-            return "new_pve_content"
-        if _rx(text, r"(신규|새로운).{0,22}(정규 던전|파티 던전|월드 던전|던전|레이드|보스 콘텐츠|보스 몬스터|보스)"):
-            return "new_pve_content"
-        if _rx(text, r"(정규 던전|파티 던전|월드 던전|던전|레이드|보스 콘텐츠|보스 몬스터).{0,22}(추가|도입|신설|오픈)"):
-            return "new_pve_content"
-        if _rx(text, r"(메인 퀘스트|서브 퀘스트).{0,18}(추가|도입|신설)") and _has_any(text, ["챕터", "지역", "대륙"]):
-            return "new_pve_content"
+    if _is_specific_pve_structural_add(text):
+        return "new_pve_content"
 
     if not _has_non_structural_context(text, ["시즌", "매칭", "랭킹", "포인트", "보상"]) and _major_evidence_ok(text):
         if _rx(text, r"(신규|새로운).{0,20}(전쟁 콘텐츠|전장 콘텐츠|점령전|공성전|수성전|쟁탈전|월드 PvP|PvP 콘텐츠|경쟁 콘텐츠|월드 격전지|격전지)"):
             return "new_pvp_war"
-        if _rx(text, r"(전쟁 콘텐츠|전장 콘텐츠|점령전|공성전|수성전|쟁탈전|월드 PvP|PvP 콘텐츠|경쟁 콘텐츠|월드 격전지|격전지).{0,20}(추가|도입|신설|오픈)"):
+        if _rx(text, r"(전쟁 콘텐츠|전장 콘텐츠|점령전|공성전|수성전|쟁탈전|월드 PvP|PvP 콘텐츠|경쟁 콘텐츠|월드 격전지|격전지).{0,20}(추가|도입|신설|오픈|개방)"):
             return "new_pvp_war"
         if _rx(text, r"(전쟁|점령|공성|수성|쟁탈|경쟁).{0,12}(구조|규칙|방식).{0,20}(전면 개편|대규모 개편|개편|재편|변경)"):
             return "new_pvp_war"
@@ -291,8 +332,8 @@ def major_type_for_line(line: str) -> str | None:
         if _major_evidence_ok(text) and _rx(text, r"(신규|새로운).{0,16}태세") and not _has_any(text, ["능력치 조정", "표시", "전환 상태", "조정"]):
             return "class_skill_system"
 
-    growth_exclude = ["수집", "획득처", "잠금", "유지할 수 있는 기능", "정보가 추가", "외형", "형상", "보상", "상품", "패키지", "계열 성장 시스템"]
-    if not _has_non_structural_context(text, growth_exclude):
+    growth_exclude = ["수집", "획득처", "잠금", "유지할 수 있는 기능", "정보가 추가", "외형", "형상", "보상", "상품", "패키지", "계열 성장 시스템", "재료"]
+    if not _has_non_structural_context(text, growth_exclude) and not _is_reward_or_material_explanation(text):
         if _major_evidence_ok(text) and _rx(text, r"(신규|새로운).{0,20}(성장 시스템|성장축|장비 부위|방어구 파츠|장비 파츠|스탯 축|스테이터스|각성 시스템|강화 시스템|계승 시스템|장비 체계)"):
             return "new_growth_axis"
         if _major_evidence_ok(text) and _rx(text, r"(성장 시스템|성장축|장비 부위|방어구 파츠|장비 파츠|스탯 축|스테이터스|각성 시스템|강화 시스템|계승 시스템|장비 체계).{0,20}(추가|도입|신설|확장|개편)"):
@@ -472,7 +513,7 @@ def main() -> int:
             writer.writeheader()
             writer.writerows(rows)
     write_major_quality_audit_xlsx(art / "major_quality_audit.xlsx", payload, rows)
-    print(f"[v046] major/highlight audit rows={len(rows)} issues={issue_count} reviews={review_count} xlsx=major_quality_audit.xlsx")
+    print(f"[v047] major/highlight audit rows={len(rows)} issues={issue_count} reviews={review_count} xlsx=major_quality_audit.xlsx")
     return 0
 
 

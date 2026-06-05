@@ -64,11 +64,11 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v045"
+WORKFLOW_VERSION = "github_actions_v046"
 
 
-DERIVED_DATA_VERSION = "patch_view_model.derived.major_policy_v045"
-MAJOR_POLICY_VERSION = "major_policy_v045"
+DERIVED_DATA_VERSION = "patch_view_model.derived.major_policy_v046"
+MAJOR_POLICY_VERSION = "major_policy_v046"
 def canonical_url(url: str) -> str:
     if not url:
         return ""
@@ -299,16 +299,17 @@ def _rx(text: str, pattern: str) -> bool:
 
 
 def _non_structural_markers() -> list[str]:
-    """Change-type exclusions. These are generic rules, not page/date exceptions."""
+    """Change-type exclusions. Generic rules only; no date/page hardcoding."""
     return [
-        "신규 시즌", "시즌 시작", "시즌이 시작", "새 시즌", "시즌 갱신", "시즌이 갱신", "시즌 종료", "시즌 보상",
+        "신규 시즌", "새 시즌", "시즌 시작", "시즌이 시작", "시즌 갱신", "시즌이 갱신", "시즌 종료", "시즌 보상", "시즌",
         "이벤트", "출석", "미션", "교환소", "쿠폰", "상자", "패키지", "상품", "상점", "판매", "구매", "혜택", "출시 기념",
         "지급", "회수", "보전", "삭제", "기간", "일정", "확률", "수량", "랭킹", "매칭", "시드", "포인트", "정산",
         "버그", "오류", "수정", "개선", "텍스트", "표시", "연출", "사운드", "안내", "알림", "UI", "편의", "검색", "프리셋", "자동",
-        "외형", "형상", "코스튬", "스킨", "의상", "아바타", "탈것", "보조 장비",
+        "외형", "형상", "코스튬", "스킨", "의상", "아바타", "탈것", "보조 장비", "무기 외형", "무기 형상",
         "수집 목록", "아이템 수집", "수집 25종", "잠금 기능", "획득처 정보", "기술 정보창",
-        "신규 지속 기술", "공통 신규 지속 기술", "일부", "소폭", "밸런스", "수치", "효과 조정", "난이도", "단계", "층",
-        "툴팁", "문구", "버튼", "아이콘", "색상",
+        "신규 지속 기술", "공통 신규 지속 기술", "클래스 변경", "Class Change", "클래스 변경권", "직업 변경",
+        "일부", "소폭", "밸런스", "수치", "효과 조정", "난이도", "단계", "층", "보스 교체",
+        "툴팁", "문구", "버튼", "아이콘", "색상", "품목", "구성", "구성 개선", "구성 갱신",
     ]
 
 
@@ -316,75 +317,111 @@ def _has_non_structural_context(text: str, extra: list[str] | None = None) -> bo
     return _has_any(text, _non_structural_markers() + list(extra or []))
 
 
+def _is_ambiguous_or_template_major_text(text: str) -> bool:
+    """Reject vague/template-like summary sentences as Major evidence."""
+    generic_markers = [
+        "신규 및 변경 사항", "관련 이용 목표", "관련 이용", "신규/변경", "주요 변경", "다양한",
+        "신규 필드·지역 또는 전용 사냥 구역", "월드 던전이 추가되거나 시즌이 갱신",
+        "추가되거나", "또는", "보상 구조가 갱신", "보상 구조가 조정", "보상 구조가 확장",
+        "보상 구성이 갱신", "보상 구성이 조정", "구성이 갱신", "구성이 개선",
+        "이용 흐름과 정보 확인 방식", "성장 재료 획득 루트가 조정",
+    ]
+    return _has_any(text, generic_markers)
+
+
+def _has_concrete_target(text: str) -> bool:
+    """Require an identifiable target name, quoted term, numbered chapter, or proper noun-like token."""
+    if re.search(r"[‘'\"][^‘’'\"]{2,40}[’'\"]", text):
+        return True
+    if re.search(r"\b\d+\s*(?:챕터|장|막|차|번째|th|st|nd|rd)\b", text, flags=re.IGNORECASE):
+        return True
+    english_targets = re.findall(r"\b[A-Z][A-Za-z0-9]+(?:\s+[A-Z][A-Za-z0-9]+){0,4}\b", text)
+    generic = {"PvE", "PvP", "UI", "BM", "NPC", "PC", "KR", "Global", "Class", "Change"}
+    if any(t not in generic and len(t) >= 4 for t in english_targets):
+        return True
+    if re.search(r"[가-힣A-Za-z0-9·]{2,24}\s*(?:챕터|지역|대륙|필드|던전|레이드|보스|클래스|직업|전직|태세|성장 시스템|성장축|장비 부위|방어구 파츠|스탯 축|스테이터스|서버군|월드군)", text):
+        if not re.search(r"(?:신규|새로운|정규|월드|파티|필드·지역|전용 사냥 구역)\s*(?:챕터|지역|대륙|필드|던전|레이드|보스|콘텐츠)", text):
+            return True
+    return False
+
+
+def _major_evidence_ok(text: str, *, require_target: bool = True) -> bool:
+    if _is_ambiguous_or_template_major_text(text):
+        return False
+    if require_target and not _has_concrete_target(text):
+        return False
+    return True
+
+
 def major_type_for_line(line: str) -> str | None:
     """Return Major type for structural update-units only.
 
-    v045 keeps Major as a strict true/false derived judgement.
+    v046 keeps Major as a strict boolean derived judgement.
     Source of truth is the body_summary/update-unit sentence only.
-    Legacy importance, domain tags, card_summary, source title, and the word
-    "신규" alone must not create Major.
-
-    Major requires both a concrete core target and a structural action.
-    Explicitly non-structural change types such as season renewal, event/reward,
-    BM/product, cosmetic/appearance, convenience/UI, bug fixes, item grant/recovery,
-    minor balance, stages/floors/difficulty and search/preset/helper features are
-    rejected by rule rather than by hardcoded patch exceptions.
+    Major requires a concrete structural target and an add/rework action.
+    Vague template sentences, mixed 'added or season renewed' phrasing,
+    season/event/BM/cosmetic/convenience/reward/bug/minor changes are rejected
+    by rule rather than by patch-specific hardcoding.
     """
     _text, d, combined = _major_text(line)
     text = combined
+    if _is_ambiguous_or_template_major_text(text):
+        return None
 
-    pve_exclude = ["시즌", "새 시즌", "시즌 시작", "시즌이 시작", "시즌 갱신", "시즌이 갱신", "보스 교체", "신규 서버"]
-    if not _has_non_structural_context(text, pve_exclude):
-        if _rx(text, r"(신규|새로운).{0,16}(챕터|지역|대륙|필드|월드|정규 콘텐츠|PvE 콘텐츠)"):
+    pve_exclude = ["시즌", "보스 교체", "난이도", "단계", "층", "이벤트"]
+    if not _has_non_structural_context(text, pve_exclude) and _major_evidence_ok(text):
+        if _rx(text, r"(신규|새로운|오픈).{0,18}(챕터|지역|대륙|필드|정규 콘텐츠|PvE 콘텐츠)"):
             return "new_pve_content"
-        if _rx(text, r"(챕터|지역|대륙|필드|정규 콘텐츠|PvE 콘텐츠).{0,16}(추가|도입|신설|오픈)"):
+        if _rx(text, r"(챕터|지역|대륙|필드|정규 콘텐츠|PvE 콘텐츠).{0,18}(추가|도입|신설|오픈)"):
             return "new_pve_content"
-        if _rx(text, r"(신규|새로운).{0,20}(정규 던전|파티 던전|월드 던전|던전|레이드|보스 콘텐츠|보스 몬스터|보스)"):
+        if _rx(text, r"(신규|새로운).{0,22}(정규 던전|파티 던전|월드 던전|던전|레이드|보스 콘텐츠|보스 몬스터|보스)"):
             return "new_pve_content"
-        if _rx(text, r"(정규 던전|파티 던전|월드 던전|던전|레이드|보스 콘텐츠|보스 몬스터).{0,20}(추가|도입|신설|오픈)"):
+        if _rx(text, r"(정규 던전|파티 던전|월드 던전|던전|레이드|보스 콘텐츠|보스 몬스터).{0,22}(추가|도입|신설|오픈)"):
             return "new_pve_content"
-        if _rx(text, r"(메인 퀘스트|서브 퀘스트).{0,16}(추가|도입|신설)") and _has_any(text, ["챕터", "지역", "대륙"]):
+        if _rx(text, r"(메인 퀘스트|서브 퀘스트).{0,18}(추가|도입|신설)") and _has_any(text, ["챕터", "지역", "대륙"]):
             return "new_pve_content"
 
-    if not _has_non_structural_context(text, ["시즌", "새 시즌", "시즌 시작", "시즌이 시작"]):
-        if _rx(text, r"(신규|새로운).{0,18}(전쟁 콘텐츠|전장 콘텐츠|점령전|공성전|수성전|쟁탈전|월드 PvP|PvP 콘텐츠|경쟁 콘텐츠|월드 격전지|격전지)"):
+    if not _has_non_structural_context(text, ["시즌", "매칭", "랭킹", "포인트", "보상"]) and _major_evidence_ok(text):
+        if _rx(text, r"(신규|새로운).{0,20}(전쟁 콘텐츠|전장 콘텐츠|점령전|공성전|수성전|쟁탈전|월드 PvP|PvP 콘텐츠|경쟁 콘텐츠|월드 격전지|격전지)"):
             return "new_pvp_war"
-        if _rx(text, r"(전쟁 콘텐츠|전장 콘텐츠|점령전|공성전|수성전|쟁탈전|월드 PvP|PvP 콘텐츠|경쟁 콘텐츠|월드 격전지|격전지).{0,18}(추가|도입|신설|오픈)"):
+        if _rx(text, r"(전쟁 콘텐츠|전장 콘텐츠|점령전|공성전|수성전|쟁탈전|월드 PvP|PvP 콘텐츠|경쟁 콘텐츠|월드 격전지|격전지).{0,20}(추가|도입|신설|오픈)"):
             return "new_pvp_war"
-        if _rx(text, r"(전쟁|점령|공성|수성|쟁탈|경쟁).{0,12}(구조|규칙|방식).{0,18}(전면 개편|대규모 개편|개편|재편|변경)"):
+        if _rx(text, r"(전쟁|점령|공성|수성|쟁탈|경쟁).{0,12}(구조|규칙|방식).{0,20}(전면 개편|대규모 개편|개편|재편|변경)"):
             return "new_pvp_war"
 
-    if not _has_non_structural_context(text, ["전설 보조 장비", "지속 기술", "기술 추가", "스킬 추가"]):
-        if _rx(text, r"(신규|새로운).{0,16}(클래스|직업|전직)"):
+    if not _has_non_structural_context(text, ["전설 보조 장비", "지속 기술", "기술 추가", "스킬 추가", "Class Change", "클래스 변경", "변경권"]):
+        if _major_evidence_ok(text) and _rx(text, r"(신규|새로운).{0,16}(클래스|직업|전직)"):
             return "class_skill_system"
-        if _rx(text, r"(클래스|직업|전직).{0,8}(추가|도입|신설)") and not _rx(text, r"(클래스별|전 클래스|클래스 공통)"):
+        if _major_evidence_ok(text) and _rx(text, r"(클래스|직업|전직).{0,8}(추가|도입|신설)") and not _rx(text, r"(클래스별|전 클래스|클래스 공통|변경|변경권)"):
             return "class_skill_system"
-        if _rx(text, r"(스킬 체계|스킬 시스템|클래스 구조|전직 구조|태세 시스템).{0,18}(추가|도입|전면 개편|대규모 개편|개편|재편)"):
+        if _rx(text, r"(스킬 체계|스킬 시스템|클래스 구조|전직 구조|태세 시스템).{0,20}(추가|도입|전면 개편|대규모 개편|개편|재편)") and _major_evidence_ok(text, require_target=False):
             return "class_skill_system"
-        if _rx(text, r"(신규|새로운).{0,16}태세") and not _has_any(text, ["능력치 조정", "표시", "전환 상태"]):
+        if _major_evidence_ok(text) and _rx(text, r"(신규|새로운).{0,16}태세") and not _has_any(text, ["능력치 조정", "표시", "전환 상태", "조정"]):
             return "class_skill_system"
 
-    growth_exclude = ["수집", "획득처", "잠금", "유지할 수 있는 기능", "정보가 추가"]
+    growth_exclude = ["수집", "획득처", "잠금", "유지할 수 있는 기능", "정보가 추가", "외형", "형상", "보상", "상품", "패키지", "계열 성장 시스템"]
     if not _has_non_structural_context(text, growth_exclude):
-        if _rx(text, r"(신규|새로운).{0,18}(성장 시스템|성장축|장비 부위|방어구 파츠|장비 파츠|스탯 축|스테이터스|각성 시스템|강화 시스템|계승 시스템|장비 체계)"):
+        if _major_evidence_ok(text) and _rx(text, r"(신규|새로운).{0,20}(성장 시스템|성장축|장비 부위|방어구 파츠|장비 파츠|스탯 축|스테이터스|각성 시스템|강화 시스템|계승 시스템|장비 체계)"):
             return "new_growth_axis"
-        if _rx(text, r"(성장 시스템|성장축|장비 부위|방어구 파츠|장비 파츠|스탯 축|스테이터스|각성 시스템|강화 시스템|계승 시스템|장비 체계).{0,18}(추가|도입|신설|확장|개편)"):
+        if _major_evidence_ok(text) and _rx(text, r"(성장 시스템|성장축|장비 부위|방어구 파츠|장비 파츠|스탯 축|스테이터스|각성 시스템|강화 시스템|계승 시스템|장비 체계).{0,20}(추가|도입|신설|확장|개편)"):
             return "new_growth_axis"
-        if _has_any(text, ["성장 단계가 확장", "장기 성장축이 확장", "장비 축복 시스템이 추가", "수호정령이 새롭게 추가"]):
+        if _major_evidence_ok(text) and _has_any(text, ["성장 단계가 확장", "장기 성장축이 확장", "장비 축복 시스템이 추가", "수호정령이 새롭게 추가"]):
             return "new_growth_axis"
 
-    if not _has_non_structural_context(text):
+    if not _has_non_structural_context(text, ["이전권", "회수", "지급", "보상"]):
         if _has_any(text, ["서버 통합", "월드군 재편", "서버군 재편", "신규 서버군", "신규 월드군"]):
             return "server_world_structure"
-        if _rx(text, r"(서버 구조|월드 구조|서버 이전 구조|서버 매칭 구조).{0,18}(개편|재편|변경|통합)"):
+        if _rx(text, r"(서버 구조|월드 구조|서버 이전 구조|서버 매칭 구조).{0,20}(개편|재편|변경|통합)"):
             return "server_world_structure"
 
-    if not _has_non_structural_context(text, ["품목", "구성"]):
-        if _rx(text, r"(제작 구조|거래 구조|경제 구조|재화 구조|교환 구조|거래소 구조|제작 시스템|거래 시스템|재화 흐름|소모 구조|획득 구조).{0,20}(추가|도입|개편|재편|변경)"):
+    if not _has_non_structural_context(text, ["품목", "구성", "교환 아이템", "보상"]):
+        if _rx(text, r"(제작 구조|거래 구조|경제 구조|재화 구조|교환 구조|거래소 구조|제작 시스템|거래 시스템|재화 흐름|소모 구조|획득 구조).{0,22}(추가|도입|개편|재편|변경)"):
             return "economy_crafting_system"
 
-    if not _has_non_structural_context(text):
-        if _rx(text, r"(진행 구조|보상 구조|참여 구조|규칙 구조|콘텐츠 구조|핵심 규칙).{0,20}(전면 개편|대규모 개편|개편|재편|변경)"):
+    if not _has_non_structural_context(text, ["보상 구성이", "보상 갱신"]):
+        if _rx(text, r"(진행 구조|참여 구조|규칙 구조|콘텐츠 구조|핵심 규칙).{0,22}(전면 개편|대규모 개편|개편|재편|변경)"):
+            return "major_rule_rework"
+        if _rx(text, r"보상 구조.{0,12}(전면 개편|대규모 개편|개편|재편)"):
             return "major_rule_rework"
 
     return None
@@ -473,7 +510,7 @@ def enrich_major_highlight_fields(item: dict[str, Any]) -> dict[str, Any]:
     item["major_summary_indices"] = list(range(len(groups)))
     item["derived_importance"] = "major" if groups else "normal"
     item["display_importance"] = item["derived_importance"]
-    item["importance_source"] = "derived_from_body_summary_structural_major_groups_v044"
+    item["importance_source"] = "derived_from_body_summary_structural_major_groups_v046"
     return item
 
 

@@ -7,11 +7,11 @@ import re
 from pathlib import Path
 from typing import Any
 
-AUDIT_VERSION = "github_actions_v040"
+AUDIT_VERSION = "github_actions_v041"
 HIGHLIGHT_POLICY = (
-    "major_group: body_summary update-units are first classified as major types; "
-    "multiple major units of the same type are grouped into one red summary sentence. "
-    "Card major state is derived from major_group_count >= 1."
+    "major_group: body_summary update-units are classified as major only when they describe "
+    "structural game changes. Multiple major units of the same type are grouped into one "
+    "red summary sentence. Card major state is derived from major_group_count >= 1."
 )
 
 MAJOR_TYPE_ORDER = [
@@ -89,29 +89,132 @@ def has_any(text: str, words: list[str]) -> bool:
     return any(w in text for w in words)
 
 
+STRUCTURAL_ADD_ACTIONS = ["신규", "새로운", "추가", "도입", "신설", "오픈", "확장"]
+STRUCTURAL_REWORK_ACTIONS = ["개편", "재편", "통합", "구조 변경", "구조가 변경", "구조가 개편", "규칙 변경", "방식 변경", "대규모"]
+OPERATIONAL_MINOR_MARKERS = [
+    "시즌", "이벤트", "출석", "미션", "교환소", "쿠폰", "지급", "회수", "삭제", "보상",
+    "상자", "패키지", "상품", "패스", "소환권", "상점", "판매", "구매", "기간", "일정",
+    "버그", "오류", "수정", "개선", "텍스트", "표시", "연출", "사운드", "확률", "수량",
+    "랭킹", "매칭", "시드", "포인트", "정산", "밸런스", "수치", "효과 조정", "일부",
+]
+
+
+def _has_structural_action(text: str) -> bool:
+    return has_any(text, STRUCTURAL_ADD_ACTIONS + STRUCTURAL_REWORK_ACTIONS)
+
+
+def _has_operational_minor_marker(text: str) -> bool:
+    return has_any(text, OPERATIONAL_MINOR_MARKERS)
+
+
+def _contains_structural_phrase(text: str, phrases: list[str]) -> bool:
+    return any(p in text for p in phrases)
+
+
+def _structural_added_or_reworked(text: str, nouns: list[str]) -> bool:
+    return has_any(text, nouns) and _has_structural_action(text)
+
+
+def _not_minor_unless_structural(text: str, structural_phrases: list[str]) -> bool:
+    if _contains_structural_phrase(text, structural_phrases):
+        return True
+    return not _has_operational_minor_marker(text)
+
+
 def major_type_for_line(line: str) -> str | None:
+    """Return a major type only for structural game changes.
+
+    v041 intentionally blocks domain-only detection.  A unit is major only when
+    it adds/reworks a core content, PvP, growth, class, server/world, economy,
+    or rule structure.  Operational updates, rewards, shop/BM, events, minor
+    tuning, and bug fixes are excluded unless the same sentence explicitly
+    describes a structural system/rule/axis change.
+    """
     text = clean_line(line)
     d = domain(text)
-    is_event_or_bm = d.startswith(("이벤트", "이벤트/보상", "상점/BM", "상점", "보상"))
-    bm_major = has_any(text, ["수집 효과", "능력치", "성장축", "전용 장비", "아이템 수집", "제작 구조", "거래 구조"])
-    if is_event_or_bm and not bm_major:
-        return None
-    if "PvP" in d or has_any(text, ["공성", "수성", "전쟁", "점령", "쟁탈", "서버 침공", "전장", "월드 던전", "경쟁 콘텐츠"]):
-        return "new_pvp_war"
-    if "클래스" in d or has_any(text, ["클래스", "전직", "스킬", "태세"]):
-        return "class_skill_system"
-    if "서버" in d or has_any(text, ["서버 이전", "서버 통합", "신규 서버", "월드군", "서버군"]):
-        return "server_world_structure"
-    if "성장" in d or "장비" in d or has_any(text, ["성장 시스템", "방어구", "무기 형상", "유물", "능력치", "스테이터스", "강화", "각성", "아이템 수집", "도감", "전용 장비"]):
-        return "new_growth_axis"
-    if "경제" in d or "거래" in d or has_any(text, ["제작", "거래소", "재화", "교환 구조", "경제"]):
-        return "economy_crafting_system"
-    if "PvE" in d or has_any(text, ["챕터", "지역", "던전", "보스", "레이드", "성채", "탑", "퀘스트", "대륙"]):
-        return "new_pve_content"
-    if has_any(text, ["개편", "구조", "규칙", "보상 구조", "진행 구조"]):
-        return "major_rule_rework"
-    return None
+    body = text.split(":", 1)[1].strip() if ":" in text else text
+    combined = f"{d} {body}"
 
+    # 1) PvP/war: require a new/reworked competitive structure, not season/reward/matching notices.
+    pvp_structural_phrases = [
+        "신규 전쟁", "신규 전장", "신규 점령", "신규 공성", "신규 PvP", "신규 경쟁 콘텐츠",
+        "전쟁 콘텐츠가 추가", "전장 콘텐츠가 추가", "점령전 콘텐츠가 추가", "공성전 콘텐츠가 추가",
+        "PvP 구조", "전쟁 구조", "점령 구조", "공성 구조", "경쟁 구조", "서버 단위 경쟁 구조",
+    ]
+    if _contains_structural_phrase(combined, pvp_structural_phrases):
+        return "new_pvp_war"
+    if _structural_added_or_reworked(combined, ["전쟁", "전장", "점령전", "공성전", "수성전", "쟁탈전", "월드 PvP", "경쟁 콘텐츠"]):
+        if _not_minor_unless_structural(combined, ["구조", "규칙", "방식", "콘텐츠가 추가", "신규"]):
+            return "new_pvp_war"
+
+    # 2) Class/skill: require a new class/job/stance/skill system or large system rework.
+    class_structural_phrases = [
+        "신규 클래스", "클래스가 추가", "신규 전직", "전직이 추가", "신규 직업", "직업이 추가",
+        "태세 시스템", "스킬 체계", "스킬 시스템", "클래스 구조", "전직 구조", "대규모 스킬 개편",
+    ]
+    if _contains_structural_phrase(combined, class_structural_phrases):
+        return "class_skill_system"
+    if _structural_added_or_reworked(combined, ["클래스", "직업", "전직", "태세", "스킬 체계", "스킬 시스템"]):
+        if _not_minor_unless_structural(combined, ["신규", "시스템", "체계", "구조", "대규모"]):
+            return "class_skill_system"
+
+    # 3) Server/world: require world/server structure change, not ticket grant/recovery or schedule changes.
+    server_structural_phrases = [
+        "서버 통합", "월드군", "서버군", "신규 서버", "서버 구조", "월드 구조",
+        "서버 이전 구조", "서버 이전 규칙", "서버 매칭 구조", "서버군 재편", "월드군 재편",
+    ]
+    if _contains_structural_phrase(combined, server_structural_phrases):
+        if not _contains_structural_phrase(combined, ["이전권", "회수", "삭제", "지급", "보상", "기간 연장"]):
+            return "server_world_structure"
+    if _structural_added_or_reworked(combined, ["서버", "월드", "월드군", "서버군"]):
+        if _not_minor_unless_structural(combined, ["통합", "재편", "신규 서버", "구조", "규칙"]):
+            return "server_world_structure"
+
+    # 4) Growth/equipment: require a new growth axis/system/part/stat, not rewards or item grants.
+    growth_structural_phrases = [
+        "신규 성장", "성장 시스템", "성장축", "신규 장비 부위", "신규 방어구 파츠", "신규 파츠",
+        "신규 능력치", "신규 스테이터스", "스테이터스가 추가", "능력치가 추가", "각성 시스템",
+        "강화 시스템", "유물 시스템", "아이템 수집", "도감 시스템", "전용 장비가 추가", "장비 구성이 추가",
+    ]
+    if _contains_structural_phrase(combined, growth_structural_phrases) and _has_structural_action(combined):
+        if _not_minor_unless_structural(combined, ["시스템", "성장축", "부위", "파츠", "능력치", "스테이터스", "도감", "수집", "전용 장비"]):
+            return "new_growth_axis"
+    if _structural_added_or_reworked(combined, ["성장", "장비 부위", "방어구 파츠", "스테이터스", "능력치", "각성", "강화 시스템", "유물 시스템", "도감"]):
+        if _not_minor_unless_structural(combined, ["시스템", "성장축", "신규", "추가", "개편"]):
+            return "new_growth_axis"
+
+    # 5) Economy/crafting: require economy/crafting/trading structure, not shop/product/reward updates.
+    economy_structural_phrases = [
+        "제작 구조", "거래 구조", "경제 구조", "재화 구조", "교환 구조", "거래소 구조",
+        "제작 시스템", "거래 시스템", "재화 흐름", "소모 구조", "획득 구조",
+    ]
+    if _contains_structural_phrase(combined, economy_structural_phrases) and _has_structural_action(combined):
+        return "economy_crafting_system"
+    if _structural_added_or_reworked(combined, ["제작", "거래", "거래소", "재화", "경제"]):
+        if _not_minor_unless_structural(combined, ["구조", "시스템", "흐름", "소모", "획득"]):
+            return "economy_crafting_system"
+
+    # 6) PvE content: require new/reworked playable content, not event reward/content schedule mentions.
+    pve_structural_phrases = [
+        "신규 챕터", "신규 지역", "신규 대륙", "신규 던전", "신규 레이드", "신규 보스", "신규 퀘스트",
+        "챕터가 추가", "지역이 추가", "던전이 추가", "레이드가 추가", "보스가 추가", "퀘스트가 추가",
+        "파티 던전", "월드 던전", "무한의 탑", "성채", "신규 콘텐츠",
+    ]
+    if _contains_structural_phrase(combined, pve_structural_phrases) and _has_structural_action(combined):
+        if _not_minor_unless_structural(combined, ["신규", "추가", "개편", "콘텐츠", "던전", "레이드", "챕터", "지역"]):
+            return "new_pve_content"
+    if _structural_added_or_reworked(combined, ["챕터", "지역", "대륙", "던전", "레이드", "보스", "성채", "탑", "퀘스트", "콘텐츠"]):
+        if _not_minor_unless_structural(combined, ["신규", "추가", "개편", "구조"]):
+            return "new_pve_content"
+
+    # 7) Major rule rework: require explicit structural rule/progression/reward rework.
+    if _contains_structural_phrase(combined, ["진행 구조", "보상 구조", "참여 구조", "규칙 구조", "콘텐츠 구조", "핵심 규칙"]):
+        if has_any(combined, ["개편", "변경", "조정", "재편"]):
+            return "major_rule_rework"
+    if has_any(combined, ["규칙", "방식", "구조"]) and has_any(combined, ["개편", "재편", "대규모 변경"]):
+        if not _has_operational_minor_marker(combined):
+            return "major_rule_rework"
+    return None
 
 def derive_groups(body_lines: list[str]) -> list[dict[str, Any]]:
     grouped: dict[str, dict[str, Any]] = {}
@@ -214,7 +317,7 @@ def main() -> int:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(rows)
-    print(f"[v040] major/highlight audit rows={len(rows)} issues={issue_count} reviews={review_count}")
+    print(f"[v041] major/highlight audit rows={len(rows)} issues={issue_count} reviews={review_count}")
     return 0
 
 

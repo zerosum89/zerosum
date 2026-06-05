@@ -1,10 +1,10 @@
 {
   "schema_version": "patch_view_model.v1",
-  "generated_at": "2026-06-05T20:43:10.170507+09:00",
+  "generated_at": "2026-06-05T21:06:37.392137+09:00",
   "source": "notion_db",
-  "workflow_version": "github_actions_v044",
-  "derived_data_version": "patch_view_model.derived.major_policy_v044",
-  "major_policy_version": "major_policy_v044",
+  "workflow_version": "github_actions_v045",
+  "derived_data_version": "patch_view_model.derived.major_policy_v045",
+  "major_policy_version": "major_policy_v045",
   "items": [
     {
       "page_id": "3753453a-cf42-81dc-b378-de6f1692b852",
@@ -122,33 +122,11 @@
         "길드/성장"
       ],
       "card_summary": "성장/장비 · PvP/전쟁 · 클래스/스킬 · PvE 콘텐츠",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            9
-          ],
-          "text": "PvE 콘텐츠: 파티 던전 신규 시즌이 시작되고 보스 몬스터 ‘크라부스’가 등장합니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "성장/장비: 클래스별 신규 무기 외형이 추가되고, 신화 등급 무기 외형 관련 성장 조건과 보유 효과가 확장됩니다."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -189,11 +167,23 @@
         "이벤트/보상"
       ],
       "card_summary": "성장/장비 · PvP/전쟁 · 경제/보상 · PvE 콘텐츠",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            2
+          ],
+          "text": "PvP/전쟁: 신규 월드 배틀프론트 ‘Auber Lava Fortress’가 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -265,33 +255,11 @@
         "버그 수정"
       ],
       "card_summary": "길드/성장 · PvE 콘텐츠 · 경제/보상 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "PvE 콘텐츠: 그림자 성채 신규 단계가 추가되어 성채 공략 구간이 확장됩니다."
-        },
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            7
-          ],
-          "text": "성장/장비: 신규 스테이터스가 추가되어 캐릭터 전투 능력 표시와 성장 지표가 확장됩니다."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -1033,11 +1001,23 @@
         "PvE 콘텐츠"
       ],
       "card_summary": "경제/거래 · PvE 콘텐츠",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            1
+          ],
+          "text": "PvE 콘텐츠: 신규 및 변경 사항이 추가되어 관련 이용 목표와 보상 구조가 갱신되었습니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -1171,23 +1151,11 @@
         "이벤트/보상"
       ],
       "card_summary": "PvE 콘텐츠 · 이벤트/보상",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvE 콘텐츠: 일반 던전 4종의 개편과 신규 장비 수집 추가, 월드 던전 이용 시간 및 난이도가 변경됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -1766,23 +1734,11 @@
         "버그 수정"
       ],
       "card_summary": "이벤트/보상 · 버그 수정",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "버그 수정: [NPC] 에픽 던전 및 월드 던전에 배치된 상인의 위치 정보 클릭 시, 일반 던전 화면이 오픈 되던 현상이 수정됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -1971,12 +1927,11 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            0,
-            2
+            0
           ],
-          "text": "PvE 콘텐츠: 월드 던전에 신규 사냥터, 길드 던전Ⅰ,Ⅱ에 최상급 난이도 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
+          "text": "PvE 콘텐츠: 월드 던전에 신규 사냥터가 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -2140,21 +2095,11 @@
             7
           ],
           "text": "PvE 콘텐츠: 부트캠프 2기 및 3기의 월드 던전이 오픈됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            5
-          ],
-          "text": "클래스/스킬: 클래스별 신규 무기 외형 4종이 추가됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -2193,23 +2138,11 @@
         "경제/거래"
       ],
       "card_summary": "서버 통합",
-      "major_summary_groups": [
-        {
-          "major_type": "server_world_structure",
-          "domain": "서버/월드",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "편의/UI: 서버그룹 총력전 결과에 따라 서버 통합이 진행됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -2240,33 +2173,11 @@
         "PvP/전쟁"
       ],
       "card_summary": "PvE 콘텐츠 · 편의/UI · 성장/장비 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvE 콘텐츠: 에픽 던전: 하르페논 성소 상위 난이도 지역 ‘염원의 신역’이 추가됩니다."
-        },
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "성장/장비: 길드 특성 능력치 3페이지가 추가됩니다."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -2405,29 +2316,18 @@
       "card_summary": "신규 필드",
       "major_summary_groups": [
         {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "편의/UI: 신 트리에스테 공국에 다섯 번째 필드 ‘카르데일’이 추가됩니다."
-        },
-        {
           "major_type": "new_growth_axis",
           "domain": "성장/장비",
-          "source_unit_count": 2,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            1,
             2
           ],
-          "text": "성장/장비: 내갑, 장비에 축복을 부여하여 능력치를 획득하는 장비 축복 시스템 관련 성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다."
+          "text": "성장/장비: 장비에 축복을 부여하여 능력치를 획득하는 장비 축복 시스템이 추가됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -2530,23 +2430,11 @@
         "상점/BM"
       ],
       "card_summary": "클래스/스킬 · PvE 콘텐츠 · 편의/UI · 이벤트/보상",
-      "major_summary_groups": [
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "클래스/스킬: 기본 능력치 (체력/정신/인내) 획득 시 해당 능력치에 의해 증가하는 세부 능력치가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -2626,22 +2514,11 @@
             0
           ],
           "text": "PvE 콘텐츠: 신원을 식별할 수 없는 익명 던전 ‘테네리스 해협’이 추가됩니다."
-        },
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            2,
-            6
-          ],
-          "text": "성장/장비: 전설 등급 각반과 신발 관련 성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -2913,23 +2790,11 @@
         "상점/BM"
       ],
       "card_summary": "PvE 콘텐츠 · 클래스/스킬 · 편의/UI · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "클래스/스킬: 클래스 별 전설 보조 장비가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -3192,23 +3057,11 @@
         "이벤트/보상"
       ],
       "card_summary": "클래스/스킬 · 서버/월드 · 이벤트/보상",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            3
-          ],
-          "text": "서버/월드: 신규 서버 '도노반'과 '에스텔라' 서버의 월드 던전이 오픈됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -3241,15 +3094,6 @@
       "card_summary": "클래스/스킬 · PvP/전쟁 · PvE 콘텐츠 · 편의/UI",
       "major_summary_groups": [
         {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "PvE 콘텐츠: 익명 에픽 ‘테네리스 해협’ 던전에 Lv.110 낙망의 해역 지역이 추가되며, 일부 지역의 입장 조건이 변경됩니다."
-        },
-        {
           "major_type": "new_growth_axis",
           "domain": "성장/장비",
           "source_unit_count": 1,
@@ -3259,10 +3103,9 @@
           "text": "클래스/스킬: 다양한 능력치 효과와 기술을 제공하는 귀여운 성장 시스템 ‘수호정령’이 새롭게 추가됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -3476,23 +3319,11 @@
         "서버/월드"
       ],
       "card_summary": "이벤트/보상 · PvE 콘텐츠 · 클래스/스킬 · PvP/전쟁",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            6
-          ],
-          "text": "서버/월드: 업데이트 이후 기존 서버와 신규 서버 모두 상점에서 판매되는 클래스 체인지 티켓(55,000원)을 구매하여 횟수 제한 없이 클래스 체인지가 가능합니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -3561,21 +3392,11 @@
             2
           ],
           "text": "PvE 콘텐츠: 마사르타 기암 성역 7지역이 추가됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            3
-          ],
-          "text": "클래스/스킬: 전 클래스 공통 신규 전설 등급 기술이 추가됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -3744,23 +3565,11 @@
         "이벤트/보상"
       ],
       "card_summary": "편의/UI · PvE 콘텐츠 · 경제/거래 · PvP/전쟁",
-      "major_summary_groups": [
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "편의/UI: 신규 영웅 상급 내갑 2종이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -3818,23 +3627,11 @@
         "이벤트/보상"
       ],
       "card_summary": "편의/UI · 클래스/스킬 · 상점/BM · 이벤트/보상",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "클래스/스킬: 공헌 주화 상인이 판매하는 클래스 공통 신규 지속 기술이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -3939,27 +3736,16 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            0,
-            1
-          ],
-          "text": "PvE 콘텐츠: 디트슈타인, 몽환의 미궁 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        },
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
           "source_unit_count": 1,
           "source_unit_indices": [
-            6
+            1
           ],
-          "text": "성장/장비: 불멸 탈 것을 성장시켜 능력치를 상승시킬 수 있는 기능이 추가됩니다."
+          "text": "PvE 콘텐츠: 파티 단위로 함께 도전할 수 있는 신규 던전 콘텐츠 ‘몽환의 미궁’이 추가됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -4115,33 +3901,11 @@
         "편의/UI"
       ],
       "card_summary": "클래스/스킬 · 성장/장비 · PvP/전쟁 · PvE 콘텐츠",
-      "major_summary_groups": [
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "성장/장비: 마력 주입 효과 변경 시 이미 획득한 능력치를 유지할 수 있는 잠금 기능이 추가됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "클래스/스킬: 클래스 별 신규 무기 외형이 추가됩니다."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -4262,23 +4026,11 @@
         "이벤트/보상"
       ],
       "card_summary": "PvE 콘텐츠 · 성장/장비 · 경제/거래 · 서버/월드",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvE 콘텐츠: 길드 던전의 상위 난이도가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -4434,13 +4186,13 @@
       "card_summary": "화포 · 신시아 · 콘라드",
       "major_summary_groups": [
         {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
           "source_unit_count": 1,
           "source_unit_indices": [
-            6
+            4
           ],
-          "text": "편의/UI: 전설 등급 내갑이 2종 추가됩니다."
+          "text": "PvP/전쟁: 신규 월드 격전지 ‘오베르 용암 성채’가 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -4543,12 +4295,11 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            0,
-            3
+            0
           ],
-          "text": "PvE 콘텐츠: 마사르타 기암 성역 8지역, 콘라드, 신시아 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
+          "text": "PvE 콘텐츠: 마사르타 기암 성역 8지역이 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -4712,23 +4463,11 @@
         "이벤트/보상"
       ],
       "card_summary": "클래스/스킬 · 편의/UI · 이벤트/보상",
-      "major_summary_groups": [
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "편의/UI: 상태이상 관련 능력치 획득처 정보가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -4794,23 +4533,11 @@
         "이벤트/보상"
       ],
       "card_summary": "성장/장비 · 클래스/스킬 · PvP/전쟁 · 서버/월드",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            4
-          ],
-          "text": "서버/월드: 신규 서버 월드 던전의 난이도 및 보상이 기존 서버들과 동일하게 변경됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -4898,23 +4625,11 @@
         "이벤트/보상"
       ],
       "card_summary": "성장/장비 · 클래스/스킬 · PvP/전쟁 · 이벤트/보상",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "클래스/스킬: 전 클래스의 4차 전직 의상이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -5044,23 +4759,11 @@
         "PvP/전쟁"
       ],
       "card_summary": "성장/장비 · 이벤트/보상 · 서버/월드 · PvE 콘텐츠",
-      "major_summary_groups": [
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "성장/장비: 길드 특성 능력치 4페이지가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -5123,23 +4826,11 @@
         "이벤트/보상"
       ],
       "card_summary": "PvE 콘텐츠 · 편의/UI · 이벤트/보상",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvE 콘텐츠: 익명 에픽 ‘테네리스 해협’ 던전에 Lv.122 회한의 해역 지역이 추가되며, 일부 지역의 입장 조건이 변경됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -5254,23 +4945,11 @@
         "PvP/전쟁"
       ],
       "card_summary": "PvE 콘텐츠 · 경제/거래 · 성장/장비 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            4
-          ],
-          "text": "클래스/스킬: 전 클래스 공통 신규 지속 기술이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -5473,23 +5152,11 @@
         "이벤트/보상"
       ],
       "card_summary": "PvE 콘텐츠 · 클래스/스킬 · 성장/장비 · PvP/전쟁",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvE 콘텐츠: 에픽 던전: 하르페논 성소 상위 난이도 지역 ‘서원의 신역’이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -5615,23 +5282,11 @@
         "PvP/전쟁"
       ],
       "card_summary": "클래스/스킬 · 편의/UI · 성장/장비 · 이벤트/보상",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "클래스/스킬: 길드 상인 NPC가 판매하는 전설 클래스 공통 신규 지속 기술이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -5761,33 +5416,11 @@
         "서버/월드"
       ],
       "card_summary": "권갑 · 필리푸스",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            3
-          ],
-          "text": "편의/UI: 일곱 번째 필드 ‘탈라시온’이 추가됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "경제/거래: 지속된 클래스 추가로 무기 외형의 수량이 많아짐에 따라 무기 외형 교체 부담을 줄이고자 교체 비용이 반값으로 변경됩니다."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -5854,11 +5487,23 @@
         "버그 수정"
       ],
       "card_summary": "PvP/전쟁 · 성장/장비 · 편의/UI · 클래스/스킬",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvP/전쟁: 신규 월드 격전지 ‘아스포델’이 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -5890,23 +5535,11 @@
         "편의/UI"
       ],
       "card_summary": "공명 카드",
-      "major_summary_groups": [
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "성장/장비: 카드를 장착하여 캐릭터를 한층 더 강력하게 성장시킬 수 있는 신규 성장 시스템 ‘공명 카드’가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -6180,23 +5813,11 @@
         "상점/BM"
       ],
       "card_summary": "PvE 콘텐츠 · 문파 · 클래스/스킬 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "클래스/스킬: 탈 것 '황철전호'가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -6364,23 +5985,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 서버/월드 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvE 콘텐츠: 신규 필드 '해룡의 심층부'가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -6424,23 +6033,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · 서버/월드 · 문파 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvE 콘텐츠: 지도 > 상단의 지역 리스트에 좌/우 드래그 기능을 추가하여 화면 내에서 일부 지역이 보이지 않는 현상이 발생하지 않도록 개선됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -6593,24 +6190,11 @@
         "상점/BM"
       ],
       "card_summary": "PvE 콘텐츠 · 문파 · 클래스/스킬 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            3,
-            4
-          ],
-          "text": "클래스/스킬: 신화 정령, 신화 장비 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -6799,23 +6383,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · 서버/월드 · 문파 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            7
-          ],
-          "text": "클래스/스킬: 각 직업별 '은하전대 갑주/투구'가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -6906,21 +6478,11 @@
             0
           ],
           "text": "PvE 콘텐츠: 신규 콘텐츠 '무극도'가 추가됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            5
-          ],
-          "text": "클래스/스킬: 각 직업별로 '정령 무기' 외형 장비가 추가됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -7012,23 +6574,11 @@
         "상점/BM"
       ],
       "card_summary": "PvE 콘텐츠 · 서버/월드 · 문파 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvE 콘텐츠: 신규 토벌 '혈화의 사원' 이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -7247,23 +6797,11 @@
         "버그 수정"
       ],
       "card_summary": "클래스/스킬 · 성장/장비 · 경제/보상 · 이벤트/보상",
-      "major_summary_groups": [
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            4
-          ],
-          "text": "성장/장비: 상세 정보에 정령을 통해 적용받는 '받는 기본공격 피해 감소' 능력치에 대한 정보가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -7412,13 +6950,12 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 5,
+          "source_unit_count": 4,
           "source_unit_indices": [
             0,
             1,
             2,
-            3,
-            11
+            3
           ],
           "text": "PvE 콘텐츠: 1첩 2계, 맹천강, 1첩 1계 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
         }
@@ -7482,22 +7019,11 @@
             0
           ],
           "text": "PvE 콘텐츠: '결투장' 콘텐츠가 추가됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            4,
-            6
-          ],
-          "text": "클래스/스킬: 유령 해적 무기 의상, 풍룡권 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -7593,23 +7119,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · 서버/월드 · 클래스/스킬 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            3
-          ],
-          "text": "클래스/스킬: 각 직업별로 '무대 복장/모자'가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -7757,23 +7271,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 서버/월드 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            8
-          ],
-          "text": "클래스/스킬: 직업 > 캐릭터 생성 화면 내 투사의 신규 직업 표시(New)가 제거됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -8021,23 +7523,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · 성장/장비 · 이벤트/보상 · 상점/BM",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "PvE 콘텐츠: 균열된 비정봉 11층의 보스 출현 구역이 4개에서 8개로 확장되며, '명왕의 주온' 아이템을 이전보다 더욱 쉽게 획득할 수 있도록 개선됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -8175,11 +7665,23 @@
         "편의/UI"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 서버/월드 · 문파",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pvp_war",
+          "domain": "PvP/전쟁",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            16
+          ],
+          "text": "콘텐츠/시스템: 점령전의 진행 방식이 변경됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -8435,23 +7937,11 @@
         "콘텐츠/시스템"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 문파 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvE 콘텐츠: ‘지역 속성’ 툴팁 문구에 안전, 토벌 지역에서의 보충 설명이 추가되며, 안전지역과 위험 지역의 구분이 명확하도록 버튼 아이콘의 색상이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -8594,11 +8084,10 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 3,
+          "source_unit_count": 2,
           "source_unit_indices": [
             0,
-            2,
-            3
+            2
           ],
           "text": "PvE 콘텐츠: 보스 레벨 135의 신규 보스토벌 “옥혈귀마”, 몽촌 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
         }
@@ -8651,23 +8140,11 @@
         "콘텐츠/시스템"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 문파 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            8
-          ],
-          "text": "클래스/스킬: 신규 의상으로 공통 등 부위 의상 1종과 직업별 모자 의상 1종이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -8760,23 +8237,11 @@
         "이벤트/보상"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 문파 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            8
-          ],
-          "text": "클래스/스킬: 신규 의상으로 직업별 무기 의상 1종이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -9096,23 +8561,11 @@
         "편의/UI"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 서버/월드 · 문파",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            10
-          ],
-          "text": "클래스/스킬: 신규 의상으로 각 직업별 의상 2종과 모자 2종이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -9195,23 +8648,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · 문파 · 성장/장비 · 편의/UI",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            5
-          ],
-          "text": "성장/장비: 수련동굴에서 캐릭터간 대련을 관람할 수 있도록 지역 내부 이동공간이 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -9304,23 +8745,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 문파 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "PvE 콘텐츠: 마방진 7층이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -9362,23 +8791,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 클래스/스킬 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            4
-          ],
-          "text": "클래스/스킬: 200일 기념 직업별 신규의상이 총 5종 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -9477,21 +8894,11 @@
             1
           ],
           "text": "PvE 콘텐츠: 사북지역의 사북성과 신규 사냥터, 검지, 석각묘 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            5
-          ],
-          "text": "클래스/스킬: 직업 별 21종의 보감이 추가됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -9590,23 +8997,11 @@
         "버그 수정"
       ],
       "card_summary": "용비02",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            6
-          ],
-          "text": "클래스/스킬: 스킬에 추가 효과 및 방식 개선으로 한층 더 강력해지도록 개선됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -9918,13 +9313,12 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 3,
+          "source_unit_count": 2,
           "source_unit_indices": [
-            0,
             2,
             3
           ],
-          "text": "PvE 콘텐츠: 의뢰 페이지 오픈 시, 자유 결투장 지역, 대련장 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
+          "text": "PvE 콘텐츠: 자유 결투장 지역, 대련장 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
         }
       ],
       "major_group_count": 1,
@@ -10131,33 +9525,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 서버/월드 · 문파",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvE 콘텐츠: 마인광산 보스 '귀령마인' 의 활동범위를 확장하여 잦은 초기화가 발생하는 현상이 개선됩니다."
-        },
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "PvP/전쟁: 다른 서버의 '문파'와 동맹 체결 및 전쟁을 선포 할 수 있는 기능이 추가됩니다."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -10205,14 +9577,13 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 4,
+          "source_unit_count": 3,
           "source_unit_indices": [
             0,
-            1,
             2,
             3
           ],
-          "text": "PvE 콘텐츠: 토벌, 사북 형장, 몽촌사막을 중심으로 모든 지역에서 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
+          "text": "PvE 콘텐츠: 토벌, 몽촌사막을 중심으로 모든 지역에서, 일장춘몽 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
         }
       ],
       "major_group_count": 1,
@@ -10331,27 +9702,16 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            1,
-            7
-          ],
-          "text": "PvE 콘텐츠: 마방진과 비정봉 8층, 문파 원정 보스 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
           "source_unit_count": 1,
           "source_unit_indices": [
-            8
+            7
           ],
-          "text": "클래스/스킬: 1주년 기념 외형 장비인 모자와 의복이 직업별로 각 1종씩 추가됩니다."
+          "text": "문파: 신규 문파 원정 보스가 추가됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -10922,23 +10282,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 서버/월드 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            6
-          ],
-          "text": "클래스/스킬: 신규 외형 장비인 모자와 의복이 직업별로 각 1종씩 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -11095,23 +10443,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · 서버/월드 · 문파 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            5
-          ],
-          "text": "클래스/스킬: 신규 외형 장비인 모자와 의복이 직업별로 각 1종씩 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -11166,21 +10502,11 @@
             1
           ],
           "text": "PvE 콘텐츠: 기연 ‘백아절현’을 오픈하기 위한 사전 임무 1종이 추가됩니다."
-        },
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            4
-          ],
-          "text": "PvP/전쟁: ‘전설 청룡 조각상’ 아이템이 추가됩니다. 전설 청룡 조각상은 공성전 / 지옥토벌 / 임무 등 다양한 콘텐츠를 통해 획득하실 수 있습니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -11331,23 +10657,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · 서버/월드 · 문파 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            5
-          ],
-          "text": "클래스/스킬: 신규 외형 장비인 모자와 의복이 직업별로 각 1종씩 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -11395,30 +10709,17 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 5,
+          "source_unit_count": 2,
           "source_unit_indices": [
             0,
-            1,
-            2,
-            3,
-            8
+            3
           ],
-          "text": "PvE 콘텐츠: 설원 지역의, 구룡미궁, 명오제천 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        },
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            4
-          ],
-          "text": "PvP/전쟁: 신규 '자객 모드' 시스템이 추가됩니다. 자객 모드는 원정대 내에서 자신의 정체를 숨긴 채로 타 유저를 처치할 수 있는 PK 모드입니다."
+          "text": "PvE 콘텐츠: 설원 지역의, 연대기 종장: 천파, 설원 지역 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -11553,23 +10854,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · 서버/월드 · 성장/장비 · 콘텐츠/시스템",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "서버/월드: 의뢰 > 본진 지역과 정복 지역 탭이 추가되어 정복 서버 전용 의뢰를 구분할 수 있도록 개선됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -11607,14 +10896,13 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 4,
+          "source_unit_count": 3,
           "source_unit_indices": [
             0,
             1,
-            2,
             3
           ],
-          "text": "PvE 콘텐츠: 토벌/보스토벌, 오마패왕천, 지도 > 콘텐츠가 오픈되지 않은 지역에 잠금 표시 및 알림 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
+          "text": "PvE 콘텐츠: 토벌/보스토벌, 오마패왕천, 잊혀진 투기장 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
         }
       ],
       "major_group_count": 1,
@@ -11658,25 +10946,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · 성장/장비 · 콘텐츠/시스템 · 이벤트/보상",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 3,
-          "source_unit_indices": [
-            0,
-            2,
-            3
-          ],
-          "text": "PvE 콘텐츠: 마방진/비정봉 9층, 마방진 9층, 비정봉 9층 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -11771,31 +11045,11 @@
             1
           ],
           "text": "PvE 콘텐츠: 지옥토벌, 광혈괴마 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        },
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "PvP/전쟁: '포고' 기능이 추가됩니다. 포고는 비천성 국왕과 사북성 황제가 사용할 수 있는 우편 기능입니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            4
-          ],
-          "text": "클래스/스킬: '특수 교환' 기능이 추가됩니다. 특수 교환을 통해 타 직업 전용 장비를 현재 캐릭터의 직업 전용 장비로 교환할 수 있습니다."
         }
       ],
-      "major_group_count": 3,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1,
-        2
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -11881,23 +11135,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · 문파 · 클래스/스킬 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "클래스/스킬: 효과 정보에 관한 설명이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -11937,23 +11179,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 클래스/스킬 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            5
-          ],
-          "text": "클래스/스킬: 각 직업별 '신년 기념 의상'이 추가됩니다. 신년 기념 의상은 신년 한정 모자/복장 교환권으로 구매하실 수 있습니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -12002,12 +11232,11 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            5,
             6
           ],
-          "text": "PvE 콘텐츠: 문파 원정 보스, 문파 도전 7단계, 흡혼마수 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
+          "text": "문파: 신규 문파 원정 보스 '흡혼마수'가 추가됩니다. 보스 레벨: 165."
         }
       ],
       "major_group_count": 1,
@@ -12196,25 +11425,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · 서버/월드 · 성장/장비 · 경제/보상",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 3,
-          "source_unit_indices": [
-            0,
-            1,
-            3
-          ],
-          "text": "PvE 콘텐츠: 3첩 8계, 빙마귀천, 3첩 1계 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -12263,24 +11478,11 @@
         "버그 수정"
       ],
       "card_summary": "신규 성장 시스템",
-      "major_summary_groups": [
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            10,
-            12
-          ],
-          "text": "성장/장비: 능력치, 잠재력 관련 성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -12525,13 +11727,11 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 3,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            0,
-            1,
-            2
+            0
           ],
-          "text": "PvE 콘텐츠: 흑룡비곡, 흑룡탈혼, 사룡추혼 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
+          "text": "PvE 콘텐츠: 신규 지역 '흑룡비곡' 이 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -12634,12 +11834,10 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 4,
+          "source_unit_count": 2,
           "source_unit_indices": [
             0,
-            1,
-            2,
-            3
+            1
           ],
           "text": "PvE 콘텐츠: 토벌, 3첩 7계, 3첩 4계 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
         }
@@ -12726,33 +11924,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 클래스/스킬 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "PvP/전쟁: 탈 것 '하얀마음 구름이'가 추가됩니다. 보유 능력치: 받는 PvP피해 감소 2%, 사냥 경험치 증가 5%."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "클래스/스킬: 신규 무기 외형 장비는 각 직업별로 1종씩 추가되며, 상점에서 구매할 수 있는 교환권으로 획득하실 수 있습니다."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -12834,23 +12010,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 서버/월드 · 문파",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            4
-          ],
-          "text": "클래스/스킬: 신규 '외형 장비'가 추가됩니다. 각 직업별로 모자와 복장이 1종씩 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -12895,33 +12059,11 @@
         "상점/BM"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 서버/월드 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "PvP/전쟁: 탈 것 '명계의 푸른 해치'가 추가됩니다. 보유 능력치: PvP 공격피해 증가 2%, 치명 공격피해 증가 4%."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            4
-          ],
-          "text": "클래스/스킬: '마령주' 시스템이 추가됩니다. 마령주를 장착하면 캐릭터의 능력치가 향상되고 성장 단계에 따라 착용자에게 추가적인 능력치와 마령주 스킬이 부여됩니다."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -13085,34 +12227,11 @@
         "버그 수정"
       ],
       "card_summary": "PvP/전쟁 · 문파 · 클래스/스킬 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            1,
-            2
-          ],
-          "text": "PvE 콘텐츠: 문파 원정 보스, 문파 도전 8단계, 전륜암귀 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            3
-          ],
-          "text": "클래스/스킬: 탈 것 '흑호'가 추가됩니다. 보유 능력치: 스킬 공격 피해 증가 1.5%, 받는 스킬 피해 감소 1.5%."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -13296,24 +12415,11 @@
         "이벤트/보상"
       ],
       "card_summary": "PvP/전쟁 · 서버/월드 · 클래스/스킬 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            0,
-            1
-          ],
-          "text": "PvP/전쟁: 분노의 스노보드, 정열의 스노보드 관련 전쟁·경쟁 구조가 추가·개편되어 PvP 참여 흐름과 보상 경쟁이 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -13417,23 +12523,11 @@
         "버그 수정"
       ],
       "card_summary": "PvP/전쟁 · 문파 · 클래스/스킬 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "클래스/스킬: 각 직업별로 '귀여운 사랑의 모자'가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -13474,23 +12568,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · 서버/월드 · 성장/장비 · 경제/보상",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "서버/월드: 정복 서버 전용 초월드 보스 '<흑각괴룡> 드라카잔'이 추가됩니다. 드라카잔은 강력한 디버프 효과와 함께 지속적으로 다수의 하위 몬스터를 소환할 수 있는 능력을 보유하고 있으며, 팀원들과의 협동 플레이가 필수적인 최고 난이도의 보스 몬스터입니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -13610,23 +12692,11 @@
         "버그 수정"
       ],
       "card_summary": "서버/월드 · 클래스/스킬 · 성장/장비 · 콘텐츠/시스템",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "서버/월드: 흑룡의 나락의 출입 지역이 더욱 넓게 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -13668,23 +12738,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · 문파 · 클래스/스킬 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvE 콘텐츠: 신규 지역 '균열된 마방진/비정봉 11층' 이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -13922,24 +12980,11 @@
         "이벤트/보상"
       ],
       "card_summary": "PvP/전쟁 · 서버/월드 · 문파 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            0,
-            5
-          ],
-          "text": "PvP/전쟁: 문파대전 관련 전쟁·경쟁 구조가 추가·개편되어 PvP 참여 흐름과 보상 경쟁이 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -14087,23 +13132,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 클래스/스킬 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "PvP/전쟁: 신규 용신기 능력치 정보 구분 보유 능력치 장도 기본 공격 피해 증가 강타 공격 피해 증가 치명 공격 피해 증가 물리공격 술법공격 체력 은령 PvP 공격 피해 증가 스킬 공격 피해 증가 명중 물리공격 술법공격 몬스터 공격 피해 증가 향로 받는 PvP 피해 감소 회피 항마력 물리방어 술법방어 선화수 재사용 시간 감소 곡옥 받는 스킬 피해 감소 치명회피 치명 물리방어 술법방어 몬스터에게 받는 피해 감소 동경 받는 기본 공격 피해 감소 받는 강타 피해 감소 받는 치명 피해 감소 물리방어 술법방어 마력."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -14237,21 +13270,11 @@
             0
           ],
           "text": "PvE 콘텐츠: 지옥토벌 '천검흑령'이 추가됩니다."
-        },
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            12
-          ],
-          "text": "편의/UI: 보패 각인은 석판을 통해 기존의 보패에 랜덤한 능력치 1종을 추가하거나 기존의 옵션을 변경할 수 있는 시스템입니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -14329,24 +13352,11 @@
         "이벤트/보상"
       ],
       "card_summary": "PvP/전쟁 · 성장/장비 · 경제/거래 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            7,
-            11
-          ],
-          "text": "PvE 콘텐츠: 대륙 침략자 처치 미션 이벤트, 미드가르드 대륙에 보물 상자가 1개 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -14594,23 +13604,11 @@
         "서버/월드"
       ],
       "card_summary": "성장/장비 · PvE 콘텐츠 · 클래스/스킬 · 편의/UI",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            9
-          ],
-          "text": "클래스/스킬: 은신 스킬의 버프 효과가 추가됩니다. (이동 속도 10% / 지속 시간 15초 / 강화 당 1초 증가)."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -14710,27 +13708,16 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            2,
-            23
-          ],
-          "text": "PvE 콘텐츠: 그림자 성채, 파티 던전 난이도 선택 기능 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        },
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
           "source_unit_count": 1,
           "source_unit_indices": [
-            6
+            2
           ],
-          "text": "성장/장비: 일부 영웅/전설 등급의 장비 옵션의 능력치가 새롭게 변경 또는 추가됩니다."
+          "text": "PvE 콘텐츠: 신규 정예 던전 '그림자 성채' 추가됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -14939,35 +13926,11 @@
         "상점/BM"
       ],
       "card_summary": "클래스/스킬 · 콘텐츠/시스템 · 편의/UI · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 3,
-          "source_unit_indices": [
-            5,
-            6,
-            9
-          ],
-          "text": "성장/장비: 모든 대미지, 치명타 확률, 전투력 반영 능력치 관련 성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "클래스/스킬: 신규 액티브 스킬이 추가됩니다."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -15052,23 +14015,11 @@
         "상점/BM"
       ],
       "card_summary": "PvE 콘텐츠 · 콘텐츠/시스템 · 성장/장비 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvE 콘텐츠: 그림자 성채 단계 추가 및 일부 몬스터 아이템 지급 방식 변경됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -15143,23 +14094,11 @@
         "클래스/스킬"
       ],
       "card_summary": "성장/장비 · PvE 콘텐츠 · 경제/거래 · 상점/BM",
-      "major_summary_groups": [
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            5
-          ],
-          "text": "성장/장비: 캐릭터 신규 능력치가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -15243,23 +14182,11 @@
         "버그 수정"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 클래스/스킬 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            6
-          ],
-          "text": "PvE 콘텐츠: 파티 던전에 극악 난이도가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -15354,23 +14281,11 @@
         "클래스/스킬"
       ],
       "card_summary": "PvE 콘텐츠 · 성장/장비 · 이벤트/보상 · 콘텐츠/시스템",
-      "major_summary_groups": [
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            16
-          ],
-          "text": "성장/장비: 공중 탈 것 빠른 하강 기능과 이동속도 능력치가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -15409,23 +14324,11 @@
         "상점/BM"
       ],
       "card_summary": "PvE 콘텐츠 · 편의/UI · 클래스/스킬 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            6
-          ],
-          "text": "PvE 콘텐츠: 4챕터 알브하임 내 거점 지배자 구역의 [무법 지역] 이 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -15506,23 +14409,11 @@
         "경제/거래"
       ],
       "card_summary": "성장/장비 · PvE 콘텐츠 · 길드/성장 · 콘텐츠/시스템",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            17
-          ],
-          "text": "PvE 콘텐츠: 월드 던전 1, 2단계 보스의 머리 위에 이펙트가 추가되어 눈에 더 잘 띄도록 개선됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -15667,23 +14558,11 @@
         "이벤트/보상"
       ],
       "card_summary": "PvE 콘텐츠 · 콘텐츠/시스템 · 클래스/스킬 · 편의/UI",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            14
-          ],
-          "text": "PvE 콘텐츠: 마을 의뢰 횟수 추가 이벤트가 진행됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -15822,23 +14701,11 @@
         "이벤트/보상"
       ],
       "card_summary": "PvE 콘텐츠 · PvP/전쟁 · 상점/BM · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            4
-          ],
-          "text": "PvP/전쟁: 학살자 페널티 추가 효과 중 'PvP 대미지 감소'가 '학살자 PvP 대미지 감소'로 변경됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -15888,24 +14755,11 @@
         "PvP/전쟁"
       ],
       "card_summary": "PvE 콘텐츠 · 서버/월드 · 성장/장비 · 콘텐츠/시스템",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            3,
-            6
-          ],
-          "text": "PvE 콘텐츠: 지하 8층-혼돈의 전당(월드), 지하 8층-혼돈의 전당 던전 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -16038,15 +14892,6 @@
           "text": "PvE 콘텐츠: 5챕터 무스펠하임에 서브 퀘스트 및 NPC가 추가됩니다."
         },
         {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            20
-          ],
-          "text": "PvP/전쟁: 결투장 관전 기능이 추가됩니다."
-        },
-        {
           "major_type": "new_growth_axis",
           "domain": "성장/장비",
           "source_unit_count": 2,
@@ -16057,11 +14902,10 @@
           "text": "성장/장비: 스테이터스 관련 성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다."
         }
       ],
-      "major_group_count": 3,
+      "major_group_count": 2,
       "major_summary_indices": [
         0,
-        1,
-        2
+        1
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -16432,21 +15276,11 @@
             11
           ],
           "text": "PvP/전쟁: 월드맵에서 좌측의 진지 팝업 노출 시 팝업 하단에 점령전 관련 설명이 추가됩니다."
-        },
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            7
-          ],
-          "text": "성장/장비: 캐릭터에 신규 능력치가 추가됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -16615,23 +15449,11 @@
         "클래스/스킬"
       ],
       "card_summary": "성장/장비 · 편의/UI · PvP/전쟁 · 서버/월드",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            12
-          ],
-          "text": "PvE 콘텐츠: 무기 형상 소환권을 획득할 수 있는 무기 상자가 각 대륙에 5개씩 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -16715,23 +15537,11 @@
         "경제/거래"
       ],
       "card_summary": "PvE 콘텐츠 · 클래스/스킬 · 성장/장비 · PvP/전쟁",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            8
-          ],
-          "text": "PvP/전쟁: 발할라 대전 우승자 동상 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -16808,16 +15618,6 @@
       "card_summary": "PvP/전쟁 · 클래스/스킬 · 성장/장비 · PvE 콘텐츠",
       "major_summary_groups": [
         {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            12,
-            13
-          ],
-          "text": "PvE 콘텐츠: 길드 던전 11~13단계 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        },
-        {
           "major_type": "new_pvp_war",
           "domain": "PvP/전쟁",
           "source_unit_count": 1,
@@ -16825,22 +15625,11 @@
             0
           ],
           "text": "PvP/전쟁: 5챕터 무스펠하임에 거점 점령전 진지가 2곳 추가됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            18
-          ],
-          "text": "클래스/스킬: 기존 디펜더의 [방패 막기] 스킬의 능력치인 '받는 모든 대미지 절대 감소'가 모든 클래스의 캐릭터 스탯에 추가됩니다."
         }
       ],
-      "major_group_count": 3,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1,
-        2
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -16933,11 +15722,12 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
+          "source_unit_count": 2,
           "source_unit_indices": [
-            0
+            0,
+            3
           ],
-          "text": "PvE 콘텐츠: 던전이 새롭게 추가됩니다."
+          "text": "PvE 콘텐츠: 던전이 새롭게, 지하감옥 던전 주요 보상으로 신규 장신구 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
         }
       ],
       "major_group_count": 1,
@@ -17037,28 +15827,17 @@
         {
           "major_type": "new_growth_axis",
           "domain": "성장/장비",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            6,
-            8
-          ],
-          "text": "성장/장비: 각반, 상태이상 관련 성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
           "source_unit_count": 1,
           "source_unit_indices": [
-            10
+            6
           ],
-          "text": "클래스/스킬: 신규 영웅/전설 등급 아바타가 각 클래스별로 2종씩 추가되며, 보유 효과가 추가됩니다."
+          "text": "성장/장비: 캐릭터를 더욱 강력하게 성장시켜 줄 신규 방어구 파츠 '각반'이 추가됩니다."
         }
       ],
-      "major_group_count": 3,
+      "major_group_count": 2,
       "major_summary_indices": [
         0,
-        1,
-        2
+        1
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -17356,23 +16135,11 @@
         "클래스/스킬"
       ],
       "card_summary": "성장/장비 · PvE 콘텐츠 · 상점/BM · 서버/월드",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            3
-          ],
-          "text": "PvE 콘텐츠: '그림자 성채의 물약' 툴팁 하단 문구에 '보스 몬스터 제외' 문구가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -17450,24 +16217,11 @@
         "상점/BM"
       ],
       "card_summary": "실드 메이든",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            0,
-            15
-          ],
-          "text": "클래스/스킬: 실드 메이든, 각 직업별로 신규 무기 형상 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -17844,13 +16598,11 @@
         {
           "major_type": "new_growth_axis",
           "domain": "성장/장비",
-          "source_unit_count": 3,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            19,
-            20,
-            21
+            20
           ],
-          "text": "성장/장비: 캐릭터 능력치, 공격 및 방어 유형의 신규 스테이터스 관련 성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다."
+          "text": "성장/장비: 공격 및 방어 유형의 신규 스테이터스가 추가됩니다."
         },
         {
           "major_type": "economy_crafting_system",
@@ -17931,23 +16683,11 @@
         "상점/BM"
       ],
       "card_summary": "콘텐츠/시스템 · 클래스/스킬 · PvP/전쟁 · PvE 콘텐츠",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "클래스/스킬: 미사용 [시즌 2] 클래스 변경권 제작식 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -18008,21 +16748,11 @@
             9
           ],
           "text": "PvP/전쟁: 서버 이전 시 공성전 용병 조건 항목, 서버 이전 관련 전쟁·경쟁 구조가 추가·개편되어 PvP 참여 흐름과 보상 경쟁이 확장됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            13
-          ],
-          "text": "성장/장비: 각 직업별로 신규 무기 형상이 추가됩니다. (영웅 2종, 전설 1종)."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -18172,24 +16902,11 @@
         "상점/BM"
       ],
       "card_summary": "PvP/전쟁 · 클래스/스킬 · 경제/거래 · 편의/UI",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            10,
-            12
-          ],
-          "text": "PvE 콘텐츠: 본 캐릭터로 월드 던전에 입장 후 부 캐릭터 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -18275,11 +16992,23 @@
         "버그 수정"
       ],
       "card_summary": "PvP/전쟁 · 편의/UI · 클래스/스킬 · 경제/거래",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pvp_war",
+          "domain": "PvP/전쟁",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvP/전쟁: 공성전 점령 방식이 기존 성물을 3회 상호작용하는 방식에서 성물을 감싼 보호막을 공격하여 마지막 일격을 가한 길드가 점령에 성공하는 방식으로 변경됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -18360,11 +17089,23 @@
         "경제/거래"
       ],
       "card_summary": "PvP/전쟁 · PvE 콘텐츠 · 편의/UI · 클래스/스킬",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            15
+          ],
+          "text": "PvE 콘텐츠: 거점 지배자, 절대자, 성채 보스, 월드 던전의 보스 몬스터 처치 시 화려한 처치 이팩트가 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -18445,23 +17186,11 @@
         "경제/거래"
       ],
       "card_summary": "서버/월드 · 클래스/스킬 · 성장/장비 · 길드/성장",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "클래스/스킬: 각 클래스별 신규 아바타가 추가됩니다. (신화 1종, 전설 1종, 영웅 1종)."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -18657,23 +17386,11 @@
         "PvE 콘텐츠"
       ],
       "card_summary": "클래스/스킬 · 이벤트/보상 · 성장/장비 · PvP/전쟁",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            5
-          ],
-          "text": "성장/장비: 각 직업별로 신규 무기 형상이 추가됩니다. (영웅 2종, 전설 1종)."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -19032,33 +17749,11 @@
         "상점/BM"
       ],
       "card_summary": "서버/월드 · 길드/성장 · 콘텐츠/시스템 · PvE 콘텐츠",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            19
-          ],
-          "text": "PvP/전쟁: 그림자 성채 상점, 공성전 상점에 NPC가 추가됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            6
-          ],
-          "text": "클래스/스킬: 각 클래스 별 신규 아바타가 추가됩니다. (전설 1종, 영웅 1종)."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -19227,30 +17922,18 @@
       "card_summary": "바드",
       "major_summary_groups": [
         {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            17
-          ],
-          "text": "성장/장비: 신규 캐릭터 능력치 추가됩니다."
-        },
-        {
           "major_type": "class_skill_system",
           "domain": "클래스/스킬",
-          "source_unit_count": 3,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            0,
-            1,
-            2
+            0
           ],
-          "text": "클래스/스킬: 바드 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다."
+          "text": "클래스/스킬: 전장을 지휘하는 신의 선율 '바드'가 프리스트 클래스에 추가됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -19616,40 +18299,18 @@
       "card_summary": "PvP/전쟁 · 콘텐츠/시스템 · PvE 콘텐츠 · 경제/거래",
       "major_summary_groups": [
         {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            6,
-            7
-          ],
-          "text": "PvE 콘텐츠: 천둥 군주 수드리의 사념, 린베스트의 사념 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        },
-        {
           "major_type": "new_growth_axis",
           "domain": "성장/장비",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            17,
-            18
-          ],
-          "text": "성장/장비: 캐릭터 능력치, 공격 유형에 신규 스테이터스 관련 성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
           "source_unit_count": 1,
           "source_unit_indices": [
-            15
+            18
           ],
-          "text": "클래스/스킬: 클래스별 신규 아바타가 추가됩니다. (신화 1종, 전설 1종)."
+          "text": "성장/장비: 공격 유형에 신규 스테이터스가 추가됩니다."
         }
       ],
-      "major_group_count": 3,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1,
-        2
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -19818,42 +18479,20 @@
           "text": "PvE 콘텐츠: 울부짖는 영혼의 심연, 타락한 이둔 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
         },
         {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            16
-          ],
-          "text": "클래스/스킬: 발키리 클래스의 신규 스킬인 '전장 점령' 스킬에 [우선 감지] 체크가 추가됩니다."
-        },
-        {
           "major_type": "new_growth_axis",
           "domain": "성장/장비",
-          "source_unit_count": 3,
-          "source_unit_indices": [
-            0,
-            10,
-            18
-          ],
-          "text": "성장/장비: 막기 상쇄, 타락한 이둔, 타락한 이둔의 어둠 각반 관련 성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
           "source_unit_count": 2,
           "source_unit_indices": [
-            13,
-            17
+            0,
+            18
           ],
-          "text": "클래스/스킬: 전 클래스 신규 액티브 스킬, 클래스 별 신규 무기 형상 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다."
+          "text": "성장/장비: 막기 상쇄, 공격, 방어 유형에 신규 스테이터스 관련 성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다."
         }
       ],
-      "major_group_count": 4,
+      "major_group_count": 2,
       "major_summary_indices": [
         0,
-        1,
-        2,
-        3
+        1
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -20008,28 +18647,16 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 3,
-          "source_unit_indices": [
-            5,
-            8,
-            9
-          ],
-          "text": "PvE 콘텐츠: 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        },
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
           "source_unit_count": 1,
           "source_unit_indices": [
-            21
+            5
           ],
-          "text": "경제/거래: 거래소 구매 안전장치 추가됩니다."
+          "text": "PvE 콘텐츠: 새로운 구역에 신규 보스 몬스터와 보스 몬스터 보상으로 신화 목걸이가 추가됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -20177,23 +18804,11 @@
         "PvE 콘텐츠"
       ],
       "card_summary": "PvP/전쟁 · PvE 콘텐츠",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvP/전쟁: 수르트 01 ~ 09 서버에 [월드 던전] 과 [정예 던전 - 지하감옥 최하층(월드)], [공성전] 이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -20242,23 +18857,11 @@
         "편의/UI"
       ],
       "card_summary": "성장/장비 · PvE 콘텐츠 · 클래스/스킬 · 콘텐츠/시스템",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "클래스/스킬: 클래스별 신규 아바타가 추가됩니다. (전설 1종)."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -20365,33 +18968,29 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            14,
             15
           ],
-          "text": "PvE 콘텐츠: 흥겨운 겨울 축제 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
+          "text": "PvE 콘텐츠: 메뉴(三) - [던전] - [정예 던전]에 '흥겨운 겨울 축제' 던전이 추가됩니다."
         },
         {
           "major_type": "new_growth_axis",
           "domain": "성장/장비",
-          "source_unit_count": 2,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            6,
             7
           ],
-          "text": "성장/장비: 캐릭터 능력치, 공격 유형에 신규 스테이터스 관련 성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다."
+          "text": "성장/장비: 공격 유형에 신규 스테이터스가 추가됩니다."
         },
         {
           "major_type": "class_skill_system",
           "domain": "클래스/스킬",
-          "source_unit_count": 3,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            0,
-            2,
-            8
+            0
           ],
-          "text": "클래스/스킬: 썬더 브링어, 클래스 별 신규 무기 형상 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다."
+          "text": "클래스/스킬: 적을 파괴하는 번개의 권능, '썬더 브링어'가 워리어 클래스에 추가됩니다."
         }
       ],
       "major_group_count": 3,
@@ -20803,27 +19402,16 @@
         {
           "major_type": "new_growth_axis",
           "domain": "성장/장비",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            7,
-            8
-          ],
-          "text": "성장/장비: 캐릭터 능력치, 공격, 방어 유형의 신규 스테이터스 관련 성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
           "source_unit_count": 1,
           "source_unit_indices": [
-            9
+            8
           ],
-          "text": "클래스/스킬: 클래스별 신규 아바타가 추가됩니다. (고대 1종, 전설 1종)."
+          "text": "성장/장비: 공격, 방어 유형의 신규 스테이터스가 추가됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -20995,23 +19583,11 @@
         "버그 수정"
       ],
       "card_summary": "서버/월드 · 길드/성장 · 편의/UI · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            4
-          ],
-          "text": "클래스/스킬: 클래스 별 신규 무기 형상이 추가됩니다. ( 전설 1종)."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -21080,33 +19656,11 @@
         "상점/BM"
       ],
       "card_summary": "PvE 콘텐츠 · 성장/장비 · 편의/UI · PvP/전쟁",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvE 콘텐츠: 봄 이벤트 정예 던전 '달보드레 정원' 추가 메뉴(三) - [던전] - [정예 던전]에 '달보드레 정원' 던전이 추가됩니다."
-        },
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            6
-          ],
-          "text": "PvP/전쟁: 아이템 획득처에 [공성전 상점]이 추가됩니다."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -21347,34 +19901,11 @@
         "PvP/전쟁"
       ],
       "card_summary": "PvE 콘텐츠 · 클래스/스킬 · 성장/장비 · 콘텐츠/시스템",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            0,
-            1
-          ],
-          "text": "PvE 콘텐츠: 길드 던전 협동 토벌전 14~16단계 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            4
-          ],
-          "text": "클래스/스킬: 클래스별 신규 아바타가 추가됩니다. (전설 1종)."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -21464,24 +19995,11 @@
         "성장/장비"
       ],
       "card_summary": "PvE 콘텐츠 · 편의/UI · PvP/전쟁 · 서버/월드",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            0,
-            1
-          ],
-          "text": "PvE 콘텐츠: 영지 방어전 5~6단계, 아홉 대륙 수호자의 초월 가호석, 아홉 대륙 수호자의 초월 가호석 상자 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -21571,22 +20089,20 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            6,
             7
           ],
-          "text": "PvE 콘텐츠: 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
+          "text": "서버/월드: 던전은 상시 오픈되어 있으며, '그림자 성채 중심부 이동석 - 지옥 성채(월드)'를 사용하여 던전에 입장할 수 있습니다."
         },
         {
           "major_type": "class_skill_system",
           "domain": "클래스/스킬",
-          "source_unit_count": 2,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            1,
-            18
+            1
           ],
-          "text": "클래스/스킬: 인챈트리스 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다."
+          "text": "클래스/스킬: 신규 전직 클래스 '인챈트리스' 추가됩니다."
         }
       ],
       "major_group_count": 2,
@@ -21837,23 +20353,11 @@
         "편의/UI"
       ],
       "card_summary": "클래스/스킬 · 성장/장비 · 서버/월드 · 이벤트/보상",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            10
-          ],
-          "text": "PvE 콘텐츠: 아이템 분해와 파티 던전을 자동으로 진행할 수 있는 '아이템 자동 분해', '파티 던전 자동 진행' 스케줄이 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -22004,23 +20508,11 @@
         "상점/BM"
       ],
       "card_summary": "PvE 콘텐츠 · 콘텐츠/시스템 · 성장/장비 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            3
-          ],
-          "text": "클래스/스킬: 클래스별 신규 아바타가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -22193,12 +20685,11 @@
         {
           "major_type": "class_skill_system",
           "domain": "클래스/스킬",
-          "source_unit_count": 2,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            0,
-            8
+            0
           ],
-          "text": "클래스/스킬: 헌트리스, 클래스 별 신규 무기 형상 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다."
+          "text": "클래스/스킬: 신규 전직 클래스 '헌트리스' 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -22346,23 +20837,11 @@
         "이벤트/보상"
       ],
       "card_summary": "콘텐츠/시스템 · 성장/장비 · 클래스/스킬 · 경제/거래",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            3
-          ],
-          "text": "클래스/스킬: 클래스 별 신규 아바타가 추가됩니다. ( 전설 1종)."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -22640,12 +21119,11 @@
         {
           "major_type": "class_skill_system",
           "domain": "클래스/스킬",
-          "source_unit_count": 2,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            0,
-            10
+            0
           ],
-          "text": "클래스/스킬: 클래스 별 신규 무기 형상 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다."
+          "text": "클래스/스킬: 저지할 수 없는 압도적인 힘을 가진 권갑의 주인, 실드 메이든의 신규 전직 클래스 디스트로이어가 추가됩니다."
         }
       ],
       "major_group_count": 2,
@@ -22824,22 +21302,11 @@
             10
           ],
           "text": "PvE 콘텐츠: 파멸하는 심해의 성소, 뇨르드, 발라 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        },
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            19,
-            21
-          ],
-          "text": "성장/장비: 에기르, 에기르의 심연 울림 각반, 뇨르드의 망토와 관련 성장 요소가 추가·개편되어 캐릭터 성장 단계와 선택지가 확장됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -23006,34 +21473,11 @@
         "PvE 콘텐츠"
       ],
       "card_summary": "PvP/전쟁 · 서버/월드 · 상점/BM · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            12,
-            20
-          ],
-          "text": "PvE 콘텐츠: 기만의 기사 다인흘로크, 영웅 보조무기가 15종 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
-        },
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            6
-          ],
-          "text": "PvP/전쟁: 공성전 상점 내 신규 상품이 추가됩니다."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -23115,24 +21559,11 @@
         "경제/거래"
       ],
       "card_summary": "성장/장비 · PvP/전쟁 · 서버/월드 · 편의/UI",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            1,
-            2
-          ],
-          "text": "PvP/전쟁: 공성전 상점 내 신규 상품, 공성전 상점에 신규 상품 1종 관련 전쟁·경쟁 구조가 추가·개편되어 PvP 참여 흐름과 보상 경쟁이 확장됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -23596,15 +22027,6 @@
       "card_summary": "서버 통합",
       "major_summary_groups": [
         {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            8
-          ],
-          "text": "PvE 콘텐츠: 6챕터 아스가르드에 신규 거점 2곳이 추가됩니다."
-        },
-        {
           "major_type": "new_pvp_war",
           "domain": "PvP/전쟁",
           "source_unit_count": 1,
@@ -23612,23 +22034,11 @@
             7
           ],
           "text": "PvP/전쟁: 아스가르드 거점 점령전 추가됩니다."
-        },
-        {
-          "major_type": "server_world_structure",
-          "domain": "서버/월드",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            0,
-            2
-          ],
-          "text": "서버/월드: 일부 서버군 서버 통합, 서버 통합에 따라 일부 콘텐츠의 입장이 임시 제한되며, 관련 서버·월드 구조가 변경되어 이전·매칭·진행 범위가 조정됩니다."
         }
       ],
-      "major_group_count": 3,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1,
-        2
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -24057,21 +22467,11 @@
             8
           ],
           "text": "PvE 콘텐츠: 87월 3일(일) 21:30에 뇨르드 서버군 월드 던전이 오픈됩니다."
-        },
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            19
-          ],
-          "text": "PvP/전쟁: 에기르 07~09 서버 오픈 이후 공성전 세금이 정상적으로 누적되지 않은 현상이 수정됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -24227,14 +22627,11 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 4,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            3,
-            8,
-            9,
             10
           ],
-          "text": "PvE 콘텐츠: 98월 1일부터, 다음 주 업데이트(98월 3일) 이후,, 길드 던전 관련 신규 제작식 2종 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
+          "text": "PvE 콘텐츠: 길드 던전 관련 신규 제작식 2종이 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -24268,23 +22665,11 @@
         "경제/거래"
       ],
       "card_summary": "PvE 콘텐츠 · 콘텐츠/시스템 · 경제/거래",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "PvE 콘텐츠: 99월 3일(수) 업데이트 이후 진행되는 길드 영지 방어전 보상으로 새로운 [길드 던전 보상 상자]가 지급됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -24421,31 +22806,11 @@
             13
           ],
           "text": "PvE 콘텐츠: 세월에 잊혀진 깊은 동굴 속 신전, 신규 정예 던전 '망각의 신전' 던전이 추가됩니다."
-        },
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            5
-          ],
-          "text": "성장/장비: 전설 등급 장비의 강화 단계별 추가 능력치 증가 구간을 추가하여, 강화 단계가 높아질 수록 추가 능력치의 성능이 향상되도록 변경됩니다."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            15
-          ],
-          "text": "클래스/스킬: 클래스 별 신규 무기 형상이 추가됩니다. ( 전설 1종)."
         }
       ],
-      "major_group_count": 3,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1,
-        2
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -24490,12 +22855,11 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 2,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            0,
             1
           ],
-          "text": "PvE 콘텐츠: 온가을달 호수 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
+          "text": "PvE 콘텐츠: 메뉴(三) - [던전] - [정예 던전]에 '온가을달 호수' 던전이 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -24745,23 +23109,11 @@
         "경제/거래"
       ],
       "card_summary": "콘텐츠/시스템 · 서버/월드 · 성장/장비 · 클래스/스킬",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            7
-          ],
-          "text": "클래스/스킬: 거래소 무기, 보조무기, 스킬북 항목에 클래스별 하위 카테고리가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -24943,13 +23295,11 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 3,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            10,
-            15,
             16
           ],
-          "text": "PvE 콘텐츠: 6챕터 아스가르드 공허 소환체 5종, 흥겨운 겨울 축제 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
+          "text": "PvE 콘텐츠: 메뉴(三) - [던전] - [정예 던전]에 '흥겨운 겨울 축제' 던전이 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -25091,23 +23441,11 @@
         "상점/BM"
       ],
       "card_summary": "PvE 콘텐츠 · 편의/UI · 콘텐츠/시스템 · 성장/장비",
-      "major_summary_groups": [
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            5
-          ],
-          "text": "클래스/스킬: 제작 무기, 보조무기, 스킬북 항목에 클래스별 하위 카테고리가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -25197,31 +23535,11 @@
             1
           ],
           "text": "PvE 콘텐츠: 길드 던전 공허의 제단 추가됩니다."
-        },
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvE 콘텐츠: '길드 공허 소환체 결정의 종류' 항목에 각 공허 소환체에서 등장하는 보스 몬스터의 능력치 관련 안내 문구가 추가되었습니다. (1/28 11:20)."
-        },
-        {
-          "major_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            15
-          ],
-          "text": "클래스/스킬: 클래스 별 신규 무기 형상이 추가됩니다. ( 전설 1종)."
         }
       ],
-      "major_group_count": 3,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1,
-        2
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -25831,23 +24149,11 @@
         "편의/UI"
       ],
       "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -25913,11 +24219,23 @@
         "편의/UI"
       ],
       "card_summary": "PvE 콘텐츠 · 성장/장비 · 성장/합성 · 보스/PvE",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -25958,11 +24276,23 @@
         "편의/UI"
       ],
       "card_summary": "PvE 콘텐츠 · 공성/전쟁 · 문파 콘텐츠 · 성장/정령",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -26005,23 +24335,11 @@
         "편의/UI"
       ],
       "card_summary": "월드보스 · 성장/장비 · NFT/거래 · 성장/정령",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "월드보스: 도미네이션 서버의 Black Dragon Abaddon에 등장하는 ‘<Blackhorn Winged Drakin> Drakazan’ 월드보스가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -26061,15 +24379,6 @@
       "card_summary": "PvP/콘텐츠 · 신규 클래스 · 월드보스 · 성장/장비",
       "major_summary_groups": [
         {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "월드보스: 도미네이션 서버의 Black Dragon Abaddon에 등장하는 ‘<Blackhorn Winged Drakin> Drakazan’ 월드보스가 추가됩니다."
-        },
-        {
           "major_type": "class_skill_system",
           "domain": "클래스/스킬",
           "source_unit_count": 1,
@@ -26079,10 +24388,9 @@
           "text": "신규 클래스: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -26364,33 +24672,11 @@
         "편의/UI"
       ],
       "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "월드보스: 도미네이션 서버의 Black Dragon Abaddon에 등장하는 ‘<Blackhorn Winged Drakin> Drakazan’ 월드보스가 추가됩니다."
-        },
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -26537,23 +24823,11 @@
         "편의/UI"
       ],
       "card_summary": "PvP/전쟁: Bicheon Castle Siege가 추가되어 수비·공성 문파가 비천성 소유권을 두고 경쟁합니다.",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "월드보스: 도미네이션 서버의 Black Dragon Abaddon에 등장하는 ‘<Blackhorn Winged Drakin> Drakazan’ 월드보스가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -26618,23 +24892,11 @@
         "편의/UI"
       ],
       "card_summary": "공성/전쟁 · 성장/장비 · 성장/제작 · 상점/BM",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -26666,23 +24928,11 @@
         "편의/UI"
       ],
       "card_summary": "공성/전쟁 · 성장/장비 · 성장/정령 · 이벤트/보상",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -26714,11 +24964,23 @@
         "편의/UI"
       ],
       "card_summary": "PvE 콘텐츠 · 보스/PvE · 성장/장비 · 성장/제작",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -26753,11 +25015,23 @@
         "편의/UI"
       ],
       "card_summary": "PvE 콘텐츠 · 성장/정령 · 성장/제작 · 시스템/성장",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -26851,23 +25125,11 @@
         "편의/UI"
       ],
       "card_summary": "PvP/전쟁: Bicheon Castle Siege가 추가되어 수비·공성 문파가 비천성 소유권을 두고 경쟁합니다.",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            2
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -27220,11 +25482,23 @@
         "편의/UI"
       ],
       "card_summary": "PvE 콘텐츠 · 성장/장비 · 서버/권역 · 성장/정령",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -27250,11 +25524,23 @@
         "편의/UI"
       ],
       "card_summary": "PvE 콘텐츠 · 성장/제작 · 이벤트/보상 · 편의/UI",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -27284,11 +25570,23 @@
         "편의/UI"
       ],
       "card_summary": "PvE 콘텐츠 · 성장/정령 · 이벤트/보상 · 상점/BM",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -27402,6 +25700,15 @@
       "card_summary": "신규 클래스 · PvE 콘텐츠 · 이벤트/보상 · 편의/UI",
       "major_summary_groups": [
         {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            1
+          ],
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
+        },
+        {
           "major_type": "class_skill_system",
           "domain": "클래스/스킬",
           "source_unit_count": 1,
@@ -27411,9 +25718,10 @@
           "text": "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다."
         }
       ],
-      "major_group_count": 1,
+      "major_group_count": 2,
       "major_summary_indices": [
-        0
+        0,
+        1
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -27888,23 +26196,11 @@
         "상점/BM"
       ],
       "card_summary": "콘텐츠: 신규 지역 Phantasia가 추가됩니다.",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -28280,23 +26576,11 @@
         "편의/UI"
       ],
       "card_summary": "콘텐츠: 신규 보스 레이드 Deranged Hellbound Revenant가 추가됩니다.",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -28521,23 +26805,11 @@
         "편의/UI"
       ],
       "card_summary": "공성/전쟁 · PvP/전쟁 · 서버/권역 · 시스템/성장",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -28761,23 +27033,11 @@
         "편의/UI"
       ],
       "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -28932,23 +27192,11 @@
         "편의/UI"
       ],
       "card_summary": "PvP/전쟁: Sabuk Castle 관련 점령·공성 콘텐츠가 갱신됩니다.",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -29050,23 +27298,11 @@
         "이벤트/보상"
       ],
       "card_summary": "공성/전쟁 · 성장/합성 · 성장/제작 · 시스템/성장",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -29132,11 +27368,23 @@
         "편의/UI"
       ],
       "card_summary": "PvE 콘텐츠 · 성장/장비 · 성장/제작 · 시스템/성장",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -29184,12 +27432,11 @@
         {
           "major_type": "new_pvp_war",
           "domain": "PvP/전쟁",
-          "source_unit_count": 2,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            0,
-            2
+            0
           ],
-          "text": "PvP/전쟁: Hidden Valley Capture, Sabuk Emperor 관련 전쟁·경쟁 구조가 추가·개편되어 PvP 참여 흐름과 보상 경쟁이 확장됩니다."
+          "text": "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -29331,23 +27578,11 @@
         "편의/UI"
       ],
       "card_summary": "PvP/전쟁: Sabuk Clash가 추가되어 사북 지역을 중심으로 경쟁 콘텐츠가 확장됩니다.",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -29441,23 +27676,11 @@
         "편의/UI"
       ],
       "card_summary": "공성/전쟁 · 보스/PvE · 성장/정령 · 시스템/성장",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -29604,11 +27827,23 @@
         "편의/UI"
       ],
       "card_summary": "PvE 콘텐츠 · 성장/정령 · 시스템/성장 · 성장/장비",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -29687,13 +27922,13 @@
       "card_summary": "공성/전쟁 · PvE 콘텐츠 · NFT/거래 · 성장/제작",
       "major_summary_groups": [
         {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
           "source_unit_count": 1,
           "source_unit_indices": [
-            0
+            1
           ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -29743,13 +27978,13 @@
       "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
       "major_summary_groups": [
         {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
           "source_unit_count": 1,
           "source_unit_indices": [
-            0
+            1
           ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -29787,11 +28022,23 @@
         "편의/UI"
       ],
       "card_summary": "PvE 콘텐츠 · 성장/정령 · 성장/장비 · 시스템/성장",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -29875,23 +28122,11 @@
         "편의/UI"
       ],
       "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -29965,11 +28200,23 @@
         "편의/UI"
       ],
       "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -30085,13 +28332,13 @@
       "card_summary": "PvP/전쟁: Sabuk Clash가 추가되어 사북 지역을 중심으로 경쟁 콘텐츠가 확장됩니다.",
       "major_summary_groups": [
         {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
           "source_unit_count": 1,
           "source_unit_indices": [
-            0
+            1
           ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -30171,6 +28418,15 @@
       "card_summary": "PvE 콘텐츠 · 성장/장비 · 성장/정령 · 성장/제작",
       "major_summary_groups": [
         {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
+        },
+        {
           "major_type": "new_growth_axis",
           "domain": "성장/장비",
           "source_unit_count": 1,
@@ -30180,9 +28436,10 @@
           "text": "성장/장비: 고등급 장비의 추가 성장을 위한 ‘Dragon Forge’ 강화 시스템이 확장됩니다."
         }
       ],
-      "major_group_count": 1,
+      "major_group_count": 2,
       "major_summary_indices": [
-        0
+        0,
+        1
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -30260,13 +28517,13 @@
       "card_summary": "PvP/전쟁: Castle Siege가 추가되어 비천성 점령을 둘러싼 대규모 문파 전쟁이 열립니다.",
       "major_summary_groups": [
         {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
           "source_unit_count": 1,
           "source_unit_indices": [
-            0
+            1
           ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -30305,13 +28562,13 @@
       "card_summary": "공성/전쟁 · PvE 콘텐츠 · 성장/장비 · 이벤트/보상",
       "major_summary_groups": [
         {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
           "source_unit_count": 1,
           "source_unit_indices": [
-            0
+            1
           ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -30394,13 +28651,13 @@
       "card_summary": "공성/전쟁 · PvE 콘텐츠 · 성장/장비 · 시스템/성장",
       "major_summary_groups": [
         {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
           "source_unit_count": 1,
           "source_unit_indices": [
-            0
+            1
           ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
         }
       ],
       "major_group_count": 1,
@@ -30523,23 +28780,11 @@
         "편의/UI"
       ],
       "card_summary": "PvP/콘텐츠 · 월드보스 · 성장/장비 · 서버/권역",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "월드보스: 도미네이션 서버의 Black Dragon Abaddon에 등장하는 ‘<Blackhorn Winged Drakin> Drakazan’ 월드보스가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -30614,11 +28859,23 @@
         "편의/UI"
       ],
       "card_summary": "PvE 콘텐츠 · 성장/장비 · 성장/정령 · 성장/제작",
-      "major_summary_groups": [],
-      "major_group_count": 0,
-      "major_summary_indices": [],
-      "derived_importance": "normal",
-      "display_importance": "normal",
+      "major_summary_groups": [
+        {
+          "major_type": "new_pve_content",
+          "domain": "PvE 콘텐츠",
+          "source_unit_count": 1,
+          "source_unit_indices": [
+            0
+          ],
+          "text": "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다."
+        }
+      ],
+      "major_group_count": 1,
+      "major_summary_indices": [
+        0
+      ],
+      "derived_importance": "major",
+      "display_importance": "major",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -30687,23 +28944,11 @@
         "편의/UI"
       ],
       "card_summary": "공성/전쟁 · 성장/장비 · 성장/정령 · 성장/제작",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -30834,15 +29079,6 @@
       "card_summary": "PvP/콘텐츠 · 공성/전쟁 · 신규 클래스 · 성장/스킬",
       "major_summary_groups": [
         {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "text": "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다."
-        },
-        {
           "major_type": "class_skill_system",
           "domain": "클래스/스킬",
           "source_unit_count": 2,
@@ -30853,10 +29089,9 @@
           "text": "클래스/스킬: Arbalist, Darkist 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다."
         }
       ],
-      "major_group_count": 2,
+      "major_group_count": 1,
       "major_summary_indices": [
-        0,
-        1
+        0
       ],
       "derived_importance": "major",
       "display_importance": "major",
@@ -32294,12 +30529,11 @@
         {
           "major_type": "class_skill_system",
           "domain": "클래스/스킬",
-          "source_unit_count": 2,
+          "source_unit_count": 1,
           "source_unit_indices": [
-            0,
-            1
+            0
           ],
-          "text": "클래스/스킬: Rapier, 클래스 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다."
+          "text": "클래스/스킬: 신규 클래스 ‘Rapier’가 추가되고, 돌진·마비·상태이상 반사 중심의 전투 구조가 도입되었습니다."
         }
       ],
       "major_group_count": 1,
@@ -33639,11 +31873,12 @@
         {
           "major_type": "new_pve_content",
           "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
+          "source_unit_count": 2,
           "source_unit_indices": [
-            0
+            0,
+            1
           ],
-          "text": "PvE 콘텐츠: 신규 필드·지역 또는 전용 사냥 구역이 추가되어 사냥 동선과 보상 루트가 확장되었습니다."
+          "text": "PvE 콘텐츠: 필드·지역 또는 전용 사냥 구역, 미궁 던전 보상 배율 기능 관련 콘텐츠가 추가·개편되어 공략 구간과 플레이 목표가 확장됩니다."
         },
         {
           "major_type": "new_growth_axis",
@@ -33698,23 +31933,11 @@
         "이벤트/시즌"
       ],
       "card_summary": "Periapt Awakening System",
-      "major_summary_groups": [
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "성장/장비: Periapt Awakening 시스템이 추가되어 성장 단계가 확장됩니다"
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -33749,23 +31972,11 @@
         "이벤트/시즌"
       ],
       "card_summary": "Candellium Desert Renewal",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pve_content",
-          "domain": "PvE 콘텐츠",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            3
-          ],
-          "text": "편의/UI: Guild Lab Crimson Wolf Journal Chapter 8 챕터가 추가됩니다"
-        }
-      ],
-      "major_group_count": 1,
-      "major_summary_indices": [
-        0
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {
@@ -33799,33 +32010,11 @@
         "이벤트/시즌"
       ],
       "card_summary": "Dominion",
-      "major_summary_groups": [
-        {
-          "major_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "text": "PvP/전쟁: Dominion 문파 콘텐츠가 추가되어 길드 단위 경쟁 구조가 확장됩니다"
-        },
-        {
-          "major_type": "new_growth_axis",
-          "domain": "성장/장비",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            3
-          ],
-          "text": "성장/장비: Glider Special Transcendence 시스템이 추가되어 글라이더 성장 단계가 확장됩니다"
-        }
-      ],
-      "major_group_count": 2,
-      "major_summary_indices": [
-        0,
-        1
-      ],
-      "derived_importance": "major",
-      "display_importance": "major",
+      "major_summary_groups": [],
+      "major_group_count": 0,
+      "major_summary_indices": [],
+      "derived_importance": "normal",
+      "display_importance": "normal",
       "importance_source": "derived_from_body_summary_structural_major_groups_v044"
     },
     {

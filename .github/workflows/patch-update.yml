@@ -125,6 +125,18 @@ jobs:
         run: |
           python scripts/patch_update_workflow.py
 
+      - name: Enrich schedule identity
+        if: always()
+        env:
+          GITHUB_EVENT_SCHEDULE: ${{ github.event.schedule || '' }}
+        run: |
+          python scripts/enrich_schedule_identity.py
+
+      - name: Run major consistency audit
+        if: always()
+        run: |
+          python scripts/major_consistency_audit.py
+
       - name: Commit patch_view_model.json only
         if: ${{ env.DRY_RUN == 'false' && env.RUN_GIT_PUSH == 'true' }}
         run: |

@@ -48,6 +48,101 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans
 .side{overflow:auto;background:#fff;padding:16px;border-left:1px solid var(--line);color:#142033}.empty-msg{padding:40px;color:#7a879b}.side-title{font-size:20px;font-weight:900;margin:8px 0;color:#142033}.side-sub{font-size:13px;color:var(--accent);font-weight:900;margin-bottom:4px}.tag{display:inline-block;border-radius:999px;background:#ffe4ef;color:#c2185b;border:1px solid #f8b6cf;padding:4px 8px;font-weight:900;margin-right:4px;margin-bottom:4px}.tag.neutral{background:#eef4ff;color:#34435c;border-color:#dce5f2}.box{border:1px solid var(--line);border-radius:14px;background:#f8fbff;padding:14px;margin:14px 0}.box.primary{background:#fff;border-color:#c7d8f2;box-shadow:var(--glow)}.box h3{font-size:14px;margin:0 0 10px;font-weight:900;color:#142033}.box ul{margin:0;padding-left:18px}.box li{margin:6px 0;line-height:1.48;color:#25324a}.source-btn{display:inline-block;margin-top:8px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:#26374f;text-decoration:none;font-weight:800}.source-btn:hover{border-color:#9db7df;background:#f8fbff}.meta{font-size:12px;color:#64748b}.no-results{padding:60px;text-align:center;color:#6b7890;font-weight:800}.review-meta{font-size:11px;color:#64748b;line-height:1.5}.filter-note{font-size:12px;color:#64748b}.floating-year{position:fixed;z-index:60;display:none;background:#17233a;color:#fff;border:1px solid #17233a;border-radius:6px;padding:3px 8px;font-weight:900;font-size:13px;pointer-events:none;box-shadow:0 8px 20px rgba(24,39,75,.18)}
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:#edf2f8}::-webkit-scrollbar-thumb{background:#c8d4e6;border-radius:999px;border:2px solid #edf2f8}::-webkit-scrollbar-thumb:hover{background:#9db7df}
 @media (max-width:860px){.minimap-section{top:44px}.minimap-wrap{height:30px}.mbar{min-width:3px}.content{grid-template-columns:1fr}.side{max-height:260px;border-top:1px solid var(--line)}}
+
+
+/* v038 UI fixes: right panel spacing, tag wrapping, sticky clipping, selected state, major summary text */
+:root {
+  --v038-detail-panel-space: 380px;
+}
+/* A안: leave horizontal room so the right detail panel does not cover the last timeline columns. */
+#viewport,
+.timeline-wrap,
+.timeline-scroll,
+.timeline-board-scroll,
+.timeline-content-scroll,
+.timeline-grid-scroll {
+  padding-right: var(--v038-detail-panel-space) !important;
+  scroll-padding-right: var(--v038-detail-panel-space) !important;
+  box-sizing: border-box;
+}
+.event-card .domain-tag,
+.event-card .tag,
+.patch-card .domain-tag,
+.patch-card .tag,
+.card .domain-tag,
+.card .tag,
+.domain-tag {
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+}
+.event-card .domain-summary,
+.event-card .summary,
+.patch-card .tags,
+.patch-card .domain-tags,
+.card .tags,
+.card .domain-tags {
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+}
+.domain-separator {
+  white-space: nowrap;
+}
+.game-label,
+.game-name-column,
+.game-column,
+.game-cell.sticky,
+.sticky-game-column {
+  position: sticky;
+  left: 0;
+  z-index: 20;
+  background: #fff;
+}
+.event-card.selected,
+.event-card.is-selected,
+.patch-card.is-selected,
+.patch-card.selected,
+.card.is-selected,
+.card.selected {
+  border-color: #4B78FF !important;
+  box-shadow: 0 0 0 2px rgba(75, 120, 255, 0.22) !important;
+}
+.event-card.major.selected,
+.event-card.major.is-selected,
+.patch-card.major.selected,
+.patch-card.major.is-selected,
+.card.major.selected,
+.card.major.is-selected {
+  border-left-color: #4B78FF !important;
+}
+.event-card.selected .major-badge,
+.event-card.is-selected .major-badge,
+.event-card.selected .badge-major,
+.event-card.is-selected .badge-major,
+.patch-card.is-selected .major-badge,
+.patch-card.selected .major-badge,
+.card.is-selected .major-badge,
+.card.selected .major-badge,
+.patch-card.is-selected .badge-major,
+.patch-card.selected .badge-major,
+.card.is-selected .badge-major,
+.card.selected .badge-major {
+  display: none !important;
+}
+.summary-major-text,
+.body-summary-major,
+.v038-major-summary-line {
+  color: #C00000 !important;
+  font-weight: 600;
+}
+.v038-source-link-under-title {
+  display: inline-block;
+  margin: 10px 0 12px;
+}
+.v038-hidden-major-meta {
+  display: none !important;
+}
+
 </style><!-- patchnote timeline UI: restored stable timeline; standard patch_view_model.json source -->
 <!-- patch_view_model_html_restore_v007: existing timeline UI preserved; patch_view_model.json View Model fields used. -->
 </head><body><div class="app"><div class="toolbar" id="controls"></div><div class="minimap-section"><div class="minimap-wrap" id="minimapWrap"><div class="minimap-bars" id="minimapBars"></div><div class="minimap-window" id="minimapWindow"></div><div class="minimap-empty" id="minimapEmpty" style="display:none">표시할 패치노트가 없습니다</div></div></div><div class="content no-side" id="content"><div class="timeline-wrap" id="viewport"><div class="timeline" id="timeline"></div></div><aside class="side" id="side"></aside></div></div><div class="floating-year" id="floatingYear"></div><script>let DATA = [];
@@ -295,23 +390,41 @@ function updateFloatingYear(){
   fy.style.display='block';
 }
 function attachViewportListeners(){const viewport=$('viewport'); if(viewport&&!viewport.dataset.minimapBound){const sync=()=>{updateMinimapViewport(); updateFloatingYear();}; viewport.addEventListener('scroll',sync,{passive:true}); viewport.addEventListener('click',e=>{if(!e.target.closest('.event-card')) clearDetail();}); window.addEventListener('resize',sync); viewport.dataset.minimapBound='1';}}
-function cardHtml(e,g,idx){ const major=isMajor(e); const rel=e.type==='release'; const sum=cardSummary(e); return `<div class="event-card ${major?'major':''} ${rel?'release-card':''}" data-game="${g.name}" data-idx="${idx}"><div class="title-line"><span class="dot"></span><span class="date-title">${escapeHtml(e.title||'')}</span></div>${sum?`<div class="summary ${major?'major-text':''}">${major?'<span class="major-badge in-summary">주요</span>':''}${escapeHtml(sum)}</div>`:''}</div>`; }
+function cardSummaryHtml(e){
+  const major=isMajor(e);
+  if(major){
+    const sum=cardSummary(e);
+    return sum?`<div class="summary major-text"><span class="major-badge in-summary">주요</span>${escapeHtml(sum)}</div>`:'';
+  }
+  const tags=asArray(e.domain_tags).map(textOf).filter(Boolean).slice(0,4);
+  if(tags.length){
+    return `<div class="summary domain-summary">${tags.map(t=>`<span class="domain-tag">${escapeHtml(t)}</span>`).join('<span class="domain-separator"> · </span>')}</div>`;
+  }
+  const sum=cardSummary(e);
+  return sum?`<div class="summary">${escapeHtml(sum)}</div>`:'';
+}
+function cardHtml(e,g,idx){ const major=isMajor(e); const rel=e.type==='release'; return `<div class="event-card ${major?'major':''} ${rel?'release-card':''}" data-game="${g.name}" data-idx="${idx}"><div class="title-line"><span class="dot"></span><span class="date-title">${escapeHtml(e.title||'')}</span></div>${cardSummaryHtml(e)}</div>`; }
+function isMajorSummaryLine(text, majorItems, signals){
+  const src=[...asArray(majorItems), ...asArray(signals)].map(textOf).map(cleanBullet).join(' ');
+  const stop=new Set(['신규','대형','추가','변경','개선','콘텐츠','업데이트','패치','안내','주요','보상']);
+  const tokens=[...new Set(String(src||'').replace(/\s+/g,' ').split(/[^0-9A-Za-z가-힣]+/).map(x=>x.trim()).filter(x=>x.length>=3&&!stop.has(x)))];
+  const target=String(text||'');
+  return tokens.length>0 && tokens.some(t=>target.includes(t));
+}
+function box(title,items,extra='', majorItems=[], signals=[]){return `<div class="box ${extra}"><h3>${escapeHtml(title)}</h3><ul>${items.map(i=>`<li class="${extra==='primary'&&isMajorSummaryLine(i,majorItems,signals)?'v038-major-summary-line':''}">${escapeHtml(i)}</li>`).join('')}</ul></div>`}
 function showDetail(game,idx){
   openDetail();
   const g=GAME_BY_NAME[game], e=g.events[Number(idx)]; const major=isMajor(e);
-  const signals=asArray(e.representative_signals).map(s=>`<span class="tag">${escapeHtml(s)}</span>`).join('');
+  const signals=asArray(e.representative_signals).map(textOf).filter(Boolean);
   const majorItems=asArray(e.major_update_summary).map(textOf).map(cleanBullet).filter(Boolean);
   const bodyItems=asArray(e.body_summary).map(textOf).map(cleanBullet).filter(Boolean);
   const tagItems = asArray(e.domain_tags).map(textOf).filter(Boolean);
   let html=`<div class="side-sub">선택 항목</div>${major?'<span class="tag">주요</span>':''}<div class="side-sub">${escapeHtml(g.name)}</div><div class="side-title">${escapeHtml(e.title||'')}</div>`;
-  if(signals) html+=`<div class="box"><h3>패치 카테고리</h3>${signals}</div>`;
-  if(majorItems.length) html+=box('주요 업데이트',majorItems);
-  if(bodyItems.length) html+=box('본문 요약', bodyItems, 'primary');
+  if(e.source_url) html+=`<a class="source-btn v038-source-link-under-title" href="${escapeAttr(e.source_url)}" target="_blank">원문 패치노트 열기</a>`;
+  if(bodyItems.length) html+=box('본문 요약', bodyItems, 'primary', majorItems, signals);
   if(tagItems.length) html+=box('관련 영역', tagItems);
-  if(e.source_url) html+=`<a class="source-btn" href="${escapeAttr(e.source_url)}" target="_blank">원문 패치노트 열기</a>`;
   $('side').innerHTML=html;
 }
-function box(title,items,extra=''){return `<div class="box ${extra}"><h3>${escapeHtml(title)}</h3><ul>${items.map(i=>`<li>${escapeHtml(i)}</li>`).join('')}</ul></div>`}
 function escapeHtml(s){return String(s||'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
 function escapeAttr(s){return escapeHtml(s).replace(/'/g,'&#39;')}
 async function startApp(){

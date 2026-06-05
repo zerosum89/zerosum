@@ -4,55 +4,55 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: "true = preview only. false = allow Notion write and patch_view_model.json commit according to other switches."
+        description: "[dry_run] 실행 모드 — true=미리보기만 실행, false=Notion write와 JSON 배포를 다른 스위치 기준으로 허용"
         required: true
         default: "true"
         type: choice
         options: ["true", "false"]
       run_notion_write:
-        description: "true = create new Patch View Model pages when dry_run=false and payload quality passes."
+        description: "[run_notion_write] Notion 신규 적재 — true=dry_run=false이고 품질 PASS인 신규 패치노트를 Patch View Model DB에 생성"
         required: true
         default: "false"
         type: choice
         options: ["false", "true"]
       run_git_push:
-        description: "Commit/push patch_view_model.json only when dry_run=false."
+        description: "[run_git_push] GitHub Pages 데이터 배포 — true=dry_run=false일 때 patch_view_model.json 변경분 commit/push"
         required: true
         default: "false"
         type: choice
         options: ["false", "true"]
       target_games:
-        description: "ALL or comma-separated game keys, e.g. MIR4_Global,Odin_KR"
+        description: "[target_games] 대상 게임 — ALL 또는 쉼표 구분 게임 키 예: MIR4_Global,Odin_KR"
         required: false
         default: "ALL"
       max_new_urls_per_game:
-        description: "Safety cap for newer-than-anchor URL candidates per game."
+        description: "[max_new_urls_per_game] 게임별 신규 URL 최대 처리 수 — anchor 이후 후보 URL 안전 상한"
         required: false
         default: "20"
       strict_detail_url_guard:
-        description: "true = fail run if any board/list URL survives as a new candidate."
+        description: "[strict_detail_url_guard] 상세 URL 안전 검사 — true=목록/게시판 URL이 신규 후보로 남으면 실패 처리"
         required: true
         default: "true"
         type: choice
         options: ["true", "false"]
       fetch_detail_pages:
-        description: "true = fetch raw detail HTML/text for new URL candidates and create rule-based summary preview."
+        description: "[fetch_detail_pages] 상세 본문 수집 — true=신규 후보의 상세 HTML/text를 수집하고 요약 preview 생성"
         required: true
         default: "true"
         type: choice
         options: ["true", "false"]
       max_detail_fetches:
-        description: "Safety cap for detail page fetches per workflow run."
+        description: "[max_detail_fetches] 상세 페이지 fetch 최대 수 — workflow 1회 실행당 안전 상한"
         required: false
         default: "20"
       run_title_repair:
-        description: "true = normalize recent Notion item names to YY.MM.DD | 패치노트 when dry_run=false."
+        description: "[run_title_repair] 제목 보정 실행 여부 — true=dry_run=false일 때 최근 Notion 항목명을 YY.MM.DD | 패치노트로 보정"
         required: true
         default: "false"
         type: choice
         options: ["false", "true"]
       title_repair_window_days:
-        description: "Only repair item titles whose actual_date is within this many days."
+        description: "[title_repair_window_days] 제목 보정 기간 — actual_date 기준 최근 N일만 보정"
         required: false
         default: "14"
   schedule:

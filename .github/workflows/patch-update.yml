@@ -56,9 +56,9 @@ on:
         required: false
         default: "14"
   schedule:
-    # 21:00 UTC = 06:00 KST. Scheduled runs are preview by default.
+    # 21:17 UTC = 06:17 KST. Scheduled runs are preview by default.
     # Set repository variable PATCH_UPDATE_SCHEDULE_MODE=write_deploy to enable automatic write/deploy.
-    - cron: "0 21 * * *"
+    - cron: "17 21 * * *"
 
 permissions:
   contents: write
@@ -123,9 +123,9 @@ jobs:
 
       - name: Run patchnote workflow
         env:
-          WORKFLOW_VERSION: github_actions_v091
+          WORKFLOW_VERSION: github_actions_v093
         run: |
-          python scripts/policy_gate_v069_runner.py -- python scripts/patch_update_workflow.py
+          python scripts/policy_gate_v093_runner.py -- python scripts/patch_update_workflow.py
 
       - name: Enrich schedule identity
         if: always()
@@ -137,11 +137,11 @@ jobs:
       - name: Run v069 display / decision audit
         if: always()
         run: |
-          python scripts/policy_gate_v069.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode post-run --strict
+          python scripts/policy_gate_v093.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode post-run --strict
 
       - name: Run v069 deploy gate
         run: |
-          python scripts/policy_gate_v069.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode deploy --strict
+          python scripts/policy_gate_v093.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode deploy --strict
       - name: Commit patch_view_model.json only
         if: ${{ env.DRY_RUN == 'false' && env.RUN_GIT_PUSH == 'true' }}
         run: |
@@ -255,7 +255,7 @@ jobs:
       - name: Run v069 report consistency gate
         if: always()
         run: |
-          python scripts/report_consistency_v069.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --repo-root "$GITHUB_WORKSPACE" --strict
+          python scripts/report_consistency_v093.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --repo-root "$GITHUB_WORKSPACE" --strict
 
 
       - name: Upload workflow artifacts

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-policy_gate_v069_runner.py
+policy_gate_v093_runner.py
 
 Runs patch_update_workflow under a strict preview -> gate -> actual sequence and writes a version-neutral runner summary artifact.
 
 When the original run is write/deploy capable, the runner first executes a preview
 pass with DRY_RUN=true, RUN_NOTION_WRITE=false, RUN_GIT_PUSH=false, validates the
-preview/public data through policy_gate_v069.py, then executes the original command.
+preview/public data through policy_gate_v093.py, then executes the original command.
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 
-WORKFLOW_VERSION = "github_actions_v069"
+WORKFLOW_VERSION = "github_actions_v093"
 
 
 def truthy(v: str | None) -> bool:
@@ -28,14 +28,14 @@ def truthy(v: str | None) -> bool:
 
 
 def run_cmd(cmd: list[str], env: dict[str, str], phase: str) -> int:
-    print(f"[v069 runner] phase={phase} command={' '.join(cmd)}", flush=True)
+    print(f"[v093 runner] phase={phase} command={' '.join(cmd)}", flush=True)
     p = subprocess.run(cmd, env=env)
-    print(f"[v069 runner] phase={phase} returncode={p.returncode}", flush=True)
+    print(f"[v093 runner] phase={phase} returncode={p.returncode}", flush=True)
     return int(p.returncode)
 
 
 def run_gate(mode: str, artifact_dir: str) -> int:
-    gate_script = pathlib.Path(__file__).with_name("policy_gate_v069.py")
+    gate_script = pathlib.Path(__file__).with_name("policy_gate_v093.py")
     cmd = [sys.executable, str(gate_script), "--artifact-dir", artifact_dir, "--mode", mode, "--strict"]
     return run_cmd(cmd, os.environ.copy(), f"gate:{mode}")
 
@@ -49,7 +49,7 @@ def main() -> int:
     if cmd and cmd[0] == "--":
         cmd = cmd[1:]
     if not cmd:
-        print("[v069 runner][ERROR] missing command after --", file=sys.stderr)
+        print("[v093 runner][ERROR] missing command after --", file=sys.stderr)
         return 2
 
     original_env = os.environ.copy()

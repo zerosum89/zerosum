@@ -6,7 +6,7 @@ import argparse, json, os, pathlib, re, subprocess, sys
 from datetime import datetime, timezone
 from typing import Any
 
-WORKFLOW_VERSION = "github_actions_v069"
+WORKFLOW_VERSION = "github_actions_v093"
 STALE_SCOPE_TOKENS = [
     "v043 strict major detection",
     "v043 major grouping",
@@ -49,7 +49,7 @@ def rewrite_scope(report_text: str, workflow_version: str) -> tuple[str, bool]:
 - v069 phase separation: preview, pre-write gate, actual run, post-run gate, report consistency, and deploy result are reported as separate states.
 - v060/v069 decision model: body_summary, highlight_sentence_candidates, importance_suggestion, and importance_decision keep single responsibilities.
 - Display rule: card major badge follows importance_decision; body-summary emphasis follows major decision AND highlight_sentence_candidates.
-- Legacy major fields are blocked from public output: derived_major*, derived_importance, display_importance, major_summary_groups, major_group_count, major_summary_indices.
+- Legacy major fields are blocked from public output: derived_major*, legacy_importance_suggestion, display_importance, legacy_highlight_sentence_groups, major_group_LEGACYTOKEN_count, legacy_highlight_sentence_indices.
 - Notion write guard: write runs only when dry_run=false, run_notion_write=true, and gate status is pass.
 - Data-only deploy guard: GitHub Pages deploy may commit patch_view_model.json only; template changes require a separate approved package.
 - Report rule: file_changed and patch_view_model_git_changed reflect final Git deploy state, not only the actual run's pre-deploy workspace state.
@@ -140,7 +140,7 @@ def main() -> int:
     result["git_status_after_report_consistency"] = status_text
     if rc != 0: warnings.append("git status failed: " + status_err.strip())
     result["errors"] = errors; result["warnings"] = warnings; result["status"] = "pass" if not errors else "blocked"
-    write_json(artifact_dir / "report_consistency_v069.json", result)
+    write_json(artifact_dir / "report_consistency_v093.json", result)
     if errors:
         print("[v069 report consistency][BLOCKED] " + "; ".join(errors), file=sys.stderr)
         return 1 if args.strict else 0

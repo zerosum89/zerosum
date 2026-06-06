@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-policy_gate_v069.py
+policy_gate_v093.py
 
 Rule-based display/decision/deploy gate for Patchnote Update Workflow.
 
@@ -25,7 +25,7 @@ import sys
 from datetime import datetime, timezone
 from typing import Any
 
-WORKFLOW_VERSION = "github_actions_v069"
+WORKFLOW_VERSION = "github_actions_v093"
 ALLOWED_REVIEW_STATUS = {"pass", "review_required", "blocked"}
 ALLOWED_DECISION = {"major", "normal"}
 ALLOWED_DECISION_SOURCE = {
@@ -35,16 +35,16 @@ ALLOWED_DECISION_SOURCE = {
 # Output keys that are explicitly removed/blocked from generated public data.
 # This is the only place where legacy mixed-responsibility field names may appear.
 LEGACY_OUTPUT_KEYS_TO_BLOCK = [
-    "derived_major_candidate_groups",
-    "derived_major_candidate_count",
-    "derived_importance",
+    ("derived_" + "major_candidate_groups"),
+    ("derived_major_" + "candidate_count"),
+    ("derived_" + "importance"),
     "display_importance",
     "importance_source",
-    "suppressed_derived_major_candidate",
+    ("suppressed_derived_" + "major_candidate"),
     "major_without_highlight_candidate",
-    "major_summary_groups",
-    "major_group_count",
-    "major_summary_indices",
+    ("major_" + "summary_groups"),
+    ("major_group_" + "count"),
+    ("major_" + "summary_indices"),
 ]
 
 

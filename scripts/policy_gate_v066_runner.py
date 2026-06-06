@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-policy_gate_v060_runner.py
+policy_gate_v066_runner.py
 
 Runs patch_update_workflow under a strict preview -> gate -> actual sequence.
 
 When the original run is write/deploy capable, the runner first executes a preview
 pass with DRY_RUN=true, RUN_NOTION_WRITE=false, RUN_GIT_PUSH=false, validates the
-preview/public data through policy_gate_v060.py, then executes the original command.
+preview/public data through policy_gate_v066.py, then executes the original command.
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 
-WORKFLOW_VERSION = "github_actions_v060"
+WORKFLOW_VERSION = "github_actions_v066"
 
 
 def truthy(v: str | None) -> bool:
@@ -35,7 +35,7 @@ def run_cmd(cmd: list[str], env: dict[str, str], phase: str) -> int:
 
 
 def run_gate(mode: str, artifact_dir: str) -> int:
-    gate_script = pathlib.Path(__file__).with_name("policy_gate_v060.py")
+    gate_script = pathlib.Path(__file__).with_name("policy_gate_v066.py")
     cmd = [sys.executable, str(gate_script), "--artifact-dir", artifact_dir, "--mode", mode, "--strict"]
     return run_cmd(cmd, os.environ.copy(), f"gate:{mode}")
 

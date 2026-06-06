@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-policy_gate_v060.py
+policy_gate_v066.py
 
 Rule-based display/decision/deploy gate for Patchnote Update Workflow.
 
@@ -25,7 +25,7 @@ import sys
 from datetime import datetime, timezone
 from typing import Any
 
-WORKFLOW_VERSION = "github_actions_v060"
+WORKFLOW_VERSION = "github_actions_v066"
 ALLOWED_REVIEW_STATUS = {"pass", "review_required", "blocked"}
 ALLOWED_DECISION = {"major", "normal"}
 ALLOWED_DECISION_SOURCE = {

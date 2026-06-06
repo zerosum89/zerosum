@@ -64,11 +64,11 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v069"
+WORKFLOW_VERSION = "github_actions_v087"
 
 
-DISPLAY_DATA_VERSION = "patch_view_model.v060_importance_decision_display"
-MAJOR_POLICY_VERSION = "major_policy_v060_importance_decision"
+DISPLAY_DATA_VERSION = "patch_view_model.v087_semantic_fields_from_notion"
+MAJOR_POLICY_VERSION = "major_policy_v087_semantic_fields_from_notion"
 def canonical_url(url: str) -> str:
     if not url:
         return ""
@@ -556,37 +556,124 @@ def derive_highlight_sentence_candidates(body_summary: list[str]) -> list[dict[s
     return out
 
 
-def enrich_importance_display_fields(item: dict[str, Any]) -> dict[str, Any]:
-    '''v060: separate summary, highlight candidates, suggestion, decision, and gate fields.
+def _semantic_property_present(raw: dict[str, Any], names: list[str]) -> bool:
+    key_map = {norm_key(k): k for k in raw.keys()}
+    return any((n in raw) or (norm_key(n) in key_map) for n in names)
 
-    The Patch View Model DB importance field is mapped to importance_decision.
-    highlight_sentence_candidates are display candidates only and cannot promote a card.
+
+def normalize_highlight_candidates_value(value: Any) -> list[dict[str, Any]]:
+    """Normalize Notion rich_text/list value into display highlight candidate dicts.
+
+    Stored Notion rich_text may be JSON list, JSON object, newline-separated sentences,
+    or a single sentence. This function preserves candidate sentences as display candidates
+    only; it does not decide whether the patch is major.
+    """
+    if value is None or value == "":
+        return []
+    raw_items: list[Any]
+    if isinstance(value, list):
+        raw_items = value
+    elif isinstance(value, dict):
+        raw_items = [value]
+    else:
+        text = str(value).strip()
+        if not text:
+            return []
+        parsed = None
+        if text.startswith("[") or text.startswith("{"):
+            try:
+                parsed = json.loads(text)
+            except Exception:
+                parsed = None
+        if isinstance(parsed, list):
+            raw_items = parsed
+        elif isinstance(parsed, dict):
+            raw_items = [parsed]
+        else:
+            raw_items = [x.strip() for x in re.split(r"[\r\n]+", text) if x.strip()]
+    out: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for idx, raw in enumerate(raw_items):
+        if isinstance(raw, dict):
+            sentence = str(raw.get("sentence") or raw.get("text") or raw.get("plain_text") or "").strip()
+            if not sentence:
+                continue
+            item = dict(raw)
+        else:
+            sentence = str(raw).strip()
+            if not sentence:
+                continue
+            item = {}
+        if sentence in seen:
+            continue
+        seen.add(sentence)
+        item["sentence"] = sentence
+        item["text"] = sentence
+        item.setdefault("highlight_reason", item.get("highlight_type") or "notion_stored")
+        item.setdefault("confidence", 1.0)
+        item.setdefault("rule_id", "v087_notion_stored_highlight")
+        item.setdefault("source", "notion_property")
+        out.append(item)
+    return out
+
+
+def enrich_importance_display_fields(item: dict[str, Any]) -> dict[str, Any]:
+    '''v087: single-responsibility export mapping.
+
+    - body_summary remains the source summary.
+    - highlight_sentence_candidates are display candidates only.
+    - importance_suggestion is derived from body_summary for audit/suggestion.
+    - importance_decision is mapped from the Notion/DB importance field.
+    - normal rows must not export display highlight candidates.
+    - major rows use stored Notion highlight candidates, with derived candidates only as fallback.
     '''
     body_summary = listify(item.get("body_summary", []))
-    candidates = derive_highlight_sentence_candidates(body_summary)
+    derived_candidates = derive_highlight_sentence_candidates(body_summary)
+    stored_candidates = normalize_highlight_candidates_value(item.get("highlight_sentence_candidates"))
+
     db_importance = str(item.get("importance", "normal") or "normal").strip().lower()
     decision = "major" if db_importance == "major" else "normal"
-    reasons = sorted({str(c.get("highlight_reason", "")) for c in candidates if c.get("highlight_reason")})
-    suggestion = "major" if candidates else "normal"
-    confidence = max([float(c.get("confidence", 0.0) or 0.0) for c in candidates] or [0.76])
+
+    # Stored candidates are the source of truth for display when available. For major rows
+    # without stored candidates, derive a fallback so existing/future major rows do not lose
+    # all emphasis. For normal rows, candidates are always cleared to prevent semantic mixing.
+    if decision == "major":
+        candidates = stored_candidates if stored_candidates else derived_candidates
+    else:
+        candidates = []
+
+    derived_reasons = sorted({str(c.get("highlight_reason", "")) for c in derived_candidates if c.get("highlight_reason")})
+    suggestion = "major" if derived_candidates else "normal"
+    confidence = max([float(c.get("confidence", 0.0) or 0.0) for c in derived_candidates] or [0.76])
+
+    stored_reason = str(item.get("importance_reason") or "").strip()
+    if stored_reason:
+        importance_reason = stored_reason
+    else:
+        importance_reason = "Patch View Model DB importance 필드가 카드 주요 표시의 최종 기준입니다."
 
     item["highlight_sentence_candidates"] = candidates
     item["importance_suggestion"] = suggestion
-    item["importance_suggestion_reason"] = reasons
+    item["importance_suggestion_reason"] = derived_reasons
     item["importance_suggestion_confidence"] = confidence
     item["importance_decision"] = decision
     item["importance_decision_source"] = "notion_existing"
-    item["importance_reason"] = "Patch View Model DB importance 필드가 카드 주요 표시의 최종 기준입니다."
+    item["importance_reason"] = importance_reason
     item["importance_review_status"] = "pass"
     item["display_highlight_count"] = len(candidates) if decision == "major" else 0
     item["quality_gate_status"] = "pass"
 
-    # v057 outputs must not expose legacy mixed-responsibility fields.
     for legacy_key in [
-        "derived_major_candidate_groups", "derived_major_candidate_count", "derived_importance",
-        "display_importance", "importance_source", "suppressed_derived_major_candidate",
-        "major_without_highlight_candidate", "major_summary_groups", "major_group_count",
-        "major_summary_indices",
+        "highlight_sentence_candidates",
+        "highlight_sentence_candidate_count",
+        "importance_suggestion",
+        "display_importance",
+        "importance_source",
+        "suppressed_highlight_sentence_candidate",
+        "major_without_highlight_candidate",
+        "highlight_sentence_candidates",
+        "display_highlight_count",
+        "highlight_sentence_indices",
     ]:
         item.pop(legacy_key, None)
     return item
@@ -606,12 +693,7 @@ def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
     card_summary = pick(raw, ["card_summary", "카드 요약", "Card Summary"], "")
     if not card_summary:
         card_summary = " · ".join(domain_tags[:4]) if domain_tags else ""
-
     actual_date = str(pick(raw, ["actual_date", "실제 패치일", "패치일", "날짜", "Date"], ""))[:10]
-    # v015: Notion title property in this DB is "항목명".  Earlier versions did
-    # not read that key, so title repair saw an already-normalized fallback and
-    # found zero candidates. Keep the raw Notion title separately for repair,
-    # while exposing a normalized display title to patch_view_model.json.
     raw_title = str(pick(raw, ["항목명", "title", "표시 제목", "정규화 제목", "패치 제목", "Name", "제목"], ""))
     normalized_title = normalized_patch_page_title(actual_date, raw_title)
     title = normalized_title or raw_title
@@ -619,6 +701,8 @@ def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
         date = actual_date.replace("-", ".")[2:] if actual_date else "--.--.--"
         title = f"{date} | 패치노트"
 
+    highlight_names = ["highlight_sentence_candidates", "주요 문장 후보", "강조 문장 후보"]
+    reason_names = ["importance_reason", "중요도 판단 근거", "주요 여부 판단 근거"]
     return {
         "page_id": page.get("id", ""),
         "game": str(pick(raw, ["game", "게임", "게임명", "Game"], "")),
@@ -632,8 +716,9 @@ def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
         "body_summary": body_summary,
         "domain_tags": domain_tags,
         "card_summary": str(card_summary),
+        "highlight_sentence_candidates": pick(raw, highlight_names, []),
+        "importance_reason": str(pick(raw, reason_names, "") or ""),
     }
-
 
 def notion_query_database() -> list[dict[str, Any]]:
     token = os.environ.get("NOTION_TOKEN", "").strip()

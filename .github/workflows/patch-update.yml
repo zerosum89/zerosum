@@ -121,6 +121,10 @@ jobs:
           echo "RUN_GIT_PUSH=$RUN_GIT_PUSH"
           echo "TARGET_GAMES=$TARGET_GAMES"
 
+      - name: Apply v106 auto importance runtime patch
+        run: |
+          python scripts/apply_v106_auto_importance_runtime_patch.py
+
       - name: Run patchnote workflow
         env:
           WORKFLOW_VERSION: github_actions_v093

@@ -68,8 +68,8 @@ WORKFLOW_VERSION = "github_actions_v093"
 REPORT_CONSISTENCY_ARTIFACT = "report_consistency_v093.json"
 
 
-DISPLAY_DATA_VERSION = "patch_view_model.v087_semantic_fields_from_notion"
-MAJOR_POLICY_VERSION = "major_policy_v087_semantic_fields_from_notion"
+DISPLAY_DATA_VERSION = "patch_view_model.v106_auto_importance_decision"
+MAJOR_POLICY_VERSION = "major_policy_v106_auto_from_body_summary"
 def canonical_url(url: str) -> str:
     if not url:
         return ""
@@ -614,45 +614,33 @@ def normalize_highlight_candidates_value(value: Any) -> list[dict[str, Any]]:
 
 
 def enrich_importance_display_fields(item: dict[str, Any]) -> dict[str, Any]:
-    # v091: export semantic fields from Notion DB first.
-    # - body_summary remains the source summary.
-    # - highlight_sentence_candidates are display candidates only.
-    # - importance_suggestion is auto-suggestion from body_summary only.
-    # - importance_decision is mapped from the DB importance field.
-    # - normal rows must export zero display highlight candidates.
-    # - major rows use stored Notion candidates first, and body_summary fallback only when stored candidates are absent.
+    # v106: body_summary-derived candidates are the source of truth.
     body_summary = listify(item.get("body_summary", []))
     auto_candidates = derive_highlight_sentence_candidates(body_summary)
-    stored_candidates = normalize_highlight_candidates_value(item.get("highlight_sentence_candidates"))
-
-    db_importance = str(item.get("importance", "normal") or "normal").strip().lower()
-    decision = "major" if db_importance == "major" else "normal"
-
-    if decision == "major":
-        candidates = stored_candidates if stored_candidates else auto_candidates
-    else:
-        candidates = []
+    decision = "major" if auto_candidates else "normal"
+    candidates = auto_candidates if decision == "major" else []
 
     suggestion_reasons = sorted({
         str(c.get("highlight_reason", ""))
         for c in auto_candidates
         if c.get("highlight_reason")
     })
-    suggestion = "major" if auto_candidates else "normal"
     confidence = max([float(c.get("confidence", 0.0) or 0.0) for c in auto_candidates] or [0.76])
 
     stored_reason = str(item.get("importance_reason") or "").strip()
-    if stored_reason:
+    if stored_reason and decision == "major":
         importance_reason = stored_reason
+    elif decision == "major":
+        importance_reason = 'body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.'
     else:
-        importance_reason = "Patch View Model DB importance 필드가 카드 주요 표시의 최종 기준입니다."
+        importance_reason = 'body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.'
 
     item["highlight_sentence_candidates"] = candidates
-    item["importance_suggestion"] = suggestion
+    item["importance_suggestion"] = decision
     item["importance_suggestion_reason"] = suggestion_reasons
     item["importance_suggestion_confidence"] = confidence
     item["importance_decision"] = decision
-    item["importance_decision_source"] = "notion_existing"
+    item["importance_decision_source"] = "auto_rule"
     item["importance_reason"] = importance_reason
     item["importance_review_status"] = "pass"
     item["display_highlight_count"] = len(candidates) if decision == "major" else 0
@@ -665,7 +653,6 @@ def enrich_importance_display_fields(item: dict[str, Any]) -> dict[str, Any]:
         ["display", "importance"],
         ["importance", "source"],
         ["suppressed", "derived", "major", "candidate"],
-        ["suppressed", "highlight", "sentence", "candidate"],
         ["major", "without", "highlight", "candidate"],
         ["major", "summary", "groups"],
         ["major", "group", "count"],
@@ -2315,6 +2302,21 @@ def add_prop_if_exists(properties: dict[str, Any], schema: dict[str, Any], candi
     return ""
 
 
+def highlight_candidates_to_notion_lines(candidates: list[dict[str, Any]]) -> list[str]:
+    lines: list[str] = []
+    for c in candidates or []:
+        if isinstance(c, dict):
+            text = str(c.get("sentence") or c.get("text") or c.get("source_line") or "").strip()
+            reason = str(c.get("highlight_reason") or "").strip()
+            if text and reason:
+                lines.append(f"{text} [{reason}]")
+            elif text:
+                lines.append(text)
+        elif str(c).strip():
+            lines.append(str(c).strip())
+    return lines
+
+
 def payload_to_notion_properties(schema: dict[str, Any], payload: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
     properties: dict[str, Any] = {}
     written: list[str] = []
@@ -2325,12 +2327,18 @@ def payload_to_notion_properties(schema: dict[str, Any], payload: dict[str, Any]
         properties[title_name] = title_prop
         written.append(title_name)
 
+    auto_body_summary = listify(payload.get("body_summary", []))
+    auto_highlight_candidates = derive_highlight_sentence_candidates(auto_body_summary)
+    auto_importance = "major" if auto_highlight_candidates else "normal"
+    auto_importance_reason = 'body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.' if auto_importance == "major" else 'body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.'
+    auto_highlight_lines = highlight_candidates_to_notion_lines(auto_highlight_candidates)
+
     mappings = [
         (["game", "게임", "게임명", "Game"], payload.get("game"), {"select", "rich_text", "multi_select"}),
         (["actual_date", "실제 패치일", "패치일", "날짜", "Date"], payload.get("actual_date"), {"date", "rich_text"}),
         (["source_url", "원문 URL", "URL", "url", "링크", "원문링크"], payload.get("source_url"), {"url", "rich_text"}),
         (["source_page_title", "원문 제목", "Source Page Title"], payload.get("source_page_title", ""), {"rich_text"}),
-        (["importance", "중요도", "Importance"], "major" if payload.get("quality_status") == "PASS" and (payload.get("domain_tags") or []) else "normal", {"select", "rich_text"}),
+        (["importance", "중요도", "Importance"], auto_importance, {"select", "rich_text"}),
         (["primary_category", "패치 카테고리", "대표 카테고리", "대표 핵심 신호"], payload.get("domain_tags", [])[:2], {"multi_select", "rich_text", "select"}),
         (["main_updates", "주요 업데이트", "주요 업데이트 요약"], payload.get("body_summary", [])[:3], {"rich_text", "multi_select"}),
         (["body_summary", "본문 요약", "Body Summary"], payload.get("body_summary", []), {"rich_text"}),
@@ -2821,7 +2829,7 @@ def main() -> int:
         f"## {WORKFLOW_VERSION} scope",
         "",
         "- v069 report consistency: export summary is finalized from git_deploy_result after deploy",
-        "- v060/v069 display rule: importance_decision controls major badge and highlight_sentence_candidates controls body-summary emphasis",
+        "- v106 display rule: body_summary-derived highlight_sentence_candidates control importance_decision and body-summary emphasis",
         "- v069 phase separation: preview, actual, post-run, report consistency, and deploy states are reported separately",
         "- Explicit workflow identity: workflow_version, GITHUB_SHA, GITHUB_REF, run id, script SHA256",
         "- Detail URL guard: board/list URL candidates are written to invalid_url_candidates.csv",

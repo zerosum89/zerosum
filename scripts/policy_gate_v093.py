@@ -7,9 +7,9 @@ Rule-based display/decision/deploy gate for Patchnote Update Workflow.
 
 Single responsibility rules:
 - body_summary is summary output, not a decision field.
-- highlight_sentence_candidates are display candidates only.
-- importance_suggestion is an automatic suggestion only.
-- importance_decision is the final display/write decision.
+- highlight_sentence_candidates are automatic body_summary-derived candidates.
+- importance_suggestion mirrors the automatic decision.
+- importance_decision is the final display/write decision from auto_rule.
 - importance_review_status controls write/push gate.
 """
 
@@ -141,7 +141,12 @@ def audit_items(items: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list
         if decision == "major" and display_highlight_count != len(candidates):
             row_warnings.append("major decision display_highlight_count differs from candidate count")
         if decision == "major" and not candidates:
-            row_warnings.append("major decision has no highlight candidates")
+            row_errors.append("major decision has no highlight candidates")
+        if decision == "major" and not str(item.get("importance_reason") or "").strip():
+            row_errors.append("major decision missing importance_reason")
+        suggestion = str(item.get("importance_suggestion") or "").lower().strip()
+        if suggestion in ALLOWED_DECISION and suggestion != decision:
+            row_warnings.append(f"importance_suggestion={suggestion} differs from decision={decision}")
         if review_status in {"review_required", "blocked"}:
             row_warnings.append(f"review_status={review_status}")
 

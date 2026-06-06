@@ -64,7 +64,7 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v066"
+WORKFLOW_VERSION = "github_actions_v069"
 
 
 DISPLAY_DATA_VERSION = "patch_view_model.v060_importance_decision_display"
@@ -2734,9 +2734,9 @@ def main() -> int:
         "",
         f"## {WORKFLOW_VERSION} scope",
         "",
-        "- v066 report consistency: export summary is finalized from git_deploy_result after deploy",
-        "- v060/v066 display rule: importance_decision controls major badge and highlight_sentence_candidates controls body-summary emphasis",
-        "- v066 phase separation: preview, actual, post-run, report consistency, and deploy states are reported separately",
+        "- v069 report consistency: export summary is finalized from git_deploy_result after deploy",
+        "- v060/v069 display rule: importance_decision controls major badge and highlight_sentence_candidates controls body-summary emphasis",
+        "- v069 phase separation: preview, actual, post-run, report consistency, and deploy states are reported separately",
         "- Explicit workflow identity: workflow_version, GITHUB_SHA, GITHUB_REF, run id, script SHA256",
         "- Detail URL guard: board/list URL candidates are written to invalid_url_candidates.csv",
         "- Rejected link artifacts are emitted per game profile",
@@ -2753,7 +2753,7 @@ def main() -> int:
         "- v015 title handling: read raw Notion 항목명, export normalized display title, and repair recent raw titles",
         "- v022 Odin_KR summary repair: Daum Cafe body cleanup, mobile text preference, article span extraction",
 "- v037 installer Unicode-safe subprocess capture: UTF-8/errors=replace for Git output plus no-change deploy guard",
-"- v066 report rule: file_changed and patch_view_model_git_changed reflect final Git deploy state",
+"- v069 report rule: file_changed and patch_view_model_git_changed reflect final Git deploy state",
     ]
     (ART / "workflow_report.md").write_text("\n".join(report), encoding="utf-8")
 

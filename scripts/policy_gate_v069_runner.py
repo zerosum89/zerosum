@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-policy_gate_v066_runner.py
+policy_gate_v069_runner.py
 
-Runs patch_update_workflow under a strict preview -> gate -> actual sequence.
+Runs patch_update_workflow under a strict preview -> gate -> actual sequence and writes a version-neutral runner summary artifact.
 
 When the original run is write/deploy capable, the runner first executes a preview
 pass with DRY_RUN=true, RUN_NOTION_WRITE=false, RUN_GIT_PUSH=false, validates the
-preview/public data through policy_gate_v066.py, then executes the original command.
+preview/public data through policy_gate_v069.py, then executes the original command.
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 
-WORKFLOW_VERSION = "github_actions_v066"
+WORKFLOW_VERSION = "github_actions_v069"
 
 
 def truthy(v: str | None) -> bool:
@@ -28,14 +28,14 @@ def truthy(v: str | None) -> bool:
 
 
 def run_cmd(cmd: list[str], env: dict[str, str], phase: str) -> int:
-    print(f"[v060 runner] phase={phase} command={' '.join(cmd)}", flush=True)
+    print(f"[v069 runner] phase={phase} command={' '.join(cmd)}", flush=True)
     p = subprocess.run(cmd, env=env)
-    print(f"[v060 runner] phase={phase} returncode={p.returncode}", flush=True)
+    print(f"[v069 runner] phase={phase} returncode={p.returncode}", flush=True)
     return int(p.returncode)
 
 
 def run_gate(mode: str, artifact_dir: str) -> int:
-    gate_script = pathlib.Path(__file__).with_name("policy_gate_v066.py")
+    gate_script = pathlib.Path(__file__).with_name("policy_gate_v069.py")
     cmd = [sys.executable, str(gate_script), "--artifact-dir", artifact_dir, "--mode", mode, "--strict"]
     return run_cmd(cmd, os.environ.copy(), f"gate:{mode}")
 
@@ -49,7 +49,7 @@ def main() -> int:
     if cmd and cmd[0] == "--":
         cmd = cmd[1:]
     if not cmd:
-        print("[v060 runner][ERROR] missing command after --", file=sys.stderr)
+        print("[v069 runner][ERROR] missing command after --", file=sys.stderr)
         return 2
 
     original_env = os.environ.copy()
@@ -80,13 +80,13 @@ def main() -> int:
         preview_rc = run_cmd(cmd, preview_env, "preview")
         summary["preview_returncode"] = preview_rc
         if preview_rc != 0:
-            pathlib.Path(artifact_dir, "v060_runner_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+            pathlib.Path(artifact_dir, "policy_gate_runner_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
             return preview_rc
 
         prewrite_rc = run_gate("pre-write", artifact_dir)
         summary["prewrite_gate_returncode"] = prewrite_rc
         if prewrite_rc != 0:
-            pathlib.Path(artifact_dir, "v060_runner_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+            pathlib.Path(artifact_dir, "policy_gate_runner_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
             return prewrite_rc
 
     actual_env = original_env.copy()
@@ -94,12 +94,12 @@ def main() -> int:
     actual_rc = run_cmd(cmd, actual_env, "actual")
     summary["actual_returncode"] = actual_rc
     if actual_rc != 0:
-        pathlib.Path(artifact_dir, "v060_runner_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+        pathlib.Path(artifact_dir, "policy_gate_runner_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
         return actual_rc
 
     post_rc = run_gate("post-run", artifact_dir)
     summary["post_run_gate_returncode"] = post_rc
-    pathlib.Path(artifact_dir, "v060_runner_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+    pathlib.Path(artifact_dir, "policy_gate_runner_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
     return post_rc
 
 

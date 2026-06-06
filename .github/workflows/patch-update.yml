@@ -123,9 +123,9 @@ jobs:
 
       - name: Run patchnote workflow
         env:
-          WORKFLOW_VERSION: github_actions_v066
+          WORKFLOW_VERSION: github_actions_v069
         run: |
-          python scripts/policy_gate_v066_runner.py -- python scripts/patch_update_workflow.py
+          python scripts/policy_gate_v069_runner.py -- python scripts/patch_update_workflow.py
 
       - name: Enrich schedule identity
         if: always()
@@ -134,14 +134,14 @@ jobs:
         run: |
           python scripts/enrich_schedule_identity.py
 
-      - name: Run v066 display / decision audit
+      - name: Run v069 display / decision audit
         if: always()
         run: |
-          python scripts/policy_gate_v066.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode post-run --strict
+          python scripts/policy_gate_v069.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode post-run --strict
 
-      - name: Run v066 deploy gate
+      - name: Run v069 deploy gate
         run: |
-          python scripts/policy_gate_v066.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode deploy --strict
+          python scripts/policy_gate_v069.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode deploy --strict
       - name: Commit patch_view_model.json only
         if: ${{ env.DRY_RUN == 'false' && env.RUN_GIT_PUSH == 'true' }}
         run: |
@@ -252,10 +252,10 @@ jobs:
             'github_run_id': os.environ.get('GITHUB_RUN_ID', ''),
           }, ensure_ascii=False, indent=2), encoding='utf-8')
           PY
-      - name: Run v066 report consistency gate
+      - name: Run v069 report consistency gate
         if: always()
         run: |
-          python scripts/report_consistency_v066.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --repo-root "$GITHUB_WORKSPACE" --strict
+          python scripts/report_consistency_v069.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --repo-root "$GITHUB_WORKSPACE" --strict
 
 
       - name: Upload workflow artifacts

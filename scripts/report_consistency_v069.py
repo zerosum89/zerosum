@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""v066 post-deploy report consistency gate."""
+"""v069 post-deploy report consistency gate."""
 from __future__ import annotations
 import argparse, json, os, pathlib, re, subprocess, sys
 from datetime import datetime, timezone
 from typing import Any
 
-WORKFLOW_VERSION = "github_actions_v066"
+WORKFLOW_VERSION = "github_actions_v069"
 STALE_SCOPE_TOKENS = [
     "v043 strict major detection",
     "v043 major grouping",
@@ -45,9 +45,9 @@ def rewrite_scope(report_text: str, workflow_version: str) -> tuple[str, bool]:
     heading = f"## {workflow_version} scope"
     scope = f"""{heading}
 
-- v066 report consistency: patch_view_model_export_summary.json is finalized from git_deploy_result.json after deploy.
-- v066 phase separation: preview, pre-write gate, actual run, post-run gate, report consistency, and deploy result are reported as separate states.
-- v060/v066 decision model: body_summary, highlight_sentence_candidates, importance_suggestion, and importance_decision keep single responsibilities.
+- v069 report consistency: patch_view_model_export_summary.json is finalized from git_deploy_result.json after deploy.
+- v069 phase separation: preview, pre-write gate, actual run, post-run gate, report consistency, and deploy result are reported as separate states.
+- v060/v069 decision model: body_summary, highlight_sentence_candidates, importance_suggestion, and importance_decision keep single responsibilities.
 - Display rule: card major badge follows importance_decision; body-summary emphasis follows major decision AND highlight_sentence_candidates.
 - Legacy major fields are blocked from public output: derived_major*, derived_importance, display_importance, major_summary_groups, major_group_count, major_summary_indices.
 - Notion write guard: write runs only when dry_run=false, run_notion_write=true, and gate status is pass.
@@ -112,16 +112,20 @@ def main() -> int:
     result["workflow_report_scope_rewritten"] = scope_changed
     result["stale_scope_tokens_remaining"] = stale_remaining
     if stale_remaining: errors.append("stale workflow_report scope tokens remain: " + ", ".join(stale_remaining))
-    runner_candidates = sorted(artifact_dir.glob("v*_runner_summary.json"))
-    result["runner_summary_files"] = [p.name for p in runner_candidates]
-    if runner_candidates:
-        runner_path = runner_candidates[-1]
+    runner_path = artifact_dir / "policy_gate_runner_summary.json"
+    legacy_runner_candidates = sorted(artifact_dir.glob("v*_runner_summary.json"))
+    result["runner_summary_file"] = runner_path.name if runner_path.exists() else ""
+    result["legacy_runner_summary_files_detected"] = [p.name for p in legacy_runner_candidates]
+    if legacy_runner_candidates:
+        warnings.append("legacy runner summary artifact detected: " + ", ".join(p.name for p in legacy_runner_candidates))
+    if runner_path.exists():
         runner = read_json(runner_path)
         if isinstance(runner, dict):
             runner["report_consistency_version"] = WORKFLOW_VERSION
             runner["report_consistency_status"] = "pass" if not errors else "blocked"
             runner["git_deploy_status"] = finalization.get("deploy_result", {}).get("status")
             runner["patch_view_model_git_changed_final"] = finalization.get("final_git_changed")
+            runner["runner_summary_artifact_name"] = "policy_gate_runner_summary.json"
             write_json(runner_path, runner)
     export_summary = read_json(artifact_dir / "patch_view_model_export_summary.json") or {}
     deploy = read_json(artifact_dir / "git_deploy_result.json") or {}
@@ -136,11 +140,11 @@ def main() -> int:
     result["git_status_after_report_consistency"] = status_text
     if rc != 0: warnings.append("git status failed: " + status_err.strip())
     result["errors"] = errors; result["warnings"] = warnings; result["status"] = "pass" if not errors else "blocked"
-    write_json(artifact_dir / "report_consistency_v066.json", result)
+    write_json(artifact_dir / "report_consistency_v069.json", result)
     if errors:
-        print("[v066 report consistency][BLOCKED] " + "; ".join(errors), file=sys.stderr)
+        print("[v069 report consistency][BLOCKED] " + "; ".join(errors), file=sys.stderr)
         return 1 if args.strict else 0
-    print("[v066 report consistency] pass")
+    print("[v069 report consistency] pass")
     return 0
 if __name__ == "__main__":
     raise SystemExit(main())

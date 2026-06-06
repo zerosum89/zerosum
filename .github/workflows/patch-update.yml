@@ -123,7 +123,7 @@ jobs:
 
       - name: Run patchnote workflow
         env:
-          WORKFLOW_VERSION: github_actions_v087
+          WORKFLOW_VERSION: github_actions_v091
         run: |
           python scripts/policy_gate_v069_runner.py -- python scripts/patch_update_workflow.py
 

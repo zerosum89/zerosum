@@ -64,11 +64,11 @@ POST_WRITE_EXPORT_RETRY_COUNT = env_int("POST_WRITE_EXPORT_RETRY_COUNT", 6)
 POST_WRITE_EXPORT_RETRY_SECONDS = env_int("POST_WRITE_EXPORT_RETRY_SECONDS", 5)
 NOTION_VERSION = os.environ.get("NOTION_VERSION", "2022-06-28")
 SCHEMA_VERSION = "patch_view_model.v1"
-WORKFLOW_VERSION = "github_actions_v052"
+WORKFLOW_VERSION = "github_actions_v060"
 
 
-DERIVED_DATA_VERSION = "patch_view_model.derived.db_importance_display_v052"
-MAJOR_POLICY_VERSION = "major_policy_v052_db_importance_display"
+DISPLAY_DATA_VERSION = "patch_view_model.v060_importance_decision_display"
+MAJOR_POLICY_VERSION = "major_policy_v060_importance_decision"
 def canonical_url(url: str) -> str:
     if not url:
         return ""
@@ -503,9 +503,10 @@ def extract_major_targets(lines: list[str]) -> list[str]:
     return out
 
 
-def build_major_group_text(major_type: str, lines: list[str]) -> str:
+
+def build_highlight_candidate_text(highlight_type: str, lines: list[str]) -> str:
     first_domain = summary_domain(lines[0]) if lines else ""
-    domain = domain_for_major_type(major_type, first_domain)
+    domain = domain_for_major_type(highlight_type, first_domain)
     if len(lines) == 1:
         return clean_summary_line(lines[0])
     targets = extract_major_targets(lines)
@@ -519,19 +520,19 @@ def build_major_group_text(major_type: str, lines: list[str]) -> str:
         "economy_crafting_system": f"{domain}: {target_text}제작·거래·재화 구조가 추가·개편되어 아이템 획득과 경제 흐름이 조정됩니다.",
         "major_rule_rework": f"{domain}: {target_text}콘텐츠 규칙과 진행 구조가 개편되어 플레이 흐름과 보상 기준이 조정됩니다.",
     }
-    return templates.get(major_type, f"{domain}: {target_text}주요 변경이 적용됩니다.")
+    return templates.get(highlight_type, f"{domain}: {target_text}주요 변경이 적용됩니다.")
 
 
-def derive_major_summary_groups(body_summary: list[str]) -> list[dict[str, Any]]:
+def derive_highlight_sentence_candidates(body_summary: list[str]) -> list[dict[str, Any]]:
     grouped: dict[str, dict[str, Any]] = {}
     for idx, raw_line in enumerate(body_summary):
         line = clean_summary_line(raw_line)
-        major_type = major_type_for_line(line)
-        if not major_type:
+        highlight_type = major_type_for_line(line)
+        if not highlight_type:
             continue
-        item = grouped.setdefault(major_type, {
-            "major_type": major_type,
-            "domain": domain_for_major_type(major_type, summary_domain(line)),
+        item = grouped.setdefault(highlight_type, {
+            "highlight_type": highlight_type,
+            "domain": domain_for_major_type(highlight_type, summary_domain(line)),
             "source_unit_count": 0,
             "source_unit_indices": [],
             "_lines": [],
@@ -540,40 +541,54 @@ def derive_major_summary_groups(body_summary: list[str]) -> list[dict[str, Any]]
         item["source_unit_indices"].append(idx)
         item["_lines"].append(line)
     out: list[dict[str, Any]] = []
-    for major_type in MAJOR_TYPE_ORDER:
-        item = grouped.get(major_type)
+    for highlight_type in MAJOR_TYPE_ORDER:
+        item = grouped.get(highlight_type)
         if not item:
             continue
         lines = item.pop("_lines")
-        item["text"] = build_major_group_text(major_type, lines)
+        sentence = build_highlight_candidate_text(highlight_type, lines)
+        item["sentence"] = sentence
+        item["text"] = sentence  # display alias for existing renderer patterns; not a decision field.
+        item["highlight_reason"] = highlight_type
+        item["confidence"] = 0.86
+        item["rule_id"] = f"v060_{highlight_type}"
         out.append(item)
     return out
 
-def enrich_major_highlight_fields(item: dict[str, Any]) -> dict[str, Any]:
-    """v052: card Major display follows Patch View Model DB importance.
 
-    Derived major groups are still computed as audit/review candidates, but they do not
-    promote a card to Major by themselves. Red highlight groups are exposed only when
-    DB importance is major, so DB normal rows cannot re-promote themselves during export
-    or in the browser fallback path.
-    """
+def enrich_importance_display_fields(item: dict[str, Any]) -> dict[str, Any]:
+    '''v060: separate summary, highlight candidates, suggestion, decision, and gate fields.
+
+    The Patch View Model DB importance field is mapped to importance_decision.
+    highlight_sentence_candidates are display candidates only and cannot promote a card.
+    '''
     body_summary = listify(item.get("body_summary", []))
-    derived_groups = derive_major_summary_groups(body_summary)
-    legacy_importance = str(item.get("importance", "normal") or "normal").strip().lower()
-    db_major = legacy_importance == "major"
+    candidates = derive_highlight_sentence_candidates(body_summary)
+    db_importance = str(item.get("importance", "normal") or "normal").strip().lower()
+    decision = "major" if db_importance == "major" else "normal"
+    reasons = sorted({str(c.get("highlight_reason", "")) for c in candidates if c.get("highlight_reason")})
+    suggestion = "major" if candidates else "normal"
+    confidence = max([float(c.get("confidence", 0.0) or 0.0) for c in candidates] or [0.76])
 
-    item["derived_major_candidate_groups"] = derived_groups
-    item["derived_major_candidate_count"] = len(derived_groups)
-    item["derived_importance"] = "major" if derived_groups else "normal"
-    item["display_importance"] = "major" if db_major else "normal"
-    item["importance_source"] = "db_importance_v052"
-    item["suppressed_derived_major_candidate"] = (not db_major and len(derived_groups) > 0)
-    item["major_without_highlight_candidate"] = (db_major and len(derived_groups) == 0)
+    item["highlight_sentence_candidates"] = candidates
+    item["importance_suggestion"] = suggestion
+    item["importance_suggestion_reason"] = reasons
+    item["importance_suggestion_confidence"] = confidence
+    item["importance_decision"] = decision
+    item["importance_decision_source"] = "notion_existing"
+    item["importance_reason"] = "Patch View Model DB importance 필드가 카드 주요 표시의 최종 기준입니다."
+    item["importance_review_status"] = "pass"
+    item["display_highlight_count"] = len(candidates) if decision == "major" else 0
+    item["quality_gate_status"] = "pass"
 
-    visible_groups = derived_groups if db_major else []
-    item["major_summary_groups"] = visible_groups
-    item["major_group_count"] = len(visible_groups)
-    item["major_summary_indices"] = list(range(len(visible_groups)))
+    # v057 outputs must not expose legacy mixed-responsibility fields.
+    for legacy_key in [
+        "derived_major_candidate_groups", "derived_major_candidate_count", "derived_importance",
+        "display_importance", "importance_source", "suppressed_derived_major_candidate",
+        "major_without_highlight_candidate", "major_summary_groups", "major_group_count",
+        "major_summary_indices",
+    ]:
+        item.pop(legacy_key, None)
     return item
 
 def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
@@ -665,14 +680,14 @@ def existing_json_items() -> list[dict[str, Any]]:
 
 
 
-def existing_json_derived_data_version() -> str:
+def existing_json_display_data_version() -> str:
     path = ROOT / "patch_view_model.json"
     if not path.exists():
         return ""
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
         if isinstance(data, dict):
-            return str(data.get("derived_data_version") or data.get("major_policy_version") or "")
+            return str(data.get("display_data_version") or data.get("derived_data_version") or data.get("major_policy_version") or "")
     except Exception:
         return ""
     return ""
@@ -721,13 +736,13 @@ def export_patch_view_model() -> tuple[list[dict[str, Any]], str, bool]:
         source = "existing_patch_view_model_json" if items else "empty"
         log(f"[STEP] Existing patch_view_model.json fallback loaded: {len(items)} items")
 
-    items = [enrich_major_highlight_fields(dict(x)) for x in items]
+    items = [enrich_importance_display_fields(dict(x)) for x in items]
 
     current_items = existing_json_items()
     source_items_changed = stable_items(current_items) != stable_items(items)
-    existing_derived_data_version = existing_json_derived_data_version()
-    derived_data_version_changed = existing_derived_data_version != DERIVED_DATA_VERSION
-    should_write = source_items_changed or derived_data_version_changed or not existing_path.exists()
+    existing_display_data_version = existing_json_display_data_version()
+    display_data_version_changed = existing_display_data_version != DISPLAY_DATA_VERSION
+    should_write = source_items_changed or display_data_version_changed or not existing_path.exists()
 
     if not should_write and existing_path.exists():
         log("[STEP] patch_view_model.json unchanged; existing file preserved to avoid noisy commits")
@@ -737,7 +752,7 @@ def export_patch_view_model() -> tuple[list[dict[str, Any]], str, bool]:
             "generated_at": datetime.now(KST).isoformat(),
             "source": source,
             "workflow_version": WORKFLOW_VERSION,
-            "derived_data_version": DERIVED_DATA_VERSION,
+            "display_data_version": DISPLAY_DATA_VERSION,
             "major_policy_version": MAJOR_POLICY_VERSION,
             "items": items,
         }
@@ -745,9 +760,9 @@ def export_patch_view_model() -> tuple[list[dict[str, Any]], str, bool]:
         log(
             "[STEP] patch_view_model.json written: "
             f"source_items_changed={source_items_changed}, "
-            f"derived_data_version_changed={derived_data_version_changed}, "
-            f"existing_derived_data_version={existing_derived_data_version or 'none'}, "
-            f"new_derived_data_version={DERIVED_DATA_VERSION}"
+            f"display_data_version_changed={display_data_version_changed}, "
+            f"existing_display_data_version={existing_display_data_version or 'none'}, "
+            f"new_display_data_version={DISPLAY_DATA_VERSION}"
         )
 
     after_sha = file_sha256(existing_path) if existing_path.exists() else ""
@@ -756,10 +771,10 @@ def export_patch_view_model() -> tuple[list[dict[str, Any]], str, bool]:
         "source": source,
         "items": len(items),
         "source_items_changed": source_items_changed,
-        "derived_items_changed": source_items_changed or derived_data_version_changed,
-        "derived_data_version_changed": derived_data_version_changed,
-        "existing_derived_data_version": existing_derived_data_version,
-        "derived_data_version": DERIVED_DATA_VERSION,
+        "display_items_changed": source_items_changed or display_data_version_changed,
+        "display_data_version_changed": display_data_version_changed,
+        "existing_display_data_version": existing_display_data_version,
+        "display_data_version": DISPLAY_DATA_VERSION,
         "major_policy_version": MAJOR_POLICY_VERSION,
         "should_write_patch_view_model": should_write,
         "patch_view_model_before_sha256": before_sha,
@@ -2685,7 +2700,7 @@ def main() -> int:
         f"- export_source: {export_source}",
         f"- public_items: {len(items)}",
         f"- patch_view_model_changed: {file_changed}",
-        "- patch_view_model_change_note: true means source items changed or derived_data_version changed; see patch_view_model_export_summary.json",
+        "- patch_view_model_change_note: true means source items changed or display_data_version changed; see patch_view_model_export_summary.json",
         f"- payload_preview_count: {len(payload_preview)}",
         f"- notion_write_attempted: {notion_write_result.get('write_attempted', False)}",
         f"- notion_write_created: {notion_write_result.get('created', 0)}",

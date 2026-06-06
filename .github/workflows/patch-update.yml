@@ -122,8 +122,10 @@ jobs:
           echo "TARGET_GAMES=$TARGET_GAMES"
 
       - name: Run patchnote workflow
+        env:
+          WORKFLOW_VERSION: github_actions_v060
         run: |
-          python scripts/patch_update_workflow.py
+          python scripts/policy_gate_v060_runner.py -- python scripts/patch_update_workflow.py
 
       - name: Enrich schedule identity
         if: always()
@@ -132,11 +134,14 @@ jobs:
         run: |
           python scripts/enrich_schedule_identity.py
 
-      - name: Run major consistency audit
+      - name: Run v060 display / decision audit
         if: always()
         run: |
-          python scripts/major_consistency_audit.py
+          python scripts/policy_gate_v060.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode post-run --strict
 
+      - name: Run v060 deploy gate
+        run: |
+          python scripts/policy_gate_v060.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode deploy --strict
       - name: Commit patch_view_model.json only
         if: ${{ env.DRY_RUN == 'false' && env.RUN_GIT_PUSH == 'true' }}
         run: |

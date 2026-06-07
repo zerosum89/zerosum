@@ -40,6 +40,7 @@ CHANGE_WORDS = {
     "nerf": "\ud558\ud5a5",
     "buff": "\uc0c1\ud5a5",
     "fix": "\uc218\uc815",
+    "run": "\uc9c4\ud589",
 }
 
 SECTION_GAMES = {"MIR4_KR", "MIR4_Global", "NightCrows_Global"}
@@ -68,6 +69,7 @@ def norm_key(text: str) -> str:
 
 def clean_line(line: str) -> str:
     line = compact_text(line)
+    line = re.sub(r"^[.\u3002]\s*", "", line)
     line = re.sub(r"^[\u2022\u00b7\u318d\u25a0\u25cf\-*]+\s*", "", line)
     line = re.sub(r"^\(?\d{1,2}\)?[.)]\s*", "", line)
     return line.strip()
@@ -161,6 +163,8 @@ def normalize_target(target: str) -> str:
 def change_type(text: str) -> str:
     low = str(text or "").lower()
     compact = norm_key(text)
+    if any(x in low for x in ["end", "ended", "expires"]) or "\uc885\ub8cc" in compact:
+        return CHANGE_WORDS["end"]
     if any(x in low for x in ["commence", "begin", "start"]) or "\uc2dc\uc791" in compact:
         return CHANGE_WORDS["start"]
     if any(x in low for x in ["improved", "improvement"]) or "\uac1c\uc120" in compact:
@@ -205,6 +209,8 @@ def balance_targets(title: str, detail: str) -> list[str]:
 
 def classify_unit(title: str, detail: str) -> tuple[str, str, list[str]]:
     text = f"{title} {detail}"
+    low = text.lower()
+    compact = norm_key(text)
     signals: list[str] = []
 
     if re.search(r"(\ubc38\ub7f0\uc2a4|balance)", text, re.I):
@@ -234,10 +240,11 @@ def classify_unit(title: str, detail: str) -> tuple[str, str, list[str]]:
         return KO["collection"], change_type(text), ["collection"]
     if re.search(r"(artifact|inner armor|weapon style|equipment|gear|mount|glider|accessory|lamp|\uc7a5\ube44|\uc7a5\uc2e0\uad6c|\ud0c8\uac83|\uae00\ub77c\uc774\ub354|\ubb34\uae30\s*\uc678\ud615|\ubc24\uae4c\ub9c8\uadc0)", text, re.I):
         return KO["equipment"], change_type(text), ["equipment"]
-    if re.search(r"(event|check-in|attendance|\uc774\ubca4\ud2b8|\ucd9c\uc11d|\ubbf8\uc158)", text, re.I):
-        return KO["event"], change_type(text), ["event"]
-    if re.search(r"(shop|pass|product|purchase|merchant|\uc0c1\uc810|\ud328\uc2a4|\uc0c1\ud488|\uad6c\ub9e4)", text, re.I):
+    if re.search(r"(shop|pass|product|purchase|merchant|package|cash shop|\uc0c1\uc810|\ud328\uc2a4|\uc0c1\ud488|\ud328\ud0a4\uc9c0|\uad6c\ub9e4|\ud310\ub9e4|\uc18c\ud658\uad8c|\uce90\uc2dc\uc0f5)", text, re.I):
         return KO["shop"], change_type(text), ["shop"]
+    if re.search(r"(event|check-in|attendance|\uc774\ubca4\ud2b8|\ucd9c\uc11d|\ubbf8\uc158)", text, re.I):
+        change = CHANGE_WORDS["run"] if re.search(r"(\uc774\ubca4\ud2b8)", text, re.I) else change_type(text)
+        return KO["event"], change, ["event"]
     if re.search(r"(ui|convenience|display|image|\uc774\ubbf8\uc9c0|\ud3b8\uc758|\ud45c\uc2dc|\uc808\uc804\ubaa8\ub4dc)", text, re.I):
         return KO["ui"], change_type(text), ["ui"]
     if re.search(r"(schedule|\uc77c\uc815)", text, re.I):
@@ -256,12 +263,20 @@ def target_from_unit(title: str, detail: str, domain: str) -> str:
     if domain == KO["new_class"]:
         q = quoted(detail) or quoted(text)
         return normalize_target(q or text)
+    if domain == KO["event"]:
+        m = re.search(r"(\uc2e0\uaddc\s*\uc774\ubca4\ud2b8)", text)
+        if m:
+            return m.group(1)
+    if domain == KO["shop"]:
+        m = re.search(r"(\uc2e0\uaddc\s*(?:\uc0c1\ud488|\ud328\ud0a4\uc9c0))", text)
+        if m:
+            return m.group(1)
     if domain == KO["class_change"]:
         return normalize_target(text)
     patterns = [
         r"^(?:New|new)\s+[^:]{2,30}:\s*(.+)$",
         r"^(.+?)\s+will\s+be\s+(?:added|adjusted|improved|changed|commence|begin)",
-        r"^(.+?)\s+(?:\ucd94\uac00|\uac1c\ud3b8|\uac1c\uc120|\uc870\uc815|\ubcc0\uacbd|\uc2dc\uc791)",
+        r"^(.+?)\s+(?:\ucd94\uac00|\uac1c\ud3b8|\uac1c\uc120|\uc870\uc815|\ubcc0\uacbd|\uc2dc\uc791|\uc885\ub8cc|\uc9c4\ud589)",
     ]
     for pattern in patterns:
         m = re.search(pattern, text, re.I)
@@ -427,6 +442,73 @@ def parse_numbered_representative_items(game: str, section: list[str]) -> list[d
     return units
 
 
+def parse_odin_roman_fallback(game: str, lines: list[str]) -> list[dict[str, Any]]:
+    start = -1
+    for i, line in enumerate(lines):
+        if "\u3010" in line and re.search(r"\uc5c5\ub370\uc774\ud2b8\s*\uc0c1\uc138\s*\ub0b4\uc5ed\s*\uc548\ub0b4", line):
+            start = i + 1
+    if start < 0:
+        for i, line in enumerate(lines):
+            if re.search(r"\uc544\ub798\ub97c\s*\ucc38\uace0|\uc5c5\ub370\uc774\ud2b8\uc5d0\s*\ub300\ud55c\s*\uc790\uc138\ud55c", line):
+                start = i + 1
+                break
+    if start < 0:
+        start = 0
+
+    units: list[dict[str, Any]] = []
+    current_title = ""
+    numbered_titles: list[str] = []
+
+    def is_noise(title: str) -> bool:
+        t = clean_line(title)
+        if not t:
+            return True
+        if t in {"\uae30\ud0c0 \ubcc0\uacbd \uc0ac\ud56d", "\ubcc0\uacbd \uc0ac\ud56d"}:
+            return True
+        if re.search(r"(\ud310\ub9e4\s*\ud0ed|\uc0c1\ud488\uba85|\uad6c\uc131\ud488|\uad6c\ub9e4\s*\uc81c\ud55c|\uc544\uc774\ud15c\s*\uba85|\uc218\uc9d1\s*\ud6a8\uacfc)", t):
+            return True
+        return False
+
+    def choose_titles(section_title: str, children: list[str]) -> list[str]:
+        title = clean_line(section_title)
+        children = [clean_line(x) for x in children if clean_line(x) and not is_noise(x)]
+        if not title:
+            return children[:3]
+        if re.search(r"(\uae30\ud0c0|\ubcc0\uacbd)", title) and children:
+            return children[:4]
+        return [title]
+
+    def flush() -> None:
+        nonlocal current_title, numbered_titles
+        for title in choose_titles(current_title, numbered_titles):
+            if len(units) >= 16:
+                break
+            units.append(build_summary_unit(game, title, "", len(units) + 1))
+        current_title = ""
+        numbered_titles = []
+
+    i = start
+    while i < len(lines):
+        raw_line = lines[i]
+        line = clean_line(raw_line)
+        if re.search(r"(\ucd94\uac00\s*\uc548\ub0b4\s*\uc0ac\ud56d|\uac10\uc0ac\ud569\ub2c8\ub2e4|^\ub2e4\uc74c\uac80\uc0c9$|^\ub313\uae00$)", line):
+            break
+        if re.match(r"^[\u2160-\u216b]+$", line) or re.match(r"^[\u2160-\u216b]+\s*\.", line):
+            flush()
+            j = i + 1
+            while j < len(lines) and clean_line(lines[j]) in {"", ".", "\u00b7"}:
+                j += 1
+            current_title = clean_line(lines[j]) if j < len(lines) else ""
+            i = j + 1
+            continue
+        m = re.match(r"^\s*\d{1,2}\)\s*(.+)$", raw_line)
+        if current_title and m:
+            numbered_titles.append(clean_line(m.group(1)))
+        i += 1
+    flush()
+    return dedupe_units(units)
+
+
 def dedupe_units(units: list[dict[str, Any]]) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     seen: set[str] = set()
@@ -476,6 +558,8 @@ def extract_source_section_units(game: str, text: str) -> tuple[list[dict[str, A
             max_lines=900,
         )
         units = parse_numbered_representative_items(game, section) if game == "Odin_KR" else parse_representative_items(game, section)
+        if game == "Odin_KR" and not units:
+            units = parse_odin_roman_fallback(game, lines)
     else:
         return [], ["UNSUPPORTED_GAME"]
 

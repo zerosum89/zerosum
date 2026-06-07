@@ -59,11 +59,14 @@ LOW_VALUE_TARGETS = {
     "\ucd94\uac00",
     "\ubcc0\uacbd",
     "\uac1c\uc120",
+    "\uc2e0\uaddc",
+    "\uc774\ubca4\ud2b8",
+    "\uc544\uc774\ucf58",
     "\uc8fc\uc694\uc548\ub0b4\uc0ac\ud56d",
     "\uc548\ub0b4\uc0ac\ud56d",
 }
 TABLE_TARGET_PATTERN = re.compile(
-    r"(^\(?\ucd94\uac00\)?\s|^[\uff0a*]?\s*\ubcc0\uacbd[:\s]|^\ubcc0\uacbd\s+|\[[^\]]+\]|\d{1,2}/\d{1,2}\s+\d{1,2}:\d{2}|\uac1c\uc120\s*\ubc0f\s*\uac1c\uc120|\d+\s*(?:\ub2e8\uacc4|\ud398\uc774\uc988)$|\d+\s*(?:\ub2e8\uacc4|\ud398\uc774\uc988)\s*\ucd94\uac00|\ubcc0\uacbd\s*(?:\uc804|\ud6c4)|\uc0c1\ud488\uba85|\uad6c\uc131\ud488|\uad6c\ub9e4\s*\uc81c\ud55c|\uc218\ub7c9|\uac00\uaca9|\ud655\ub960|\ubcf4\uc0c1\s*\uc815\ubcf4)",
+    r"(^\(?\ucd94\uac00\)?\s|^[\uff0a*]?\s*\ubcc0\uacbd[:\s]|^\ubcc0\uacbd\s+|\[[^\]]+\]|\d{1,2}/\d{1,2}\s+\d{1,2}:\d{2}|\bx\s*\d+\b|^\d+\s*\ucd08\s|\uc9c4\ud589\s*\uae30\uac04|^\ubc1c\ub3d9\s*\uc870\uac74|^\uc0ac\uc6a9\s*\uae30\uc220|\uac1c\uc120\s*\ubc0f\s*\uac1c\uc120|\d+\s*(?:\ub2e8\uacc4|\ud398\uc774\uc988)$|\d+\s*(?:\ub2e8\uacc4|\ud398\uc774\uc988)\s*\ucd94\uac00|\ubcc0\uacbd\s*(?:\uc804|\ud6c4)|\uc0c1\ud488\uba85|\uad6c\uc131\ud488|\uad6c\ub9e4\s*\uc81c\ud55c|\uc218\ub7c9|\uac00\uaca9|\ud655\ub960|\ubcf4\uc0c1\s*\uc815\ubcf4)",
     re.I,
 )
 
@@ -91,7 +94,7 @@ def norm_key(text: str) -> str:
 def clean_line(line: str) -> str:
     line = compact_text(line)
     line = re.sub(r"^[.\u3002]\s*", "", line)
-    line = re.sub(r"^[\u2022\u00b7\u318d\u25a0\u25cf\u226b\u25b6\u25b7\-*]+\s*", "", line)
+    line = re.sub(r"^[\u2022\u00b7\u318d\u25a0\u25cf\u25e6\u226b\u25b6\u25b7\-*]+\s*", "", line)
     line = re.sub(r"^\(?\d{1,2}\)?[.)]\s*", "", line)
     return line.strip()
 
@@ -107,16 +110,36 @@ def is_generic_representative_title(title: str) -> bool:
 
 def representative_detail_target(detail: str) -> str:
     t = clean_line(detail)
+    t = re.sub(r"\s*(?:\uc774|\uac00)\s*(?:\uc544\ub798\uc640|\ub2e4\uc74c\uacfc)?\s*\uac19\uc774\s*\ubcc0\uacbd\ub429\ub2c8\ub2e4\.?$", "", t)
+    t = re.sub(r"\s*(?:\uc774|\uac00)\s*(?:\uc544\ub798\uc640|\ub2e4\uc74c\uacfc)?\s*\uac19\s*$", "", t)
     t = re.sub(r"\s*(?:\uc774|\uac00)\s*(?:\uc0c8\ub86d\uac8c\s*)?\ucd94\uac00\ub429\ub2c8\ub2e4\.?$", "", t)
     t = re.sub(r"\s*(?:\uc774|\uac00)\s*\ucd94\uac00\ub429\ub2c8\ub2e4\.?$", "", t)
     t = re.sub(r"\s*\ucd94\uac00\ub429\ub2c8\ub2e4\.?$", "", t)
     t = re.sub(r"\s*\ubcc0\uacbd\ub429\ub2c8\ub2e4\.?$", "", t)
+    t = re.sub(r"\s*\ub9ac\ub274\uc5bc\ub429\ub2c8\ub2e4\.?$", "", t)
+    t = re.sub(r"\s*\ud655\uc7a5\ub429\ub2c8\ub2e4\.?$", "", t)
+    t = re.sub(r"\s*\ub3cc\uc544\uc635\ub2c8\ub2e4\.?$", "", t)
+    t = re.sub(r"\s*\ud574\uc81c\ub429\ub2c8\ub2e4\.?$", "", t)
+    t = re.sub(r"\s*\uc0c1\ud5a5\s*\uc870\uc815\ub429\ub2c8\ub2e4\.?$", "", t)
+    t = re.sub(r"\s*\ud558\ud5a5\s*\uc870\uc815\ub429\ub2c8\ub2e4\.?$", "", t)
+    t = re.sub(r"\s*\uc870\uc815\ub429\ub2c8\ub2e4\.?$", "", t)
     t = re.sub(r"\s*\uc2dc\uc791\ub429\ub2c8\ub2e4\.?$", "", t)
     return t.strip(" .")
 
 
+def is_representative_detail_line(line: str) -> bool:
+    t = clean_line(line)
+    if not t or is_table_or_link_line(t) or TABLE_TARGET_PATTERN.search(t):
+        return False
+    if re.search(r"(\ubc14\ub85c\uac00\uae30|\uacf5\uc9c0|URL|https?://|\uc790\uc138\ud55c\s*\ub0b4\uc6a9|\ucc38\uace0\ud574\s*\uc8fc\uc138\uc694)", t, re.I):
+        return False
+    if re.match(r"^[\u25e6\u203b*]|\uc774\ubca4\ud2b8\s*\uae30\uac04|^\uc608\uc2dc\d*$", t):
+        return False
+    return True
+
+
 def is_bullet_line(line: str) -> bool:
-    return re.match(r"^\s*[\-\u2022\u00b7\u318d\u25a0\u25cf*]\s*", str(line or "")) is not None
+    return re.match(r"^\s*[\-\u2022\u00b7\u318d\u25a0\u25cf\u25e6*]\s*", str(line or "")) is not None
 
 
 def is_table_or_link_line(line: str) -> bool:
@@ -255,7 +278,7 @@ def normalize_server_target(target: str, source: str, change: str) -> tuple[str,
             flags.append("NORMALIZED_GENERIC_SERVER")
         else:
             target = "\uc11c\ubc84"
-    elif re.match(r"^\uc11c\ubc84\s+\S+", target):
+    elif re.match(r"^\uc11c\ubc84\s+\S+", target) and "\uc11c\ubc84 \uc774\uc804" not in target:
         m = re.match(r"^\uc11c\ubc84\s+(.+)$", target)
         target = f"{m.group(1)} \uc11c\ubc84" if m else target
         flags.append("NORMALIZED_SERVER_NAME")
@@ -285,10 +308,18 @@ def normalize_target_change(domain: str, target: str, change: str, title: str, d
         target, change = detected
         flags.append("NORMALIZED_ENGLISH_VERB")
     target = normalize_target(strip_change_suffix(target))
+    if re.search(r"\uc2dc\uc98c\s*\d+.*\uc885\ub8cc.*\d+.*\uc2dc\uc791", source) and "\uc2e0\uaddc \uc2dc\uc98c" in title:
+        target = clean_line(title)
+        change = CHANGE_WORDS["start"]
+        flags.append("NORMALIZED_SEASON_ROLLOVER")
     if domain == KO["event"]:
         target, change, added = normalize_event_target(target, source, change)
         flags.extend(added)
     if domain == KO["server"]:
+        if re.search(r"(\uc11c\ubc84\s*\uc774\uc804|\uc774\uc804\s*\uc11c\ubc84|server transfer)", source, re.I):
+            target = "\uc11c\ubc84 \uc774\uc804"
+            change = CHANGE_WORDS["run"]
+            flags.append("NORMALIZED_SERVER_TRANSFER")
         target, change, added = normalize_server_target(target, source, change)
         flags.extend(added)
     if domain == KO["shop"]:
@@ -323,7 +354,7 @@ def quality_flags_for_summary(sentence: str, domain: str, target: str, change: s
         flags.append("ENGLISH_VERB_KO_SUFFIX")
     if domain in {KO["class_balance"], KO["skill_balance"]} and TABLE_TARGET_PATTERN.search(sentence):
         flags.append("BALANCE_TABLE_ROW")
-    if len(target) > 80:
+    if len(target) > 120:
         flags.append("OVERLONG_TARGET")
     return flags
 
@@ -333,22 +364,24 @@ def change_type(text: str) -> str:
     compact = norm_key(text)
     if re.search(r"\b(end|ended|expires?|closed?)\b", low) or "\uc885\ub8cc" in compact:
         return CHANGE_WORDS["end"]
-    if any(x in low for x in ["commence", "begin", "start", "open"]) or "\uc2dc\uc791" in compact:
+    if any(x in low for x in ["commence", "begin", "start", "open"]) or "\uc2dc\uc791" in compact or "\ub3cc\uc544\uc635\ub2c8\ub2e4" in compact:
         return CHANGE_WORDS["start"]
     if any(x in low for x in ["improved", "improvement"]) or "\uac1c\uc120" in compact:
         return CHANGE_WORDS["improve"]
-    if any(x in low for x in ["adjusted", "adjustment"]) or "\uc870\uc815" in compact:
-        return CHANGE_WORDS["adjust"]
-    if re.search(r"\b(changed|change)\b", low) or "\ubcc0\uacbd" in compact:
-        return CHANGE_WORDS["change"]
-    if any(x in low for x in ["renewed", "updated"]) or "\uac31\uc2e0" in compact:
-        return CHANGE_WORDS["renew"]
-    if any(x in low for x in ["fixed", "fix"]) or "\uc218\uc815" in compact:
-        return CHANGE_WORDS["fix"]
     if "\ud558\ud5a5" in compact or "decreased" in low:
         return CHANGE_WORDS["nerf"]
     if "\uc0c1\ud5a5" in compact or "increased" in low:
         return CHANGE_WORDS["buff"]
+    if "\ud655\uc7a5" in compact or "expanded" in low:
+        return CHANGE_WORDS["expand"]
+    if any(x in low for x in ["adjusted", "adjustment"]) or "\uc870\uc815" in compact:
+        return CHANGE_WORDS["adjust"]
+    if re.search(r"\b(changed|change)\b", low) or "\ubcc0\uacbd" in compact or "\ud574\uc81c" in compact:
+        return CHANGE_WORDS["change"]
+    if any(x in low for x in ["renewed", "updated", "renewal"]) or "\uac31\uc2e0" in compact or "\ub9ac\ub274\uc5bc" in compact:
+        return CHANGE_WORDS["renew"]
+    if any(x in low for x in ["fixed", "fix"]) or "\uc218\uc815" in compact:
+        return CHANGE_WORDS["fix"]
     return CHANGE_WORDS["add"]
 
 
@@ -386,6 +419,8 @@ def classify_unit(title: str, detail: str) -> tuple[str, str, list[str]]:
     if re.search(r"(\ubc38\ub7f0\uc2a4|balance)", text, re.I):
         domain = KO["class_balance"] if re.search(r"(\ud074\ub798\uc2a4|\uc9c1\uc5c5|class)", text, re.I) else KO["skill_balance"]
         return domain, CHANGE_WORDS["adjust"], ["class_balance"]
+    if re.search(r"(\uc77c\ubd80\s*\ud074\ub798\uc2a4\s*\ubcc0\uacbd|\ud074\ub798\uc2a4\s*\ucf00\uc5b4|\ud074\ub798\uc2a4\s*\uae30\uc220\s*\ubc0f\s*\ud2b9\uc131\s*\ud6a8\uacfc)", text, re.I):
+        return KO["class_balance"], CHANGE_WORDS["adjust"], ["class_balance"]
 
     if re.search(r"(new class|new combat class|\uc2e0\uaddc\s*(\ud074\ub798\uc2a4|\uc9c1\uc5c5))", text, re.I):
         return KO["new_class"], CHANGE_WORDS["add"], ["new_class"]
@@ -437,13 +472,13 @@ def classify_unit(title: str, detail: str) -> tuple[str, str, list[str]]:
     return KO["system_growth"], change_type(text), ["system_growth"]
 
 
-def target_from_unit(title: str, detail: str, domain: str) -> str:
+def target_from_unit(title: str, detail: str, domain: str, game: str = "") -> str:
     if domain in {KO["class_balance"], KO["skill_balance"]}:
         targets = balance_targets(title, detail)
         return ", ".join(targets) if targets else clean_line(title)
 
     text = clean_line(title)
-    if detail and is_generic_representative_title(text):
+    if detail and (is_generic_representative_title(text) or game == "NightCrows_KR"):
         detail_target = representative_detail_target(detail)
         if detail_target:
             return normalize_target(detail_target)
@@ -486,7 +521,7 @@ def target_from_unit(title: str, detail: str, domain: str) -> str:
 
 def build_summary_unit(game: str, title: str, detail: str, order: int) -> dict[str, Any]:
     domain, change, signals = classify_unit(title, detail)
-    target = target_from_unit(title, detail, domain)
+    target = target_from_unit(title, detail, domain, game)
     if domain in {KO["class_balance"], KO["skill_balance"]} and not target:
         target = clean_line(title)
     target, change, normalization_flags = normalize_target_change(domain, target, change, title, detail)
@@ -602,7 +637,8 @@ def parse_representative_items(game: str, section: list[str]) -> list[dict[str, 
             return ""
         m = re.match(r"^\s*(\d{1,2})[.]\s*(.+)$", line)
         if m:
-            return clean_line(m.group(2))
+            numbered = clean_line(m.group(2))
+            return "" if TABLE_TARGET_PATTERN.search(numbered) else numbered
         cleaned = clean_line(line)
         if TABLE_TARGET_PATTERN.search(cleaned):
             return ""
@@ -622,15 +658,23 @@ def parse_representative_items(game: str, section: list[str]) -> list[dict[str, 
             continue
         details: list[str] = []
         j = i + 1
-        is_balance = re.search(r"(\ubc38\ub7f0\uc2a4|balance)", title, re.I) is not None
+        is_balance = re.search(r"(\ubc38\ub7f0\uc2a4|balance|\uc77c\ubd80\s*\ud074\ub798\uc2a4\s*\ubcc0\uacbd|\ud074\ub798\uc2a4\s*\ucf00\uc5b4)", title, re.I) is not None
         while j < n:
             nxt = section[j]
             if title_at(j):
                 break
+            cleaned_nxt = clean_line(nxt)
+            if not is_balance and not is_bullet_line(nxt) and cleaned_nxt and (
+                TABLE_TARGET_PATTERN.search(cleaned_nxt)
+                or (3 <= len(cleaned_nxt) <= 80 and is_heading_like(nxt))
+            ):
+                break
             if is_bullet_line(nxt):
-                if not is_table_or_link_line(nxt):
+                if is_balance:
+                    if not is_table_or_link_line(nxt):
+                        details.append(nxt)
+                elif is_representative_detail_line(nxt):
                     details.append(nxt)
-                if not is_balance:
                     break
             elif is_balance:
                 target = balance_target_line(nxt)

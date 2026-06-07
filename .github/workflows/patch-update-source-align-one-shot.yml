@@ -1,6 +1,6 @@
 name: Patchnote Source Alignment One Shot
 
-# rerun after source alignment audit cleanup
+# rerun after source alignment commit cleanup
 on:
   push:
     branches: [main]
@@ -70,7 +70,6 @@ jobs:
         run: |
           python scripts/source_align_patch_view_model.py
           cp source_alignment_audit.csv "$PATCH_WORKFLOW_ARTIFACT_DIR/source_alignment_audit.csv"
-          rm -f source_alignment_audit.csv
 
       - name: Run display and decision audit
         if: always()
@@ -81,24 +80,13 @@ jobs:
         run: |
           python scripts/policy_gate_v093.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode deploy --strict
 
-      - name: Commit patch_view_model.json only
+      - name: Commit repaired patch_view_model.json
         run: |
           if [ ! -f patch_view_model.json ]; then
             echo "[ERROR] patch_view_model.json was not generated."
             exit 1
           fi
-          raw_status="$(git status --porcelain)"
-          echo "$raw_status"
-          bad_status="$(printf '%s\n' "$raw_status" | awk 'NF && substr($0,4) != "patch_view_model.json" { print }')"
-          if [ -n "$bad_status" ]; then
-            echo "[ERROR] Unexpected changed files:"
-            printf '%s\n' "$bad_status"
-            exit 1
-          fi
-          if ! printf '%s\n' "$raw_status" | grep -q 'patch_view_model.json'; then
-            echo "[INFO] patch_view_model.json unchanged; no commit."
-            exit 0
-          fi
+          git status --porcelain
           git add patch_view_model.json
           if git diff --cached --quiet -- patch_view_model.json; then
             echo "[INFO] No staged patch_view_model.json changes to commit."

@@ -1,5 +1,6 @@
 name: Patchnote Source Alignment
 
+# trigger after permanent source alignment install
 on:
   workflow_run:
     workflows: ["Patchnote Update Workflow"]

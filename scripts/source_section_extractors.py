@@ -63,7 +63,7 @@ LOW_VALUE_TARGETS = {
     "\uc548\ub0b4\uc0ac\ud56d",
 }
 TABLE_TARGET_PATTERN = re.compile(
-    r"(^\(?\ucd94\uac00\)?\s|^[\uff0a*]?\s*\ubcc0\uacbd[:\s]|^\ubcc0\uacbd\s+|\uac1c\uc120\s*\ubc0f\s*\uac1c\uc120|\ub2e8\uacc4$|\ubcc0\uacbd\s*(?:\uc804|\ud6c4)|\uc0c1\ud488\uba85|\uad6c\uc131\ud488|\uad6c\ub9e4\s*\uc81c\ud55c|\uc218\ub7c9|\uac00\uaca9|\ud655\ub960|\ubcf4\uc0c1\s*\uc815\ubcf4)",
+    r"(^\(?\ucd94\uac00\)?\s|^[\uff0a*]?\s*\ubcc0\uacbd[:\s]|^\ubcc0\uacbd\s+|\[[^\]]+\]|\d{1,2}/\d{1,2}\s+\d{1,2}:\d{2}|\uac1c\uc120\s*\ubc0f\s*\uac1c\uc120|\d+\s*(?:\ub2e8\uacc4|\ud398\uc774\uc988)$|\d+\s*(?:\ub2e8\uacc4|\ud398\uc774\uc988)\s*\ucd94\uac00|\ubcc0\uacbd\s*(?:\uc804|\ud6c4)|\uc0c1\ud488\uba85|\uad6c\uc131\ud488|\uad6c\ub9e4\s*\uc81c\ud55c|\uc218\ub7c9|\uac00\uaca9|\ud655\ub960|\ubcf4\uc0c1\s*\uc815\ubcf4)",
     re.I,
 )
 
@@ -94,6 +94,25 @@ def clean_line(line: str) -> str:
     line = re.sub(r"^[\u2022\u00b7\u318d\u25a0\u25cf\u226b\u25b6\u25b7\-*]+\s*", "", line)
     line = re.sub(r"^\(?\d{1,2}\)?[.)]\s*", "", line)
     return line.strip()
+
+
+def is_generic_representative_title(title: str) -> bool:
+    t = clean_line(title)
+    return re.search(
+        r"(\uc2e0\uaddc\s*(?:\ucf58\ud150\uce20|content)|\ucd94\uac00\s*\ubc0f\s*\ubcc0\uacbd|\uc2e0\uaddc\s*\ucd94\uac00|\uc8fc\uc694\s*\uc548\ub0b4|\uc8fc\uc694\s*\uc5c5\ub370\uc774\ud2b8)",
+        t,
+        re.I,
+    ) is not None
+
+
+def representative_detail_target(detail: str) -> str:
+    t = clean_line(detail)
+    t = re.sub(r"\s*(?:\uc774|\uac00)\s*(?:\uc0c8\ub86d\uac8c\s*)?\ucd94\uac00\ub429\ub2c8\ub2e4\.?$", "", t)
+    t = re.sub(r"\s*(?:\uc774|\uac00)\s*\ucd94\uac00\ub429\ub2c8\ub2e4\.?$", "", t)
+    t = re.sub(r"\s*\ucd94\uac00\ub429\ub2c8\ub2e4\.?$", "", t)
+    t = re.sub(r"\s*\ubcc0\uacbd\ub429\ub2c8\ub2e4\.?$", "", t)
+    t = re.sub(r"\s*\uc2dc\uc791\ub429\ub2c8\ub2e4\.?$", "", t)
+    return t.strip(" .")
 
 
 def is_bullet_line(line: str) -> bool:
@@ -390,6 +409,9 @@ def classify_unit(title: str, detail: str) -> tuple[str, str, list[str]]:
     if re.search(r"(world battlefront|battlefront|crusade|\ud06c\ub8e8\uc138\uc774\ub4dc|\uc601\uc9c0)", text, re.I):
         sig = "new_world_content" if re.search(r"(new|\uc2e0\uaddc|\ucd94\uac00)", text, re.I) else "world_content"
         return KO["world"], change_type(text), [sig]
+    if re.search(r"(dominion|\ub3c4\ubbf8\ub2c8\uc5b8|\uc810\ub839\uc804|\uacf5\uc131\uc804|\uae38\ub4dc\s*\ub2e8\uc704|\uae38\ub4dc\s*\uc804\uc7a5|\uc804\uc7c1|\uc804\uc7a5|\uc810\ub839)", text, re.I):
+        sig = "new_pvp_war" if re.search(r"(new|\uc2e0\uaddc|\ucd94\uac00)", text, re.I) else "pvp_war"
+        return KO["pvp"], change_type(text), [sig]
     if re.search(r"(dungeon|boss|raid|monster|\uc9c0\ud558\uac10\uc625|\ub358\uc804|\ubcf4\uc2a4|\ubaac\uc2a4\ud130|\ud544\ub4dc)", text, re.I):
         if re.search(r"(\uccb4\ub825|\ub370\ubbf8\uc9c0|\ub09c\uc774\ub3c4|\ud558\ud5a5|difficulty|damage)", text, re.I):
             return KO["pve_balance"], change_type(text), ["pve_balance"]
@@ -421,6 +443,10 @@ def target_from_unit(title: str, detail: str, domain: str) -> str:
         return ", ".join(targets) if targets else clean_line(title)
 
     text = clean_line(title)
+    if detail and is_generic_representative_title(text):
+        detail_target = representative_detail_target(detail)
+        if detail_target:
+            return normalize_target(detail_target)
     if domain == KO["new_class"]:
         q = quoted(detail) or quoted(text)
         return normalize_target(q or text)
@@ -578,6 +604,8 @@ def parse_representative_items(game: str, section: list[str]) -> list[dict[str, 
         if m:
             return clean_line(m.group(2))
         cleaned = clean_line(line)
+        if TABLE_TARGET_PATTERN.search(cleaned):
+            return ""
         if 3 <= len(cleaned) <= 80 and is_heading_like(line) and not is_bullet_line(line) and not is_table_or_link_line(line):
             if re.search(r"(\ucd94\uac00|\ubcc0\uacbd|\uc870\uc815|\uac1c\uc120|\uac1c\ud3b8|\uc2dc\uc791|\uc885\ub8cc|\ubc38\ub7f0\uc2a4|balance|\ud074\ub798\uc2a4\s*\uccb4\uc778\uc9c0|\uc2dc\uc98c|\uae30\ub2a5)", cleaned, re.I):
                 return cleaned

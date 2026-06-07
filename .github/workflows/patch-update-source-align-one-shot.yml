@@ -1,6 +1,6 @@
 name: Patchnote Source Alignment One Shot
 
-# rerun after source alignment import fix
+# rerun after source alignment audit cleanup
 on:
   push:
     branches: [main]
@@ -70,6 +70,7 @@ jobs:
         run: |
           python scripts/source_align_patch_view_model.py
           cp source_alignment_audit.csv "$PATCH_WORKFLOW_ARTIFACT_DIR/source_alignment_audit.csv"
+          rm -f source_alignment_audit.csv
 
       - name: Run display and decision audit
         if: always()

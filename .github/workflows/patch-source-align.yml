@@ -1,0 +1,93 @@
+name: Patchnote Source Alignment
+
+on:
+  workflow_run:
+    workflows: ["Patchnote Update Workflow"]
+    types: [completed]
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/patch-source-align.yml"
+      - "scripts/source_align_patch_view_model.py"
+  schedule:
+    # 21:47 UTC = 06:47 KST. Runs after the main patch update schedule.
+    - cron: "47 21 * * *"
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: patchnote-source-alignment
+  cancel-in-progress: false
+
+jobs:
+  source-align:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-actions.txt
+
+      - name: Prepare artifact directory
+        run: |
+          echo "PATCH_WORKFLOW_ARTIFACT_DIR=$RUNNER_TEMP/patch_source_alignment_artifacts" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/patch_source_alignment_artifacts"
+
+      - name: Align public summaries with source text
+        run: |
+          python scripts/source_align_patch_view_model.py
+          cp source_alignment_audit.csv "$PATCH_WORKFLOW_ARTIFACT_DIR/source_alignment_audit.csv"
+
+      - name: Run display and decision audit
+        if: always()
+        run: |
+          python scripts/policy_gate_v093.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode post-run --strict
+
+      - name: Run deploy gate
+        run: |
+          python scripts/policy_gate_v093.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode deploy --strict
+
+      - name: Commit repaired patch_view_model.json
+        run: |
+          if [ ! -f patch_view_model.json ]; then
+            echo "[ERROR] patch_view_model.json was not generated."
+            exit 1
+          fi
+          git status --porcelain
+          git add patch_view_model.json
+          if git diff --cached --quiet -- patch_view_model.json; then
+            echo "[INFO] No staged patch_view_model.json changes to commit."
+            exit 0
+          fi
+          git config user.name "patch-update-actions"
+          git config user.email "patch-update-actions@users.noreply.github.com"
+          git commit -m "Repair patch view model source alignment"
+          git push
+
+      - name: Upload source alignment artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: patch-source-alignment-artifacts
+          path: ${{ env.PATCH_WORKFLOW_ARTIFACT_DIR }}/
+          if-no-files-found: warn
+          retention-days: 14

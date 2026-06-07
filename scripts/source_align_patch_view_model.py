@@ -125,6 +125,32 @@ def main() -> int:
             })
             continue
         if not new_body:
+            if status == 200 and old_body:
+                item["body_summary"] = []
+                item["main_updates"] = []
+                item["domain_tags"] = []
+                item["primary_category"] = []
+                item["card_summary"] = ""
+                item["update_units"] = []
+                item["source_section_extractor_status"] = "missing_cleared"
+                item["source_section_extractor_rule"] = "source_section_extractor_v1"
+                item["source_section_extractor_flags"] = preview_flags
+                enrich_importance_display_fields(item)
+                changed_by_game[game] += 1
+                rows.append({
+                    "game": game,
+                    "actual_date": item.get("actual_date", ""),
+                    "title": item.get("title", ""),
+                    "source_url": item.get("source_url") or item.get("url") or "",
+                    "http_status": status,
+                    "status": "CLEARED_MISSING",
+                    "old_count": len(old_body),
+                    "new_count": 0,
+                    "flags": ";".join(preview_flags),
+                    "old_body_summary": " | ".join(old_body),
+                    "new_body_summary": "",
+                })
+                continue
             missing_by_game[game] += 1
             rows.append({
                 "game": game,

@@ -144,7 +144,7 @@ def main() -> int:
     changed = 0
     removed = 0
 
-    from scripts.patch_update_workflow import enrich_importance_display_fields
+    from patch_update_workflow import enrich_importance_display_fields
 
     for item in items:
         game = item.get("game_key") or item.get("game") or ""

@@ -1,6 +1,6 @@
 name: Patchnote Source Alignment
 
-# trigger after permanent source alignment install
+# trigger after all-game source alignment update
 on:
   workflow_run:
     workflows: ["Patchnote Update Workflow"]

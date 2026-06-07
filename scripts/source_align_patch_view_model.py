@@ -123,13 +123,17 @@ def is_unsupported_summary_line(line: str, source_text: str) -> tuple[bool, str]
     return False, ""
 
 
-def compact_card_summary(lines: list[str]) -> str:
+def summary_domains(lines: list[str]) -> list[str]:
     domains: list[str] = []
     for line in lines:
         domain = line.split(":", 1)[0].strip() if ":" in line else ""
         if domain and domain not in domains:
             domains.append(domain)
-    return " \u00b7 ".join(domains[:4])
+    return domains
+
+
+def compact_card_summary(lines: list[str]) -> str:
+    return " \u00b7 ".join(summary_domains(lines)[:4])
 
 
 def main() -> int:
@@ -163,9 +167,12 @@ def main() -> int:
             else:
                 new_lines.append(line)
         if removed_lines:
+            domains = summary_domains(new_lines)
             item["body_summary"] = new_lines
             item["main_updates"] = new_lines[:3]
-            item["card_summary"] = compact_card_summary(new_lines)
+            item["domain_tags"] = domains
+            item["primary_category"] = domains[:2]
+            item["card_summary"] = " \u00b7 ".join(domains[:4])
             item["source_alignment_status"] = "repaired"
             item["source_alignment_removed_count"] = len(removed_lines)
             item["source_alignment_reasons"] = reasons

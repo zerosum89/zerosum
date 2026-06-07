@@ -1,5 +1,6 @@
 name: Patchnote Source Alignment One Shot
 
+# rerun after source alignment import fix
 on:
   push:
     branches: [main]

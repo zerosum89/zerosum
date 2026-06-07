@@ -1,0 +1,117 @@
+name: Patchnote Source Alignment One Shot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/patch-update-source-align-one-shot.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: patchnote-update
+  cancel-in-progress: false
+
+jobs:
+  source-align:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      SCHEDULE_OPERATION_MODE: write_deploy
+      DRY_RUN: "false"
+      RUN_NOTION_WRITE: "false"
+      RUN_GIT_PUSH: "true"
+      TARGET_GAMES: "ALL"
+      MAX_NEW_URLS_PER_GAME: "20"
+      STRICT_DETAIL_URL_GUARD: "true"
+      FETCH_DETAIL_PAGES: "true"
+      MAX_DETAIL_FETCHES: "20"
+      RUN_TITLE_REPAIR: "false"
+      TITLE_REPAIR_WINDOW_DAYS: "14"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-actions.txt
+
+      - name: Prepare artifact directory
+        run: |
+          echo "PATCH_WORKFLOW_ARTIFACT_DIR=$RUNNER_TEMP/patch_workflow_artifacts" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/patch_workflow_artifacts"
+
+      - name: Run patchnote workflow
+        env:
+          WORKFLOW_VERSION: github_actions_v106_source_align
+        run: |
+          python scripts/policy_gate_v093_runner.py -- python scripts/patch_update_workflow.py
+
+      - name: Align public summaries with source text
+        run: |
+          python scripts/source_align_patch_view_model.py
+          cp source_alignment_audit.csv "$PATCH_WORKFLOW_ARTIFACT_DIR/source_alignment_audit.csv"
+
+      - name: Run display and decision audit
+        if: always()
+        run: |
+          python scripts/policy_gate_v093.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode post-run --strict
+
+      - name: Run deploy gate
+        run: |
+          python scripts/policy_gate_v093.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode deploy --strict
+
+      - name: Commit patch_view_model.json only
+        run: |
+          if [ ! -f patch_view_model.json ]; then
+            echo "[ERROR] patch_view_model.json was not generated."
+            exit 1
+          fi
+          raw_status="$(git status --porcelain)"
+          echo "$raw_status"
+          bad_status="$(printf '%s\n' "$raw_status" | awk 'NF && substr($0,4) != "patch_view_model.json" { print }')"
+          if [ -n "$bad_status" ]; then
+            echo "[ERROR] Unexpected changed files:"
+            printf '%s\n' "$bad_status"
+            exit 1
+          fi
+          if ! printf '%s\n' "$raw_status" | grep -q 'patch_view_model.json'; then
+            echo "[INFO] patch_view_model.json unchanged; no commit."
+            exit 0
+          fi
+          git add patch_view_model.json
+          if git diff --cached --quiet -- patch_view_model.json; then
+            echo "[INFO] No staged patch_view_model.json changes to commit."
+            exit 0
+          fi
+          git config user.name "patch-update-actions"
+          git config user.email "patch-update-actions@users.noreply.github.com"
+          git commit -m "Repair patch view model source alignment"
+          git push
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: patch-source-alignment-artifacts
+          path: ${{ env.PATCH_WORKFLOW_ARTIFACT_DIR }}/
+          if-no-files-found: warn
+          retention-days: 14

@@ -26662,16 +26662,16 @@
       "source_url": "https://forum.mir4global.com/post/2160",
       "importance": "normal",
       "primary_category": [
-        "신규 클래스",
+        "클래스/스킬",
         "성장/스킬"
       ],
       "main_updates": [
-        "신규 클래스: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다.",
+        "클래스/스킬: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다.",
         "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다."
       ],
       "body_summary": [
-        "신규 클래스: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다.",
+        "클래스/스킬: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다.",
         "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
@@ -26680,14 +26680,14 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "신규 클래스",
+        "클래스/스킬",
         "성장/스킬",
         "성장/장비",
         "시스템/성장",
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "신규 클래스 · 성장/스킬 · 성장/장비 · 시스템/성장",
+      "card_summary": "클래스/스킬 · 성장/스킬 · 성장/장비 · 시스템/성장",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -26699,9 +26699,11 @@
       "display_highlight_count": 0,
       "quality_gate_status": "pass",
       "source_alignment_status": "repaired",
-      "source_alignment_removed_count": 1,
-      "source_alignment_reasons": [
-        "add_context_not_found:Summon Ticket"
+      "source_alignment_removed_count": 0,
+      "source_alignment_reasons": [],
+      "source_alignment_rewrite_count": 1,
+      "source_alignment_rewrite_reasons": [
+        "retag_new_class_domain"
       ]
     },
     {
@@ -27784,15 +27786,18 @@
       "source_url": "https://forum.mir4global.com/post/344",
       "importance": "normal",
       "primary_category": [
-        "클래스/전투"
+        "신규 클래스",
+        "성장/스킬"
       ],
       "main_updates": [
-        "클래스/전투: 신규 클래스 Arbalist가 추가되어 원거리 물리 공격 기반 전투 선택지가 열립니다."
+        "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
+        "성장/스킬: 전투 능력 강화 목표를 제공하는 ‘Solitude Training’ 수련형 성장 콘텐츠가 추가됩니다.",
+        "클래스/스킬: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다."
       ],
       "body_summary": [
         "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
         "성장/스킬: 전투 능력 강화 목표를 제공하는 ‘Solitude Training’ 수련형 성장 콘텐츠가 추가됩니다.",
-        "신규 클래스: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다.",
+        "클래스/스킬: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다.",
         "PvP/전쟁: 비곡 경쟁과 자원 획득 동선을 확장하는 Hidden Valleys가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
@@ -27801,12 +27806,13 @@
       "domain_tags": [
         "신규 클래스",
         "성장/스킬",
+        "클래스/스킬",
         "PvP/전쟁",
         "성장/제작",
         "시스템/성장",
         "편의/UI"
       ],
-      "card_summary": "클래스/전투: 신규 클래스 Arbalist가 추가되어 원거리 물리 공격 기반 전투 선택지가 열립니다.",
+      "card_summary": "신규 클래스 · 성장/스킬 · 클래스/스킬 · PvP/전쟁",
       "highlight_sentence_candidates": [
         {
           "highlight_type": "class_skill_system",
@@ -27832,7 +27838,14 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 0,
+      "source_alignment_reasons": [],
+      "source_alignment_rewrite_count": 1,
+      "source_alignment_rewrite_reasons": [
+        "retag_new_class_domain"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-812e-982e-c2c06add147c",
@@ -29460,15 +29473,18 @@
       "source_url": "https://forum.mir4global.com/post/1224",
       "importance": "normal",
       "primary_category": [
-        "클래스/전투"
+        "클래스/스킬",
+        "문파 콘텐츠"
       ],
       "main_updates": [
-        "클래스/전투: 신규 클래스 Darkist가 추가되어 원거리 마법 공격 기반 전투 선택지가 열립니다."
+        "클래스/스킬: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다.",
+        "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
+        "클래스/스킬: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다."
       ],
       "body_summary": [
-        "신규 클래스: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다.",
+        "클래스/스킬: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다.",
         "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
-        "신규 클래스: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다.",
+        "클래스/스킬: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "경제/교환: 특정 재화와 보상을 교환하는 ‘Special Exchange System’ 특별 교환 시스템이 추가됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
@@ -29477,7 +29493,7 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "신규 클래스",
+        "클래스/스킬",
         "문파 콘텐츠",
         "성장/제작",
         "경제/교환",
@@ -29486,7 +29502,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "클래스/전투: 신규 클래스 Darkist가 추가되어 원거리 마법 공격 기반 전투 선택지가 열립니다.",
+      "card_summary": "클래스/스킬 · 문파 콘텐츠 · 성장/제작 · 경제/교환",
       "highlight_sentence_candidates": [
         {
           "highlight_type": "class_skill_system",
@@ -29495,8 +29511,8 @@
           "source_unit_indices": [
             0
           ],
-          "sentence": "신규 클래스: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다.",
-          "text": "신규 클래스: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다.",
+          "sentence": "클래스/스킬: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다.",
+          "text": "클래스/스킬: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다.",
           "highlight_reason": "class_skill_system",
           "confidence": 0.86,
           "rule_id": "v060_class_skill_system"
@@ -29512,7 +29528,15 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 0,
+      "source_alignment_reasons": [],
+      "source_alignment_rewrite_count": 2,
+      "source_alignment_rewrite_reasons": [
+        "retag_new_class_domain",
+        "retag_new_class_domain"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81f5-a8ae-cab758f54883",

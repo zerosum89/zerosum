@@ -11,6 +11,7 @@ on:
     paths:
       - ".github/workflows/patch-source-align.yml"
       - "scripts/source_align_patch_view_model.py"
+      - "scripts/source_section_extractors.py"
   schedule:
     # 21:47 UTC = 06:47 KST. Runs after the main patch update schedule.
     - cron: "47 21 * * *"

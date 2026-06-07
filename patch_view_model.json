@@ -1,6 +1,6 @@
 {
   "schema_version": "patch_view_model.v1",
-  "generated_at": "2026-06-07T11:13:19.632420+09:00",
+  "generated_at": "2026-06-07T12:25:02.823643+09:00",
   "source": "notion_db",
   "workflow_version": "github_actions_v093",
   "display_data_version": "patch_view_model.v106_auto_importance_decision",
@@ -198,7 +198,10 @@
       "raw_title": "26.05.26 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/2480",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/정령",
+        "이벤트/보상"
+      ],
       "main_updates": [
         "성장/정령: 정령 성장 선택지를 넓히는 ‘Arcane Mage Aquiel’ Legendary Party Leader Spirit이 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -25574,7 +25577,7 @@
       "importance": "normal",
       "primary_category": [
         "서버/권역",
-        "PvP/전쟁"
+        "성장/정령"
       ],
       "main_updates": [
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
@@ -25591,7 +25594,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
         "서버/권역",
         "성장/정령",
         "시스템/성장",
@@ -25661,7 +25663,10 @@
       "raw_title": "24.10.15 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1823",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "PvE 콘텐츠",
+        "성장/합성"
+      ],
       "main_updates": [
         "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
@@ -25678,7 +25683,6 @@
       ],
       "domain_tags": [
         "PvE 콘텐츠",
-        "성장/장비",
         "성장/합성",
         "보스/PvE",
         "성장/제작",
@@ -25711,7 +25715,10 @@
       "raw_title": "24.10.29 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1836",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "문파 콘텐츠",
+        "성장/정령"
+      ],
       "main_updates": [
         "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -25730,8 +25737,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvE 콘텐츠",
-        "공성/전쟁",
         "문파 콘텐츠",
         "성장/정령",
         "성장/장비",
@@ -25768,7 +25773,10 @@
       "raw_title": "24.11.26 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1857",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "NFT/거래",
+        "성장/정령"
+      ],
       "main_updates": [
         "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -25789,13 +25797,12 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "월드보스",
-        "성장/장비",
         "NFT/거래",
         "성장/정령",
         "성장/제작",
         "시스템/성장",
         "원정/서버",
+        "성장/장비",
         "이벤트/보상",
         "랭킹/경쟁",
         "상점/BM",
@@ -25827,7 +25834,10 @@
       "raw_title": "24.12.10 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1887",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "PvP/콘텐츠",
+        "성장/합성"
+      ],
       "main_updates": [
         "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
@@ -25845,10 +25855,8 @@
       ],
       "domain_tags": [
         "PvP/콘텐츠",
-        "신규 클래스",
-        "월드보스",
-        "성장/장비",
         "성장/합성",
+        "성장/장비",
         "성장/제작",
         "시스템/성장",
         "이벤트/보상",
@@ -25881,7 +25889,10 @@
       "raw_title": "24.12.24 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1898",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/정령",
+        "시스템/성장"
+      ],
       "main_updates": [
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
@@ -25900,7 +25911,6 @@
       "domain_tags": [
         "성장/정령",
         "시스템/성장",
-        "성장/장비",
         "이벤트/보상",
         "랭킹/경쟁",
         "상점/BM",
@@ -25982,7 +25992,10 @@
       "raw_title": "25.01.21 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1935",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/장비",
+        "성장/정령"
+      ],
       "main_updates": [
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -26030,7 +26043,10 @@
       "raw_title": "25.02.18 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1961",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/합성",
+        "성장/정령"
+      ],
       "main_updates": [
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -26053,7 +26069,6 @@
         "시스템/성장",
         "이벤트/보상",
         "상점/BM",
-        "성장 지원/BM",
         "편의/UI"
       ],
       "card_summary": "성장/합성 · 성장/정령 · 성장/장비 · 시스템/성장",
@@ -26116,7 +26131,10 @@
       "raw_title": "25.03.18 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1997",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "PvP/콘텐츠",
+        "성장/정령"
+      ],
       "main_updates": [
         "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -26134,8 +26152,6 @@
       ],
       "domain_tags": [
         "PvP/콘텐츠",
-        "신규 클래스",
-        "성장/장비",
         "성장/정령",
         "성장/제작",
         "이벤트/보상",
@@ -26170,8 +26186,8 @@
       "source_url": "https://forum.mir4global.com/post/2010",
       "importance": "normal",
       "primary_category": [
-        "서버/권역",
-        "PvP/전쟁"
+        "PvE 콘텐츠",
+        "서버/권역"
       ],
       "main_updates": [
         "PvE 콘텐츠: 층별 전투와 성장 보상 목표를 제공하는 ‘Tower of Black Dragon’ 탑형 PvE 콘텐츠가 추가됩니다.",
@@ -26186,9 +26202,7 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
         "PvE 콘텐츠",
-        "월드보스",
         "서버/권역",
         "성장/제작",
         "이벤트/보상",
@@ -26275,7 +26289,8 @@
       "source_url": "https://forum.mir4global.com/post/2046",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁"
+        "PvP/전쟁",
+        "성장/합성"
       ],
       "main_updates": [
         "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
@@ -26295,7 +26310,6 @@
       ],
       "domain_tags": [
         "PvP/전쟁",
-        "성장/장비",
         "성장/합성",
         "NFT/거래",
         "성장/정령",
@@ -26345,7 +26359,8 @@
       "source_url": "https://forum.mir4global.com/post/2060",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁"
+        "공성/전쟁",
+        "성장/장비"
       ],
       "main_updates": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
@@ -26364,12 +26379,10 @@
       ],
       "domain_tags": [
         "공성/전쟁",
-        "월드보스",
         "성장/장비",
         "성장/제작",
         "시스템/성장",
         "랭킹/경쟁",
-        "성장 지원/BM",
         "이벤트/보상",
         "편의/UI"
       ],
@@ -26399,7 +26412,10 @@
       "raw_title": "25.06.10 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/2068",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/정령",
+        "시스템/성장"
+      ],
       "main_updates": [
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
@@ -26446,7 +26462,10 @@
       "raw_title": "25.06.24 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/2085",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/장비",
+        "성장/제작"
+      ],
       "main_updates": [
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -26459,10 +26478,8 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
         "성장/장비",
         "성장/제작",
-        "상점/BM",
         "이벤트/보상",
         "편의/UI"
       ],
@@ -26492,7 +26509,10 @@
       "raw_title": "25.07.08 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/2107",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/정령",
+        "이벤트/보상"
+      ],
       "main_updates": [
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다.",
@@ -26506,8 +26526,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
-        "성장/장비",
         "성장/정령",
         "이벤트/보상",
         "상점/BM",
@@ -26540,7 +26558,10 @@
       "raw_title": "25.07.22 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/2124",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "보스/PvE",
+        "성장/장비"
+      ],
       "main_updates": [
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
@@ -26555,7 +26576,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvE 콘텐츠",
         "보스/PvE",
         "성장/장비",
         "성장/제작",
@@ -26588,7 +26608,10 @@
       "raw_title": "25.08.05 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/2142",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/정령",
+        "성장/제작"
+      ],
       "main_updates": [
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -26605,7 +26628,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvE 콘텐츠",
         "성장/정령",
         "성장/제작",
         "시스템/성장",
@@ -26640,7 +26662,8 @@
       "source_url": "https://forum.mir4global.com/post/2160",
       "importance": "normal",
       "primary_category": [
-        "클래스/전투"
+        "신규 클래스",
+        "성장/스킬"
       ],
       "main_updates": [
         "신규 클래스: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다.",
@@ -26661,7 +26684,6 @@
         "성장/스킬",
         "성장/장비",
         "시스템/성장",
-        "상점/BM",
         "이벤트/보상",
         "편의/UI"
       ],
@@ -26691,7 +26713,8 @@
       "source_url": "https://forum.mir4global.com/post/2205",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁"
+        "PvP/콘텐츠",
+        "공성/전쟁"
       ],
       "main_updates": [
         "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
@@ -26712,7 +26735,6 @@
       "domain_tags": [
         "PvP/콘텐츠",
         "공성/전쟁",
-        "성장/장비",
         "성장/정령",
         "시스템/성장",
         "이벤트/보상",
@@ -26745,7 +26767,10 @@
       "raw_title": "25.09.16 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/2214",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/제작",
+        "이벤트/보상"
+      ],
       "main_updates": [
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "이벤트/보상: 누적 출석과 이벤트 재화 교환 보상을 제공하는 ‘Ringring's 28-Day Check-in’ 출석·교환소 이벤트가 운영됩니다.",
@@ -26758,7 +26783,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "성장/장비",
         "성장/제작",
         "이벤트/보상",
         "편의/UI"
@@ -26832,7 +26856,8 @@
       "source_url": "https://forum.mir4global.com/post/2244",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁"
+        "공성/전쟁",
+        "성장/스킬"
       ],
       "main_updates": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
@@ -26850,7 +26875,6 @@
         "공성/전쟁",
         "성장/스킬",
         "시스템/성장",
-        "상점/BM",
         "이벤트/보상",
         "편의/UI"
       ],
@@ -26879,7 +26903,10 @@
       "raw_title": "25.10.28 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/2249",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/합성",
+        "보스/PvE"
+      ],
       "main_updates": [
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
@@ -26899,10 +26926,10 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "성장/장비",
         "성장/합성",
         "보스/PvE",
         "성장/스킬",
+        "성장/장비",
         "성장/정령",
         "시스템/성장",
         "이벤트/보상",
@@ -26971,7 +26998,8 @@
       "source_url": "https://forum.mir4global.com/post/2282",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁"
+        "공성/전쟁",
+        "성장/스킬"
       ],
       "main_updates": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
@@ -26993,8 +27021,6 @@
       ],
       "domain_tags": [
         "공성/전쟁",
-        "신규 클래스",
-        "성장/장비",
         "성장/스킬",
         "성장/정령",
         "성장/제작",
@@ -27032,8 +27058,8 @@
       "source_url": "https://forum.mir4global.com/post/2297",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁",
-        "이벤트/보상"
+        "공성/전쟁",
+        "NFT/거래"
       ],
       "main_updates": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
@@ -27056,7 +27082,6 @@
       ],
       "domain_tags": [
         "공성/전쟁",
-        "신규 클래스",
         "NFT/거래",
         "성장/스킬",
         "성장/제작",
@@ -27093,7 +27118,10 @@
       "raw_title": "25.12.23 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/2309",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "PvE 콘텐츠",
+        "서버/권역"
+      ],
       "main_updates": [
         "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
@@ -27116,8 +27144,8 @@
       ],
       "domain_tags": [
         "PvE 콘텐츠",
-        "성장/장비",
         "서버/권역",
+        "성장/장비",
         "성장/정령",
         "성장/제작",
         "시스템/성장",
@@ -27184,7 +27212,10 @@
       "raw_title": "26.01.20 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/2338",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/정령",
+        "이벤트/보상"
+      ],
       "main_updates": [
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
@@ -27199,7 +27230,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvE 콘텐츠",
         "성장/정령",
         "이벤트/보상",
         "상점/BM",
@@ -27231,7 +27261,8 @@
       "source_url": "https://forum.mir4global.com/post/2350",
       "importance": "normal",
       "primary_category": [
-        "서버/권역"
+        "서버/권역",
+        "성장/스킬"
       ],
       "main_updates": [
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
@@ -27250,13 +27281,11 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvP/콘텐츠",
-        "성장/장비",
         "서버/권역",
         "성장/스킬",
+        "성장/장비",
         "시스템/성장",
         "이벤트/보상",
-        "상점/BM",
         "편의/UI"
       ],
       "card_summary": "서버/권역 · 성장/스킬 · 성장/장비 · 시스템/성장",
@@ -27329,7 +27358,10 @@
       "raw_title": "26.03.17 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/2402",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "이벤트/보상",
+        "편의/UI"
+      ],
       "main_updates": [
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
@@ -27341,8 +27373,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "신규 클래스",
-        "PvE 콘텐츠",
         "이벤트/보상",
         "편의/UI"
       ],
@@ -27373,7 +27403,8 @@
       "source_url": "https://forum.mir4global.com/post/2423",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁"
+        "공성/전쟁",
+        "성장/장비"
       ],
       "main_updates": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
@@ -27395,10 +27426,8 @@
         "성장/장비",
         "성장/정령",
         "성장/제작",
-        "이벤트/성장",
         "이벤트/보상",
         "상점/BM",
-        "성장 지원/BM",
         "편의/UI"
       ],
       "card_summary": "공성/전쟁 · 성장/장비 · 성장/정령 · 성장/제작",
@@ -27443,7 +27472,10 @@
       "raw_title": "26.04.14 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/2442",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/스킬",
+        "이벤트/보상"
+      ],
       "main_updates": [
         "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
         "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다.",
@@ -27456,7 +27488,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "성장/장비",
         "성장/스킬",
         "이벤트/보상",
         "편의/UI"
@@ -27486,7 +27517,10 @@
       "raw_title": "26.04.28 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/2456",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/정령",
+        "시스템/성장"
+      ],
       "main_updates": [
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
@@ -27500,7 +27534,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "성장/장비",
         "성장/정령",
         "시스템/성장",
         "상점/BM",
@@ -27572,7 +27605,8 @@
       "source_url": "https://forum.mir4global.com/post/157",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁"
+        "성장/장비",
+        "이벤트/보상"
       ],
       "main_updates": [
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
@@ -27585,7 +27619,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvP/전쟁",
         "성장/장비",
         "이벤트/보상",
         "편의/UI"
@@ -27617,7 +27650,8 @@
       "source_url": "https://forum.mir4global.com/post/212",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁"
+        "시스템/성장",
+        "성장/장비"
       ],
       "main_updates": [
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
@@ -27630,7 +27664,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvP/전쟁",
         "시스템/성장",
         "성장/장비",
         "편의/UI"
@@ -27661,7 +27694,8 @@
       "source_url": "https://forum.mir4global.com/post/231",
       "importance": "normal",
       "primary_category": [
-        "콘텐츠"
+        "PvE 콘텐츠",
+        "편의/UI"
       ],
       "main_updates": [
         "PvE 콘텐츠: 반복 공략과 보상 획득 동선을 제공하는 ‘Wailing Dead Mine’ 광산형 PvE 콘텐츠가 확장됩니다.",
@@ -27673,7 +27707,6 @@
       ],
       "domain_tags": [
         "PvE 콘텐츠",
-        "PvP/전쟁",
         "편의/UI"
       ],
       "card_summary": "PvE 콘텐츠 · 편의/UI",
@@ -27701,7 +27734,10 @@
       "raw_title": "21.10.19 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/297",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "문파 콘텐츠",
+        "PvP/전쟁"
+      ],
       "main_updates": [
         "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
         "PvP/전쟁: 비곡 경쟁과 자원 획득 동선을 확장하는 Hidden Valleys가 추가됩니다.",
@@ -27807,7 +27843,8 @@
       "source_url": "https://forum.mir4global.com/post/407",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁"
+        "공성/전쟁",
+        "성장/제작"
       ],
       "main_updates": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
@@ -27822,8 +27859,6 @@
       "domain_tags": [
         "공성/전쟁",
         "성장/제작",
-        "성장/장비",
-        "상점/BM",
         "편의/UI"
       ],
       "card_summary": "공성/전쟁 · 성장/제작 · 편의/UI",
@@ -27891,7 +27926,8 @@
       "source_url": "https://forum.mir4global.com/post/513",
       "importance": "normal",
       "primary_category": [
-        "콘텐츠"
+        "보스/PvE",
+        "시스템/성장"
       ],
       "main_updates": [
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
@@ -27902,10 +27938,8 @@
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
         "보스/PvE",
-        "시스템/성장",
-        "상점/BM"
+        "시스템/성장"
       ],
       "card_summary": "보스/PvE · 시스템/성장",
       "highlight_sentence_candidates": [],
@@ -27968,7 +28002,10 @@
       "raw_title": "22.01.11 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/601",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "NFT/거래",
+        "성장/장비"
+      ],
       "main_updates": [
         "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
         "성장/장비: 기간제 효과와 수집 목표를 제공하는 Time-Limited Codex가 추가됩니다.",
@@ -27981,8 +28018,8 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "성장/장비",
         "NFT/거래",
+        "성장/장비",
         "시스템/성장",
         "편의/UI"
       ],
@@ -28012,7 +28049,8 @@
       "source_url": "https://forum.mir4global.com/post/626",
       "importance": "normal",
       "primary_category": [
-        "성장/소환"
+        "성장/스킬",
+        "성장/제작"
       ],
       "main_updates": [
         "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
@@ -28027,7 +28065,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "신규 클래스",
         "성장/스킬",
         "성장/제작",
         "시스템/성장",
@@ -28099,7 +28136,10 @@
       "raw_title": "22.02.21 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/685",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "NFT/거래",
+        "성장/제작"
+      ],
       "main_updates": [
         "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -28117,7 +28157,6 @@
         "NFT/거래",
         "성장/제작",
         "원정/서버",
-        "성장/장비",
         "시스템/성장",
         "이벤트/보상",
         "편의/UI"
@@ -28148,8 +28187,8 @@
       "source_url": "https://forum.mir4global.com/post/702",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁",
-        "콘텐츠"
+        "월드보스",
+        "경제/분배"
       ],
       "main_updates": [
         "월드보스: Black Flame Abaddon 지역에서 전투가 진행되는 ‘Dark Flame Arch Demon Nerkan’ 월드보스가 조정됩니다.",
@@ -28202,7 +28241,10 @@
       "raw_title": "22.03.21 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/722",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/스킬",
+        "시스템/성장"
+      ],
       "main_updates": [
         "성장/스킬: 클래스별 전투 성능과 스킬 운용을 조정하는 ‘Class Balance’ 밸런스 변경이 적용됩니다.",
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
@@ -28216,7 +28258,6 @@
       ],
       "domain_tags": [
         "성장/스킬",
-        "이벤트/성장",
         "시스템/성장",
         "이벤트/보상",
         "편의/UI"
@@ -28247,8 +28288,8 @@
       "source_url": "https://forum.mir4global.com/post/758",
       "importance": "normal",
       "primary_category": [
-        "서버/권역",
-        "콘텐츠"
+        "월드보스",
+        "성장/제작"
       ],
       "main_updates": [
         "월드보스: Black Flame Abaddon 지역에서 전투가 진행되는 ‘Dark Flame Arch Demon Nerkan’ 월드보스가 조정됩니다.",
@@ -28264,11 +28305,9 @@
       ],
       "domain_tags": [
         "월드보스",
-        "성장/장비",
         "성장/제작",
         "시스템/성장",
         "시스템/전투",
-        "상점/BM",
         "편의/UI"
       ],
       "card_summary": "월드보스 · 성장/제작 · 시스템/성장 · 시스템/전투",
@@ -28340,7 +28379,8 @@
       "source_url": "https://forum.mir4global.com/post/803",
       "importance": "normal",
       "primary_category": [
-        "콘텐츠"
+        "보스/PvE",
+        "시스템/성장"
       ],
       "main_updates": [
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
@@ -28354,8 +28394,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
-        "성장/장비",
         "보스/PvE",
         "시스템/성장",
         "이벤트/보상",
@@ -28387,7 +28425,10 @@
       "raw_title": "22.05.17 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/824",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/합성",
+        "NFT/거래"
+      ],
       "main_updates": [
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
         "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
@@ -28406,12 +28447,12 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "성장/장비",
         "성장/합성",
         "NFT/거래",
         "성장/제작",
         "시스템/성장",
         "원정/서버",
+        "성장/장비",
         "상점/BM",
         "편의/UI"
       ],
@@ -28441,7 +28482,8 @@
       "source_url": "https://forum.mir4global.com/post/849",
       "importance": "normal",
       "primary_category": [
-        "콘텐츠"
+        "성장/합성",
+        "월드보스"
       ],
       "main_updates": [
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
@@ -28459,9 +28501,7 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvE 콘텐츠",
         "성장/합성",
-        "신규 클래스",
         "월드보스",
         "시스템/성장",
         "시스템/전투",
@@ -28494,7 +28534,10 @@
       "raw_title": "22.06.14 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/869",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "문파 콘텐츠",
+        "성장/합성"
+      ],
       "main_updates": [
         "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
@@ -28509,11 +28552,8 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "신규 클래스",
-        "공성/전쟁",
         "문파 콘텐츠",
         "성장/합성",
-        "성장/장비",
         "시스템/성장",
         "시스템/전투",
         "이벤트/보상",
@@ -28547,7 +28587,8 @@
       "source_url": "https://forum.mir4global.com/post/888",
       "importance": "normal",
       "primary_category": [
-        "서버/권역"
+        "공성/전쟁",
+        "성장/합성"
       ],
       "main_updates": [
         "공성/전쟁: 비천성 점령 세력과 참여 문파가 경쟁하는 ‘Heist the Bicheon Castle’ 전쟁 콘텐츠가 운영됩니다.",
@@ -28568,7 +28609,6 @@
         "성장/합성",
         "경제/분배",
         "원정/서버",
-        "성장/장비",
         "상점/BM",
         "편의/UI"
       ],
@@ -28597,7 +28637,10 @@
       "raw_title": "22.07.12 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/910",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "PvP/전쟁",
+        "시스템/성장"
+      ],
       "main_updates": [
         "PvP/전쟁: 비곡 경쟁과 자원 획득 동선을 확장하는 Hidden Valleys가 추가됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
@@ -28612,9 +28655,7 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
         "PvP/전쟁",
-        "서버/권역",
         "시스템/성장",
         "상점/경제",
         "성장/장비",
@@ -28726,7 +28767,8 @@
       "source_url": "https://forum.mir4global.com/post/959",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁"
+        "공성/전쟁",
+        "PvE 콘텐츠"
       ],
       "main_updates": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
@@ -28757,7 +28799,6 @@
         "원정/서버",
         "시스템/성장",
         "이벤트/보상",
-        "상점/BM",
         "편의/UI"
       ],
       "card_summary": "공성/전쟁 · PvE 콘텐츠 · 성장/정령 · 성장/합성",
@@ -28786,8 +28827,8 @@
       "source_url": "https://forum.mir4global.com/post/1014",
       "importance": "normal",
       "primary_category": [
-        "서버/권역",
-        "PvP/전쟁"
+        "문파 콘텐츠",
+        "성장/장비"
       ],
       "main_updates": [
         "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
@@ -28805,7 +28846,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvP/전쟁",
         "문파 콘텐츠",
         "성장/장비",
         "서버/권역",
@@ -28856,7 +28896,8 @@
       "source_url": "https://forum.mir4global.com/post/1030",
       "importance": "normal",
       "primary_category": [
-        "서버/권역"
+        "PvE 콘텐츠",
+        "성장/합성"
       ],
       "main_updates": [
         "PvE 콘텐츠: 층별 전투와 성장 보상 목표를 제공하는 ‘Tower of Black Dragon’ 탑형 PvE 콘텐츠가 추가됩니다.",
@@ -28872,9 +28913,7 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
         "PvE 콘텐츠",
-        "성장/장비",
         "성장/합성",
         "서버/권역",
         "성장/제작",
@@ -28908,6 +28947,7 @@
       "source_url": "https://forum.mir4global.com/post/1046",
       "importance": "normal",
       "primary_category": [
+        "보스/PvE",
         "서버/권역"
       ],
       "main_updates": [
@@ -28924,7 +28964,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "성장/장비",
         "보스/PvE",
         "서버/권역",
         "성장/제작",
@@ -28960,7 +28999,7 @@
       "importance": "normal",
       "primary_category": [
         "서버/권역",
-        "성장/소환"
+        "성장/제작"
       ],
       "main_updates": [
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
@@ -28974,7 +29013,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "성장/장비",
         "서버/권역",
         "성장/제작",
         "시스템/성장",
@@ -29006,6 +29044,7 @@
       "source_url": "https://forum.mir4global.com/post/1090",
       "importance": "normal",
       "primary_category": [
+        "문파 콘텐츠",
         "서버/권역"
       ],
       "main_updates": [
@@ -29022,10 +29061,8 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
         "문파 콘텐츠",
         "서버/권역",
-        "성장/장비",
         "시스템/성장",
         "상점/BM",
         "이벤트/보상",
@@ -29058,8 +29095,8 @@
       "source_url": "https://forum.mir4global.com/post/1105",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁",
-        "콘텐츠"
+        "시스템/성장",
+        "편의/UI"
       ],
       "main_updates": [
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
@@ -29070,10 +29107,7 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
-        "PvE 콘텐츠",
         "시스템/성장",
-        "성장/장비",
         "편의/UI"
       ],
       "card_summary": "시스템/성장 · 편의/UI",
@@ -29144,7 +29178,10 @@
       "raw_title": "22.12.13 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1132",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/장비",
+        "성장/제작"
+      ],
       "main_updates": [
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -29191,7 +29228,10 @@
       "raw_title": "22.12.27 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1145",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/합성",
+        "성장/제작"
+      ],
       "main_updates": [
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -29204,11 +29244,9 @@
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
         "성장/합성",
         "성장/제작",
         "시스템/성장",
-        "상점/BM",
         "이벤트/보상"
       ],
       "card_summary": "성장/합성 · 성장/제작 · 시스템/성장 · 이벤트/보상",
@@ -29275,7 +29313,10 @@
       "raw_title": "23.01.26 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1170",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/제작",
+        "시스템/성장"
+      ],
       "main_updates": [
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
@@ -29290,10 +29331,9 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvE 콘텐츠",
-        "성장/장비",
         "성장/제작",
         "시스템/성장",
+        "성장/장비",
         "이벤트/보상",
         "편의/UI"
       ],
@@ -29324,8 +29364,8 @@
       "source_url": "https://forum.mir4global.com/post/1190",
       "importance": "normal",
       "primary_category": [
-        "서버/권역",
-        "PvP/전쟁"
+        "공성/전쟁",
+        "PvE 콘텐츠"
       ],
       "main_updates": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
@@ -29343,7 +29383,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvP/전쟁",
         "공성/전쟁",
         "PvE 콘텐츠",
         "성장/스킬",
@@ -29484,8 +29523,8 @@
       "source_url": "https://forum.mir4global.com/post/1240",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁",
-        "서버/권역"
+        "서버/권역",
+        "성장/정령"
       ],
       "main_updates": [
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
@@ -29500,13 +29539,10 @@
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
-        "성장/장비",
-        "성장/정령",
         "서버/권역",
+        "성장/정령",
         "이벤트/보상",
-        "상점/BM",
-        "편의/UI"
+        "상점/BM"
       ],
       "card_summary": "서버/권역 · 성장/정령 · 이벤트/보상 · 상점/BM",
       "highlight_sentence_candidates": [],
@@ -29601,7 +29637,10 @@
       "raw_title": "23.04.18 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1274",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "보스/PvE",
+        "성장/정령"
+      ],
       "main_updates": [
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -29620,7 +29659,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
         "보스/PvE",
         "성장/정령",
         "시스템/성장",
@@ -29655,7 +29693,10 @@
       "raw_title": "23.05.02 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1288",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/장비",
+        "성장/제작"
+      ],
       "main_updates": [
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -29671,7 +29712,6 @@
       "domain_tags": [
         "성장/장비",
         "성장/제작",
-        "이벤트/성장",
         "상점/BM",
         "이벤트/보상",
         "편의/UI"
@@ -29703,7 +29743,10 @@
       "raw_title": "23.05.16 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1299",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "보스/PvE",
+        "성장/정령"
+      ],
       "main_updates": [
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -29720,10 +29763,10 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "성장/장비",
         "보스/PvE",
         "성장/정령",
         "시스템/성장",
+        "성장/장비",
         "이벤트/보상",
         "상점/BM",
         "편의/UI"
@@ -29794,7 +29837,10 @@
       "raw_title": "23.06.13 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1324",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "PvE 콘텐츠",
+        "성장/정령"
+      ],
       "main_updates": [
         "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 보조하는 ‘Red Eyes Lucy’ Party Leader Spirit이 추가됩니다.",
@@ -29846,7 +29892,10 @@
       "raw_title": "23.06.27 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1339",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/제작",
+        "편의/UI"
+      ],
       "main_updates": [
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
@@ -29856,7 +29905,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "신규 클래스",
         "성장/제작",
         "편의/UI"
       ],
@@ -29886,7 +29934,10 @@
       "raw_title": "23.07.04 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1347",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "PvE 콘텐츠",
+        "NFT/거래"
+      ],
       "main_updates": [
         "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
@@ -29901,12 +29952,10 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
         "PvE 콘텐츠",
         "NFT/거래",
         "성장/제작",
         "원정/서버",
-        "상점/BM",
         "이벤트/보상",
         "편의/UI"
       ],
@@ -29938,7 +29987,8 @@
       "source_url": "https://forum.mir4global.com/post/1359",
       "importance": "normal",
       "primary_category": [
-        "서버/권역"
+        "서버/권역",
+        "성장/장비"
       ],
       "main_updates": [
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
@@ -29955,10 +30005,8 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
-        "PvE 콘텐츠",
-        "성장/장비",
         "서버/권역",
+        "성장/장비",
         "성장/정령",
         "이벤트/보상",
         "거래/편의",
@@ -30079,7 +30127,8 @@
       "source_url": "https://forum.mir4global.com/post/1395",
       "importance": "normal",
       "primary_category": [
-        "서버/권역"
+        "서버/권역",
+        "성장/제작"
       ],
       "main_updates": [
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
@@ -30095,9 +30144,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
-        "PvE 콘텐츠",
-        "성장/장비",
         "서버/권역",
         "성장/제작",
         "시스템/성장",
@@ -30131,7 +30177,10 @@
       "raw_title": "23.09.05 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1403",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/장비",
+        "성장/정령"
+      ],
       "main_updates": [
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -30181,7 +30230,8 @@
       "source_url": "https://forum.mir4global.com/post/1421",
       "importance": "normal",
       "primary_category": [
-        "서버/권역"
+        "성장/스킬",
+        "보스/PvE"
       ],
       "main_updates": [
         "성장/스킬: 클래스별 전투 성능과 스킬 운용을 조정하는 ‘Class Balance’ 밸런스 변경이 적용됩니다.",
@@ -30198,7 +30248,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvE 콘텐츠",
         "성장/스킬",
         "보스/PvE",
         "서버/권역",
@@ -30231,7 +30280,10 @@
       "raw_title": "23.10.04 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1437",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/장비",
+        "성장/제작"
+      ],
       "main_updates": [
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -30279,7 +30331,10 @@
       "raw_title": "23.10.17 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1446",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/장비",
+        "시스템/성장"
+      ],
       "main_updates": [
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
@@ -30328,7 +30383,8 @@
       "source_url": "https://forum.mir4global.com/post/1461",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁"
+        "문파 콘텐츠",
+        "보스/PvE"
       ],
       "main_updates": [
         "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
@@ -30344,14 +30400,10 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
-        "PvE 콘텐츠",
         "문파 콘텐츠",
-        "성장/장비",
         "보스/PvE",
         "시스템/성장",
         "이벤트/보상",
-        "상점/BM",
         "편의/UI"
       ],
       "card_summary": "문파 콘텐츠 · 보스/PvE · 시스템/성장 · 이벤트/보상",
@@ -30383,7 +30435,10 @@
       "raw_title": "23.11.14 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1473",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "보스/PvE",
+        "성장/장비"
+      ],
       "main_updates": [
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
@@ -30398,8 +30453,8 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "성장/장비",
         "보스/PvE",
+        "성장/장비",
         "상점/BM",
         "이벤트/보상",
         "편의/UI"
@@ -30527,7 +30582,8 @@
       "source_url": "https://forum.mir4global.com/post/1516",
       "importance": "normal",
       "primary_category": [
-        "PvP/전쟁"
+        "성장/정령",
+        "상점/BM"
       ],
       "main_updates": [
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -30543,9 +30599,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
-        "PvE 콘텐츠",
-        "성장/장비",
         "성장/정령",
         "상점/BM",
         "이벤트/보상",
@@ -30580,7 +30633,10 @@
       "raw_title": "24.01.09 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1530",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "PvE 콘텐츠",
+        "성장/장비"
+      ],
       "main_updates": [
         "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "성장/장비: 장비 추가·강화 구조가 확장됩니다.",
@@ -30594,7 +30650,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
         "PvE 콘텐츠",
         "성장/장비",
         "이벤트/보상",
@@ -30625,7 +30680,10 @@
       "raw_title": "24.01.23 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1541",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/정령",
+        "시스템/성장"
+      ],
       "main_updates": [
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
@@ -30642,7 +30700,6 @@
       ],
       "domain_tags": [
         "성장/정령",
-        "성장/장비",
         "시스템/성장",
         "이벤트/보상",
         "상점/BM",
@@ -30674,7 +30731,10 @@
       "raw_title": "24.02.06 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1557",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/장비",
+        "시스템/성장"
+      ],
       "main_updates": [
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
@@ -30690,8 +30750,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
-        "PvE 콘텐츠",
         "성장/장비",
         "시스템/성장",
         "상점/BM",
@@ -30726,7 +30784,10 @@
       "raw_title": "24.02.20 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1563",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "보스/PvE",
+        "성장/정령"
+      ],
       "main_updates": [
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -30742,7 +30803,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "성장/장비",
         "보스/PvE",
         "성장/정령",
         "이벤트/보상",
@@ -30774,7 +30834,10 @@
       "raw_title": "24.03.05 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1587",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/장비",
+        "시스템/성장"
+      ],
       "main_updates": [
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
@@ -30822,7 +30885,10 @@
       "raw_title": "24.03.19 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1599",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "PvP/콘텐츠",
+        "월드보스"
+      ],
       "main_updates": [
         "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
         "월드보스: 도미네이션 서버의 Black Dragon Abaddon에 등장하는 ‘<Blackhorn Winged Drakin> Drakazan’ 월드보스가 추가됩니다.",
@@ -30882,7 +30948,8 @@
       "source_url": "https://forum.mir4global.com/post/1613",
       "importance": "normal",
       "primary_category": [
-        "서버/권역"
+        "서버/권역",
+        "성장/장비"
       ],
       "main_updates": [
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
@@ -30897,10 +30964,9 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "성장/장비",
         "서버/권역",
+        "성장/장비",
         "시스템/성장",
-        "상점/BM",
         "이벤트/보상",
         "편의/UI"
       ],
@@ -30930,7 +30996,10 @@
       "raw_title": "24.04.16 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1622",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "PvE 콘텐츠",
+        "성장/장비"
+      ],
       "main_updates": [
         "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
@@ -30982,7 +31051,10 @@
       "raw_title": "24.04.30 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1644",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "원정/서버",
+        "이벤트/보상"
+      ],
       "main_updates": [
         "원정/서버: 서버 간 이동과 다른 서버 콘텐츠 참여를 위한 ‘Expedition Missions / Wayfarer Travel’ 원정·이동 구조가 조정됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
@@ -30995,7 +31067,6 @@
       ],
       "domain_tags": [
         "원정/서버",
-        "성장/장비",
         "이벤트/보상",
         "편의/UI"
       ],
@@ -31024,7 +31095,10 @@
       "raw_title": "24.05.14 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1662",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/정령",
+        "성장/제작"
+      ],
       "main_updates": [
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -31043,11 +31117,10 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "공성/전쟁",
-        "성장/장비",
         "성장/정령",
         "성장/제작",
         "시스템/성장",
+        "성장/장비",
         "시스템/전투",
         "이벤트/보상",
         "상점/BM",
@@ -31079,7 +31152,10 @@
       "raw_title": "24.05.28 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1676",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/장비",
+        "보스/PvE"
+      ],
       "main_updates": [
         "성장/장비: 장비 외 성장 목표와 전투 능력 강화를 위한 ‘Dragon Artifacts’ Dragon Artifact 성장축이 확장됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
@@ -31100,7 +31176,6 @@
         "성장/제작",
         "원정/서버",
         "시스템/성장",
-        "상점/BM",
         "이벤트/보상",
         "편의/UI"
       ],
@@ -31145,7 +31220,10 @@
       "raw_title": "24.06.11 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1688",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/정령",
+        "시스템/성장"
+      ],
       "main_updates": [
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
@@ -31161,8 +31239,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvP/콘텐츠",
-        "성장/장비",
         "성장/정령",
         "시스템/성장",
         "이벤트/보상",
@@ -31195,7 +31271,10 @@
       "raw_title": "24.06.25 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1705",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/스킬",
+        "보스/PvE"
+      ],
       "main_updates": [
         "성장/스킬: 전투 능력 강화 목표를 제공하는 ‘Solitude Training’ 수련형 성장 콘텐츠가 추가됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
@@ -31212,9 +31291,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvP/콘텐츠",
-        "공성/전쟁",
-        "신규 클래스",
         "성장/스킬",
         "보스/PvE",
         "성장/장비",
@@ -31252,7 +31328,10 @@
       "raw_title": "24.07.09 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1728",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/장비",
+        "NFT/거래"
+      ],
       "main_updates": [
         "성장/장비: 장비 외 성장 목표와 전투 능력 강화를 위한 ‘Dragon Artifacts’ Dragon Artifact 성장축이 확장됩니다.",
         "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
@@ -31318,7 +31397,10 @@
       "raw_title": "24.08.06 | 패치노트",
       "source_url": "https://forum.mir4global.com/post/1752",
       "importance": "normal",
-      "primary_category": [],
+      "primary_category": [
+        "성장/장비",
+        "성장/정령"
+      ],
       "main_updates": [
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -31336,7 +31418,6 @@
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
-        "PvP/콘텐츠",
         "성장/장비",
         "성장/정령",
         "성장/제작",

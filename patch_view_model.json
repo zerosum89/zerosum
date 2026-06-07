@@ -199,14 +199,17 @@
       "source_url": "https://forum.mir4global.com/post/2480",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/정령: 정령 성장 선택지를 넓히는 ‘Arcane Mage Aquiel’ Legendary Party Leader Spirit이 추가됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "이벤트/보상: 누적 출석과 이벤트 재화 교환 보상을 제공하는 ‘Ringring's 28-Day Check-in’ 출석·교환소 이벤트가 운영됩니다."
+      ],
       "body_summary": [
         "성장/정령: 정령 성장 선택지를 넓히는 ‘Arcane Mage Aquiel’ Legendary Party Leader Spirit이 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "이벤트/보상: 누적 출석과 이벤트 재화 교환 보상을 제공하는 ‘Ringring's 28-Day Check-in’ 출석·교환소 이벤트가 운영됩니다.",
         "상점/BM: Arcane Mage Aquiel을 대상으로 한 ‘Arcane Mage Aquiel Legendary Spirit Special Summon’ Legendary Spirit Special Summon이 운영됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
-        "편의/UI: 문파 채팅에서 직책 정보를 확인하는 ‘Clan chat role display’ 표시 기능이 추가됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
@@ -225,7 +228,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Clan chat role display"
+      ]
     },
     {
       "page_id": "3713453a-cf42-8158-b148-fe2cde47ea63",
@@ -25569,17 +25577,16 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
-        "PvP/전쟁: Castle Siege가 추가되어 비천성 점령을 둘러싼 대규모 문파 전쟁이 열립니다."
+        "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다."
       ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
         "상점/BM: Special Summon이 운영됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -25592,7 +25599,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "서버/권역 · 성장/정령 · 시스템/성장 · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -25602,7 +25609,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81ec-906a-ff382580e3e3",
@@ -25649,10 +25662,13 @@
       "source_url": "https://forum.mir4global.com/post/1823",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
+        "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
+        "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다."
+      ],
       "body_summary": [
         "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -25670,7 +25686,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "PvE 콘텐츠 · 성장/장비 · 성장/합성 · 보스/PvE",
+      "card_summary": "PvE 콘텐츠 · 성장/합성 · 보스/PvE · 성장/제작",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -25680,7 +25696,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81fa-92d5-f508efb3610d",
@@ -25691,10 +25712,12 @@
       "source_url": "https://forum.mir4global.com/post/1836",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다."
+      ],
       "body_summary": [
-        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
-        "공성/전쟁: 문파 자금으로 공성 병기를 소환하는 ‘Siege Weapon Craftsman’ 공성 병기 제작·소환 구조가 추가됩니다.",
         "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
@@ -25719,7 +25742,7 @@
         "거래/편의",
         "편의/UI"
       ],
-      "card_summary": "PvE 콘텐츠 · 공성/전쟁 · 문파 콘텐츠 · 성장/정령",
+      "card_summary": "문파 콘텐츠 · 성장/정령 · 성장/장비 · 시스템/성장",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -25729,7 +25752,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_context_not_found:Mirage Ship",
+        "add_claim_term_not_in_source:Siege Weapon Craftsman"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81d6-b23f-fe410c89e30d",
@@ -25740,10 +25769,12 @@
       "source_url": "https://forum.mir4global.com/post/1857",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다."
+      ],
       "body_summary": [
-        "월드보스: 도미네이션 서버의 Black Dragon Abaddon에 등장하는 ‘<Blackhorn Winged Drakin> Drakazan’ 월드보스가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -25770,7 +25801,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "월드보스 · 성장/장비 · NFT/거래 · 성장/정령",
+      "card_summary": "NFT/거래 · 성장/정령 · 성장/제작 · 시스템/성장",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -25780,7 +25811,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:<Blackhorn Winged Drakin;Black Dragon Abaddon;Blackhorn Winged Drakin",
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81f2-a5c8-fbe4c000ab82",
@@ -25791,12 +25828,13 @@
       "source_url": "https://forum.mir4global.com/post/1887",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
+        "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다."
+      ],
       "body_summary": [
         "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
-        "신규 클래스: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다.",
-        "월드보스: 도미네이션 서버의 Black Dragon Abaddon에 등장하는 ‘<Blackhorn Winged Drakin> Drakazan’ 월드보스가 추가됩니다.",
-        "성장/장비: 치명타 피해 감소와 PvP 피해 감소 등 방어형 능력치를 강화하는 ‘Wu Yeogi's Gourd’ 전승 장비가 추가됩니다.",
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -25816,33 +25854,24 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "PvP/콘텐츠 · 신규 클래스 · 월드보스 · 성장/장비",
-      "highlight_sentence_candidates": [
-        {
-          "highlight_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            1
-          ],
-          "sentence": "신규 클래스: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다.",
-          "text": "신규 클래스: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다.",
-          "highlight_reason": "class_skill_system",
-          "confidence": 0.86,
-          "rule_id": "v060_class_skill_system"
-        }
-      ],
-      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.",
-      "importance_suggestion": "major",
-      "importance_suggestion_reason": [
-        "class_skill_system"
-      ],
-      "importance_suggestion_confidence": 0.86,
-      "importance_decision": "major",
+      "card_summary": "PvP/콘텐츠 · 성장/합성 · 성장/장비 · 성장/제작",
+      "highlight_sentence_candidates": [],
+      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
+      "importance_suggestion": "normal",
+      "importance_suggestion_reason": [],
+      "importance_suggestion_confidence": 0.76,
+      "importance_decision": "normal",
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
-      "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "display_highlight_count": 0,
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "new_class_context_not_found",
+        "add_claim_term_not_in_source:<Blackhorn Winged Drakin;Black Dragon Abaddon;Blackhorn Winged Drakin",
+        "add_context_not_found:Wu Yeogi's Gourd"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81c2-939a-ca6620b733e4",
@@ -25853,17 +25882,19 @@
       "source_url": "https://forum.mir4global.com/post/1898",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다."
+      ],
       "body_summary": [
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
-        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
         "랭킹/경쟁: 전투력 기반 경쟁과 보상 기준을 제공하는 Power Score Ranking이 조정됩니다.",
         "상점/BM: Special Summon이 운영됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
-        "편의/UI: 문파 채팅에서 직책 정보를 확인하는 ‘Clan chat role display’ 표시 기능이 추가됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
@@ -25875,7 +25906,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "성장/정령 · 시스템/성장 · 성장/장비 · 이벤트/보상",
+      "card_summary": "성장/정령 · 시스템/성장 · 이벤트/보상 · 랭킹/경쟁",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -25885,7 +25916,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_context_not_found:Mount",
+        "add_claim_term_not_in_source:Clan chat role display"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8102-ae0e-ebab2156b7fe",
@@ -25946,9 +25983,12 @@
       "source_url": "https://forum.mir4global.com/post/1935",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다."
+      ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다.",
@@ -25975,7 +26015,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-810c-baf6-c3f0950637be",
@@ -25986,7 +26031,11 @@
       "source_url": "https://forum.mir4global.com/post/1961",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "성장/장비: 장비 추가·강화 구조가 확장됩니다."
+      ],
       "body_summary": [
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -25994,7 +26043,6 @@
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
         "상점/BM: Special Summon이 운영됩니다.",
-        "성장 지원/BM: 특정 레벨대 캐릭터의 성장 목표를 제공하는 Mission Scroll이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -26018,7 +26066,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Mission Scroll"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8153-a84a-e8767825fec5",
@@ -26064,12 +26117,13 @@
       "source_url": "https://forum.mir4global.com/post/1997",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다."
+      ],
       "body_summary": [
         "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
-        "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
-        "신규 클래스: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다.",
@@ -26088,34 +26142,24 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "PvP/콘텐츠 · 신규 클래스 · 성장/장비 · 성장/정령",
-      "highlight_sentence_candidates": [
-        {
-          "highlight_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            1,
-            2
-          ],
-          "sentence": "클래스/스킬: Arbalist, Darkist 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다.",
-          "text": "클래스/스킬: Arbalist, Darkist 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다.",
-          "highlight_reason": "class_skill_system",
-          "confidence": 0.86,
-          "rule_id": "v060_class_skill_system"
-        }
-      ],
-      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.",
-      "importance_suggestion": "major",
-      "importance_suggestion_reason": [
-        "class_skill_system"
-      ],
-      "importance_suggestion_confidence": 0.86,
-      "importance_decision": "major",
+      "card_summary": "PvP/콘텐츠 · 성장/정령 · 성장/제작 · 이벤트/보상",
+      "highlight_sentence_candidates": [],
+      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
+      "importance_suggestion": "normal",
+      "importance_suggestion_reason": [],
+      "importance_suggestion_confidence": 0.76,
+      "importance_decision": "normal",
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
-      "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "display_highlight_count": 0,
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "new_class_context_not_found",
+        "new_class_context_not_found",
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81cb-a274-cc883fb1a22d",
@@ -26130,13 +26174,12 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
-        "PvP/전쟁: Sabuk Castle 관련 점령·공성 콘텐츠가 갱신됩니다."
+        "PvE 콘텐츠: 층별 전투와 성장 보상 목표를 제공하는 ‘Tower of Black Dragon’ 탑형 PvE 콘텐츠가 추가됩니다.",
+        "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다."
       ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
         "PvE 콘텐츠: 층별 전투와 성장 보상 목표를 제공하는 ‘Tower of Black Dragon’ 탑형 PvE 콘텐츠가 추가됩니다.",
-        "월드보스: 도미네이션 서버의 Black Dragon Abaddon에 등장하는 ‘<Blackhorn Winged Drakin> Drakazan’ 월드보스가 추가됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
@@ -26151,7 +26194,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "PvE 콘텐츠 · 서버/권역 · 성장/제작 · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -26161,7 +26204,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_claim_term_not_in_source:<Blackhorn Winged Drakin;Blackhorn Winged Drakin"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-814c-b1fe-e8226cfac812",
@@ -26229,11 +26278,12 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "PvP/전쟁: Hidden Valley Capture가 추가되어 비천·뱀골·적월 비곡의 지배권을 두고 문파 간 점령전이 진행됩니다."
+        "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
+        "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
+        "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다."
       ],
       "body_summary": [
         "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
         "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -26253,7 +26303,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Hidden Valley Capture가 추가되어 비천·뱀골·적월 비곡의 지배권을 두고 문파 간 점령전이 진행됩니다.",
+      "card_summary": "PvP/전쟁 · 성장/합성 · NFT/거래 · 성장/정령",
       "highlight_sentence_candidates": [
         {
           "highlight_type": "new_pvp_war",
@@ -26279,7 +26329,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8125-833e-d0537039686b",
@@ -26293,17 +26348,17 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "PvP/전쟁: Bicheon Castle Siege가 추가되어 수비·공성 문파가 비천성 소유권을 두고 경쟁합니다."
+        "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다."
       ],
       "body_summary": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
-        "월드보스: 도미네이션 서버의 Black Dragon Abaddon에 등장하는 ‘<Blackhorn Winged Drakin> Drakazan’ 월드보스가 추가됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
         "성장/장비: 장비 추가·강화 구조가 확장됩니다.",
         "랭킹/경쟁: 전투력 기반 경쟁과 보상 기준을 제공하는 Power Score Ranking이 조정됩니다.",
-        "성장 지원/BM: 특정 레벨대 캐릭터의 성장 목표를 제공하는 Mission Scroll이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -26318,7 +26373,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Bicheon Castle Siege가 추가되어 수비·공성 문파가 비천성 소유권을 두고 경쟁합니다.",
+      "card_summary": "공성/전쟁 · 성장/장비 · 성장/제작 · 시스템/성장",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -26328,7 +26383,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:<Blackhorn Winged Drakin;Black Dragon Abaddon;Blackhorn Winged Drakin",
+        "add_context_not_found:Mission Scroll"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8166-adb6-db47963429aa",
@@ -26339,14 +26400,17 @@
       "source_url": "https://forum.mir4global.com/post/2068",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다."
+      ],
       "body_summary": [
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
         "상점/BM: Special Summon이 운영됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -26367,7 +26431,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8108-854b-fe62f81c985d",
@@ -26378,12 +26447,14 @@
       "source_url": "https://forum.mir4global.com/post/2085",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
-      "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
+      "main_updates": [
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
+        "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다."
+      ],
+      "body_summary": [
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -26395,7 +26466,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "공성/전쟁 · 성장/장비 · 성장/제작 · 상점/BM",
+      "card_summary": "성장/장비 · 성장/제작 · 이벤트/보상 · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -26405,7 +26476,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81c2-ba89-c665b113c5c4",
@@ -26416,14 +26493,15 @@
       "source_url": "https://forum.mir4global.com/post/2107",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다.",
+        "상점/BM: Special Summon이 운영됩니다."
+      ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다.",
         "상점/BM: Special Summon이 운영됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -26435,7 +26513,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "공성/전쟁 · 성장/장비 · 성장/정령 · 이벤트/보상",
+      "card_summary": "성장/정령 · 이벤트/보상 · 상점/BM · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -26445,7 +26523,14 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_claim_term_not_in_source:Tier II Magic Stone",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-814a-b353-f5672aff0685",
@@ -26456,15 +26541,17 @@
       "source_url": "https://forum.mir4global.com/post/2124",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다."
+      ],
       "body_summary": [
-        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "이벤트/보상: 누적 출석과 이벤트 재화 교환 보상을 제공하는 ‘Ringring's 28-Day Check-in’ 출석·교환소 이벤트가 운영됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
-        "편의/UI: 문파 채팅에서 직책 정보를 확인하는 ‘Clan chat role display’ 표시 기능이 추가됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
@@ -26475,7 +26562,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "PvE 콘텐츠 · 보스/PvE · 성장/장비 · 성장/제작",
+      "card_summary": "보스/PvE · 성장/장비 · 성장/제작 · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -26485,7 +26572,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_context_not_found:Mirage Ship",
+        "add_claim_term_not_in_source:Clan chat role display"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81c0-8256-e2b13160a577",
@@ -26496,16 +26589,18 @@
       "source_url": "https://forum.mir4global.com/post/2142",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
+        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다."
+      ],
       "body_summary": [
-        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
         "상점/BM: Special Summon이 운영됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -26518,7 +26613,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "PvE 콘텐츠 · 성장/정령 · 성장/제작 · 시스템/성장",
+      "card_summary": "성장/정령 · 성장/제작 · 시스템/성장 · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -26528,7 +26623,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_context_not_found:Mirage Ship",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8168-aeb0-ca22a7b81284",
@@ -26542,7 +26643,9 @@
         "클래스/전투"
       ],
       "main_updates": [
-        "클래스/전투: 신규 클래스 Lionheart가 추가되어 MIR4의 7번째 클래스 선택지가 열립니다."
+        "신규 클래스: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다.",
+        "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
+        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다."
       ],
       "body_summary": [
         "신규 클래스: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다.",
@@ -26550,7 +26653,6 @@
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -26563,7 +26665,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "클래스/전투: 신규 클래스 Lionheart가 추가되어 MIR4의 7번째 클래스 선택지가 열립니다.",
+      "card_summary": "신규 클래스 · 성장/스킬 · 성장/장비 · 시스템/성장",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -26573,7 +26675,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-815b-af27-e76fabd1c75e",
@@ -26587,13 +26694,13 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "PvP/전쟁: Bicheon Castle Siege가 추가되어 수비·공성 문파가 비천성 소유권을 두고 경쟁합니다."
+        "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
+        "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다."
       ],
       "body_summary": [
         "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다.",
@@ -26612,7 +26719,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Bicheon Castle Siege가 추가되어 수비·공성 문파가 비천성 소유권을 두고 경쟁합니다.",
+      "card_summary": "PvP/콘텐츠 · 공성/전쟁 · 성장/정령 · 시스템/성장",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -26622,7 +26729,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81b3-910d-e5564a82a63b",
@@ -26633,10 +26746,12 @@
       "source_url": "https://forum.mir4global.com/post/2214",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
+        "이벤트/보상: 누적 출석과 이벤트 재화 교환 보상을 제공하는 ‘Ringring's 28-Day Check-in’ 출석·교환소 이벤트가 운영됩니다.",
+        "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다."
+      ],
       "body_summary": [
-        "성장/장비: 상위 장비 성장과 전투 능력 강화를 위한 ‘New Mythic Equipment’ Mythic 장비가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "이벤트/보상: 누적 출석과 이벤트 재화 교환 보상을 제공하는 ‘Ringring's 28-Day Check-in’ 출석·교환소 이벤트가 운영됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
@@ -26648,7 +26763,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "성장/장비 · 성장/제작 · 이벤트/보상 · 편의/UI",
+      "card_summary": "성장/제작 · 이벤트/보상 · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -26658,7 +26773,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:New Mythic Equipment",
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8105-ae81-c4ed02323b87",
@@ -26714,13 +26835,14 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "PvP/전쟁: Castle Siege가 추가되어 비천성 점령을 둘러싼 대규모 문파 전쟁이 열립니다."
+        "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
+        "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다."
       ],
       "body_summary": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
         "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -26732,7 +26854,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Castle Siege가 추가되어 비천성 점령을 둘러싼 대규모 문파 전쟁이 열립니다.",
+      "card_summary": "공성/전쟁 · 성장/스킬 · 시스템/성장 · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -26742,7 +26864,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8190-bf8f-daa283084816",
@@ -26753,9 +26880,12 @@
       "source_url": "https://forum.mir4global.com/post/2249",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
+        "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
+        "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다."
+      ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
@@ -26779,7 +26909,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "성장/장비 · 성장/합성 · 보스/PvE · 성장/스킬",
+      "card_summary": "성장/합성 · 보스/PvE · 성장/스킬 · 성장/장비",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -26789,7 +26919,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8188-a585-f6ab9eb19cdb",
@@ -26839,18 +26974,16 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "PvP/전쟁: Bicheon Castle Siege가 추가되어 수비·공성 문파가 비천성 소유권을 두고 경쟁합니다."
+        "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
+        "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다."
       ],
       "body_summary": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
-        "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
-        "신규 클래스: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
-        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
         "상점/BM: Legendary Spirit Summon이 운영됩니다.",
@@ -26870,34 +27003,25 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Bicheon Castle Siege가 추가되어 수비·공성 문파가 비천성 소유권을 두고 경쟁합니다.",
-      "highlight_sentence_candidates": [
-        {
-          "highlight_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            1,
-            2
-          ],
-          "sentence": "클래스/스킬: Arbalist, Darkist 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다.",
-          "text": "클래스/스킬: Arbalist, Darkist 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다.",
-          "highlight_reason": "class_skill_system",
-          "confidence": 0.86,
-          "rule_id": "v060_class_skill_system"
-        }
-      ],
-      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.",
-      "importance_suggestion": "major",
-      "importance_suggestion_reason": [
-        "class_skill_system"
-      ],
-      "importance_suggestion_confidence": 0.86,
-      "importance_decision": "major",
+      "card_summary": "공성/전쟁 · 성장/스킬 · 성장/정령 · 성장/제작",
+      "highlight_sentence_candidates": [],
+      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
+      "importance_suggestion": "normal",
+      "importance_suggestion_reason": [],
+      "importance_suggestion_confidence": 0.76,
+      "importance_decision": "normal",
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
-      "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "display_highlight_count": 0,
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 4,
+      "source_alignment_reasons": [
+        "new_class_context_not_found",
+        "new_class_context_not_found",
+        "add_claim_term_not_in_source:Tier II Magic Stone",
+        "add_context_not_found:Mount"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81c4-ae54-d56e217f0255",
@@ -26912,12 +27036,12 @@
         "이벤트/보상"
       ],
       "main_updates": [
-        "PvP/전쟁: Sabuk Clash가 추가되어 사북 지역을 중심으로 경쟁 콘텐츠가 확장됩니다.",
-        "이벤트/보상: Bicheon Castle Siege Objects의 보상 또는 진행 조건이 변경됩니다."
+        "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
+        "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
+        "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다."
       ],
       "body_summary": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
-        "신규 클래스: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다.",
         "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
         "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -26944,7 +27068,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Sabuk Clash가 추가되어 사북 지역을 중심으로 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "공성/전쟁 · NFT/거래 · 성장/스킬 · 성장/제작",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -26954,7 +27078,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "new_class_context_not_found"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8126-933c-f30cc1a66c5e",
@@ -26965,10 +27094,13 @@
       "source_url": "https://forum.mir4global.com/post/2309",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
+        "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다."
+      ],
       "body_summary": [
         "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -26993,7 +27125,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "PvE 콘텐츠 · 성장/장비 · 서버/권역 · 성장/정령",
+      "card_summary": "PvE 콘텐츠 · 서버/권역 · 성장/장비 · 성장/정령",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -27003,7 +27135,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8117-a01a-d47e7e362387",
@@ -27048,9 +27185,12 @@
       "source_url": "https://forum.mir4global.com/post/2338",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
+        "상점/BM: Special Summon이 운영됩니다."
+      ],
       "body_summary": [
-        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
         "상점/BM: Special Summon이 운영됩니다.",
@@ -27065,7 +27205,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "PvE 콘텐츠 · 성장/정령 · 이벤트/보상 · 상점/BM",
+      "card_summary": "성장/정령 · 이벤트/보상 · 상점/BM · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -27075,7 +27215,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Mirage Ship"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81ef-afc8-d6b5d0447c6f",
@@ -27089,11 +27234,11 @@
         "서버/권역"
       ],
       "main_updates": [
-        "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다."
+        "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
+        "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다."
       ],
       "body_summary": [
-        "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
         "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
@@ -27101,7 +27246,6 @@
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "이벤트/보상: 누적 출석과 이벤트 재화 교환 보상을 제공하는 ‘Ringring's 28-Day Check-in’ 출석·교환소 이벤트가 운영됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -27115,7 +27259,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "서버/권역 · 성장/스킬 · 성장/장비 · 시스템/성장",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -27125,7 +27269,14 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "add_context_not_found:Valley of Life and Death;Valley;Life;Death",
+        "add_claim_term_not_in_source:Tier II Magic Stone",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8196-8684-ccb540bee348",
@@ -27179,10 +27330,12 @@
       "source_url": "https://forum.mir4global.com/post/2402",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
+        "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
+        "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
+      ],
       "body_summary": [
-        "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
-        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
@@ -27193,33 +27346,23 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "신규 클래스 · PvE 콘텐츠 · 이벤트/보상 · 편의/UI",
-      "highlight_sentence_candidates": [
-        {
-          "highlight_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "sentence": "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
-          "text": "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
-          "highlight_reason": "class_skill_system",
-          "confidence": 0.86,
-          "rule_id": "v060_class_skill_system"
-        }
-      ],
-      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.",
-      "importance_suggestion": "major",
-      "importance_suggestion_reason": [
-        "class_skill_system"
-      ],
-      "importance_suggestion_confidence": 0.86,
-      "importance_decision": "major",
+      "card_summary": "이벤트/보상 · 편의/UI",
+      "highlight_sentence_candidates": [],
+      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
+      "importance_suggestion": "normal",
+      "importance_suggestion_reason": [],
+      "importance_suggestion_confidence": 0.76,
+      "importance_decision": "normal",
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
-      "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "display_highlight_count": 0,
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "new_class_context_not_found",
+        "add_context_not_found:Mirage Ship"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-811a-9d51-eaf27f67f76f",
@@ -27233,18 +27376,17 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "PvP/전쟁: Bicheon Castle Siege가 추가되어 수비·공성 문파가 비천성 소유권을 두고 경쟁합니다.",
-        "PvP/전쟁: Castle Siege가 추가되어 비천성 점령을 둘러싼 대규모 문파 전쟁이 열립니다."
+        "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
+        "성장/장비: 고등급 장비의 추가 성장을 위한 ‘Dragon Forge’ 강화 시스템이 확장됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다."
       ],
       "body_summary": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
         "성장/장비: 고등급 장비의 추가 성장을 위한 ‘Dragon Forge’ 강화 시스템이 확장됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
-        "이벤트/성장: 빠른 육성과 보상 획득을 지원하는 ‘Character Growth Support’ 캐릭터 성장 지원 구조가 추가됩니다.",
         "이벤트/보상: 누적 출석과 이벤트 재화 교환 보상을 제공하는 ‘Ringring's 28-Day Check-in’ 출석·교환소 이벤트가 운영됩니다.",
         "상점/BM: Spirit Special Summon이 운영됩니다.",
-        "성장 지원/BM: 특정 레벨대 캐릭터의 성장 목표를 제공하는 Mission Scroll이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -27259,7 +27401,7 @@
         "성장 지원/BM",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Bicheon Castle Siege가 추가되어 수비·공성 문파가 비천성 소유권을 두고 경쟁합니다.",
+      "card_summary": "공성/전쟁 · 성장/장비 · 성장/정령 · 성장/제작",
       "highlight_sentence_candidates": [
         {
           "highlight_type": "new_growth_axis",
@@ -27285,7 +27427,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Character Growth Support",
+        "add_context_not_found:Mission Scroll"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81aa-9bef-ce4428f0d047",
@@ -27296,9 +27444,12 @@
       "source_url": "https://forum.mir4global.com/post/2442",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
+        "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다.",
+        "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다."
+      ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
         "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
@@ -27310,7 +27461,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "성장/장비 · 성장/스킬 · 이벤트/보상 · 편의/UI",
+      "card_summary": "성장/스킬 · 이벤트/보상 · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -27320,7 +27471,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-812f-b1c0-d7db54302bd8",
@@ -27331,15 +27487,16 @@
       "source_url": "https://forum.mir4global.com/post/2456",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
+        "상점/BM: Spirit Special Summon이 운영됩니다."
+      ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "상점/BM: Spirit Special Summon이 운영됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
-        "편의/UI: 문파 채팅에서 직책 정보를 확인하는 ‘Clan chat role display’ 표시 기능이 추가됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
@@ -27350,7 +27507,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "성장/장비 · 성장/정령 · 시스템/성장 · 상점/BM",
+      "card_summary": "성장/정령 · 시스템/성장 · 상점/BM · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -27360,7 +27517,14 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone",
+        "add_context_not_found:Summon Ticket",
+        "add_claim_term_not_in_source:Clan chat role display"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8144-9088-f34ee53ba0bd",
@@ -27411,11 +27575,11 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "PvP/전쟁: Hidden Valley Capture가 추가되어 비천·뱀골·적월 비곡의 지배권을 두고 문파 간 점령전이 진행됩니다."
+        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
+        "이벤트/보상: 기간 한정 보상 목표를 제공하는 ‘Golden Porkinator’ 이벤트 보스가 운영됩니다.",
+        "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "body_summary": [
-        "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
-        "PvP/전쟁: 비곡 경쟁과 자원 획득 동선을 확장하는 Hidden Valleys가 추가됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "이벤트/보상: 기간 한정 보상 목표를 제공하는 ‘Golden Porkinator’ 이벤트 보스가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
@@ -27426,33 +27590,23 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Hidden Valley Capture가 추가되어 비천·뱀골·적월 비곡의 지배권을 두고 문파 간 점령전이 진행됩니다.",
-      "highlight_sentence_candidates": [
-        {
-          "highlight_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "sentence": "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
-          "text": "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
-          "highlight_reason": "new_pvp_war",
-          "confidence": 0.86,
-          "rule_id": "v060_new_pvp_war"
-        }
-      ],
-      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.",
-      "importance_suggestion": "major",
-      "importance_suggestion_reason": [
-        "new_pvp_war"
-      ],
-      "importance_suggestion_confidence": 0.86,
-      "importance_decision": "major",
+      "card_summary": "성장/장비 · 이벤트/보상 · 편의/UI",
+      "highlight_sentence_candidates": [],
+      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
+      "importance_suggestion": "normal",
+      "importance_suggestion_reason": [],
+      "importance_suggestion_confidence": 0.76,
+      "importance_decision": "normal",
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
-      "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "display_highlight_count": 0,
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_context_not_found:Hidden Valley Capture",
+        "add_context_not_found:Hidden Valleys"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8119-9795-ca5b60aa0e86",
@@ -27466,10 +27620,11 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "PvP/전쟁: Hidden Valley Capture가 추가되어 비천·뱀골·적월 비곡의 지배권을 두고 문파 간 점령전이 진행됩니다."
+        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
+        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
+        "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "body_summary": [
-        "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
@@ -27480,33 +27635,22 @@
         "성장/장비",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Hidden Valley Capture가 추가되어 비천·뱀골·적월 비곡의 지배권을 두고 문파 간 점령전이 진행됩니다.",
-      "highlight_sentence_candidates": [
-        {
-          "highlight_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "sentence": "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
-          "text": "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
-          "highlight_reason": "new_pvp_war",
-          "confidence": 0.86,
-          "rule_id": "v060_new_pvp_war"
-        }
-      ],
-      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.",
-      "importance_suggestion": "major",
-      "importance_suggestion_reason": [
-        "new_pvp_war"
-      ],
-      "importance_suggestion_confidence": 0.86,
-      "importance_decision": "major",
+      "card_summary": "시스템/성장 · 성장/장비 · 편의/UI",
+      "highlight_sentence_candidates": [],
+      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
+      "importance_suggestion": "normal",
+      "importance_suggestion_reason": [],
+      "importance_suggestion_confidence": 0.76,
+      "importance_decision": "normal",
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
-      "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "display_highlight_count": 0,
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Hidden Valley Capture"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-817d-88aa-c171eb262471",
@@ -27520,11 +27664,11 @@
         "콘텐츠"
       ],
       "main_updates": [
-        "콘텐츠: 신규 레이드 Wailing Dead Mine이 추가됩니다."
+        "PvE 콘텐츠: 반복 공략과 보상 획득 동선을 제공하는 ‘Wailing Dead Mine’ 광산형 PvE 콘텐츠가 확장됩니다.",
+        "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "body_summary": [
         "PvE 콘텐츠: 반복 공략과 보상 획득 동선을 제공하는 ‘Wailing Dead Mine’ 광산형 PvE 콘텐츠가 확장됩니다.",
-        "PvP/전쟁: 비곡 경쟁과 자원 획득 동선을 확장하는 Hidden Valleys가 추가됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
@@ -27532,7 +27676,7 @@
         "PvP/전쟁",
         "편의/UI"
       ],
-      "card_summary": "콘텐츠: 신규 레이드 Wailing Dead Mine이 추가됩니다.",
+      "card_summary": "PvE 콘텐츠 · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -27542,7 +27686,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Hidden Valleys"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-818f-8390-d622c78bb1b7",
@@ -27553,14 +27702,17 @@
       "source_url": "https://forum.mir4global.com/post/297",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
+        "PvP/전쟁: 비곡 경쟁과 자원 획득 동선을 확장하는 Hidden Valleys가 추가됩니다.",
+        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다."
+      ],
       "body_summary": [
         "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
         "PvP/전쟁: 비곡 경쟁과 자원 획득 동선을 확장하는 Hidden Valleys가 추가됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "상점/BM: Dragon Material·Spirit Stone·Skill Tome Special Summon이 운영됩니다.",
-        "편의/UI: 문파 채팅에서 직책 정보를 확인하는 ‘Clan chat role display’ 표시 기능이 추가됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
@@ -27580,7 +27732,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Clan chat role display"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8169-943e-d3f181bca94c",
@@ -27653,15 +27810,13 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "PvP/전쟁: Castle Siege가 추가되어 비천성 점령을 둘러싼 대규모 문파 전쟁이 열립니다.",
-        "PvP/전쟁: Bicheon Castle Siege가 추가되어 수비·공성 문파가 비천성 소유권을 두고 경쟁합니다."
+        "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
+        "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "body_summary": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
-        "공성/전쟁: 문파 자금으로 공성 병기를 소환하는 ‘Siege Weapon Craftsman’ 공성 병기 제작·소환 구조가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
-        "성장/장비: 기간제 효과와 수집 목표를 제공하는 Time-Limited Codex가 추가됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
@@ -27671,7 +27826,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Castle Siege가 추가되어 비천성 점령을 둘러싼 대규모 문파 전쟁이 열립니다.",
+      "card_summary": "공성/전쟁 · 성장/제작 · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -27681,7 +27836,14 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "add_context_not_found:Siege Weapon Craftsman",
+        "add_context_not_found:Time-Limited Codex",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8171-9efd-fe59b3bd5ab7",
@@ -27732,15 +27894,12 @@
         "콘텐츠"
       ],
       "main_updates": [
-        "콘텐츠: 신규 지역 Phantasia가 추가됩니다.",
-        "콘텐츠: 신규 레이드 Crimson Dragon Nest가 추가됩니다.",
-        "콘텐츠: 신규 보스 레이드 Forsaken King이 추가됩니다."
+        "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
+        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다."
       ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
-        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다."
+        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다."
       ],
       "domain_tags": [
         "공성/전쟁",
@@ -27748,7 +27907,7 @@
         "시스템/성장",
         "상점/BM"
       ],
-      "card_summary": "콘텐츠: 신규 지역 Phantasia가 추가됩니다.",
+      "card_summary": "보스/PvE · 시스템/성장",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -27758,7 +27917,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8102-a0ac-fc34708fda38",
@@ -27804,9 +27969,12 @@
       "source_url": "https://forum.mir4global.com/post/601",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
+        "성장/장비: 기간제 효과와 수집 목표를 제공하는 Time-Limited Codex가 추가됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다."
+      ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
         "성장/장비: 기간제 효과와 수집 목표를 제공하는 Time-Limited Codex가 추가됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
@@ -27818,7 +27986,7 @@
         "시스템/성장",
         "편의/UI"
       ],
-      "card_summary": "성장/장비 · NFT/거래 · 시스템/성장 · 편의/UI",
+      "card_summary": "NFT/거래 · 성장/장비 · 시스템/성장 · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -27828,7 +27996,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-818c-9069-cb94d4123cb2",
@@ -27842,10 +28015,11 @@
         "성장/소환"
       ],
       "main_updates": [
-        "성장/소환: Forsaken Badge가 추가되어 신규 보스 몬스터를 소환할 수 있습니다."
+        "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
+        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다."
       ],
       "body_summary": [
-        "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
         "성장/스킬: 클래스 전투 성능과 성장 선택지에 영향을 주는 Lionheart 관련 전투 요소가 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
@@ -27860,33 +28034,22 @@
         "성장/장비",
         "편의/UI"
       ],
-      "card_summary": "성장/소환: Forsaken Badge가 추가되어 신규 보스 몬스터를 소환할 수 있습니다.",
-      "highlight_sentence_candidates": [
-        {
-          "highlight_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "sentence": "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
-          "text": "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
-          "highlight_reason": "class_skill_system",
-          "confidence": 0.86,
-          "rule_id": "v060_class_skill_system"
-        }
-      ],
-      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.",
-      "importance_suggestion": "major",
-      "importance_suggestion_reason": [
-        "class_skill_system"
-      ],
-      "importance_suggestion_confidence": 0.86,
-      "importance_decision": "major",
+      "card_summary": "성장/스킬 · 성장/제작 · 시스템/성장 · 성장/장비",
+      "highlight_sentence_candidates": [],
+      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
+      "importance_suggestion": "normal",
+      "importance_suggestion_reason": [],
+      "importance_suggestion_confidence": 0.76,
+      "importance_decision": "normal",
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
-      "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "display_highlight_count": 0,
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "new_class_context_not_found"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8165-b902-fd8564c74bc1",
@@ -27937,12 +28100,15 @@
       "source_url": "https://forum.mir4global.com/post/685",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
+        "원정/서버: 서버 간 이동과 다른 서버 콘텐츠 참여를 위한 ‘Expedition Missions / Wayfarer Travel’ 원정·이동 구조가 조정됩니다."
+      ],
       "body_summary": [
         "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "원정/서버: 서버 간 이동과 다른 서버 콘텐츠 참여를 위한 ‘Expedition Missions / Wayfarer Travel’ 원정·이동 구조가 조정됩니다.",
-        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
@@ -27956,7 +28122,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "NFT/거래 · 성장/제작 · 원정/서버 · 성장/장비",
+      "card_summary": "NFT/거래 · 성장/제작 · 원정/서버 · 시스템/성장",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -27966,7 +28132,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Mount"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8194-b226-eab7d09e1657",
@@ -27981,8 +28152,9 @@
         "콘텐츠"
       ],
       "main_updates": [
-        "PvP/전쟁: Castle Siege가 추가되어 비천성 점령을 둘러싼 대규모 문파 전쟁이 열립니다.",
-        "콘텐츠: 월드 보스가 추가되어 무작위 서버에서 정해진 시간에 출현합니다."
+        "월드보스: Black Flame Abaddon 지역에서 전투가 진행되는 ‘Dark Flame Arch Demon Nerkan’ 월드보스가 조정됩니다.",
+        "경제/분배: 문파·영지 자원의 개인 분배 조건이 조정됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다."
       ],
       "body_summary": [
         "월드보스: Black Flame Abaddon 지역에서 전투가 진행되는 ‘Dark Flame Arch Demon Nerkan’ 월드보스가 조정됩니다.",
@@ -27990,11 +28162,9 @@
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
         "월드보스: 월드보스 전투와 보상 구성이 조정됩니다.",
-        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "성장/장비: 기간제 효과와 수집 목표를 제공하는 Time-Limited Codex가 추가됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "시스템/전투: 성향치 회복 가능 몬스터 범위가 완화됩니다.",
-        "편의/UI: 문파 채팅에서 직책 정보를 확인하는 ‘Clan chat role display’ 표시 기능이 추가됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
@@ -28006,7 +28176,7 @@
         "시스템/전투",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Castle Siege가 추가되어 비천성 점령을 둘러싼 대규모 문파 전쟁이 열립니다.",
+      "card_summary": "월드보스 · 경제/분배 · 성장/제작 · 시스템/성장",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28016,7 +28186,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_context_not_found:Mount",
+        "add_claim_term_not_in_source:Clan chat role display"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-811c-b168-c2f7dbb95888",
@@ -28027,10 +28203,13 @@
       "source_url": "https://forum.mir4global.com/post/722",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/스킬: 클래스별 전투 성능과 스킬 운용을 조정하는 ‘Class Balance’ 밸런스 변경이 적용됩니다.",
+        "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
+        "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다."
+      ],
       "body_summary": [
         "성장/스킬: 클래스별 전투 성능과 스킬 운용을 조정하는 ‘Class Balance’ 밸런스 변경이 적용됩니다.",
-        "이벤트/성장: 빠른 육성과 보상 획득을 지원하는 ‘Character Growth Support’ 캐릭터 성장 지원 구조가 추가됩니다.",
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
@@ -28042,7 +28221,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "성장/스킬 · 이벤트/성장 · 시스템/성장 · 이벤트/보상",
+      "card_summary": "성장/스킬 · 시스템/성장 · 이벤트/보상 · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28052,7 +28231,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Character Growth Support"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-815a-9931-f8974824a554",
@@ -28067,16 +28251,15 @@
         "콘텐츠"
       ],
       "main_updates": [
-        "서버/권역: Expedition이 추가되어 매일 지정 시간 동안 다른 서버로 임시 이동할 수 있습니다.",
-        "콘텐츠: Expedition Token Trader의 조건 또는 보상이 조정됩니다."
+        "월드보스: Black Flame Abaddon 지역에서 전투가 진행되는 ‘Dark Flame Arch Demon Nerkan’ 월드보스가 조정됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다."
       ],
       "body_summary": [
         "월드보스: Black Flame Abaddon 지역에서 전투가 진행되는 ‘Dark Flame Arch Demon Nerkan’ 월드보스가 조정됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "시스템/전투: 성향치 회복 가능 몬스터 범위가 완화됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
@@ -28088,7 +28271,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Expedition이 추가되어 매일 지정 시간 동안 다른 서버로 임시 이동할 수 있습니다.",
+      "card_summary": "월드보스 · 성장/제작 · 시스템/성장 · 시스템/전투",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28098,7 +28281,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8155-823d-c931eb535790",
@@ -28154,11 +28343,11 @@
         "콘텐츠"
       ],
       "main_updates": [
-        "콘텐츠: 신규 보스 레이드 Deranged Hellbound Revenant가 추가됩니다."
+        "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
+        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
+        "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다."
       ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
@@ -28172,7 +28361,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "콘텐츠: 신규 보스 레이드 Deranged Hellbound Revenant가 추가됩니다.",
+      "card_summary": "보스/PvE · 시스템/성장 · 이벤트/보상 · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28182,7 +28371,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8199-95ce-f980f20643d6",
@@ -28193,9 +28388,12 @@
       "source_url": "https://forum.mir4global.com/post/824",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
+        "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다."
+      ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
         "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -28217,7 +28415,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "성장/장비 · 성장/합성 · NFT/거래 · 성장/제작",
+      "card_summary": "성장/합성 · NFT/거래 · 성장/제작 · 시스템/성장",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28227,7 +28425,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81ca-a6dc-d80ec83ea170",
@@ -28241,12 +28444,12 @@
         "콘텐츠"
       ],
       "main_updates": [
-        "콘텐츠: 신규 월드 보스 Violet Demon God Turkan이 무작위 서버에 등장합니다."
+        "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
+        "월드보스: 월드보스 전투와 보상 구성이 조정됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다."
       ],
       "body_summary": [
-        "PvE 콘텐츠: 캐릭터 성장과 보상 획득 목표를 제공하는 ‘Altar of Darkness’ 전투 콘텐츠가 추가됩니다.",
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
-        "신규 클래스: 캐릭터 직업 운용 선택지를 넓히는 ‘Class Change’ 클래스 변경 기능이 조정됩니다.",
         "월드보스: 월드보스 전투와 보상 구성이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "시스템/전투: 성향치 회복 가능 몬스터 범위가 완화됩니다.",
@@ -28265,7 +28468,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "콘텐츠: 신규 월드 보스 Violet Demon God Turkan이 무작위 서버에 등장합니다.",
+      "card_summary": "성장/합성 · 월드보스 · 시스템/성장 · 시스템/전투",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28275,7 +28478,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_context_not_found:Altar of Darkness;Altar;Darkness",
+        "new_class_context_not_found"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8106-8d35-d9e16017868e",
@@ -28286,13 +28495,14 @@
       "source_url": "https://forum.mir4global.com/post/869",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
-      "body_summary": [
-        "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
-        "공성/전쟁: 문파 자금으로 공성 병기를 소환하는 ‘Siege Weapon Craftsman’ 공성 병기 제작·소환 구조가 추가됩니다.",
+      "main_updates": [
         "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
-        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
+        "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다."
+      ],
+      "body_summary": [
+        "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
+        "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
         "시스템/전투: 성향치 회복 가능 몬스터 범위가 완화됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
@@ -28309,33 +28519,24 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "신규 클래스 · 공성/전쟁 · 문파 콘텐츠 · 성장/합성",
-      "highlight_sentence_candidates": [
-        {
-          "highlight_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "sentence": "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
-          "text": "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
-          "highlight_reason": "class_skill_system",
-          "confidence": 0.86,
-          "rule_id": "v060_class_skill_system"
-        }
-      ],
-      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.",
-      "importance_suggestion": "major",
-      "importance_suggestion_reason": [
-        "class_skill_system"
-      ],
-      "importance_suggestion_confidence": 0.86,
-      "importance_decision": "major",
+      "card_summary": "문파 콘텐츠 · 성장/합성 · 시스템/성장 · 시스템/전투",
+      "highlight_sentence_candidates": [],
+      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
+      "importance_suggestion": "normal",
+      "importance_suggestion_reason": [],
+      "importance_suggestion_confidence": 0.76,
+      "importance_decision": "normal",
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
-      "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "display_highlight_count": 0,
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "new_class_context_not_found",
+        "add_claim_term_not_in_source:Siege Weapon Craftsman",
+        "add_context_not_found:Mount"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8184-bf88-c3195a13cfe2",
@@ -28349,14 +28550,15 @@
         "서버/권역"
       ],
       "main_updates": [
-        "서버/권역: Expedition이 추가되어 매일 지정 시간 동안 다른 서버로 임시 이동할 수 있습니다."
+        "공성/전쟁: 비천성 점령 세력과 참여 문파가 경쟁하는 ‘Heist the Bicheon Castle’ 전쟁 콘텐츠가 운영됩니다.",
+        "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
+        "경제/분배: 문파·영지 자원의 개인 분배 조건이 조정됩니다."
       ],
       "body_summary": [
         "공성/전쟁: 비천성 점령 세력과 참여 문파가 경쟁하는 ‘Heist the Bicheon Castle’ 전쟁 콘텐츠가 운영됩니다.",
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
         "경제/분배: 문파·영지 자원의 개인 분배 조건이 조정됩니다.",
         "원정/서버: 서버 간 이동과 다른 서버 콘텐츠 참여를 위한 ‘Expedition Missions / Wayfarer Travel’ 원정·이동 구조가 조정됩니다.",
-        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "상점/BM: Legendary Spirit Summon이 운영됩니다.",
         "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
@@ -28370,7 +28572,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Expedition이 추가되어 매일 지정 시간 동안 다른 서버로 임시 이동할 수 있습니다.",
+      "card_summary": "공성/전쟁 · 성장/합성 · 경제/분배 · 원정/서버",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28380,7 +28582,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Mount"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-813d-8795-ccf669ce76a7",
@@ -28391,14 +28598,15 @@
       "source_url": "https://forum.mir4global.com/post/910",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
-      "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
+      "main_updates": [
         "PvP/전쟁: 비곡 경쟁과 자원 획득 동선을 확장하는 Hidden Valleys가 추가됩니다.",
-        "서버/권역: 서버·권역 단위 플레이 동선을 확장하는 Dragonworlds Rift가 추가됩니다.",
+        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
+        "상점/경제: Darksteel 상인 이용 가능 레벨 조건이 변경됩니다."
+      ],
+      "body_summary": [
+        "PvP/전쟁: 비곡 경쟁과 자원 획득 동선을 확장하는 Hidden Valleys가 추가됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
         "상점/경제: Darksteel 상인 이용 가능 레벨 조건이 변경됩니다.",
-        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "성장/장비: 캐릭터 전투 능력 강화를 위한 Mystique가 성장 요소로 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
@@ -28413,7 +28621,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "공성/전쟁 · PvP/전쟁 · 서버/권역 · 시스템/성장",
+      "card_summary": "PvP/전쟁 · 시스템/성장 · 상점/경제 · 성장/장비",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28423,7 +28631,14 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_claim_term_not_in_source:Dragonworlds Rift",
+        "add_context_not_found:Mount"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8131-b242-fec78ffea6de",
@@ -28514,7 +28729,9 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "PvP/전쟁: Bicheon Castle Siege가 추가되어 수비·공성 문파가 비천성 소유권을 두고 경쟁합니다."
+        "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
+        "PvE 콘텐츠: 캐릭터 성장과 보상 획득 목표를 제공하는 ‘Altar of Darkness’ 전투 콘텐츠가 추가됩니다.",
+        "성장/정령: 전투 보조와 성장 선택지를 넓히는 ‘Dark Ice Demon Nerr’ 신규 정령이 추가됩니다."
       ],
       "body_summary": [
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
@@ -28527,7 +28744,6 @@
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "이벤트/보상: 글로벌 서비스 기념 보상을 제공하는 ‘MIR4 Global Anniversary’ Anniversary 이벤트가 진행됩니다.",
-        "상점/BM: ‘Dragon Eye / Dragon Claw’ Dragon Eye·Dragon Claw 소환이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -28544,7 +28760,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Bicheon Castle Siege가 추가되어 수비·공성 문파가 비천성 소유권을 두고 경쟁합니다.",
+      "card_summary": "공성/전쟁 · PvE 콘텐츠 · 성장/정령 · 성장/합성",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28554,7 +28770,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Dragon Eye / Dragon Claw"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81e8-a0ed-ec2fb39b6652",
@@ -28569,11 +28790,11 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
-        "PvP/전쟁: Hidden Valley Capture가 추가되어 비천·뱀골·적월 비곡의 지배권을 두고 문파 간 점령전이 진행됩니다."
+        "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
+        "성장/장비: 장비 외 성장 목표와 전투 능력 강화를 위한 ‘Dragon Artifacts’ Dragon Artifact 성장축이 확장됩니다.",
+        "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다."
       ],
       "body_summary": [
-        "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
         "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
         "성장/장비: 장비 외 성장 목표와 전투 능력 강화를 위한 ‘Dragon Artifacts’ Dragon Artifact 성장축이 확장됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
@@ -28593,27 +28814,14 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "문파 콘텐츠 · 성장/장비 · 서버/권역 · 성장/제작",
       "highlight_sentence_candidates": [
-        {
-          "highlight_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "sentence": "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
-          "text": "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
-          "highlight_reason": "new_pvp_war",
-          "confidence": 0.86,
-          "rule_id": "v060_new_pvp_war"
-        },
         {
           "highlight_type": "new_growth_axis",
           "domain": "성장/장비",
           "source_unit_count": 1,
           "source_unit_indices": [
-            2
+            1
           ],
           "sentence": "성장/장비: 장비 외 성장 목표와 전투 능력 강화를 위한 ‘Dragon Artifacts’ Dragon Artifact 성장축이 확장됩니다.",
           "text": "성장/장비: 장비 외 성장 목표와 전투 능력 강화를 위한 ‘Dragon Artifacts’ Dragon Artifact 성장축이 확장됩니다.",
@@ -28625,15 +28833,19 @@
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.",
       "importance_suggestion": "major",
       "importance_suggestion_reason": [
-        "new_growth_axis",
-        "new_pvp_war"
+        "new_growth_axis"
       ],
       "importance_suggestion_confidence": 0.86,
       "importance_decision": "major",
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
-      "display_highlight_count": 2,
-      "quality_gate_status": "pass"
+      "display_highlight_count": 1,
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Hidden Valley Capture"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-813a-b4fe-caca8afb266f",
@@ -28647,12 +28859,12 @@
         "서버/권역"
       ],
       "main_updates": [
-        "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다."
+        "PvE 콘텐츠: 층별 전투와 성장 보상 목표를 제공하는 ‘Tower of Black Dragon’ 탑형 PvE 콘텐츠가 추가됩니다.",
+        "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
+        "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다."
       ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
         "PvE 콘텐츠: 층별 전투와 성장 보상 목표를 제공하는 ‘Tower of Black Dragon’ 탑형 PvE 콘텐츠가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -28669,7 +28881,7 @@
         "시스템/성장",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "PvE 콘텐츠 · 성장/합성 · 서버/권역 · 성장/제작",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28679,7 +28891,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81b9-bd7d-dac1a788a910",
@@ -28693,14 +28911,14 @@
         "서버/권역"
       ],
       "main_updates": [
-        "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다."
+        "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
+        "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다."
       ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
-        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "상점/BM: ‘Magic Stone / Spirit Treasure Summon’ Magic Stone·Spirit Treasure 소환 이벤트가 운영됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
@@ -28714,7 +28932,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "보스/PvE · 서버/권역 · 성장/제작 · 상점/BM",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28724,7 +28942,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone",
+        "add_context_not_found:Mount"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-810f-80b6-dbd1dbc011f5",
@@ -28739,11 +28963,11 @@
         "성장/소환"
       ],
       "main_updates": [
-        "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
-        "성장/소환: Forsaken Badge가 추가되어 신규 보스 몬스터를 소환할 수 있습니다."
+        "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다."
       ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
@@ -28756,7 +28980,7 @@
         "시스템/성장",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "서버/권역 · 성장/제작 · 시스템/성장 · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28766,7 +28990,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81ec-84f2-fc4a3feef6ac",
@@ -28780,13 +29009,13 @@
         "서버/권역"
       ],
       "main_updates": [
-        "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다."
-      ],
-      "body_summary": [
-        "공성/전쟁: 문파 자금으로 공성 병기를 소환하는 ‘Siege Weapon Craftsman’ 공성 병기 제작·소환 구조가 추가됩니다.",
         "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
-        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다."
+      ],
+      "body_summary": [
+        "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
+        "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "상점/BM: Legendary Spirit Summon이 운영됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
@@ -28802,7 +29031,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "문파 콘텐츠 · 서버/권역 · 시스템/성장 · 상점/BM",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28812,7 +29041,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Siege Weapon Craftsman",
+        "add_context_not_found:Mount"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81a5-9e88-d9cf6c36334c",
@@ -28827,14 +29062,11 @@
         "콘텐츠"
       ],
       "main_updates": [
-        "PvP/전쟁: Sabuk Castle 관련 점령·공성 콘텐츠가 갱신됩니다.",
-        "콘텐츠: Tower of Black Dragon 콘텐츠가 추가되어 층별 전투 목표가 확장됩니다."
+        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
+        "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
-        "PvE 콘텐츠: 층별 전투와 성장 보상 목표를 제공하는 ‘Tower of Black Dragon’ 탑형 PvE 콘텐츠가 추가됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
-        "성장/장비: 캐릭터 전투 능력 강화를 위한 Mystique가 성장 요소로 추가됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
       "domain_tags": [
@@ -28844,7 +29076,7 @@
         "성장/장비",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Sabuk Castle 관련 점령·공성 콘텐츠가 갱신됩니다.",
+      "card_summary": "시스템/성장 · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28854,7 +29086,14 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_context_not_found:Tower of Black Dragon;Tower;Black Dragon",
+        "add_context_not_found:Mystique"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81b5-8088-c82a3af08b3e",
@@ -28906,9 +29145,12 @@
       "source_url": "https://forum.mir4global.com/post/1132",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
+        "이벤트/보상: 겨울 시즌 한정 보상을 제공하는 ‘Winter-themed Events’ 이벤트가 진행됩니다."
+      ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "이벤트/보상: 겨울 시즌 한정 보상을 제공하는 ‘Winter-themed Events’ 이벤트가 진행됩니다.",
@@ -28934,7 +29176,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8125-9c2b-c33dcaf12d89",
@@ -28945,13 +29192,15 @@
       "source_url": "https://forum.mir4global.com/post/1145",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
+        "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다."
+      ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
         "성장/합성: 상위 성장 재료 획득을 위한 ‘Mystical Pieces Combine’ Mystical Piece 합성 구조가 확장됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
-        "상점/BM: ‘Dragon Sphere’ 소환 탭이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다."
       ],
       "domain_tags": [
@@ -28962,7 +29211,7 @@
         "상점/BM",
         "이벤트/보상"
       ],
-      "card_summary": "공성/전쟁 · 성장/합성 · 성장/제작 · 시스템/성장",
+      "card_summary": "성장/합성 · 성장/제작 · 시스템/성장 · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -28972,7 +29221,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_context_not_found:Dragon Sphere"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-819e-a5e7-d3d3a82ae27e",
@@ -29021,10 +29276,12 @@
       "source_url": "https://forum.mir4global.com/post/1170",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
+        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
+        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다."
+      ],
       "body_summary": [
-        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
@@ -29040,7 +29297,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "PvE 콘텐츠 · 성장/장비 · 성장/제작 · 시스템/성장",
+      "card_summary": "성장/제작 · 시스템/성장 · 성장/장비 · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -29050,7 +29307,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Mirage Ship",
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8183-bc90-e7a5aa501113",
@@ -29065,14 +29328,12 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
-        "PvP/전쟁: Hidden Valley Capture가 추가되어 비천·뱀골·적월 비곡의 지배권을 두고 문파 간 점령전이 진행됩니다.",
-        "PvP/전쟁: Castle Siege가 추가되어 비천성 점령을 둘러싼 대규모 문파 전쟁이 열립니다."
+        "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
+        "PvE 콘텐츠: 층별 전투와 성장 보상 목표를 제공하는 ‘Tower of Black Dragon’ 탑형 PvE 콘텐츠가 추가됩니다.",
+        "성장/스킬: 전투 능력 강화 목표를 제공하는 ‘Solitude Training’ 수련형 성장 콘텐츠가 추가됩니다."
       ],
       "body_summary": [
-        "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
         "공성/전쟁: 공성전 오브젝트와 공성탑을 중심으로 한 ‘Bicheon Castle Siege’ 비천 공성전 밸런스가 조정됩니다.",
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
         "PvE 콘텐츠: 층별 전투와 성장 보상 목표를 제공하는 ‘Tower of Black Dragon’ 탑형 PvE 콘텐츠가 추가됩니다.",
         "성장/스킬: 전투 능력 강화 목표를 제공하는 ‘Solitude Training’ 수련형 성장 콘텐츠가 추가됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
@@ -29092,33 +29353,23 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
-      "highlight_sentence_candidates": [
-        {
-          "highlight_type": "new_pvp_war",
-          "domain": "PvP/전쟁",
-          "source_unit_count": 1,
-          "source_unit_indices": [
-            0
-          ],
-          "sentence": "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
-          "text": "PvP/전쟁: 비천·뱀골·적월 비곡의 지배권을 두고 문파가 경쟁하는 ‘Hidden Valley Capture’ 점령전 콘텐츠가 추가됩니다.",
-          "highlight_reason": "new_pvp_war",
-          "confidence": 0.86,
-          "rule_id": "v060_new_pvp_war"
-        }
-      ],
-      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.",
-      "importance_suggestion": "major",
-      "importance_suggestion_reason": [
-        "new_pvp_war"
-      ],
-      "importance_suggestion_confidence": 0.86,
-      "importance_decision": "major",
+      "card_summary": "공성/전쟁 · PvE 콘텐츠 · 성장/스킬 · 보스/PvE",
+      "highlight_sentence_candidates": [],
+      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
+      "importance_suggestion": "normal",
+      "importance_suggestion_reason": [],
+      "importance_suggestion_confidence": 0.76,
+      "importance_decision": "normal",
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
-      "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "display_highlight_count": 0,
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_context_not_found:Hidden Valley Capture",
+        "add_claim_term_not_in_source:Sabuk Emperor"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81dd-8e44-c3d3e3df11fe",
@@ -29237,20 +29488,16 @@
         "서버/권역"
       ],
       "main_updates": [
-        "PvP/전쟁: Sabuk Clash가 추가되어 사북 지역을 중심으로 경쟁 콘텐츠가 확장됩니다.",
-        "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다."
-      ],
-      "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
-        "성장/정령: 파티 운용과 정령 성장을 보조하는 ‘Red Eyes Lucy’ Party Leader Spirit이 추가됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
-        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
+        "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다."
+      ],
+      "body_summary": [
+        "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다.",
         "상점/BM: Legendary Spirit Summon이 운영됩니다.",
-        "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
-        "편의/UI: 문파 채팅에서 직책 정보를 확인하는 ‘Clan chat role display’ 표시 기능이 추가됩니다."
+        "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다."
       ],
       "domain_tags": [
         "공성/전쟁",
@@ -29261,7 +29508,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Sabuk Clash가 추가되어 사북 지역을 중심으로 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "서버/권역 · 성장/정령 · 이벤트/보상 · 상점/BM",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -29271,7 +29518,16 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 5,
+      "source_alignment_reasons": [
+        "add_context_not_found:Sabuk Emperor",
+        "add_claim_term_not_in_source:Tier II Magic Stone",
+        "add_context_not_found:Party Leader Spirit",
+        "add_context_not_found:Mount",
+        "add_claim_term_not_in_source:Clan chat role display"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81d3-ae7e-e5ae043b547c",
@@ -29346,9 +29602,12 @@
       "source_url": "https://forum.mir4global.com/post/1274",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다."
+      ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
@@ -29371,7 +29630,7 @@
         "성장 지원/BM",
         "편의/UI"
       ],
-      "card_summary": "공성/전쟁 · 보스/PvE · 성장/정령 · 시스템/성장",
+      "card_summary": "보스/PvE · 성장/정령 · 시스템/성장 · 시스템/전투",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -29381,7 +29640,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81ac-9ff1-fdee7146c9da",
@@ -29392,14 +29656,15 @@
       "source_url": "https://forum.mir4global.com/post/1288",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
-      "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
+      "main_updates": [
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
-        "이벤트/성장: 빠른 육성과 보상 획득을 지원하는 ‘Character Growth Support’ 캐릭터 성장 지원 구조가 추가됩니다.",
+        "상점/BM: Legendary Spirit Summon이 운영됩니다."
+      ],
+      "body_summary": [
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "상점/BM: Legendary Spirit Summon이 운영됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -29411,7 +29676,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "성장/장비 · 성장/제작 · 이벤트/성장 · 상점/BM",
+      "card_summary": "성장/장비 · 성장/제작 · 상점/BM · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -29421,7 +29686,14 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone",
+        "add_claim_term_not_in_source:Character Growth Support",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81f6-8a5b-fd5c9b67cd8f",
@@ -29432,14 +29704,16 @@
       "source_url": "https://forum.mir4global.com/post/1299",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다."
+      ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
-        "성장/장비: 캐릭터 전투 능력 강화를 위한 Mystique가 성장 요소로 추가됩니다.",
         "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다.",
         "상점/BM: Legendary Spirit Summon이 운영됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
@@ -29454,7 +29728,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "성장/장비 · 보스/PvE · 성장/정령 · 시스템/성장",
+      "card_summary": "보스/PvE · 성장/정령 · 시스템/성장 · 성장/장비",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -29464,7 +29738,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone",
+        "add_context_not_found:Mystique"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8154-ad85-ce10a3d45795",
@@ -29515,7 +29795,11 @@
       "source_url": "https://forum.mir4global.com/post/1324",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 보조하는 ‘Red Eyes Lucy’ Party Leader Spirit이 추가됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다."
+      ],
       "body_summary": [
         "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 보조하는 ‘Red Eyes Lucy’ Party Leader Spirit이 추가됩니다.",
@@ -29524,7 +29808,6 @@
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
-        "상점/BM: ‘Dragon Eye / Dragon Claw’ Dragon Eye·Dragon Claw 소환이 추가됩니다.",
         "상점/BM: Dragon Material·Spirit Stone·Skill Tome Special Summon이 운영됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
@@ -29548,7 +29831,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Dragon Eye / Dragon Claw"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8182-b194-ec45c4d8327b",
@@ -29559,10 +29847,11 @@
       "source_url": "https://forum.mir4global.com/post/1339",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
+        "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
+      ],
       "body_summary": [
-        "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
-        "신규 클래스: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -29571,34 +29860,23 @@
         "성장/제작",
         "편의/UI"
       ],
-      "card_summary": "신규 클래스 · 성장/제작 · 편의/UI",
-      "highlight_sentence_candidates": [
-        {
-          "highlight_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            0,
-            1
-          ],
-          "sentence": "클래스/스킬: Arbalist, Darkist 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다.",
-          "text": "클래스/스킬: Arbalist, Darkist 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다.",
-          "highlight_reason": "class_skill_system",
-          "confidence": 0.86,
-          "rule_id": "v060_class_skill_system"
-        }
-      ],
-      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.",
-      "importance_suggestion": "major",
-      "importance_suggestion_reason": [
-        "class_skill_system"
-      ],
-      "importance_suggestion_confidence": 0.86,
-      "importance_decision": "major",
+      "card_summary": "성장/제작 · 편의/UI",
+      "highlight_sentence_candidates": [],
+      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
+      "importance_suggestion": "normal",
+      "importance_suggestion_reason": [],
+      "importance_suggestion_confidence": 0.76,
+      "importance_decision": "normal",
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
-      "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "display_highlight_count": 0,
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "new_class_context_not_found",
+        "new_class_context_not_found"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8189-ac10-c2ea502de736",
@@ -29609,15 +29887,16 @@
       "source_url": "https://forum.mir4global.com/post/1347",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
+        "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다."
+      ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
         "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "원정/서버: 서버 간 이동과 다른 서버 콘텐츠 참여를 위한 ‘Expedition Missions / Wayfarer Travel’ 원정·이동 구조가 조정됩니다.",
-        "상점/BM: ‘Dragon Sphere’ 소환 탭이 추가됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -29631,7 +29910,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "공성/전쟁 · PvE 콘텐츠 · NFT/거래 · 성장/제작",
+      "card_summary": "PvE 콘텐츠 · NFT/거래 · 성장/제작 · 원정/서버",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -29641,7 +29920,14 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_context_not_found:Dragon Sphere",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8161-a897-e0d7a4013c78",
@@ -29655,12 +29941,11 @@
         "서버/권역"
       ],
       "main_updates": [
-        "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다."
+        "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다."
       ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
-        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
@@ -29679,7 +29964,7 @@
         "거래/편의",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "서버/권역 · 성장/장비 · 성장/정령 · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -29689,7 +29974,14 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_context_not_found:Mirage Ship",
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81f5-954c-c588b06a4399",
@@ -29790,12 +30082,11 @@
         "서버/권역"
       ],
       "main_updates": [
-        "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다."
+        "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
+        "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다."
       ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
-        "PvE 콘텐츠: 층별 전투와 성장 보상 목표를 제공하는 ‘Tower of Black Dragon’ 탑형 PvE 콘텐츠가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
@@ -29813,7 +30104,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "서버/권역 · 성장/제작 · 시스템/성장 · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -29823,7 +30114,14 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_context_not_found:Tower of Black Dragon;Tower",
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-817f-8110-fe02c5318bb6",
@@ -29834,9 +30132,12 @@
       "source_url": "https://forum.mir4global.com/post/1403",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다."
+      ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -29864,7 +30165,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-810a-a4e8-f9e26985e0e2",
@@ -29878,10 +30184,11 @@
         "서버/권역"
       ],
       "main_updates": [
-        "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다."
+        "성장/스킬: 클래스별 전투 성능과 스킬 운용을 조정하는 ‘Class Balance’ 밸런스 변경이 적용됩니다.",
+        "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
+        "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다."
       ],
       "body_summary": [
-        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "성장/스킬: 클래스별 전투 성능과 스킬 운용을 조정하는 ‘Class Balance’ 밸런스 변경이 적용됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
@@ -29899,7 +30206,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "성장/스킬 · 보스/PvE · 서버/권역 · 성장/장비",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -29909,7 +30216,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Mirage Ship"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81f7-9805-dc2dfad27876",
@@ -29920,15 +30232,17 @@
       "source_url": "https://forum.mir4global.com/post/1437",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
+        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다."
+      ],
       "body_summary": [
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
-        "성장/장비: 캐릭터 전투 능력 강화를 위한 Mystique가 성장 요소로 추가됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
         "상점/BM: Spirit Special Summon이 운영됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -29949,7 +30263,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_context_not_found:Mystique",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81af-9363-c8754b36d2e8",
@@ -29960,15 +30280,16 @@
       "source_url": "https://forum.mir4global.com/post/1446",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
+        "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다."
+      ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
-        "상점/BM: ‘Dragon Sphere’ 소환 탭이 추가됩니다.",
         "상점/BM: ‘Magic Stone / Spirit Treasure Summon’ Magic Stone·Spirit Treasure 소환 이벤트가 운영됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -29989,7 +30310,14 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone",
+        "add_context_not_found:Dragon Sphere",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-810b-9444-c6c81e6c1450",
@@ -30003,18 +30331,15 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "PvP/전쟁: Sabuk Clash가 추가되어 사북 지역을 중심으로 경쟁 콘텐츠가 확장됩니다."
+        "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
+        "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다."
       ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
-        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "문파 콘텐츠: 문파원이 함께 단계별 목표를 공략하는 ‘Clan Challenge’ 문파 도전 콘텐츠가 확장됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다.",
-        "상점/BM: ‘Dragon Sphere’ 소환 탭이 추가됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -30029,7 +30354,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Sabuk Clash가 추가되어 사북 지역을 중심으로 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "문파 콘텐츠 · 보스/PvE · 시스템/성장 · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -30039,7 +30364,16 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 5,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_context_not_found:Mirage Ship",
+        "add_claim_term_not_in_source:Tier II Magic Stone",
+        "add_context_not_found:Dragon Sphere",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81d5-a0ca-d4b58bae8421",
@@ -30050,9 +30384,12 @@
       "source_url": "https://forum.mir4global.com/post/1473",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
+        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다."
+      ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
@@ -30067,7 +30404,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "성장/장비 · 보스/PvE · 상점/BM · 이벤트/보상",
+      "card_summary": "보스/PvE · 성장/장비 · 상점/BM · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -30077,7 +30414,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-810a-9103-ed51ddfa26be",
@@ -30188,18 +30530,15 @@
         "PvP/전쟁"
       ],
       "main_updates": [
-        "PvP/전쟁: Castle Siege가 추가되어 비천성 점령을 둘러싼 대규모 문파 전쟁이 열립니다."
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "상점/BM: ‘Magic Stone / Spirit Treasure Summon’ Magic Stone·Spirit Treasure 소환 이벤트가 운영됩니다.",
+        "상점/BM: Special Summon이 운영됩니다."
       ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
-        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
-        "상점/BM: ‘Dragon Sphere’ 소환 탭이 추가됩니다.",
         "상점/BM: ‘Magic Stone / Spirit Treasure Summon’ Magic Stone·Spirit Treasure 소환 이벤트가 운영됩니다.",
         "상점/BM: Special Summon이 운영됩니다.",
         "상점/BM: Spirit Special Summon이 운영됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -30212,7 +30551,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "PvP/전쟁: Castle Siege가 추가되어 비천성 점령을 둘러싼 대규모 문파 전쟁이 열립니다.",
+      "card_summary": "성장/정령 · 상점/BM · 이벤트/보상 · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -30222,7 +30561,16 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 5,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_context_not_found:Mirage Ship",
+        "add_claim_term_not_in_source:Tier II Magic Stone",
+        "add_context_not_found:Dragon Sphere",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81d2-891f-c51d10ad8bc3",
@@ -30233,9 +30581,12 @@
       "source_url": "https://forum.mir4global.com/post/1530",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
+        "성장/장비: 장비 추가·강화 구조가 확장됩니다.",
+        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다."
+      ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
         "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
         "성장/장비: 장비 추가·강화 구조가 확장됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
@@ -30249,7 +30600,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "공성/전쟁 · PvE 콘텐츠 · 성장/장비 · 이벤트/보상",
+      "card_summary": "PvE 콘텐츠 · 성장/장비 · 이벤트/보상 · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -30259,7 +30610,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8130-8ba6-ef889b255196",
@@ -30270,15 +30626,17 @@
       "source_url": "https://forum.mir4global.com/post/1541",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
+        "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다."
+      ],
       "body_summary": [
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
-        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
         "상점/BM: ‘Magic Stone / Spirit Treasure Summon’ Magic Stone·Spirit Treasure 소환 이벤트가 운영됩니다.",
         "상점/BM: Special Summon이 운영됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -30290,7 +30648,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "성장/정령 · 성장/장비 · 시스템/성장 · 이벤트/보상",
+      "card_summary": "성장/정령 · 시스템/성장 · 이벤트/보상 · 상점/BM",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -30300,7 +30658,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_context_not_found:Mount",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8100-b3f0-ed470c51bb77",
@@ -30311,12 +30675,12 @@
       "source_url": "https://forum.mir4global.com/post/1557",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
+        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
+        "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다."
+      ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
-        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
-        "성장/장비: 치명타 피해 감소와 PvP 피해 감소 등 방어형 능력치를 강화하는 ‘Wu Yeogi's Gourd’ 전승 장비가 추가됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
@@ -30334,7 +30698,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "공성/전쟁 · PvE 콘텐츠 · 성장/장비 · 시스템/성장",
+      "card_summary": "성장/장비 · 시스템/성장 · 상점/BM · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -30344,7 +30708,15 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 4,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_context_not_found:Mirage Ship",
+        "add_claim_term_not_in_source:Tier II Magic Stone",
+        "add_claim_term_not_in_source:Wu Yeogi's Gourd"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8178-b4e5-e79eea982d00",
@@ -30355,9 +30727,12 @@
       "source_url": "https://forum.mir4global.com/post/1563",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다."
+      ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다.",
@@ -30374,7 +30749,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "성장/장비 · 보스/PvE · 성장/정령 · 이벤트/보상",
+      "card_summary": "보스/PvE · 성장/정령 · 이벤트/보상 · 상점/BM",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -30384,7 +30759,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81ef-a3bb-ed2f077151d8",
@@ -30395,15 +30775,16 @@
       "source_url": "https://forum.mir4global.com/post/1587",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
+        "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
+        "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다."
+      ],
       "body_summary": [
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "시스템/성장: 성장 보상과 복구 기회를 제공하는 Divine Dragons Blessing가 운영됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
-        "상점/BM: ‘Dragon Sphere’ 소환 탭이 추가됩니다.",
         "상점/BM: ‘Magic Stone / Spirit Treasure Summon’ Magic Stone·Spirit Treasure 소환 이벤트가 운영됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -30424,7 +30805,14 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 3,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone",
+        "add_context_not_found:Dragon Sphere",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-814e-8e2d-f697b9cfeb08",
@@ -30435,7 +30823,11 @@
       "source_url": "https://forum.mir4global.com/post/1599",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
+        "월드보스: 도미네이션 서버의 Black Dragon Abaddon에 등장하는 ‘<Blackhorn Winged Drakin> Drakazan’ 월드보스가 추가됩니다.",
+        "성장/장비: 치명타 피해 감소와 PvP 피해 감소 등 방어형 능력치를 강화하는 ‘Wu Yeogi's Gourd’ 전승 장비가 추가됩니다."
+      ],
       "body_summary": [
         "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
         "월드보스: 도미네이션 서버의 Black Dragon Abaddon에 등장하는 ‘<Blackhorn Winged Drakin> Drakazan’ 월드보스가 추가됩니다.",
@@ -30447,7 +30839,6 @@
         "시스템/전투: 성향치 회복 가능 몬스터 범위가 완화됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
         "상점/BM: Special Summon이 운영됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "성장 지원/BM: 특정 레벨대 캐릭터의 성장 목표를 제공하는 Mission Scroll이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
@@ -30475,7 +30866,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8170-bbfc-db5cf0256968",
@@ -30489,14 +30885,14 @@
         "서버/권역"
       ],
       "main_updates": [
-        "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다."
+        "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
+        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다."
       ],
       "body_summary": [
-        "성장/장비: 치명타 피해 감소와 PvP 피해 감소 등 방어형 능력치를 강화하는 ‘Wu Yeogi's Gourd’ 전승 장비가 추가됩니다.",
         "서버/권역: 권역 간 경쟁과 전용 콘텐츠 참여를 위한 ‘Domination Server’ 서버 구조가 확장됩니다.",
         "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
-        "상점/BM: Summon Ticket 상품·교환 구성이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -30508,7 +30904,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "서버/권역: Domination Server가 열려 서버 단위 경쟁 콘텐츠가 확장됩니다.",
+      "card_summary": "서버/권역 · 성장/장비 · 시스템/성장 · 이벤트/보상",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -30518,7 +30914,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Wu Yeogi's Gourd",
+        "add_context_not_found:Summon Ticket"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-819a-89df-c1569d2ba4e0",
@@ -30529,10 +30931,13 @@
       "source_url": "https://forum.mir4global.com/post/1622",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다."
+      ],
       "body_summary": [
         "PvE 콘텐츠: 신규 사냥 동선과 보상 루트를 제공하는 ‘Mirage Ship’ 필드 지역이 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -30562,7 +30967,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-81a6-b077-ee037dc008b6",
@@ -30573,10 +30983,13 @@
       "source_url": "https://forum.mir4global.com/post/1644",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "원정/서버: 서버 간 이동과 다른 서버 콘텐츠 참여를 위한 ‘Expedition Missions / Wayfarer Travel’ 원정·이동 구조가 조정됩니다.",
+        "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
+        "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
+      ],
       "body_summary": [
         "원정/서버: 서버 간 이동과 다른 서버 콘텐츠 참여를 위한 ‘Expedition Missions / Wayfarer Travel’ 원정·이동 구조가 조정됩니다.",
-        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -30586,7 +30999,7 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "원정/서버 · 성장/장비 · 이벤트/보상 · 편의/UI",
+      "card_summary": "원정/서버 · 이벤트/보상 · 편의/UI",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -30596,7 +31009,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Mount"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8163-b7de-d5835a021441",
@@ -30607,10 +31025,12 @@
       "source_url": "https://forum.mir4global.com/post/1662",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
+        "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다."
+      ],
       "body_summary": [
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
@@ -30633,7 +31053,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "공성/전쟁 · 성장/장비 · 성장/정령 · 성장/제작",
+      "card_summary": "성장/정령 · 성장/제작 · 시스템/성장 · 성장/장비",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -30643,7 +31063,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-813d-9354-f7aa11d7560a",
@@ -30654,14 +31080,17 @@
       "source_url": "https://forum.mir4global.com/post/1676",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/장비: 장비 외 성장 목표와 전투 능력 강화를 위한 ‘Dragon Artifacts’ Dragon Artifact 성장축이 확장됩니다.",
+        "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다."
+      ],
       "body_summary": [
         "성장/장비: 장비 외 성장 목표와 전투 능력 강화를 위한 ‘Dragon Artifacts’ Dragon Artifact 성장축이 확장됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
         "원정/서버: 서버 간 이동과 다른 서버 콘텐츠 참여를 위한 ‘Expedition Missions / Wayfarer Travel’ 원정·이동 구조가 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
-        "상점/BM: ‘Dragon Sphere’ 소환 탭이 추가됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
         "편의/UI: 정보 표시 및 반복 조작 기능이 개선됩니다."
       ],
@@ -30701,7 +31130,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Dragon Sphere"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-816a-b9bf-d541e87883ff",
@@ -30712,10 +31146,12 @@
       "source_url": "https://forum.mir4global.com/post/1688",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
+        "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다."
+      ],
       "body_summary": [
-        "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "시스템/성장: Gold로 봉인 해제·승급 시간을 단축하는 성장 편의 조건이 조정됩니다.",
         "이벤트/보상: 전설 마석 획득을 목표로 한 ‘Legendary Magic Stone Challenge’ 도전·소환 이벤트가 진행됩니다.",
@@ -30733,7 +31169,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "PvP/콘텐츠 · 성장/장비 · 성장/정령 · 시스템/성장",
+      "card_summary": "성장/정령 · 시스템/성장 · 이벤트/보상 · 상점/BM",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -30743,7 +31179,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_context_not_found:Valley of Life and Death;Valley;Life;Death",
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8101-8a03-d1e8612c8fa3",
@@ -30754,12 +31196,12 @@
       "source_url": "https://forum.mir4global.com/post/1705",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/스킬: 전투 능력 강화 목표를 제공하는 ‘Solitude Training’ 수련형 성장 콘텐츠가 추가됩니다.",
+        "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다."
+      ],
       "body_summary": [
-        "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
-        "공성/전쟁: 사북성 영지와 황제 지위를 중심으로 한 ‘Sabuk Emperor’ 전쟁·통치 구조가 추가됩니다.",
-        "신규 클래스: 원거리 전투 역할을 담당하는 ‘Arbalist’ 신규 클래스가 추가됩니다.",
-        "신규 클래스: 신규 전투 역할을 제공하는 ‘Darkist’ 클래스가 추가됩니다.",
         "성장/스킬: 전투 능력 강화 목표를 제공하는 ‘Solitude Training’ 수련형 성장 콘텐츠가 추가됩니다.",
         "보스/PvE: 레이드 콘텐츠와 보상 구성이 조정됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
@@ -30782,34 +31224,25 @@
         "이벤트/보상",
         "편의/UI"
       ],
-      "card_summary": "PvP/콘텐츠 · 공성/전쟁 · 신규 클래스 · 성장/스킬",
-      "highlight_sentence_candidates": [
-        {
-          "highlight_type": "class_skill_system",
-          "domain": "클래스/스킬",
-          "source_unit_count": 2,
-          "source_unit_indices": [
-            2,
-            3
-          ],
-          "sentence": "클래스/스킬: Arbalist, Darkist 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다.",
-          "text": "클래스/스킬: Arbalist, Darkist 관련 클래스·스킬 구성이 추가·조정되어 전투 운용 선택지가 확장됩니다.",
-          "highlight_reason": "class_skill_system",
-          "confidence": 0.86,
-          "rule_id": "v060_class_skill_system"
-        }
-      ],
-      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.",
-      "importance_suggestion": "major",
-      "importance_suggestion_reason": [
-        "class_skill_system"
-      ],
-      "importance_suggestion_confidence": 0.86,
-      "importance_decision": "major",
+      "card_summary": "성장/스킬 · 보스/PvE · 성장/장비 · 성장/제작",
+      "highlight_sentence_candidates": [],
+      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
+      "importance_suggestion": "normal",
+      "importance_suggestion_reason": [],
+      "importance_suggestion_confidence": 0.76,
+      "importance_decision": "normal",
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
-      "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "display_highlight_count": 0,
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 4,
+      "source_alignment_reasons": [
+        "add_context_not_found:Valley of Life and Death;Valley;Life;Death",
+        "add_claim_term_not_in_source:Sabuk Emperor",
+        "new_class_context_not_found",
+        "new_class_context_not_found"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8163-8a96-d7543288d611",
@@ -30820,13 +31253,16 @@
       "source_url": "https://forum.mir4global.com/post/1728",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/장비: 장비 외 성장 목표와 전투 능력 강화를 위한 ‘Dragon Artifacts’ Dragon Artifact 성장축이 확장됩니다.",
+        "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다."
+      ],
       "body_summary": [
         "성장/장비: 장비 외 성장 목표와 전투 능력 강화를 위한 ‘Dragon Artifacts’ Dragon Artifact 성장축이 확장됩니다.",
         "NFT/거래: 캐릭터 소유와 거래 동선을 확장하는 NFT 캐릭터 구조가 조정됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "시스템/성장: 정복 승급과 수련 진행 시간을 다루는 ‘Conquest / Training Sanctum’ 성장 조건이 조정됩니다.",
-        "성장/장비: 이동과 보유 효과 성장을 위한 ‘Mount’ 탈것이 추가됩니다.",
         "이벤트/보상: 출석·성장·교환소·랭킹 보상을 묶은 ‘Awaken! Book of Secrets II’ 기간 한정 이벤트가 진행됩니다.",
         "상점/BM: Special Summon이 운영됩니다.",
         "이벤트/보상: 출석·교환소·도전 이벤트가 운영됩니다.",
@@ -30867,7 +31303,12 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 1,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 1,
+      "source_alignment_reasons": [
+        "add_context_not_found:Mount"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-8139-bcef-deab9e0254dc",
@@ -30878,10 +31319,12 @@
       "source_url": "https://forum.mir4global.com/post/1752",
       "importance": "normal",
       "primary_category": [],
-      "main_updates": [],
+      "main_updates": [
+        "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
+        "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
+        "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다."
+      ],
       "body_summary": [
-        "PvP/콘텐츠: 권역 내 전체 서버 유저가 동일 조건으로 팀 PvP와 순위 경쟁을 진행하는 ‘Valley of Life and Death’ 포털 콘텐츠가 추가됩니다.",
-        "성장/장비: 마석 기반 전투 능력 강화를 위한 Tier II Magic Stone 성장 단계가 추가됩니다.",
         "성장/장비: 캐릭터 외형과 보유 효과 기반 성장을 위한 ‘Appearance Equipment’ 외형 장비가 추가됩니다.",
         "성장/정령: 파티 운용과 정령 성장을 위한 Party Leader Spirit 운용 구성이 조정됩니다.",
         "성장/제작: Epic 재료 제작의 대성공 확률이 조정됩니다.",
@@ -30902,7 +31345,7 @@
         "상점/BM",
         "편의/UI"
       ],
-      "card_summary": "PvP/콘텐츠 · 성장/장비 · 성장/정령 · 성장/제작",
+      "card_summary": "성장/장비 · 성장/정령 · 성장/제작 · 시스템/성장",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -30912,7 +31355,13 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "source_alignment_status": "repaired",
+      "source_alignment_removed_count": 2,
+      "source_alignment_reasons": [
+        "add_context_not_found:Valley of Life and Death;Valley;Life;Death",
+        "add_claim_term_not_in_source:Tier II Magic Stone"
+      ]
     },
     {
       "page_id": "36f3453a-cf42-818c-964d-d85b92dce8b3",

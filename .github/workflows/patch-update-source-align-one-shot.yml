@@ -1,6 +1,6 @@
 name: Patchnote Source Alignment One Shot
 
-# rerun after source alignment commit cleanup
+# rerun after source alignment tag cleanup
 on:
   push:
     branches: [main]

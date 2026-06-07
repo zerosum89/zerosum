@@ -49,6 +49,10 @@ def fetch_text(session: requests.Session, url: str, cache: dict[str, tuple[int, 
     try:
         r = session.get(url, timeout=30)
         result = (r.status_code, visible_text(r.text))
+        if "cafe.daum.net/odin/" in url and "m.cafe.daum.net" not in url and len(result[1]) < 200:
+            mobile_url = url.replace("https://cafe.daum.net/", "https://m.cafe.daum.net/")
+            r = session.get(mobile_url, timeout=30)
+            result = (r.status_code, visible_text(r.text))
     except Exception as exc:
         result = (0, f"FETCH_ERROR {exc}")
     cache[url] = result

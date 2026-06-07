@@ -47,6 +47,26 @@ CHANGE_WORDS = {
 SECTION_GAMES = {"MIR4_KR", "MIR4_Global", "NightCrows_Global"}
 REPRESENTATIVE_GAMES = {"Odin_KR", "NightCrows_KR"}
 
+CHANGE_SUFFIXES = "|".join(re.escape(x) for x in CHANGE_WORDS.values())
+LOW_VALUE_TARGETS = {
+    "events",
+    "event",
+    "eventupdates",
+    "newevents",
+    "updates",
+    "mainupdates",
+    "\uc774\ubca4\ud2b8\uc5c5\ub370\uc774\ud2b8",
+    "\ucd94\uac00",
+    "\ubcc0\uacbd",
+    "\uac1c\uc120",
+    "\uc8fc\uc694\uc548\ub0b4\uc0ac\ud56d",
+    "\uc548\ub0b4\uc0ac\ud56d",
+}
+TABLE_TARGET_PATTERN = re.compile(
+    r"(^\(?\ucd94\uac00\)?\s|^[\uff0a*]?\s*\ubcc0\uacbd[:\s]|^\ubcc0\uacbd\s+|\uac1c\uc120\s*\ubc0f\s*\uac1c\uc120|\ub2e8\uacc4$|\ubcc0\uacbd\s*(?:\uc804|\ud6c4)|\uc0c1\ud488\uba85|\uad6c\uc131\ud488|\uad6c\ub9e4\s*\uc81c\ud55c|\uc218\ub7c9|\uac00\uaca9|\ud655\ub960|\ubcf4\uc0c1\s*\uc815\ubcf4)",
+    re.I,
+)
+
 MAJOR_SIGNALS = {
     "new_class",
     "new_system",
@@ -157,18 +177,144 @@ def quoted(text: str) -> str:
 
 def normalize_target(target: str) -> str:
     target = compact_text(target)
+    target = target.strip(" .\u3002")
+    target = re.sub(r"^(?:A|An)\s+new\s+", "", target, flags=re.I).strip()
     target = re.sub(r"^(New|new|\uc2e0\uaddc)\s+", "", target).strip()
-    target = re.sub(r"\s+(will be added|will be adjusted|will commence|will begin|will be improved)\.?$", "", target, flags=re.I)
+    target = re.sub(r"\s+(will\s+(?:be\s+)?(?:added|adjusted|commence|begin|improved|changed|updated|introduced))\.?$", "", target, flags=re.I)
+    target = re.sub(r"\s+(added|introduced|adjusted|improved|changed|updated|commenced|began|started|ended|closed|opened)\.?$", "", target, flags=re.I)
+    target = re.sub(r"\s*(?:\ud604\uc0c1\uc774\s*)?\uc218\uc815\ub429\ub2c8\ub2e4\.?$", "", target)
+    target = re.sub(rf"\s+(?:{CHANGE_SUFFIXES})$", "", target)
     target = re.sub(r"\s*(\uc774|\uac00|\uc744|\ub97c|\uc740|\ub294)\s*$", "", target)
     return target.strip(" :-")
+
+
+def strip_change_suffix(target: str) -> str:
+    target = compact_text(target).strip(" .\u3002")
+    target = re.sub(r"\s+(?:added|introduced|adjusted|improved|changed|updated|commenced|began|started|ended|closed|opened)\.?$", "", target, flags=re.I)
+    target = re.sub(rf"\s+(?:{CHANGE_SUFFIXES})$", "", target)
+    return target.strip(" :-")
+
+
+def english_target_change(text: str) -> tuple[str, str] | None:
+    t = compact_text(text).strip()
+    m = re.match(
+        r"^(.+?)\s+(?:will\s+(?:be\s+)?)?(added|introduced|adjusted|improved|changed|updated|commence|commenced|begin|begins|started|ended|closed|opened)\.?$",
+        t,
+        re.I,
+    )
+    if not m:
+        return None
+    target = normalize_target(m.group(1))
+    change = change_type(m.group(2))
+    if not target:
+        return None
+    return target, change
+
+
+def normalize_event_target(target: str, source: str, change: str) -> tuple[str, str, list[str]]:
+    low = f"{target} {source}".lower()
+    key = norm_key(target)
+    m = re.search(r"\b(\d{1,3})\s+new\s+events?\b", low)
+    if m:
+        return f"\uc2e0\uaddc \uc774\ubca4\ud2b8 {m.group(1)}\uc885", CHANGE_WORDS["add"], ["NORMALIZED_EVENT_COUNT"]
+    if key in {"events", "event", "newevents"}:
+        return "\uc2e0\uaddc \uc774\ubca4\ud2b8", CHANGE_WORDS["run"], ["NORMALIZED_GENERIC_EVENT"]
+    if key in {"eventupdates", "updates"}:
+        return "\uc774\ubca4\ud2b8", CHANGE_WORDS["renew"], ["NORMALIZED_EVENT_UPDATE"]
+    return target, change, []
+
+
+def normalize_server_target(target: str, source: str, change: str) -> tuple[str, str, list[str]]:
+    flags: list[str] = []
+    q = quoted(source)
+    if q:
+        target = q
+    source_key = norm_key(source)
+    if not target or norm_key(target) in {norm_key("\uc11c\ubc84"), "server", "world"}:
+        if "\uc2e0\uaddc\uc11c\ubc84" in source_key or "newserver" in source_key:
+            target = "\uc2e0\uaddc \uc11c\ubc84"
+            flags.append("NORMALIZED_GENERIC_SERVER")
+        else:
+            target = "\uc11c\ubc84"
+    elif re.match(r"^\uc11c\ubc84\s+\S+", target):
+        m = re.match(r"^\uc11c\ubc84\s+(.+)$", target)
+        target = f"{m.group(1)} \uc11c\ubc84" if m else target
+        flags.append("NORMALIZED_SERVER_NAME")
+    elif not re.search(r"(\uc11c\ubc84|\uc6d4\ub4dc|server|world)", target, re.I):
+        target = f"{target} \uc11c\ubc84"
+        flags.append("NORMALIZED_SERVER_NAME")
+    return target, change, flags
+
+
+def normalize_bug_target(target: str) -> tuple[str, list[str]]:
+    flags: list[str] = []
+    target = re.sub(r"\s*(?:\ud604\uc0c1\uc774\s*)?\uc218\uc815\ub429\ub2c8\ub2e4\.?$", "", target)
+    target = re.sub(r"\s*(?:\uac31\uc2e0|\ud45c\uc2dc|\uc801\uc6a9|\ub178\ucd9c|\uc791\ub3d9|\uc9c4\ud589|\ud68d\ub4dd|\ubc18\uc601)\ub418\uc9c0\s*\uc54a(?:\ub294)?$", "", target)
+    target = re.sub(r"\s*(?:\ub418\uc9c0|\uc9c0)\s*\uc54a$", "", target)
+    target = re.sub(r"\s*(\uc774|\uac00|\uc744|\ub97c|\uc740|\ub294)\s*$", "", target).strip()
+    if target and "\uc624\ub958" not in target:
+        target = f"{target} \uc624\ub958"
+        flags.append("NORMALIZED_BUG_TARGET")
+    return target, flags
+
+
+def normalize_target_change(domain: str, target: str, change: str, title: str, detail: str) -> tuple[str, str, list[str]]:
+    source = compact_text(f"{title} {detail}")
+    flags: list[str] = []
+    detected = english_target_change(target) or english_target_change(clean_line(title))
+    if detected:
+        target, change = detected
+        flags.append("NORMALIZED_ENGLISH_VERB")
+    target = normalize_target(strip_change_suffix(target))
+    if domain == KO["event"]:
+        target, change, added = normalize_event_target(target, source, change)
+        flags.extend(added)
+    if domain == KO["server"]:
+        target, change, added = normalize_server_target(target, source, change)
+        flags.extend(added)
+    if domain == KO["shop"]:
+        key = norm_key(target)
+        if key in {"seasonpass", norm_key("\uc2dc\uc98c \ud328\uc2a4")}:
+            target = "Season Pass" if re.search(r"season\s*pass", source, re.I) else "\uc2dc\uc98c \ud328\uc2a4"
+            flags.append("NORMALIZED_SHOP_TARGET")
+        elif key in {norm_key("\uc0c1\ud488"), "product"} and change == CHANGE_WORDS["add"]:
+            target = "\uc2e0\uaddc \uc0c1\ud488"
+            flags.append("NORMALIZED_SHOP_TARGET")
+    if domain == KO["bug"]:
+        target, added = normalize_bug_target(target)
+        flags.extend(added)
+    if not target:
+        target = clean_line(title)
+    target = strip_change_suffix(target)
+    return target, change, flags
+
+
+def quality_flags_for_summary(sentence: str, domain: str, target: str, change: str) -> list[str]:
+    flags: list[str] = []
+    key = norm_key(target)
+    if not target:
+        flags.append("EMPTY_TARGET")
+    if key in LOW_VALUE_TARGETS:
+        flags.append("GENERIC_TARGET")
+    if TABLE_TARGET_PATTERN.search(target):
+        flags.append("TABLE_ROW_TARGET")
+    if re.search(rf"(?:{CHANGE_SUFFIXES})\s+{re.escape(change)}$", sentence):
+        flags.append("DUPLICATE_CHANGE_WORD")
+    if re.search(r"\b(added|introduced|adjusted|improved|changed|updated|commenced|started|ended|closed|opened)\.?\s+(?:%s)\b" % CHANGE_SUFFIXES, sentence, re.I):
+        flags.append("ENGLISH_VERB_KO_SUFFIX")
+    if domain in {KO["class_balance"], KO["skill_balance"]} and TABLE_TARGET_PATTERN.search(sentence):
+        flags.append("BALANCE_TABLE_ROW")
+    if len(target) > 80:
+        flags.append("OVERLONG_TARGET")
+    return flags
 
 
 def change_type(text: str) -> str:
     low = str(text or "").lower()
     compact = norm_key(text)
-    if re.search(r"\b(end|ended|expires?)\b", low) or "\uc885\ub8cc" in compact:
+    if re.search(r"\b(end|ended|expires?|closed?)\b", low) or "\uc885\ub8cc" in compact:
         return CHANGE_WORDS["end"]
-    if any(x in low for x in ["commence", "begin", "start"]) or "\uc2dc\uc791" in compact:
+    if any(x in low for x in ["commence", "begin", "start", "open"]) or "\uc2dc\uc791" in compact:
         return CHANGE_WORDS["start"]
     if any(x in low for x in ["improved", "improvement"]) or "\uac1c\uc120" in compact:
         return CHANGE_WORDS["improve"]
@@ -193,6 +339,8 @@ def balance_targets(title: str, detail: str) -> list[str]:
     for line in split_lines(text):
         cleaned = clean_line(line)
         if not cleaned:
+            continue
+        if TABLE_TARGET_PATTERN.search(cleaned):
             continue
         if re.match(r"^(PvE|PVE|PVP|PvP|UI|BM)$", cleaned, re.I):
             continue
@@ -228,12 +376,20 @@ def classify_unit(title: str, detail: str) -> tuple[str, str, list[str]]:
         return KO["new_system"], change_type(text), ["new_system"]
     if re.search(r"(new region|\uc2e0\uaddc\s*\uc9c0\uc5ed)", text, re.I):
         return KO["new_region"], CHANGE_WORDS["add"], ["new_region"]
-    if re.search(r"(world battlefront|battlefront|crusade|\ud06c\ub8e8\uc138\uc774\ub4dc|\uc601\uc9c0)", text, re.I):
-        sig = "new_world_content" if re.search(r"(new|\uc2e0\uaddc|\ucd94\uac00)", text, re.I) else "world_content"
-        return KO["world"], change_type(text), [sig]
     if re.search(r"(server transfer|server merge|\uc11c\ubc84\s*\uc774\uc804|\uc11c\ubc84\s*\ud1b5\ud569)", text, re.I):
         sig = "server_transfer" if re.search(r"(transfer|\uc774\uc804)", text, re.I) else "server_merge"
         return KO["server"], change_type(text), [sig]
+    if re.search(r"(new server|server\s+(?:added|opened|closed)|growth server|boost(?:ing)? world|\uc2e0\uaddc\s*\uc11c\ubc84|\uc11c\ubc84\s*(?:\ucd94\uac00|\uc885\ub8cc|\uc624\ud508|\uac1c\uc124)|\uc131\uc7a5\s*\uc11c\ubc84|\uc2dc\uc98c\s*\uc11c\ubc84)", text, re.I):
+        if re.search(r"(closed|\uc885\ub8cc)", text, re.I):
+            sig = "server_closed"
+        elif re.search(r"(new|added|opened|\uc2e0\uaddc|\ucd94\uac00|\uc624\ud508|\uac1c\uc124)", text, re.I):
+            sig = "new_server"
+        else:
+            sig = "server_change"
+        return KO["server"], change_type(text), [sig]
+    if re.search(r"(world battlefront|battlefront|crusade|\ud06c\ub8e8\uc138\uc774\ub4dc|\uc601\uc9c0)", text, re.I):
+        sig = "new_world_content" if re.search(r"(new|\uc2e0\uaddc|\ucd94\uac00)", text, re.I) else "world_content"
+        return KO["world"], change_type(text), [sig]
     if re.search(r"(dungeon|boss|raid|monster|\uc9c0\ud558\uac10\uc625|\ub358\uc804|\ubcf4\uc2a4|\ubaac\uc2a4\ud130|\ud544\ub4dc)", text, re.I):
         if re.search(r"(\uccb4\ub825|\ub370\ubbf8\uc9c0|\ub09c\uc774\ub3c4|\ud558\ud5a5|difficulty|damage)", text, re.I):
             return KO["pve_balance"], change_type(text), ["pve_balance"]
@@ -276,6 +432,10 @@ def target_from_unit(title: str, detail: str, domain: str) -> str:
         m = re.search(r"(\uc2e0\uaddc\s*(?:\uc0c1\ud488|\ud328\ud0a4\uc9c0))", text)
         if m:
             return m.group(1)
+    if domain == KO["server"]:
+        q = quoted(detail) or quoted(text)
+        if q:
+            return normalize_target(q)
     if domain == KO["pve_balance"] or (re.search(r"\(.+\)", text) and not re.search(r"\)\s+(\ucd94\uac00|\uac1c\ud3b8|\uac1c\uc120|\uc870\uc815|\ubcc0\uacbd|\uc2dc\uc791|\uc885\ub8cc|\uc9c4\ud589)", text)):
         return normalize_target(text)
     if re.search(r"^(\uae30\ud0c0\s*)?(\uac1c\uc120|\ubcc0\uacbd)\s*\uc0ac\ud56d$", text) and clean_line(detail):
@@ -284,7 +444,8 @@ def target_from_unit(title: str, detail: str, domain: str) -> str:
         return normalize_target(text)
     patterns = [
         r"^(?:New|new)\s+[^:]{2,30}:\s*(.+)$",
-        r"^(.+?)\s+will\s+be\s+(?:added|adjusted|improved|changed|commence|begin)",
+        r"^(.+?)\s+will\s+(?:be\s+)?(?:added|adjusted|improved|changed|commence|begin|introduced|updated)",
+        r"^(.+?)\s+(?:added|introduced|adjusted|improved|changed|updated|commenced|started|ended|closed|opened)\.?$",
         r"^(.+?)\s+(?:\ucd94\uac00|\uac1c\ud3b8|\uac1c\uc120|\uc870\uc815|\ubcc0\uacbd|\uc2dc\uc791|\uc885\ub8cc|\uc9c4\ud589)",
     ]
     for pattern in patterns:
@@ -302,13 +463,17 @@ def build_summary_unit(game: str, title: str, detail: str, order: int) -> dict[s
     target = target_from_unit(title, detail, domain)
     if domain in {KO["class_balance"], KO["skill_balance"]} and not target:
         target = clean_line(title)
+    target, change, normalization_flags = normalize_target_change(domain, target, change, title, detail)
     sentence = f"{domain}: {target} {change}".strip()
+    quality_flags = quality_flags_for_summary(sentence, domain, target, change)
     return {
         "order": order,
         "domain": domain,
         "target": target,
         "change_type": change,
         "signals": signals,
+        "normalization_flags": normalization_flags,
+        "quality_flags": quality_flags,
         "source_heading": clean_line(title),
         "source_context_excerpt": clean_line(detail),
         "summary_sentence": sentence,
@@ -719,13 +884,22 @@ def extract_source_section_units(game: str, text: str) -> tuple[list[dict[str, A
 
 def section_summary_preview(game: str, text: str) -> dict[str, Any]:
     units, flags = extract_source_section_units(game, text)
+    raw_units = units
+    units = [u for u in raw_units if not (u.get("quality_flags") or [])]
+    dropped_quality_flags: list[str] = []
+    for unit in raw_units:
+        for flag in unit.get("quality_flags", []) or []:
+            if flag not in dropped_quality_flags:
+                dropped_quality_flags.append(flag)
+    if raw_units and not units:
+        flags.extend([flag for flag in dropped_quality_flags if flag not in flags])
     body = [str(u.get("summary_sentence", "")) for u in units if u.get("summary_sentence")]
     if game == "NightCrows_KR":
         suspicious = [
             line for line in body
             if re.search(r"(:\s*(?:\uff0a|\u203b|\(?\ucd94\uac00\)?|\(?\ubcc0\uacbd\)?|\uc9c0\uc5ed\uba85)|\uc885\ub8cc\s*\uc774\ubca4\ud2b8|\uae30\ud0c0\s*\ubcc0\uacbd|\uc2dc\uc98c\s*\ud328\uc2a4)", line)
         ]
-        if suspicious:
+        if suspicious and len(suspicious) >= max(2, len(body) // 2):
             flags.append("LOW_CONFIDENCE_REPRESENTATIVE_SECTION")
     tags: list[str] = []
     signals: list[str] = []
@@ -744,6 +918,7 @@ def section_summary_preview(game: str, text: str) -> dict[str, Any]:
         "signals": signals,
         "quality_status": "PASS" if body and not flags else "REVIEW",
         "flags": flags,
+        "quality_warnings": dropped_quality_flags,
     }
 
 

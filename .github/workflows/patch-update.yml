@@ -4,55 +4,55 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: "[dry_run] 실행 모드 — true=미리보기만 실행, false=Notion write와 JSON 배포를 다른 스위치 기준으로 허용"
+        description: "[dry_run] ?ㅽ뻾 紐⑤뱶 ??true=誘몃━蹂닿린留??ㅽ뻾, false=Notion write? JSON 諛고룷瑜??ㅻⅨ ?ㅼ쐞移?湲곗??쇰줈 ?덉슜"
         required: true
         default: "true"
         type: choice
         options: ["true", "false"]
       run_notion_write:
-        description: "[run_notion_write] Notion 신규 적재 — true=dry_run=false이고 품질 PASS인 신규 패치노트를 Patch View Model DB에 생성"
+        description: "[run_notion_write] Notion ?좉퇋 ?곸옱 ??true=dry_run=false?닿퀬 ?덉쭏 PASS???좉퇋 ?⑥튂?명듃瑜?Patch View Model DB???앹꽦"
         required: true
         default: "false"
         type: choice
         options: ["false", "true"]
       run_git_push:
-        description: "[run_git_push] GitHub Pages 데이터 배포 — true=dry_run=false일 때 patch_view_model.json 변경분 commit/push"
+        description: "[run_git_push] GitHub Pages ?곗씠??諛고룷 ??true=dry_run=false????patch_view_model.json 蹂寃쎈텇 commit/push"
         required: true
         default: "false"
         type: choice
         options: ["false", "true"]
       target_games:
-        description: "[target_games] 대상 게임 — ALL 또는 쉼표 구분 게임 키 예: MIR4_Global,Odin_KR"
+        description: "[target_games] ???寃뚯엫 ??ALL ?먮뒗 ?쇳몴 援щ텇 寃뚯엫 ???? MIR4_Global,Odin_KR"
         required: false
         default: "ALL"
       max_new_urls_per_game:
-        description: "[max_new_urls_per_game] 게임별 신규 URL 최대 처리 수 — anchor 이후 후보 URL 안전 상한"
+        description: "[max_new_urls_per_game] 寃뚯엫蹂??좉퇋 URL 理쒕? 泥섎━ ????anchor ?댄썑 ?꾨낫 URL ?덉쟾 ?곹븳"
         required: false
         default: "20"
       strict_detail_url_guard:
-        description: "[strict_detail_url_guard] 상세 URL 안전 검사 — true=목록/게시판 URL이 신규 후보로 남으면 실패 처리"
+        description: "[strict_detail_url_guard] ?곸꽭 URL ?덉쟾 寃????true=紐⑸줉/寃뚯떆??URL???좉퇋 ?꾨낫濡??⑥쑝硫??ㅽ뙣 泥섎━"
         required: true
         default: "true"
         type: choice
         options: ["true", "false"]
       fetch_detail_pages:
-        description: "[fetch_detail_pages] 상세 본문 수집 — true=신규 후보의 상세 HTML/text를 수집하고 요약 preview 생성"
+        description: "[fetch_detail_pages] ?곸꽭 蹂몃Ц ?섏쭛 ??true=?좉퇋 ?꾨낫???곸꽭 HTML/text瑜??섏쭛?섍퀬 ?붿빟 preview ?앹꽦"
         required: true
         default: "true"
         type: choice
         options: ["true", "false"]
       max_detail_fetches:
-        description: "[max_detail_fetches] 상세 페이지 fetch 최대 수 — workflow 1회 실행당 안전 상한"
+        description: "[max_detail_fetches] ?곸꽭 ?섏씠吏 fetch 理쒕? ????workflow 1???ㅽ뻾???덉쟾 ?곹븳"
         required: false
         default: "20"
       run_title_repair:
-        description: "[run_title_repair] 제목 보정 실행 여부 — true=dry_run=false일 때 최근 Notion 항목명을 YY.MM.DD | 패치노트로 보정"
+        description: "[run_title_repair] ?쒕ぉ 蹂댁젙 ?ㅽ뻾 ?щ? ??true=dry_run=false????理쒓렐 Notion ??ぉ紐낆쓣 YY.MM.DD | ?⑥튂?명듃濡?蹂댁젙"
         required: true
         default: "false"
         type: choice
         options: ["false", "true"]
       title_repair_window_days:
-        description: "[title_repair_window_days] 제목 보정 기간 — actual_date 기준 최근 N일만 보정"
+        description: "[title_repair_window_days] ?쒕ぉ 蹂댁젙 湲곌컙 ??actual_date 湲곗? 理쒓렐 N?쇰쭔 蹂댁젙"
         required: false
         default: "14"
   schedule:
@@ -131,6 +131,12 @@ jobs:
         run: |
           python scripts/policy_gate_v093_runner.py -- python scripts/patch_update_workflow.py
 
+      - name: Align public summaries with source text
+        env:
+          SOURCE_ALIGN_AUDIT_PATH: ${{ env.PATCH_WORKFLOW_ARTIFACT_DIR }}/source_alignment_audit.csv
+        run: |
+          python scripts/source_align_patch_view_model.py
+
       - name: Enrich schedule identity
         if: always()
         env:
@@ -146,6 +152,10 @@ jobs:
       - name: Run v069 deploy gate
         run: |
           python scripts/policy_gate_v093.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode deploy --strict
+      - name: Restore runtime patched scripts before data deploy
+        if: ${{ env.DRY_RUN == 'false' && env.RUN_GIT_PUSH == 'true' }}
+        run: |
+          git checkout -- scripts/patch_update_workflow.py scripts/policy_gate_v093.py
       - name: Commit patch_view_model.json only
         if: ${{ env.DRY_RUN == 'false' && env.RUN_GIT_PUSH == 'true' }}
         run: |

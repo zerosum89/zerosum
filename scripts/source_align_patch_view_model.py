@@ -12,7 +12,7 @@ from typing import Any
 import requests
 from bs4 import BeautifulSoup
 
-from source_section_extractors import section_summary_preview
+from source_section_extractors_v2 import section_summary_preview
 
 
 DATA_PATH = Path(os.environ.get("SOURCE_ALIGN_DATA_PATH", "patch_view_model.json"))
@@ -154,7 +154,7 @@ def main() -> int:
                 item["card_summary"] = ""
                 item["update_units"] = []
                 item["source_section_extractor_status"] = "missing_cleared"
-                item["source_section_extractor_rule"] = "source_section_extractor_v1"
+                item["source_section_extractor_rule"] = "source_section_extractor_v2"
                 item["source_section_extractor_flags"] = preview_flags
                 enrich_importance_display_fields(item)
                 changed_by_game[game] += 1
@@ -197,7 +197,7 @@ def main() -> int:
         item["card_summary"] = str(preview.get("card_summary") or "")
         item["update_units"] = preview.get("units", [])
         item["source_section_extractor_status"] = "repaired"
-        item["source_section_extractor_rule"] = "source_section_extractor_v1"
+        item["source_section_extractor_rule"] = "source_section_extractor_v2"
         item["source_section_extractor_flags"] = preview_flags
         enrich_importance_display_fields(item)
         changed_by_game[game] += 1

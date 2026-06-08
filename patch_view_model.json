@@ -1,10 +1,10 @@
 {
   "schema_version": "patch_view_model.v1",
-  "generated_at": "2026-06-07T19:14:20.426712+09:00",
+  "generated_at": "2026-06-07T00:21:20.726667+09:00",
   "source": "notion_db",
-  "workflow_version": "github_actions_v093",
-  "display_data_version": "patch_view_model.v106_auto_importance_decision",
-  "major_policy_version": "major_policy_v106_auto_from_body_summary",
+  "workflow_version": "github_actions_v091",
+  "display_data_version": "patch_view_model.v087_semantic_fields_from_notion",
+  "major_policy_version": "major_policy_v087_semantic_fields_from_notion",
   "items": [
     {
       "page_id": "3753453a-cf42-81dc-b378-de6f1692b852",
@@ -5516,139 +5516,27 @@
       "raw_title": "24.02.01 | 패치노트",
       "source_url": "https://www.nightcrows.co.kr/news/release/225820",
       "importance": "normal",
-      "primary_category": [
-        "시스템/성장",
-        "PvE 콘텐츠"
-      ],
-      "main_updates": [
-        "시스템/성장: 로 혼돈의 킬데바트에 신규 사냥터 조정",
-        "시스템/성장: 일부 사냥터의 아이템 드랍률 상향",
-        "PvE 콘텐츠: 격전지와 용맹 주화 상인이 판매하는 아이템 항목 변경"
-      ],
+      "primary_category": [],
+      "main_updates": [],
       "body_summary": [
-        "시스템/성장: 로 혼돈의 킬데바트에 신규 사냥터 조정",
-        "시스템/성장: 일부 사냥터의 아이템 드랍률 상향",
-        "PvE 콘텐츠: 격전지와 용맹 주화 상인이 판매하는 아이템 항목 변경",
-        "PvE 콘텐츠: 마사르타 얼음 동굴 보스 처치 보상 추가",
-        "시스템/성장: '부트캠프' 추가",
-        "시스템/성장: 원스토어 버전 출시에 대한 상세한 내용은 추후 별도 공지사항을 통해 추가"
+        "PvE 콘텐츠: 월드 던전이 추가되거나 시즌이 갱신되어 서버 경쟁형 사냥과 전용 보상 구조가 확장되었습니다.",
+        "경제/거래: 제작식, 재화, 교환 보상 구성이 갱신되어 성장 재료 획득 루트가 조정되었습니다."
       ],
       "domain_tags": [
-        "시스템/성장",
-        "PvE 콘텐츠"
+        "PvE 콘텐츠",
+        "경제/거래"
       ],
-      "card_summary": "시스템/성장 · PvE 콘텐츠",
+      "card_summary": "PvE 콘텐츠 · 경제/거래",
       "highlight_sentence_candidates": [],
-      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
+      "importance_reason": "Patch View Model DB importance 필드가 카드 주요 표시의 최종 기준입니다.",
       "importance_suggestion": "normal",
       "importance_suggestion_reason": [],
       "importance_suggestion_confidence": 0.76,
       "importance_decision": "normal",
-      "importance_decision_source": "auto_rule",
+      "importance_decision_source": "notion_existing",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass",
-      "update_units": [
-        {
-          "order": 1,
-          "domain": "시스템/성장",
-          "target": "로 혼돈의 킬데바트에 신규 사냥터",
-          "change_type": "조정",
-          "signals": [
-            "system_growth"
-          ],
-          "normalization_flags": [],
-          "quality_flags": [],
-          "source_heading": "로 혼돈의 킬데바트에 신규 사냥터가 추가되고 기존 사냥터의 난이도가 조정되며",
-          "source_context_excerpt": "",
-          "summary_sentence": "시스템/성장: 로 혼돈의 킬데바트에 신규 사냥터 조정",
-          "confidence": 0.9,
-          "profile_rule": "source_section_extractor_v1"
-        },
-        {
-          "order": 2,
-          "domain": "시스템/성장",
-          "target": "일부 사냥터의 아이템 드랍률",
-          "change_type": "상향",
-          "signals": [
-            "system_growth"
-          ],
-          "normalization_flags": [],
-          "quality_flags": [],
-          "source_heading": "일부 사냥터의 아이템 드랍률이 상향 조정됩니다",
-          "source_context_excerpt": "",
-          "summary_sentence": "시스템/성장: 일부 사냥터의 아이템 드랍률 상향",
-          "confidence": 0.9,
-          "profile_rule": "source_section_extractor_v1"
-        },
-        {
-          "order": 3,
-          "domain": "PvE 콘텐츠",
-          "target": "격전지와 용맹 주화 상인이 판매하는 아이템 항목",
-          "change_type": "변경",
-          "signals": [
-            "new_pve_content"
-          ],
-          "normalization_flags": [],
-          "quality_flags": [],
-          "source_heading": "격전지와 용맹 주화 상인이 판매하는 아이템 항목이 변경되고 월드 던전 내 보물 상자 추가",
-          "source_context_excerpt": "",
-          "summary_sentence": "PvE 콘텐츠: 격전지와 용맹 주화 상인이 판매하는 아이템 항목 변경",
-          "confidence": 0.9,
-          "profile_rule": "source_section_extractor_v1"
-        },
-        {
-          "order": 4,
-          "domain": "PvE 콘텐츠",
-          "target": "마사르타 얼음 동굴 보스 처치 보상",
-          "change_type": "추가",
-          "signals": [
-            "new_pve_content"
-          ],
-          "normalization_flags": [],
-          "quality_flags": [],
-          "source_heading": "마사르타 얼음 동굴 보스 처치 보상 추가 드랍 이벤트 등이 진행됩니다",
-          "source_context_excerpt": "",
-          "summary_sentence": "PvE 콘텐츠: 마사르타 얼음 동굴 보스 처치 보상 추가",
-          "confidence": 0.9,
-          "profile_rule": "source_section_extractor_v1"
-        },
-        {
-          "order": 5,
-          "domain": "시스템/성장",
-          "target": "'부트캠프'",
-          "change_type": "추가",
-          "signals": [
-            "system_growth"
-          ],
-          "normalization_flags": [],
-          "quality_flags": [],
-          "source_heading": "'부트캠프'가 추가되며",
-          "source_context_excerpt": "",
-          "summary_sentence": "시스템/성장: '부트캠프' 추가",
-          "confidence": 0.9,
-          "profile_rule": "source_section_extractor_v1"
-        },
-        {
-          "order": 6,
-          "domain": "시스템/성장",
-          "target": "원스토어 버전 출시에 대한 상세한 내용은 추후 별도 공지사항을 통해",
-          "change_type": "추가",
-          "signals": [
-            "system_growth"
-          ],
-          "normalization_flags": [],
-          "quality_flags": [],
-          "source_heading": "원스토어 버전 출시에 대한 상세한 내용은 추후 별도 공지사항을 통해 추가 안내해 드릴 예정입니다",
-          "source_context_excerpt": "",
-          "summary_sentence": "시스템/성장: 원스토어 버전 출시에 대한 상세한 내용은 추후 별도 공지사항을 통해 추가",
-          "confidence": 0.9,
-          "profile_rule": "source_section_extractor_v1"
-        }
-      ],
-      "source_section_extractor_status": "repaired",
-      "source_section_extractor_rule": "source_section_extractor_v1",
-      "source_section_extractor_flags": []
+      "quality_gate_status": "pass"
     },
     {
       "page_id": "36f3453a-cf42-8175-9144-cc1ee837fe83",
@@ -44879,7 +44767,7 @@
           "rule_id": "v060_new_growth_axis"
         }
       ],
-      "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
+      "importance_reason": "5챕터 무스펠하임의 퀘스트·NPC와 신규 스테이터스 장비·아이템 수집 요소가 추가된 콘텐츠·성장 확장 패치입니다.",
       "importance_suggestion": "major",
       "importance_suggestion_reason": [
         "new_growth_axis"

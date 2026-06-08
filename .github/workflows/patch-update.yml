@@ -4,60 +4,58 @@ on:
   workflow_dispatch:
     inputs:
       dry_run:
-        description: "[dry_run] 실행 모드 — true=미리보기만 실행, false=Notion write와 JSON 배포를 다른 스위치 기준으로 허용"
+        description: "true=preview only, false=allow write/deploy switches"
         required: true
         default: "true"
         type: choice
         options: ["true", "false"]
       run_notion_write:
-        description: "[run_notion_write] Notion 신규 적재 — true=dry_run=false이고 품질 PASS인 신규 패치노트를 Patch View Model DB에 생성"
+        description: "Create new Notion pages when dry_run=false"
         required: true
         default: "false"
         type: choice
         options: ["false", "true"]
       run_git_push:
-        description: "[run_git_push] GitHub Pages 데이터 배포 — true=dry_run=false일 때 patch_view_model.json 변경분 commit/push"
+        description: "Commit and push patch_view_model.json when dry_run=false"
         required: true
         default: "false"
         type: choice
         options: ["false", "true"]
       target_games:
-        description: "[target_games] 대상 게임 — ALL 또는 쉼표 구분 게임 키 예: MIR4_Global,Odin_KR"
+        description: "ALL or comma-separated game keys"
         required: false
         default: "ALL"
       max_new_urls_per_game:
-        description: "[max_new_urls_per_game] 게임별 신규 URL 최대 처리 수 — anchor 이후 후보 URL 안전 상한"
+        description: "Maximum new URLs per game"
         required: false
         default: "20"
       strict_detail_url_guard:
-        description: "[strict_detail_url_guard] 상세 URL 안전 검사 — true=목록/게시판 URL이 신규 후보로 남으면 실패 처리"
+        description: "Fail if a list/board URL remains as a new detail candidate"
         required: true
         default: "true"
         type: choice
         options: ["true", "false"]
       fetch_detail_pages:
-        description: "[fetch_detail_pages] 상세 본문 수집 — true=신규 후보의 상세 HTML/text를 수집하고 요약 preview 생성"
+        description: "Fetch detail pages and generate summary previews"
         required: true
         default: "true"
         type: choice
         options: ["true", "false"]
       max_detail_fetches:
-        description: "[max_detail_fetches] 상세 페이지 fetch 최대 수 — workflow 1회 실행당 안전 상한"
+        description: "Maximum detail fetches per workflow run"
         required: false
         default: "20"
       run_title_repair:
-        description: "[run_title_repair] 제목 보정 실행 여부 — true=dry_run=false일 때 최근 Notion 항목명을 YY.MM.DD | 패치노트로 보정"
+        description: "Repair recent Notion item titles when dry_run=false"
         required: true
         default: "false"
         type: choice
         options: ["false", "true"]
       title_repair_window_days:
-        description: "[title_repair_window_days] 제목 보정 기간 — actual_date 기준 최근 N일만 보정"
+        description: "Recent title repair window in days"
         required: false
         default: "14"
   schedule:
-    # 21:17 UTC = 06:17 KST. Scheduled runs are preview by default.
-    # Set repository variable PATCH_UPDATE_SCHEDULE_MODE=write_deploy to enable automatic write/deploy.
     - cron: "17 21 * * *"
 
 permissions:
@@ -146,28 +144,25 @@ jobs:
       - name: Run v069 deploy gate
         run: |
           python scripts/policy_gate_v093.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode deploy --strict
+
+      - name: Restore runtime patched scripts before data deploy
+        if: ${{ env.DRY_RUN == 'false' && env.RUN_GIT_PUSH == 'true' }}
+        run: |
+          git checkout -- scripts/patch_update_workflow.py scripts/policy_gate_v093.py
+
       - name: Commit patch_view_model.json only
         if: ${{ env.DRY_RUN == 'false' && env.RUN_GIT_PUSH == 'true' }}
         run: |
           mkdir -p "$PATCH_WORKFLOW_ARTIFACT_DIR"
           result_file="$PATCH_WORKFLOW_ARTIFACT_DIR/git_deploy_result.json"
-
           if [ ! -f patch_view_model.json ]; then
             echo "[ERROR] patch_view_model.json was not generated."
             python - <<'PY'
           import json, os, pathlib
-          pathlib.Path(os.environ['PATCH_WORKFLOW_ARTIFACT_DIR'], 'git_deploy_result.json').write_text(json.dumps({
-            'status': 'FAILED',
-            'reason': 'patch_view_model_json_missing',
-            'committed': False,
-            'pushed': False,
-            'github_sha': os.environ.get('GITHUB_SHA', ''),
-            'github_run_id': os.environ.get('GITHUB_RUN_ID', ''),
-          }, ensure_ascii=False, indent=2), encoding='utf-8')
+          pathlib.Path(os.environ['PATCH_WORKFLOW_ARTIFACT_DIR'], 'git_deploy_result.json').write_text(json.dumps({'status':'FAILED','reason':'patch_view_model_json_missing','committed':False,'pushed':False,'github_sha':os.environ.get('GITHUB_SHA',''),'github_run_id':os.environ.get('GITHUB_RUN_ID','')}, ensure_ascii=False, indent=2), encoding='utf-8')
           PY
             exit 1
           fi
-
           set +e
           python - <<'PY'
           import json, os, pathlib, subprocess, sys
@@ -184,27 +179,10 @@ jobs:
           bad = [p for p in changed if p != 'patch_view_model.json']
           art.joinpath('git_status_before_deploy.txt').write_text('\n'.join(raw), encoding='utf-8')
           if bad:
-              art.joinpath('git_deploy_result.json').write_text(json.dumps({
-                'status': 'FAILED',
-                'reason': 'data_only_guard_failed',
-                'changed_files': changed,
-                'unexpected_files': bad,
-                'committed': False,
-                'pushed': False,
-                'github_sha': os.environ.get('GITHUB_SHA', ''),
-                'github_run_id': os.environ.get('GITHUB_RUN_ID', ''),
-              }, ensure_ascii=False, indent=2), encoding='utf-8')
+              art.joinpath('git_deploy_result.json').write_text(json.dumps({'status':'FAILED','reason':'data_only_guard_failed','changed_files':changed,'unexpected_files':bad,'committed':False,'pushed':False,'github_sha':os.environ.get('GITHUB_SHA',''),'github_run_id':os.environ.get('GITHUB_RUN_ID','')}, ensure_ascii=False, indent=2), encoding='utf-8')
               sys.exit(1)
           if 'patch_view_model.json' not in changed:
-              art.joinpath('git_deploy_result.json').write_text(json.dumps({
-                'status': 'NO_CHANGES',
-                'reason': 'patch_view_model_json_unchanged',
-                'changed_files': changed,
-                'committed': False,
-                'pushed': False,
-                'github_sha': os.environ.get('GITHUB_SHA', ''),
-                'github_run_id': os.environ.get('GITHUB_RUN_ID', ''),
-              }, ensure_ascii=False, indent=2), encoding='utf-8')
+              art.joinpath('git_deploy_result.json').write_text(json.dumps({'status':'NO_CHANGES','reason':'patch_view_model_json_unchanged','changed_files':changed,'committed':False,'pushed':False,'github_sha':os.environ.get('GITHUB_SHA',''),'github_run_id':os.environ.get('GITHUB_RUN_ID','')}, ensure_ascii=False, indent=2), encoding='utf-8')
               sys.exit(2)
           PY
           guard_exit=$?
@@ -218,24 +196,15 @@ jobs:
             echo "[INFO] patch_view_model.json unchanged; no commit."
             exit 0
           fi
-
           git add patch_view_model.json
           if git diff --cached --quiet -- patch_view_model.json; then
             echo "[INFO] No staged patch_view_model.json changes to commit."
             python - <<'PY'
           import json, os, pathlib
-          pathlib.Path(os.environ['PATCH_WORKFLOW_ARTIFACT_DIR'], 'git_deploy_result.json').write_text(json.dumps({
-            'status': 'NO_CHANGES',
-            'reason': 'no_staged_patch_view_model_json_changes',
-            'committed': False,
-            'pushed': False,
-            'github_sha': os.environ.get('GITHUB_SHA', ''),
-            'github_run_id': os.environ.get('GITHUB_RUN_ID', ''),
-          }, ensure_ascii=False, indent=2), encoding='utf-8')
+          pathlib.Path(os.environ['PATCH_WORKFLOW_ARTIFACT_DIR'], 'git_deploy_result.json').write_text(json.dumps({'status':'NO_CHANGES','reason':'no_staged_patch_view_model_json_changes','committed':False,'pushed':False,'github_sha':os.environ.get('GITHUB_SHA',''),'github_run_id':os.environ.get('GITHUB_RUN_ID','')}, ensure_ascii=False, indent=2), encoding='utf-8')
           PY
             exit 0
           fi
-
           git config user.name "patch-update-actions"
           git config user.email "patch-update-actions@users.noreply.github.com"
           git commit -m "Update patch view model JSON"
@@ -244,23 +213,13 @@ jobs:
           import json, os, pathlib, subprocess
           commit_hash = subprocess.run(['git','rev-parse','--short','HEAD'], text=True, capture_output=True).stdout.strip()
           full_hash = subprocess.run(['git','rev-parse','HEAD'], text=True, capture_output=True).stdout.strip()
-          pathlib.Path(os.environ['PATCH_WORKFLOW_ARTIFACT_DIR'], 'git_deploy_result.json').write_text(json.dumps({
-            'status': 'PUSHED',
-            'reason': 'patch_view_model_json_committed',
-            'changed_files': ['patch_view_model.json'],
-            'committed': True,
-            'pushed': True,
-            'commit_hash': commit_hash,
-            'commit_full_hash': full_hash,
-            'github_sha': os.environ.get('GITHUB_SHA', ''),
-            'github_run_id': os.environ.get('GITHUB_RUN_ID', ''),
-          }, ensure_ascii=False, indent=2), encoding='utf-8')
+          pathlib.Path(os.environ['PATCH_WORKFLOW_ARTIFACT_DIR'], 'git_deploy_result.json').write_text(json.dumps({'status':'PUSHED','reason':'patch_view_model_json_committed','changed_files':['patch_view_model.json'],'committed':True,'pushed':True,'commit_hash':commit_hash,'commit_full_hash':full_hash,'github_sha':os.environ.get('GITHUB_SHA',''),'github_run_id':os.environ.get('GITHUB_RUN_ID','')}, ensure_ascii=False, indent=2), encoding='utf-8')
           PY
+
       - name: Run v069 report consistency gate
         if: always()
         run: |
           python scripts/report_consistency_v093.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --repo-root "$GITHUB_WORKSPACE" --strict
-
 
       - name: Upload workflow artifacts
         uses: actions/upload-artifact@v4

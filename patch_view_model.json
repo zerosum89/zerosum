@@ -6041,8 +6041,8 @@
       "source_url": "https://www.nightcrows.co.kr/news/release/212993",
       "importance": "normal",
       "primary_category": [
-        "시즌6 진행 일자",
-        "시즌4 진행 일자"
+        "시스템/성장",
+        "성장/장비"
       ],
       "main_updates": [
         "전설 등급 방어구가 추가됩니다.",
@@ -6053,6 +6053,7 @@
         "전설 등급 방어구가 추가됩니다.",
         "기술 피해 5 → 무기 피해 10이 변경됩니다.",
         "무기 피해 10이 추가됩니다.",
+        "무기 외형을 소환, 합성하고 다량의 무기 외형을 추가로 획득해 보세요가 추가됩니다.",
         "시즌6 진행 일자:이 진행됩니다.",
         "시즌4 진행 일자:이 진행됩니다.",
         "변경 및 추가 효과가 변경됩니다.",
@@ -6063,13 +6064,14 @@
         "최대 생명력 1000이 추가됩니다.",
         "기술 피해 감소 13 → 15이 변경됩니다.",
         "정신력 회복량 5 → 10이 변경됩니다.",
-        "피해 감소 10이 추가됩니다."
+        "피해 감소 10이 추가됩니다.",
+        "정신력 회복량 7이 추가됩니다."
       ],
       "domain_tags": [
-        "시즌6 진행 일자",
-        "시즌4 진행 일자"
+        "시스템/성장",
+        "성장/장비"
       ],
-      "card_summary": "시즌6 진행 일자 · 시즌4 진행 일자",
+      "card_summary": "시스템/성장 / 성장/장비",
       "highlight_sentence_candidates": [],
       "importance_reason": "body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.",
       "importance_suggestion": "normal",
@@ -6079,7 +6081,268 @@
       "importance_decision_source": "auto_rule",
       "importance_review_status": "pass",
       "display_highlight_count": 0,
-      "quality_gate_status": "pass"
+      "quality_gate_status": "pass",
+      "update_units": [
+        {
+          "order": 1,
+          "domain": "시스템/성장",
+          "target": "전설 등급 방어구",
+          "change_type": "추가",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "전설 등급 방어구 추가",
+          "source_context_excerpt": "전설 등급 상의 6종이 추가됩니다.",
+          "summary_sentence": "전설 등급 방어구가 추가됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 2,
+          "domain": "시스템/성장",
+          "target": "기술 피해 5 → 무기 피해 10",
+          "change_type": "변경",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "기술 피해 5 → 무기 피해 10 변경",
+          "source_context_excerpt": "기술 피해 7 → 20 변경",
+          "summary_sentence": "기술 피해 5 → 무기 피해 10이 변경됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 3,
+          "domain": "시스템/성장",
+          "target": "무기 피해 10",
+          "change_type": "추가",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "무기 피해 10 추가",
+          "source_context_excerpt": "정신력 회복량 7 추가",
+          "summary_sentence": "무기 피해 10이 추가됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 4,
+          "domain": "성장/장비",
+          "target": "무기 외형을 소환, 합성하고 다량의 무기 외형을 추가로 획득해 보세요.",
+          "change_type": "추가",
+          "signals": [
+            "equipment"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "무기 외형을 소환, 합성하고 다량의 무기 외형을 추가로 획득해 보세요.",
+          "source_context_excerpt": "게임 화면 상단 [이벤트] 아이콘을 통해 확인할 수 있습니다.",
+          "summary_sentence": "무기 외형을 소환, 합성하고 다량의 무기 외형을 추가로 획득해 보세요가 추가됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 5,
+          "domain": "시스템/성장",
+          "target": "시즌6 진행 일자:",
+          "change_type": "진행",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "시즌6 진행 일자:",
+          "source_context_excerpt": "",
+          "summary_sentence": "시즌6 진행 일자:이 진행됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 6,
+          "domain": "시스템/성장",
+          "target": "시즌4 진행 일자:",
+          "change_type": "진행",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "시즌4 진행 일자:",
+          "source_context_excerpt": "",
+          "summary_sentence": "시즌4 진행 일자:이 진행됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 7,
+          "domain": "시스템/성장",
+          "target": "변경 및 추가 효과",
+          "change_type": "변경",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "변경 및 추가 효과",
+          "source_context_excerpt": "기본 피해 3 → 5 변경",
+          "summary_sentence": "변경 및 추가 효과가 변경됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 8,
+          "domain": "시스템/성장",
+          "target": "기본 피해 3 → 5",
+          "change_type": "변경",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "기본 피해 3 → 5 변경",
+          "source_context_excerpt": "생명력 물약 회복률 10% 추가",
+          "summary_sentence": "기본 피해 3 → 5이 변경됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 9,
+          "domain": "시스템/성장",
+          "target": "생명력 물약 회복률 10%",
+          "change_type": "추가",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "생명력 물약 회복률 10% 추가",
+          "source_context_excerpt": "기술 피해 5 → 무기 피해 10 변경",
+          "summary_sentence": "생명력 물약 회복률 10%이 추가됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 10,
+          "domain": "시스템/성장",
+          "target": "기술 피해 7 → 20",
+          "change_type": "변경",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "기술 피해 7 → 20 변경",
+          "source_context_excerpt": "정신력 회복량 5 → 7 변경",
+          "summary_sentence": "기술 피해 7 → 20이 변경됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 11,
+          "domain": "시스템/성장",
+          "target": "정신력 회복량 5 → 7",
+          "change_type": "변경",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "정신력 회복량 5 → 7 변경",
+          "source_context_excerpt": "최대 생명력 1000 추가",
+          "summary_sentence": "정신력 회복량 5 → 7이 변경됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 12,
+          "domain": "시스템/성장",
+          "target": "최대 생명력 1000",
+          "change_type": "추가",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "최대 생명력 1000 추가",
+          "source_context_excerpt": "기술 피해 감소 13 → 15 변경",
+          "summary_sentence": "최대 생명력 1000이 추가됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 13,
+          "domain": "시스템/성장",
+          "target": "기술 피해 감소 13 → 15",
+          "change_type": "변경",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "기술 피해 감소 13 → 15 변경",
+          "source_context_excerpt": "정신력 회복량 5 → 10 변경",
+          "summary_sentence": "기술 피해 감소 13 → 15이 변경됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 14,
+          "domain": "시스템/성장",
+          "target": "정신력 회복량 5 → 10",
+          "change_type": "변경",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "정신력 회복량 5 → 10 변경",
+          "source_context_excerpt": "피해 감소 10 추가",
+          "summary_sentence": "정신력 회복량 5 → 10이 변경됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 15,
+          "domain": "시스템/성장",
+          "target": "피해 감소 10",
+          "change_type": "추가",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "피해 감소 10 추가",
+          "source_context_excerpt": "무기 피해 10 추가",
+          "summary_sentence": "피해 감소 10이 추가됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        },
+        {
+          "order": 16,
+          "domain": "시스템/성장",
+          "target": "정신력 회복량 7",
+          "change_type": "추가",
+          "signals": [
+            "system_growth"
+          ],
+          "normalization_flags": [],
+          "quality_flags": [],
+          "source_heading": "정신력 회복량 7 추가",
+          "source_context_excerpt": "피해 감소 7 → 10 변경",
+          "summary_sentence": "정신력 회복량 7이 추가됩니다.",
+          "confidence": 0.9,
+          "profile_rule": "source_section_extractor_v2"
+        }
+      ],
+      "source_section_extractor_status": "repaired",
+      "source_section_extractor_rule": "source_section_extractor_v2",
+      "source_section_extractor_flags": []
     },
     {
       "page_id": "36f3453a-cf42-81ac-990a-c52d86de4241",

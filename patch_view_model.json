@@ -1,6 +1,6 @@
 {
   "schema_version": "patch_view_model.v1",
-  "generated_at": "2026-06-16T01:39:42.098913+09:00",
+  "generated_at": "2026-06-16T02:15:46.187788+09:00",
   "source": "notion_db",
   "workflow_version": "github_actions_v093",
   "display_data_version": "patch_view_model.v106_auto_importance_decision",

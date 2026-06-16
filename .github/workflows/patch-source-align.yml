@@ -17,7 +17,7 @@ on:
     - cron: "47 21 * * *"
 
 permissions:
-  contents: write
+  contents: read
 
 defaults:
   run:
@@ -63,27 +63,6 @@ jobs:
         if: always()
         run: |
           python scripts/policy_gate_v093.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode post-run --strict
-
-      - name: Run deploy gate
-        run: |
-          python scripts/policy_gate_v093.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode deploy --strict
-
-      - name: Commit repaired patch_view_model.json
-        run: |
-          if [ ! -f patch_view_model.json ]; then
-            echo "[ERROR] patch_view_model.json was not generated."
-            exit 1
-          fi
-          git status --porcelain
-          git add patch_view_model.json
-          if git diff --cached --quiet -- patch_view_model.json; then
-            echo "[INFO] No staged patch_view_model.json changes to commit."
-            exit 0
-          fi
-          git config user.name "patch-update-actions"
-          git config user.email "patch-update-actions@users.noreply.github.com"
-          git commit -m "Repair patch view model source alignment"
-          git push
 
       - name: Upload source alignment artifacts
         uses: actions/upload-artifact@v4

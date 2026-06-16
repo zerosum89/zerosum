@@ -17,6 +17,7 @@ from source_section_extractors_v2 import section_summary_preview
 
 DATA_PATH = Path(os.environ.get("SOURCE_ALIGN_DATA_PATH", "patch_view_model.json"))
 AUDIT_PATH = Path(os.environ.get("SOURCE_ALIGN_AUDIT_PATH", "source_alignment_audit.csv"))
+WRITE_ENABLED = os.environ.get("SOURCE_ALIGN_WRITE", "").strip() in {"1", "true", "TRUE", "yes", "YES"}
 
 
 def load_items() -> tuple[Any, list[dict[str, Any]]]:
@@ -147,23 +148,14 @@ def main() -> int:
             continue
         if not new_body:
             if status == 200 and old_body:
-                item["body_summary"] = []
-                item["domain_tags"] = []
-                item.pop("primary_category", None)
-                item.pop("patch_category", None)
-                item["update_units"] = []
-                item["source_section_extractor_status"] = "missing_cleared"
-                item["source_section_extractor_rule"] = "source_section_extractor_v2"
-                item["source_section_extractor_flags"] = preview_flags
-                enrich_importance_display_fields(item)
-                changed_by_game[game] += 1
+                missing_by_game[game] += 1
                 rows.append({
                     "game": game,
                     "actual_date": item.get("actual_date", ""),
                     "title": item.get("title", ""),
                     "source_url": item.get("source_url") or item.get("url") or "",
                     "http_status": status,
-                    "status": "CLEARED_MISSING",
+                    "status": "SECTION_MISSING_PRESERVED",
                     "old_count": len(old_body),
                     "new_count": 0,
                     "flags": ";".join(preview_flags),
@@ -189,23 +181,26 @@ def main() -> int:
         if old_body == new_body:
             continue
 
-        item["body_summary"] = new_body
-        item["domain_tags"] = listify(preview.get("domain_tags"))
-        item.pop("primary_category", None)
-        item.pop("patch_category", None)
-        item["update_units"] = preview.get("units", [])
-        item["source_section_extractor_status"] = "repaired"
-        item["source_section_extractor_rule"] = "source_section_extractor_v2"
-        item["source_section_extractor_flags"] = preview_flags
-        enrich_importance_display_fields(item)
-        changed_by_game[game] += 1
+        status_label = "REGENERATE_CANDIDATE"
+        if WRITE_ENABLED:
+            item["body_summary"] = new_body
+            item["domain_tags"] = listify(preview.get("domain_tags"))
+            item.pop("primary_category", None)
+            item.pop("patch_category", None)
+            item["update_units"] = preview.get("units", [])
+            item["source_section_extractor_status"] = "repaired"
+            item["source_section_extractor_rule"] = "source_section_extractor_v2"
+            item["source_section_extractor_flags"] = preview_flags
+            enrich_importance_display_fields(item)
+            changed_by_game[game] += 1
+            status_label = "REGENERATED"
         rows.append({
             "game": game,
             "actual_date": item.get("actual_date", ""),
             "title": item.get("title", ""),
             "source_url": item.get("source_url") or item.get("url") or "",
             "http_status": status,
-            "status": "REGENERATED",
+            "status": status_label,
             "old_count": len(old_body),
             "new_count": len(new_body),
             "flags": ";".join(preview_flags),
@@ -213,7 +208,10 @@ def main() -> int:
             "new_body_summary": " | ".join(new_body),
         })
 
-    write_items(original, items)
+    if WRITE_ENABLED:
+        write_items(original, items)
+    else:
+        print("[source-section-align] audit-only mode; patch_view_model.json was not modified")
     with AUDIT_PATH.open("w", encoding="utf-8-sig", newline="") as f:
         fields = [
             "game", "actual_date", "title", "source_url", "http_status", "status",

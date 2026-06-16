@@ -68,7 +68,7 @@ WORKFLOW_VERSION = "github_actions_v093"
 REPORT_CONSISTENCY_ARTIFACT = "report_consistency_v093.json"
 
 
-DISPLAY_DATA_VERSION = "patch_view_model.v109_full_patch_category_taxonomy"
+DISPLAY_DATA_VERSION = "patch_view_model.v110_guarded_patch_view_model"
 MAJOR_POLICY_VERSION = "major_policy_v106_auto_from_body_summary"
 def canonical_url(url: str) -> str:
     if not url:
@@ -876,6 +876,42 @@ def stable_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return sorted(items, key=lambda x: (str(x.get("game", "")), str(x.get("actual_date", "")), str(x.get("source_url", ""))))
 
 
+def view_model_item_key(item: dict[str, Any]) -> tuple[str, str, str]:
+    return (
+        str(item.get("game") or item.get("game_key") or "").strip(),
+        str(item.get("actual_date") or "").strip()[:10],
+        canonical_url(str(item.get("source_url") or item.get("url") or "").strip()),
+    )
+
+
+def assert_no_body_summary_loss(old_items: list[dict[str, Any]], new_items: list[dict[str, Any]]) -> None:
+    if os.environ.get("ALLOW_BODY_SUMMARY_CLEAR", "").strip() in {"1", "true", "TRUE", "yes", "YES"}:
+        return
+    old_by_key = {view_model_item_key(item): item for item in old_items if view_model_item_key(item)[2]}
+    losses: list[tuple[tuple[str, str, str], dict[str, Any]]] = []
+    for item in new_items:
+        key = view_model_item_key(item)
+        old = old_by_key.get(key)
+        if old and listify(old.get("body_summary")) and not listify(item.get("body_summary")):
+            losses.append((key, item))
+    if losses:
+        preview = [
+            {
+                "game": key[0],
+                "actual_date": key[1],
+                "source_url": key[2],
+                "title": item.get("title", ""),
+            }
+            for key, item in losses[:20]
+        ]
+        raise RuntimeError(
+            "body_summary_loss_blocked: "
+            f"{len(losses)} existing summaries would become empty. "
+            f"Set ALLOW_BODY_SUMMARY_CLEAR=1 only for an intentional clear. "
+            f"preview={json.dumps(preview, ensure_ascii=False)}"
+        )
+
+
 def file_sha256(path: Path) -> str:
     try:
         h = hashlib.sha256()
@@ -920,6 +956,7 @@ def export_patch_view_model() -> tuple[list[dict[str, Any]], str, bool]:
 
     public_items = [public_view_model_item(x) for x in items]
     current_items = existing_json_items()
+    assert_no_body_summary_loss(current_items, public_items)
     source_items_changed = stable_items(current_items) != stable_items(public_items)
     existing_display_data_version = existing_json_display_data_version()
     display_data_version_changed = existing_display_data_version != DISPLAY_DATA_VERSION

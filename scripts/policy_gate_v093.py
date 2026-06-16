@@ -25,6 +25,26 @@ from typing import Any
 
 WORKFLOW_VERSION = "github_actions_v093"
 ALLOWED_DECISION = {"major", "normal"}
+EXPECTED_PUBLIC_ITEM_KEYS = {
+    "game",
+    "actual_date",
+    "title",
+    "source_url",
+    "body_summary",
+    "domain_tags",
+    "patch_category",
+    "importance_decision",
+    "highlight_sentence_candidates",
+}
+ALLOWED_PATCH_CATEGORIES = {
+    "대형 콘텐츠",
+    "클래스/직업",
+    "서버/월드",
+    "신규 성장축",
+    "성장 시스템 확장",
+    "경제/거래 구조 변화",
+    "기타/일반",
+}
 
 # Output keys that are explicitly removed/blocked from generated public data.
 # This is the only place where legacy mixed-responsibility field names may appear.
@@ -39,6 +59,14 @@ LEGACY_OUTPUT_KEYS_TO_BLOCK = [
     ("major_" + "summary_groups"),
     ("major_group_" + "count"),
     ("major_" + "summary_indices"),
+    "primary_category",
+    "representative_signals",
+    "main_updates",
+    "card_summary",
+    "update_units",
+    "source_section_extractor_status",
+    "source_section_extractor_rule",
+    "source_section_extractor_flags",
 ]
 
 
@@ -115,10 +143,26 @@ def audit_items(items: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list
         decision = str(item.get("importance_decision") or "normal").lower().strip()
         candidates = item.get("highlight_sentence_candidates") if isinstance(item.get("highlight_sentence_candidates"), list) else []
         legacy_keys = [k for k in LEGACY_OUTPUT_KEYS_TO_BLOCK if k in item]
+        item_keys = set(item.keys())
+        missing_keys = sorted(EXPECTED_PUBLIC_ITEM_KEYS - item_keys)
+        extra_keys = sorted(item_keys - EXPECTED_PUBLIC_ITEM_KEYS)
+        body_summary = item.get("body_summary") if isinstance(item.get("body_summary"), list) else []
+        patch_category = item.get("patch_category") if isinstance(item.get("patch_category"), list) else []
+        invalid_categories = [str(x) for x in patch_category if str(x) not in ALLOWED_PATCH_CATEGORIES]
 
         row_errors: list[str] = []
         row_warnings: list[str] = []
 
+        if missing_keys:
+            row_errors.append("missing public keys: " + ",".join(missing_keys))
+        if extra_keys:
+            row_errors.append("unexpected public keys: " + ",".join(extra_keys))
+        if not body_summary:
+            row_errors.append("empty body_summary")
+        if not patch_category:
+            row_errors.append("empty patch_category")
+        if invalid_categories:
+            row_errors.append("invalid patch_category: " + ",".join(invalid_categories))
         if decision not in ALLOWED_DECISION:
             row_errors.append(f"invalid importance_decision={decision}")
         if legacy_keys:

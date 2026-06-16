@@ -68,7 +68,7 @@ WORKFLOW_VERSION = "github_actions_v093"
 REPORT_CONSISTENCY_ARTIFACT = "report_consistency_v093.json"
 
 
-DISPLAY_DATA_VERSION = "patch_view_model.v106_auto_importance_decision"
+DISPLAY_DATA_VERSION = "patch_view_model.v107_minimal_html_fields"
 MAJOR_POLICY_VERSION = "major_policy_v106_auto_from_body_summary"
 def canonical_url(url: str) -> str:
     if not url:
@@ -557,6 +557,18 @@ def derive_highlight_sentence_candidates(body_summary: list[str]) -> list[dict[s
     return out
 
 
+def derive_primary_category(domain_tags: list[str], candidates: list[dict[str, Any]] | None = None, limit: int = 2) -> list[str]:
+    out: list[str] = []
+    for candidate in candidates or []:
+        domain = str(candidate.get("domain") or "").strip()
+        if domain and domain not in out:
+            out.append(domain)
+    for tag in listify(domain_tags):
+        if tag not in out:
+            out.append(tag)
+    return out[:limit]
+
+
 def normalize_highlight_candidates_value(value: Any) -> list[dict[str, Any]]:
     # Normalize Notion rich_text/list value into display highlight candidate dicts.
     # This is a display-candidate parser only; it does not decide major/normal.
@@ -620,31 +632,9 @@ def enrich_importance_display_fields(item: dict[str, Any]) -> dict[str, Any]:
     decision = "major" if auto_candidates else "normal"
     candidates = auto_candidates if decision == "major" else []
 
-    suggestion_reasons = sorted({
-        str(c.get("highlight_reason", ""))
-        for c in auto_candidates
-        if c.get("highlight_reason")
-    })
-    confidence = max([float(c.get("confidence", 0.0) or 0.0) for c in auto_candidates] or [0.76])
-
-    stored_reason = str(item.get("importance_reason") or "").strip()
-    if stored_reason and decision == "major":
-        importance_reason = stored_reason
-    elif decision == "major":
-        importance_reason = 'body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.'
-    else:
-        importance_reason = 'body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.'
-
     item["highlight_sentence_candidates"] = candidates
-    item["importance_suggestion"] = decision
-    item["importance_suggestion_reason"] = suggestion_reasons
-    item["importance_suggestion_confidence"] = confidence
     item["importance_decision"] = decision
-    item["importance_decision_source"] = "auto_rule"
-    item["importance_reason"] = importance_reason
-    item["importance_review_status"] = "pass"
-    item["display_highlight_count"] = len(candidates) if decision == "major" else 0
-    item["quality_gate_status"] = "pass"
+    item["primary_category"] = derive_primary_category(listify(item.get("domain_tags", [])), candidates)
 
     old_key_specs = [
         ["derived", "major", "candidate", "groups"],
@@ -660,7 +650,35 @@ def enrich_importance_display_fields(item: dict[str, Any]) -> dict[str, Any]:
     ]
     for parts in old_key_specs:
         item.pop("_".join(parts), None)
+    for key in [
+        "importance",
+        "importance_decision_source",
+        "importance_reason",
+        "importance_review_status",
+        "importance_suggestion",
+        "importance_suggestion_reason",
+        "importance_suggestion_confidence",
+        "display_highlight_count",
+        "quality_gate_status",
+        "main_updates",
+        "card_summary",
+    ]:
+        item.pop(key, None)
     return item
+
+
+def public_view_model_item(item: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "game": item.get("game", ""),
+        "actual_date": item.get("actual_date", ""),
+        "title": item.get("title", ""),
+        "source_url": item.get("source_url", ""),
+        "body_summary": listify(item.get("body_summary", [])),
+        "domain_tags": listify(item.get("domain_tags", [])),
+        "primary_category": listify(item.get("primary_category", [])),
+        "importance_decision": str(item.get("importance_decision") or "normal").lower(),
+        "highlight_sentence_candidates": normalize_highlight_candidates_value(item.get("highlight_sentence_candidates", [])),
+    }
 
 def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
     raw = {k: parse_notion_property(v) for k, v in (page.get("properties") or {}).items()}
@@ -676,10 +694,6 @@ def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
                     domain_tags.append(d)
                     seen.add(d)
 
-    card_summary = pick(raw, ["card_summary", "카드 요약", "Card Summary"], "")
-    if not card_summary:
-        card_summary = " · ".join(domain_tags[:4]) if domain_tags else ""
-
     actual_date = str(pick(raw, ["actual_date", "실제 패치일", "패치일", "날짜", "Date"], ""))[:10]
     raw_title = str(pick(raw, ["항목명", "title", "표시 제목", "정규화 제목", "패치 제목", "Name", "제목"], ""))
     normalized_title = normalized_patch_page_title(actual_date, raw_title)
@@ -689,8 +703,6 @@ def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
         title = f"{date} | 패치노트"
 
     highlight_names = ["highlight_sentence_candidates", "주요 문장 후보", "강조 문장 후보"]
-    reason_names = ["importance_reason", "중요도 판단 근거", "주요 여부 판단 근거"]
-
     return {
         "page_id": page.get("id", ""),
         "game": str(pick(raw, ["game", "게임", "게임명", "Game"], "")),
@@ -698,14 +710,10 @@ def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
         "title": title,
         "raw_title": raw_title,
         "source_url": str(pick(raw, ["source_url", "원문 URL", "URL", "url", "링크", "원문링크"], "")),
-        "importance": str(pick(raw, ["importance", "중요도", "Importance"], "normal") or "normal"),
         "primary_category": listify(pick(raw, ["primary_category", "패치 카테고리", "대표 카테고리", "대표 핵심 신호"], [])),
-        "main_updates": listify(pick(raw, ["main_updates", "주요 업데이트", "주요 업데이트 요약"], [])),
         "body_summary": body_summary,
         "domain_tags": domain_tags,
-        "card_summary": str(card_summary),
         "highlight_sentence_candidates": pick(raw, highlight_names, []),
-        "importance_reason": str(pick(raw, reason_names, "") or ""),
     }
 
 def notion_query_database() -> list[dict[str, Any]]:
@@ -811,8 +819,9 @@ def export_patch_view_model() -> tuple[list[dict[str, Any]], str, bool]:
 
     items = [enrich_importance_display_fields(dict(x)) for x in items]
 
+    public_items = [public_view_model_item(x) for x in items]
     current_items = existing_json_items()
-    source_items_changed = stable_items(current_items) != stable_items(items)
+    source_items_changed = stable_items(current_items) != stable_items(public_items)
     existing_display_data_version = existing_json_display_data_version()
     display_data_version_changed = existing_display_data_version != DISPLAY_DATA_VERSION
     should_write = source_items_changed or display_data_version_changed or not existing_path.exists()
@@ -827,7 +836,7 @@ def export_patch_view_model() -> tuple[list[dict[str, Any]], str, bool]:
             "workflow_version": WORKFLOW_VERSION,
             "display_data_version": DISPLAY_DATA_VERSION,
             "major_policy_version": MAJOR_POLICY_VERSION,
-            "items": items,
+            "items": public_items,
         }
         existing_path.write_text(json.dumps(output, ensure_ascii=False, indent=2), encoding="utf-8")
         log(
@@ -2302,21 +2311,6 @@ def add_prop_if_exists(properties: dict[str, Any], schema: dict[str, Any], candi
     return ""
 
 
-def highlight_candidates_to_notion_lines(candidates: list[dict[str, Any]]) -> list[str]:
-    lines: list[str] = []
-    for c in candidates or []:
-        if isinstance(c, dict):
-            text = str(c.get("sentence") or c.get("text") or c.get("source_line") or "").strip()
-            reason = str(c.get("highlight_reason") or "").strip()
-            if text and reason:
-                lines.append(f"{text} [{reason}]")
-            elif text:
-                lines.append(text)
-        elif str(c).strip():
-            lines.append(str(c).strip())
-    return lines
-
-
 def payload_to_notion_properties(schema: dict[str, Any], payload: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
     properties: dict[str, Any] = {}
     written: list[str] = []
@@ -2330,24 +2324,16 @@ def payload_to_notion_properties(schema: dict[str, Any], payload: dict[str, Any]
     auto_body_summary = listify(payload.get("body_summary", []))
     auto_highlight_candidates = derive_highlight_sentence_candidates(auto_body_summary)
     auto_importance = "major" if auto_highlight_candidates else "normal"
-    auto_importance_reason = 'body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지했습니다.' if auto_importance == "major" else 'body_summary 자동 규칙이 구조적 주요 업데이트 문장을 감지하지 못했습니다.'
-    auto_highlight_lines = highlight_candidates_to_notion_lines(auto_highlight_candidates)
+    auto_primary_category = derive_primary_category(listify(payload.get("domain_tags", [])), auto_highlight_candidates)
 
     mappings = [
         (["game", "게임", "게임명", "Game"], payload.get("game"), {"select", "rich_text", "multi_select"}),
         (["actual_date", "실제 패치일", "패치일", "날짜", "Date"], payload.get("actual_date"), {"date", "rich_text"}),
         (["source_url", "원문 URL", "URL", "url", "링크", "원문링크"], payload.get("source_url"), {"url", "rich_text"}),
-        (["source_page_title", "원문 제목", "Source Page Title"], payload.get("source_page_title", ""), {"rich_text"}),
         (["importance", "중요도", "Importance"], auto_importance, {"select", "rich_text"}),
-        (["primary_category", "패치 카테고리", "대표 카테고리", "대표 핵심 신호"], payload.get("domain_tags", [])[:2], {"multi_select", "rich_text", "select"}),
-        (["main_updates", "주요 업데이트", "주요 업데이트 요약"], payload.get("body_summary", [])[:3], {"rich_text", "multi_select"}),
+        (["primary_category", "패치 카테고리", "대표 카테고리", "대표 핵심 신호"], auto_primary_category, {"multi_select", "rich_text", "select"}),
         (["body_summary", "본문 요약", "Body Summary"], payload.get("body_summary", []), {"rich_text"}),
         (["domain_tags", "관련 영역", "도메인 태그", "Domain Tags"], payload.get("domain_tags", []), {"multi_select", "rich_text"}),
-        (["card_summary", "카드 요약", "Card Summary"], payload.get("card_summary", ""), {"rich_text"}),
-        (["actual_date_source", "실제 패치일 근거", "날짜 근거"], payload.get("actual_date_source", ""), {"select", "rich_text"}),
-        (["listed_actual_date", "게시일", "목록 날짜"], payload.get("listed_actual_date", ""), {"date", "rich_text"}),
-        (["quality_status", "품질 상태", "Quality Status"], payload.get("quality_status", ""), {"select", "rich_text"}),
-        (["view_model_version", "View Model Version", "생성 규칙 버전"], SCHEMA_VERSION + "/" + WORKFLOW_VERSION, {"select", "rich_text"}),
     ]
     for candidates, value, types in mappings:
         name = add_prop_if_exists(properties, schema, candidates, value, types)
@@ -2449,8 +2435,7 @@ def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dic
             fetched = bool(detail)
             body_summary = detail.get("body_summary_candidate") if fetched else "NEEDS_DETAIL_FETCH_AND_SUMMARY"
             domain_tags = detail.get("domain_tags_candidate") if fetched else []
-            card_summary = detail.get("card_summary_candidate") if fetched else ""
-            source_page_title = detail.get("title") or row.get("title") or "패치노트"
+            detail_title = detail.get("title") or row.get("title") or "패치노트"
             final_actual_date = detail.get("actual_date") or row.get("actual_date") or None
             payloads.append({
                 "operation": "preview_new_patch_create",
@@ -2460,8 +2445,7 @@ def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dic
                 "actual_date": final_actual_date,
                 "listed_actual_date": detail.get("listed_actual_date") or row.get("actual_date") or None,
                 "actual_date_source": detail.get("actual_date_source", "list_candidate"),
-                "source_page_title": source_page_title,
-                "page_title": normalized_patch_page_title(final_actual_date or "", source_page_title),
+                "page_title": normalized_patch_page_title(final_actual_date or "", detail_title),
                 "item_name_rule": "YY.MM.DD | 패치노트",
                 "anchor_source_url": res.get("anchor", {}).get("source_url"),
                 "anchor_actual_date": res.get("anchor", {}).get("actual_date"),
@@ -2472,7 +2456,6 @@ def make_payload_preview(results: list[dict[str, Any]], detail_results: list[dic
                 "raw_text_excerpt": detail.get("text_excerpt", ""),
                 "body_summary": body_summary,
                 "domain_tags": domain_tags,
-                "card_summary": card_summary,
                 "update_units_candidate": detail.get("update_units_candidate", []),
                 "summary_quality_flags": detail.get("summary_quality_flags", []),
                 "summary_source_text_length": detail.get("summary_source_text_length", 0),
@@ -2839,7 +2822,7 @@ def main() -> int:
         "- newer-than-anchor URL detection preview",
         "- raw detail HTML/TXT collection for new URL candidates",
         "- profile-aware update-unit candidate extraction",
-        "- body_summary/domain_tags/card_summary quality preview",
+        "- body_summary/domain_tags quality preview",
         "- summary_quality_result.json, summary_quality_summary.csv, update_units_preview.csv artifacts",
         "- payload preview only",
         "- Notion write is guarded: only dry_run=false and run_notion_write=true creates pages",

@@ -7,10 +7,10 @@ import re
 from pathlib import Path
 from typing import Any
 
-AUDIT_VERSION = "github_actions_v052"
+AUDIT_VERSION = "github_actions_v053"
 HIGHLIGHT_POLICY = (
-    "v052: card Major display is sourced from Patch View Model DB importance. "
-    "Derived major groups are audit/review candidates only; DB normal rows suppress visible major groups and red highlights."
+    "v053: card Major display is sourced from body_summary-derived importance_decision. "
+    "The audit derives candidates through patch_update_workflow.major_type_for_line to avoid policy drift."
 )
 
 MAJOR_TYPE_ORDER = [
@@ -366,10 +366,17 @@ def major_type_for_line(line: str) -> str | None:
     return None
 
 def derive_groups(body_lines: list[str]) -> list[dict[str, Any]]:
+    policy_major_type_for_line = major_type_for_line
+    try:
+        from patch_update_workflow import major_type_for_line as workflow_major_type_for_line
+        policy_major_type_for_line = workflow_major_type_for_line
+    except Exception:
+        pass
+
     grouped: dict[str, dict[str, Any]] = {}
     for idx, raw in enumerate(body_lines):
         line = clean_line(raw)
-        mtype = major_type_for_line(line)
+        mtype = policy_major_type_for_line(line)
         if not mtype:
             continue
         g = grouped.setdefault(mtype, {"major_type": mtype, "source_unit_indices": [], "source_unit_count": 0})
@@ -441,10 +448,13 @@ def main() -> int:
         title = _get(row, "page_title", "title", "항목명")
         game = _get(row, "game", "game_name", "게임명")
         source_url = _get(row, "source_url", "url", "원문 URL")
-        importance = (_get(row, "importance", "중요도", "Importance") or "normal").lower()
+        legacy_importance = (_get(row, "importance", "중요도", "Importance") or "normal").lower()
+        importance = (_get(row, "importance_decision", "importance", "중요도", "Importance") or "normal").lower()
         display_importance = (_get(row, "display_importance") or importance or "normal").lower()
         body_lines = _lines(row.get("body_summary") or row.get("bodySummary") or _get(row, "body_summary", "본문 요약"))
-        stored_groups = row.get("major_summary_groups") if isinstance(row.get("major_summary_groups"), list) else []
+        stored_groups = row.get("highlight_sentence_candidates") if isinstance(row.get("highlight_sentence_candidates"), list) else []
+        if not stored_groups:
+            stored_groups = row.get("major_summary_groups") if isinstance(row.get("major_summary_groups"), list) else []
         derived_groups = derive_groups(body_lines)
         db_major = importance == "major"
         card_major = display_importance == "major"
@@ -483,7 +493,7 @@ def main() -> int:
             "game": game,
             "title": title,
             "source_url": source_url,
-            "legacy_importance": importance,
+            "legacy_importance": legacy_importance,
             "display_importance": display_importance,
             "card_major": card_major,
             "derived_major": derived_major,
@@ -491,10 +501,10 @@ def main() -> int:
             "derived_major_group_count": len(derived_groups),
             "major_group_count": len(visible_groups),
             "major_source_unit_total": source_unit_total,
-            "visible_major_types": " / ".join(str(g.get("major_type", "")) for g in visible_groups if isinstance(g, dict)),
+            "visible_major_types": " / ".join(str(g.get("major_type") or g.get("highlight_type") or "") for g in visible_groups if isinstance(g, dict)),
             "derived_major_types": " / ".join(str(g.get("major_type", "")) for g in derived_groups if isinstance(g, dict)),
-            "major_types": " / ".join(str(g.get("major_type", "")) for g in visible_groups if isinstance(g, dict)),
-            "major_group_text_preview": " / ".join(str(g.get("text", "")) for g in visible_groups if isinstance(g, dict))[:500],
+            "major_types": " / ".join(str(g.get("major_type") or g.get("highlight_type") or "") for g in visible_groups if isinstance(g, dict)),
+            "major_group_text_preview": " / ".join(str(g.get("text") or g.get("sentence") or "") for g in visible_groups if isinstance(g, dict))[:500],
             "derived_group_text_preview": " / ".join(str(g.get("text", "")) for g in derived_groups if isinstance(g, dict))[:500],
             "body_summary_preview": " / ".join(body_lines[:6])[:500],
             "issues": ";".join(issues),
@@ -523,7 +533,7 @@ def main() -> int:
             writer.writeheader()
             writer.writerows(rows)
     write_major_quality_audit_xlsx(art / "major_quality_audit.xlsx", payload, rows)
-    print(f"[v052] major/highlight audit rows={len(rows)} issues={issue_count} reviews={review_count} xlsx=major_quality_audit.xlsx")
+    print(f"[v053] major/highlight audit rows={len(rows)} issues={issue_count} reviews={review_count} xlsx=major_quality_audit.xlsx")
     return 0
 
 

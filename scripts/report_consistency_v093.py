@@ -47,7 +47,7 @@ def rewrite_scope(report_text: str, workflow_version: str) -> tuple[str, bool]:
 
 - v069 report consistency: patch_view_model_export_summary.json is finalized from git_deploy_result.json after deploy.
 - v069 phase separation: preview, pre-write gate, actual run, post-run gate, report consistency, and deploy result are reported as separate states.
-- v060/v069 decision model: body_summary, highlight_sentence_candidates, importance_suggestion, and importance_decision keep single responsibilities.
+- v107 decision model: body_summary, highlight_sentence_candidates, and importance_decision keep single responsibilities.
 - Display rule: card major badge follows importance_decision; body-summary emphasis follows major decision AND highlight_sentence_candidates.
 - Legacy major fields are blocked from public output: derived_major*, legacy_importance_suggestion, display_importance, legacy_highlight_sentence_groups, major_group_LEGACYTOKEN_count, legacy_highlight_sentence_indices.
 - Notion write guard: write runs only when dry_run=false, run_notion_write=true, and gate status is pass.

@@ -222,41 +222,31 @@ function normalizeHighlightSentenceCandidates(e){
     }));
 }
 function normalizeFlatItem(item){
-  const raw = item && item.raw_properties ? item.raw_properties : {};
-  const date = item.actual_date || item.date || raw['실제 패치일'] || raw['actual_date'] || '';
-  const gameKey = item.game_name || item.game || item.gameName || raw['게임명'] || raw['game_name'] || raw['game'] || 'Unknown';
+  const date = item.actual_date || '';
+  const gameKey = item.game || 'Unknown';
   const gameName = GAME_NAME_MAP[String(gameKey).trim()] || String(gameKey || 'Unknown').trim();
-  const body = item.body_summary || raw['본문 요약'] || raw['body_summary'] || '';
-  const major = item.main_updates || item.major_update_summary || raw['주요 업데이트'] || raw['주요 업데이트 요약'] || raw['main_updates'] || raw['major_update_summary'] || '';
-  const primary = item.primary_category || item.signals || item.representative_signals || raw['패치 카테고리'] || raw['대표 핵심 신호'] || raw['primary_category'] || [];
-  const domainTags = item.domain_tags || raw['관련 영역'] || raw['domain_tags'] || [];
+  const body = item.body_summary || '';
+  const domainTags = item.domain_tags || [];
+  const primary = item.primary_category || domainTags;
 
-  const importance = item.importance || raw['importance'] || raw['중요도'] || raw['Importance'] || 'normal';
-  const signals = primary;
+  const decision = item.importance_decision || 'normal';
   return {
     date_key: date,
-    title: item.title || raw['항목명'] || item.patchnote_title || raw['패치노트 제목'] || item.page_title || (shortDateDisplay(date)+' | 패치노트'),
+    title: item.title || (shortDateDisplay(date)+' | 패치노트'),
     type: 'update',
     year: Number(String(date).slice(0,4)) || null,
     quarter: quarterOf(date),
     impact: '패치노트',
-    source_url: item.source_url || raw['원문 URL'] || raw['source_url'] || '',
-    html_visible: item.html_visible !== false && item.html_exposed !== false && raw['HTML 노출'] !== false,
-    view_model_page_id: item.page_id || item.id || '',
-  importance: String(importance || 'normal').toLowerCase(),
-    representative_signals: splitLinesForTimeline(signals),
+    source_url: item.source_url || '',
+    html_visible: true,
+    representative_signals: splitLinesForTimeline(primary),
     primary_category: splitLinesForTimeline(primary),
-    card_summary: item.card_summary || raw['카드 요약'] || '',
-    major_update_summary: splitLinesForTimeline(major),
-    main_updates: splitLinesForTimeline(major),
     domain_tags: splitLinesForTimeline(domainTags),
     detected_sections_for_general: [],
     game: gameName,
     body_summary: splitLinesForTimeline(body),
     highlight_sentence_candidates: Array.isArray(item.highlight_sentence_candidates) ? item.highlight_sentence_candidates : [],
-    display_highlight_count: Number(item.display_highlight_count || 0),
-    importance_decision: item.importance_decision || raw['importance_decision'] || String(importance || 'normal').toLowerCase(),
-    importance_decision_source: item.importance_decision_source || raw['importance_decision_source'] || 'notion_existing'
+    importance_decision: String(decision || 'normal').toLowerCase()
   };
 }
 function normalizeTimelinePayload(payload){
@@ -275,7 +265,7 @@ function normalizeTimelinePayload(payload){
       const release = GAME_RELEASE_MAP[ev.game] || '';
       const events = [];
       if(release){
-        events.push({date_key: release, title: '출시', type: 'release', year: Number(release.slice(0,4)), quarter: quarterOf(release), impact:'', source_url:'', game: ev.game, major_update_summary:[], domain_tags:[], representative_signals:[]});
+        events.push({date_key: release, title: '출시', type: 'release', year: Number(release.slice(0,4)), quarter: quarterOf(release), impact:'', source_url:'', game: ev.game, domain_tags:[], representative_signals:[]});
       }
       groups.set(ev.game, {name: ev.game, release, release_display: shortDateDisplay(release), events});
     }
@@ -312,26 +302,23 @@ function textOf(v){ if(v==null) return ''; if(typeof v==='string') return v; if(
 function cleanBullet(s){return String(s||'').replace(/^\s*[-•]\s*/,'').replace(/^\s*\d+[.)]\s*/,'').trim();}
 
 function getHighlightCandidates(e){
-  const decision=String((e&&e.importance_decision)||(e&&e.importance)||'normal').toLowerCase();
+  const decision=String((e&&e.importance_decision)||'normal').toLowerCase();
   if(decision!=='major'){
-    if(e){e.display_highlight_count=0;}
     return [];
   }
   const candidates=normalizeHighlightSentenceCandidates(e||{});
   if(e){
     e.highlight_sentence_candidates=candidates;
-    e.display_highlight_count=candidates.length;
     e.importance_decision='major';
   }
   return candidates;
 }
 function isMajor(e){
-  return String((e&&e.importance_decision)||(e&&e.importance)||'normal').toLowerCase()==='major';
+  return String((e&&e.importance_decision)||'normal').toLowerCase()==='major';
 }
 function cardSummary(e){
   if(isMajor(e)){
     const groups=getHighlightCandidates(e);
-    if(e.card_summary) return e.card_summary;
     if(groups.length){
       const labels=groups.map(g=>{
         const txt=cleanBullet(textOf(g.text||g.sentence));
@@ -339,7 +326,7 @@ function cardSummary(e){
       }).filter(Boolean);
       if(labels.length) return labels.slice(0,3).join(' · ')+(labels.length>3?` · +${labels.length-3}`:'');
     }
-    const fallback=asArray(e.major_update_summary).map(x=>cleanBullet(textOf(x)).split(':')[0]).filter(Boolean);
+    const fallback=asArray(e.primary_category).map(textOf).filter(Boolean);
     return fallback.slice(0,3).join(' · ')+(fallback.length>3?` · +${fallback.length-3}`:'');
   }
   return asArray(e.domain_tags).map(textOf).filter(Boolean).slice(0,4).join(' · ');
@@ -355,7 +342,7 @@ function matchEvent(e,g){
   if(!categoryMatch(e)) return false;
   const q=state.q.trim().toLowerCase();
   if(q){
-    const hay=[g.name,e.title,formatShortDate(e.date_key),e.card_summary,...asArray(e.major_update_summary),...asArray(e.domain_tags),...asArray(e.body_summary),...asArray(e.representative_signals),e.note].map(textOf).join(' ').toLowerCase();
+    const hay=[g.name,e.title,formatShortDate(e.date_key),...asArray(e.domain_tags),...asArray(e.body_summary),...asArray(e.primary_category)].map(textOf).join(' ').toLowerCase();
     if(!hay.includes(q)) return false;
   }
   return true;

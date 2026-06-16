@@ -8,9 +8,7 @@ Rule-based display/decision/deploy gate for Patchnote Update Workflow.
 Single responsibility rules:
 - body_summary is summary output, not a decision field.
 - highlight_sentence_candidates are automatic body_summary-derived candidates.
-- importance_suggestion mirrors the automatic decision.
-- importance_decision is the final display/write decision from auto_rule.
-- importance_review_status controls write/push gate.
+- importance_decision is the final display/write decision.
 """
 
 from __future__ import annotations
@@ -26,11 +24,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 WORKFLOW_VERSION = "github_actions_v093"
-ALLOWED_REVIEW_STATUS = {"pass", "review_required", "blocked"}
 ALLOWED_DECISION = {"major", "normal"}
-ALLOWED_DECISION_SOURCE = {
-    "auto_rule", "manual_review", "legacy_import", "notion_existing", "reviewed_import"
-}
 
 # Output keys that are explicitly removed/blocked from generated public data.
 # This is the only place where legacy mixed-responsibility field names may appear.
@@ -118,10 +112,7 @@ def audit_items(items: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list
             errors.append(f"item[{idx}] is not an object")
             continue
 
-        decision = str(item.get("importance_decision") or item.get("importance") or "normal").lower().strip()
-        source = str(item.get("importance_decision_source") or "").strip()
-        review_status = str(item.get("importance_review_status") or "").strip()
-        display_highlight_count = int(item.get("display_highlight_count") or 0)
+        decision = str(item.get("importance_decision") or "normal").lower().strip()
         candidates = item.get("highlight_sentence_candidates") if isinstance(item.get("highlight_sentence_candidates"), list) else []
         legacy_keys = [k for k in LEGACY_OUTPUT_KEYS_TO_BLOCK if k in item]
 
@@ -130,25 +121,12 @@ def audit_items(items: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list
 
         if decision not in ALLOWED_DECISION:
             row_errors.append(f"invalid importance_decision={decision}")
-        if not source or source not in ALLOWED_DECISION_SOURCE:
-            row_errors.append(f"invalid/missing importance_decision_source={source or '<missing>'}")
-        if not review_status or review_status not in ALLOWED_REVIEW_STATUS:
-            row_errors.append(f"invalid/missing importance_review_status={review_status or '<missing>'}")
         if legacy_keys:
             row_errors.append("legacy output keys present: " + ",".join(legacy_keys))
-        if decision == "normal" and display_highlight_count > 0:
-            row_errors.append("normal decision has display_highlight_count > 0")
-        if decision == "major" and display_highlight_count != len(candidates):
-            row_warnings.append("major decision display_highlight_count differs from candidate count")
+        if decision == "normal" and candidates:
+            row_errors.append("normal decision has highlight candidates")
         if decision == "major" and not candidates:
             row_errors.append("major decision has no highlight candidates")
-        if decision == "major" and not str(item.get("importance_reason") or "").strip():
-            row_errors.append("major decision missing importance_reason")
-        suggestion = str(item.get("importance_suggestion") or "").lower().strip()
-        if suggestion in ALLOWED_DECISION and suggestion != decision:
-            row_warnings.append(f"importance_suggestion={suggestion} differs from decision={decision}")
-        if review_status in {"review_required", "blocked"}:
-            row_warnings.append(f"review_status={review_status}")
 
         title = str(item.get("title") or item.get("page_title") or item.get("item_name") or "")
         source_url = str(item.get("source_url") or item.get("url") or "")
@@ -157,10 +135,7 @@ def audit_items(items: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list
             "title": title,
             "source_url": source_url,
             "importance_decision": decision,
-            "importance_decision_source": source,
-            "importance_review_status": review_status,
             "highlight_candidate_count": len(candidates),
-            "display_highlight_count": display_highlight_count,
             "legacy_key_count": len(legacy_keys),
             "errors": " | ".join(row_errors),
             "warnings": " | ".join(row_warnings),
@@ -226,8 +201,8 @@ def run_gate(mode: str, artifact_dir: pathlib.Path, strict: bool) -> int:
             artifact_dir / "major_decision_audit.csv",
             audit_rows,
             [
-                "idx", "title", "source_url", "importance_decision", "importance_decision_source",
-                "importance_review_status", "highlight_candidate_count", "display_highlight_count",
+                "idx", "title", "source_url", "importance_decision",
+                "highlight_candidate_count",
                 "legacy_key_count", "errors", "warnings"
             ],
         )
@@ -240,11 +215,7 @@ def run_gate(mode: str, artifact_dir: pathlib.Path, strict: bool) -> int:
         status_lines = []
 
     if mode == "pre-write":
-        # Pre-write is allowed to pass when there are no new payloads, but it must block any
-        # ambiguous review status present in the generated preview/public data.
-        for row in audit_rows:
-            if row.get("importance_review_status") in {"review_required", "blocked"}:
-                errors.append(f"pre-write blocked by review status: item[{row.get('idx')}]")
+        pass
 
     report = {
         "workflow_version": WORKFLOW_VERSION,

@@ -119,10 +119,6 @@ jobs:
           echo "RUN_GIT_PUSH=$RUN_GIT_PUSH"
           echo "TARGET_GAMES=$TARGET_GAMES"
 
-      - name: Apply v106 auto importance runtime patch
-        run: |
-          python scripts/apply_v106_auto_importance_runtime_patch.py
-
       - name: Run patchnote workflow
         env:
           WORKFLOW_VERSION: github_actions_v093
@@ -144,11 +140,6 @@ jobs:
       - name: Run v069 deploy gate
         run: |
           python scripts/policy_gate_v093.py --artifact-dir "$PATCH_WORKFLOW_ARTIFACT_DIR" --mode deploy --strict
-
-      - name: Restore runtime patched scripts before data deploy
-        if: ${{ env.DRY_RUN == 'false' && env.RUN_GIT_PUSH == 'true' }}
-        run: |
-          git checkout -- scripts/patch_update_workflow.py scripts/policy_gate_v093.py
 
       - name: Commit patch_view_model.json only
         if: ${{ env.DRY_RUN == 'false' && env.RUN_GIT_PUSH == 'true' }}

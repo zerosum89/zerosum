@@ -68,7 +68,7 @@ WORKFLOW_VERSION = "github_actions_v093"
 REPORT_CONSISTENCY_ARTIFACT = "report_consistency_v093.json"
 
 
-DISPLAY_DATA_VERSION = "patch_view_model.v108_patch_category_taxonomy"
+DISPLAY_DATA_VERSION = "patch_view_model.v109_full_patch_category_taxonomy"
 MAJOR_POLICY_VERSION = "major_policy_v106_auto_from_body_summary"
 def canonical_url(url: str) -> str:
     if not url:
@@ -190,6 +190,7 @@ PATCH_CATEGORY_ORDER = [
     "신규 성장축",
     "성장 시스템 확장",
     "경제/거래 구조 변화",
+    "기타/일반",
 ]
 
 
@@ -601,13 +602,69 @@ def patch_category_for_major_group(candidate: dict[str, Any]) -> str:
     return ""
 
 
-def derive_patch_categories(candidates: list[dict[str, Any]] | None = None, limit: int = 2) -> list[str]:
+def _patch_category_from_text(text: str) -> str:
+    text = clean_summary_line(text)
+    if not text:
+        return ""
+    if _rx(text, r"(신규|새로운|추가|도입|신설).{0,18}(클래스|직업|전직)"):
+        return "클래스/직업"
+    if _rx(text, r"(클래스|직업|스킬|기술|특성|전투 운용|운용|각성).{0,28}(체계|구조|구성|개편|조정|변경|확장|밸런스)"):
+        return "성장 시스템 확장"
+    if _rx(text, r"(서버|월드).{0,24}(이전|통합|매칭|그룹|군|구조|개편|변경|신규|추가|오픈|월드)"):
+        return "서버/월드"
+    if _rx(text, r"(제작|거래|거래소|경제|화폐|교환|상점 판매 구조|시장|수수료).{0,24}(구조|체계|시스템|개편|변경|추가|확장|조정)"):
+        return "경제/거래 구조 변화"
+    if _rx(text, r"(최대 레벨|레벨 상한|레벨 제한|상한 레벨|레벨).{0,20}(확장|상향|증가|개방)"):
+        return "성장 시스템 확장"
+    if _rx(text, r"(성장|강화|각성|계승|장비|아티팩트|스테이터스|잠재력|현신|신기|정령|수집|마력|룬|휘장).{0,28}(시스템|체계|축|단계|확장|개편|추가|신규|도입|개방|성장축)"):
+        if _rx(text, r"(신규|새로운|추가|도입|신설).{0,24}(아티팩트|스테이터스|잠재력|현신|신기|정령|성장축|성장 시스템|장비 체계|강화 체계)"):
+            return "신규 성장축"
+        return "성장 시스템 확장"
+    if _rx(text, r"(신규|새로운|추가|도입|신설|오픈|개방).{0,28}(던전|필드|지역|대륙|월드 콘텐츠|콘텐츠|레이드|보스|전장|격전지|공성|PvP|전쟁|챕터|퀘스트)"):
+        return "대형 콘텐츠"
+    if _rx(text, r"(던전|필드|지역|대륙|월드 콘텐츠|콘텐츠|레이드|보스|전장|격전지|공성|PvP|전쟁|챕터|퀘스트).{0,28}(추가|오픈|개방|신규|도입|확장|개편|시즌 시작)"):
+        return "대형 콘텐츠"
+    return ""
+
+
+def _patch_category_from_domain_tag(tag: str) -> str:
+    tag = str(tag or "").strip()
+    if not tag:
+        return ""
+    if tag in {"신규 클래스", "클래스/전직"}:
+        return "클래스/직업"
+    if tag in {"서버/월드"}:
+        return "서버/월드"
+    if tag in {"월드 콘텐츠", "신규 지역"}:
+        return "대형 콘텐츠"
+    if tag in {"신규 시스템", "성장/장비", "성장/정령", "성장/수집", "시스템/성장", "클래스 밸런스", "스킬 밸런스"}:
+        return "성장 시스템 확장"
+    if tag in {"PvE 콘텐츠", "PvP/전쟁"}:
+        return "대형 콘텐츠"
+    return ""
+
+
+def derive_patch_categories(
+    candidates: list[dict[str, Any]] | None = None,
+    body_summary: list[str] | None = None,
+    domain_tags: list[str] | None = None,
+    limit: int = 2,
+) -> list[str]:
     out: list[str] = []
-    for candidate in candidates or []:
-        category = patch_category_for_major_group(candidate)
-        if category and category not in out:
+
+    def add(category: str) -> None:
+        if category and category not in out and len(out) < limit:
             out.append(category)
-    return out[:limit]
+
+    for candidate in candidates or []:
+        add(patch_category_for_major_group(candidate))
+    for line in body_summary or []:
+        add(_patch_category_from_text(str(line)))
+    for tag in domain_tags or []:
+        add(_patch_category_from_domain_tag(str(tag)))
+    if not out:
+        out.append("기타/일반")
+    return out
 
 
 def normalize_highlight_candidates_value(value: Any) -> list[dict[str, Any]]:
@@ -675,7 +732,7 @@ def enrich_importance_display_fields(item: dict[str, Any]) -> dict[str, Any]:
 
     item["highlight_sentence_candidates"] = candidates
     item["importance_decision"] = decision
-    item["patch_category"] = derive_patch_categories(candidates)
+    item["patch_category"] = derive_patch_categories(candidates, body_summary, listify(item.get("domain_tags", [])))
 
     old_key_specs = [
         ["derived", "major", "candidate", "groups"],
@@ -2366,7 +2423,11 @@ def payload_to_notion_properties(schema: dict[str, Any], payload: dict[str, Any]
     auto_body_summary = listify(payload.get("body_summary", []))
     auto_highlight_candidates = derive_highlight_sentence_candidates(auto_body_summary)
     auto_importance = "major" if auto_highlight_candidates else "normal"
-    auto_patch_category = derive_patch_categories(auto_highlight_candidates)
+    auto_patch_category = derive_patch_categories(
+        auto_highlight_candidates,
+        auto_body_summary,
+        listify(payload.get("domain_tags", [])),
+    )
 
     mappings = [
         (["game", "게임", "게임명", "Game"], payload.get("game"), {"select", "rich_text", "multi_select"}),

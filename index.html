@@ -354,7 +354,7 @@ function refreshDerivedData(){
   document.documentElement.style.setProperty('--months', MONTHS.length);
   GAME_BY_NAME = Object.fromEntries(DATA.map(g=>[g.name,g]));
 }
-const PATCH_CATEGORY_ORDER=['대형 콘텐츠','클래스/직업','서버/월드','신규 성장축','성장 시스템 확장','경제/거래 구조 변화'];
+const PATCH_CATEGORY_ORDER=['대형 콘텐츠','클래스/직업','서버/월드','신규 성장축','성장 시스템 확장','경제/거래 구조 변화','기타/일반'];
 function availableCategories(){const set=new Set(); DATA.forEach(g=>g.events.forEach(e=>asArray(e.patch_category).forEach(s=>{if(s) set.add(s)}))); return [ALL_CATEGORIES,...PATCH_CATEGORY_ORDER.filter(s=>set.has(s)),...Array.from(set).filter(s=>!PATCH_CATEGORY_ORDER.includes(s)).sort()];}
 function renderControls(){
   const games=[ALL_GAMES,...DATA.map(g=>g.name)];

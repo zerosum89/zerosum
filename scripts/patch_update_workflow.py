@@ -68,7 +68,7 @@ WORKFLOW_VERSION = "github_actions_v093"
 REPORT_CONSISTENCY_ARTIFACT = "report_consistency_v093.json"
 
 
-DISPLAY_DATA_VERSION = "patch_view_model.v107_minimal_html_fields"
+DISPLAY_DATA_VERSION = "patch_view_model.v108_patch_category_taxonomy"
 MAJOR_POLICY_VERSION = "major_policy_v106_auto_from_body_summary"
 def canonical_url(url: str) -> str:
     if not url:
@@ -181,6 +181,15 @@ MAJOR_TYPE_ORDER = [
     "server_world_structure",
     "economy_crafting_system",
     "major_rule_rework",
+]
+
+PATCH_CATEGORY_ORDER = [
+    "대형 콘텐츠",
+    "클래스/직업",
+    "서버/월드",
+    "신규 성장축",
+    "성장 시스템 확장",
+    "경제/거래 구조 변화",
 ]
 
 
@@ -550,6 +559,7 @@ def derive_highlight_sentence_candidates(body_summary: list[str]) -> list[dict[s
         sentence = build_highlight_candidate_text(highlight_type, lines)
         item["sentence"] = sentence
         item["text"] = sentence  # display alias for existing renderer patterns; not a decision field.
+        item["source_lines"] = lines
         item["highlight_reason"] = highlight_type
         item["confidence"] = 0.86
         item["rule_id"] = f"v060_{highlight_type}"
@@ -557,15 +567,46 @@ def derive_highlight_sentence_candidates(body_summary: list[str]) -> list[dict[s
     return out
 
 
-def derive_primary_category(domain_tags: list[str], candidates: list[dict[str, Any]] | None = None, limit: int = 2) -> list[str]:
+def _class_skill_patch_category(lines: list[str]) -> str:
+    text = " ".join(clean_summary_line(x) for x in lines)
+    if _rx(text, r"(신규|새로운|추가|도입|신설).{0,16}(클래스|직업|전직)"):
+        return "클래스/직업"
+    if _rx(text, r"(클래스|직업|스킬|기술|특성|전투 운용|운용).{0,24}(체계|구조|구성|개편|조정|변경|확장)"):
+        return "성장 시스템 확장"
+    return "클래스/직업"
+
+
+def _growth_patch_category(lines: list[str]) -> str:
+    text = " ".join(clean_summary_line(x) for x in lines)
+    if _rx(text, r"(최대 레벨|레벨 상한|레벨 제한|상한 레벨|레벨).{0,20}(확장|상향|증가|개방)"):
+        return "성장 시스템 확장"
+    if _rx(text, r"(단계|상한|레벨|기존|확장|개편|조정).{0,24}(성장|강화|각성|계승|장비 체계|성장 시스템)"):
+        return "성장 시스템 확장"
+    return "신규 성장축"
+
+
+def patch_category_for_major_group(candidate: dict[str, Any]) -> str:
+    highlight_type = str(candidate.get("highlight_type") or candidate.get("highlight_reason") or "").strip()
+    lines = [str(x) for x in candidate.get("source_lines") or [] if str(x).strip()]
+    if highlight_type in {"new_pve_content", "new_pvp_war"}:
+        return "대형 콘텐츠"
+    if highlight_type == "class_skill_system":
+        return _class_skill_patch_category(lines)
+    if highlight_type == "new_growth_axis":
+        return _growth_patch_category(lines)
+    if highlight_type == "server_world_structure":
+        return "서버/월드"
+    if highlight_type == "economy_crafting_system":
+        return "경제/거래 구조 변화"
+    return ""
+
+
+def derive_patch_categories(candidates: list[dict[str, Any]] | None = None, limit: int = 2) -> list[str]:
     out: list[str] = []
     for candidate in candidates or []:
-        domain = str(candidate.get("domain") or "").strip()
-        if domain and domain not in out:
-            out.append(domain)
-    for tag in listify(domain_tags):
-        if tag not in out:
-            out.append(tag)
+        category = patch_category_for_major_group(candidate)
+        if category and category not in out:
+            out.append(category)
     return out[:limit]
 
 
@@ -634,7 +675,7 @@ def enrich_importance_display_fields(item: dict[str, Any]) -> dict[str, Any]:
 
     item["highlight_sentence_candidates"] = candidates
     item["importance_decision"] = decision
-    item["primary_category"] = derive_primary_category(listify(item.get("domain_tags", [])), candidates)
+    item["patch_category"] = derive_patch_categories(candidates)
 
     old_key_specs = [
         ["derived", "major", "candidate", "groups"],
@@ -662,6 +703,7 @@ def enrich_importance_display_fields(item: dict[str, Any]) -> dict[str, Any]:
         "quality_gate_status",
         "main_updates",
         "card_summary",
+        "primary_category",
     ]:
         item.pop(key, None)
     return item
@@ -675,7 +717,7 @@ def public_view_model_item(item: dict[str, Any]) -> dict[str, Any]:
         "source_url": item.get("source_url", ""),
         "body_summary": listify(item.get("body_summary", [])),
         "domain_tags": listify(item.get("domain_tags", [])),
-        "primary_category": listify(item.get("primary_category", [])),
+        "patch_category": listify(item.get("patch_category", [])),
         "importance_decision": str(item.get("importance_decision") or "normal").lower(),
         "highlight_sentence_candidates": normalize_highlight_candidates_value(item.get("highlight_sentence_candidates", [])),
     }
@@ -710,7 +752,7 @@ def normalize_item_from_notion(page: dict[str, Any]) -> dict[str, Any]:
         "title": title,
         "raw_title": raw_title,
         "source_url": str(pick(raw, ["source_url", "원문 URL", "URL", "url", "링크", "원문링크"], "")),
-        "primary_category": listify(pick(raw, ["primary_category", "패치 카테고리", "대표 카테고리", "대표 핵심 신호"], [])),
+        "patch_category": listify(pick(raw, ["patch_category", "PatchCategory", "패치 카테고리"], [])),
         "body_summary": body_summary,
         "domain_tags": domain_tags,
         "highlight_sentence_candidates": pick(raw, highlight_names, []),
@@ -2324,14 +2366,14 @@ def payload_to_notion_properties(schema: dict[str, Any], payload: dict[str, Any]
     auto_body_summary = listify(payload.get("body_summary", []))
     auto_highlight_candidates = derive_highlight_sentence_candidates(auto_body_summary)
     auto_importance = "major" if auto_highlight_candidates else "normal"
-    auto_primary_category = derive_primary_category(listify(payload.get("domain_tags", [])), auto_highlight_candidates)
+    auto_patch_category = derive_patch_categories(auto_highlight_candidates)
 
     mappings = [
         (["game", "게임", "게임명", "Game"], payload.get("game"), {"select", "rich_text", "multi_select"}),
         (["actual_date", "실제 패치일", "패치일", "날짜", "Date"], payload.get("actual_date"), {"date", "rich_text"}),
         (["source_url", "원문 URL", "URL", "url", "링크", "원문링크"], payload.get("source_url"), {"url", "rich_text"}),
         (["importance", "중요도", "Importance"], auto_importance, {"select", "rich_text"}),
-        (["primary_category", "패치 카테고리", "대표 카테고리", "대표 핵심 신호"], auto_primary_category, {"multi_select", "rich_text", "select"}),
+        (["patch_category", "PatchCategory", "패치 카테고리"], auto_patch_category, {"multi_select", "rich_text", "select"}),
         (["body_summary", "본문 요약", "Body Summary"], payload.get("body_summary", []), {"rich_text"}),
         (["domain_tags", "관련 영역", "도메인 태그", "Domain Tags"], payload.get("domain_tags", []), {"multi_select", "rich_text"}),
     ]

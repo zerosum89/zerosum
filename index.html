@@ -227,7 +227,7 @@ function normalizeFlatItem(item){
   const gameName = GAME_NAME_MAP[String(gameKey).trim()] || String(gameKey || 'Unknown').trim();
   const body = item.body_summary || '';
   const domainTags = item.domain_tags || [];
-  const primary = item.primary_category || domainTags;
+  const patchCategory = item.patch_category || [];
 
   const decision = item.importance_decision || 'normal';
   return {
@@ -239,8 +239,7 @@ function normalizeFlatItem(item){
     impact: '패치노트',
     source_url: item.source_url || '',
     html_visible: true,
-    representative_signals: splitLinesForTimeline(primary),
-    primary_category: splitLinesForTimeline(primary),
+    patch_category: splitLinesForTimeline(patchCategory),
     domain_tags: splitLinesForTimeline(domainTags),
     detected_sections_for_general: [],
     game: gameName,
@@ -265,7 +264,7 @@ function normalizeTimelinePayload(payload){
       const release = GAME_RELEASE_MAP[ev.game] || '';
       const events = [];
       if(release){
-        events.push({date_key: release, title: '출시', type: 'release', year: Number(release.slice(0,4)), quarter: quarterOf(release), impact:'', source_url:'', game: ev.game, domain_tags:[], representative_signals:[]});
+        events.push({date_key: release, title: '출시', type: 'release', year: Number(release.slice(0,4)), quarter: quarterOf(release), impact:'', source_url:'', game: ev.game, domain_tags:[], patch_category:[]});
       }
       groups.set(ev.game, {name: ev.game, release, release_display: shortDateDisplay(release), events});
     }
@@ -326,14 +325,14 @@ function cardSummary(e){
       }).filter(Boolean);
       if(labels.length) return labels.slice(0,3).join(' · ')+(labels.length>3?` · +${labels.length-3}`:'');
     }
-    const fallback=asArray(e.primary_category).map(textOf).filter(Boolean);
+    const fallback=asArray(e.patch_category).map(textOf).filter(Boolean);
     return fallback.slice(0,3).join(' · ')+(fallback.length>3?` · +${fallback.length-3}`:'');
   }
   return asArray(e.domain_tags).map(textOf).filter(Boolean).slice(0,4).join(' · ');
 }
 function hasAll(set, allValue){return set.has(allValue)}
 function selectedContains(set, value){return set.has(value)}
-function categoryMatch(e){return hasAll(state.categories,ALL_CATEGORIES) || asArray(e.representative_signals).some(s=>state.categories.has(s));}
+function categoryMatch(e){return hasAll(state.categories,ALL_CATEGORIES) || asArray(e.patch_category).some(s=>state.categories.has(s));}
 function gameMatch(g){return hasAll(state.games,ALL_GAMES) || state.games.has(g.name);}
 function matchEvent(e,g){
   if(e.html_visible===false) return false;
@@ -342,7 +341,7 @@ function matchEvent(e,g){
   if(!categoryMatch(e)) return false;
   const q=state.q.trim().toLowerCase();
   if(q){
-    const hay=[g.name,e.title,formatShortDate(e.date_key),...asArray(e.domain_tags),...asArray(e.body_summary),...asArray(e.primary_category)].map(textOf).join(' ').toLowerCase();
+    const hay=[g.name,e.title,formatShortDate(e.date_key),...asArray(e.domain_tags),...asArray(e.body_summary),...asArray(e.patch_category)].map(textOf).join(' ').toLowerCase();
     if(!hay.includes(q)) return false;
   }
   return true;
@@ -355,8 +354,8 @@ function refreshDerivedData(){
   document.documentElement.style.setProperty('--months', MONTHS.length);
   GAME_BY_NAME = Object.fromEntries(DATA.map(g=>[g.name,g]));
 }
-const SIGNAL_ORDER=['신규 대형 PvE','신규 대형 PvP','신규 클래스/직업','신규 서버/월드','신규 성장축','성장 시스템 확장','대형 BM 변경','최대 레벨 확장','경제/거래 구조 변화'];
-function availableCategories(){const set=new Set(); DATA.forEach(g=>g.events.forEach(e=>asArray(e.representative_signals).forEach(s=>{if(s) set.add(s)}))); return [ALL_CATEGORIES,...SIGNAL_ORDER.filter(s=>set.has(s)),...Array.from(set).filter(s=>!SIGNAL_ORDER.includes(s)).sort()];}
+const PATCH_CATEGORY_ORDER=['대형 콘텐츠','클래스/직업','서버/월드','신규 성장축','성장 시스템 확장','경제/거래 구조 변화'];
+function availableCategories(){const set=new Set(); DATA.forEach(g=>g.events.forEach(e=>asArray(e.patch_category).forEach(s=>{if(s) set.add(s)}))); return [ALL_CATEGORIES,...PATCH_CATEGORY_ORDER.filter(s=>set.has(s)),...Array.from(set).filter(s=>!PATCH_CATEGORY_ORDER.includes(s)).sort()];}
 function renderControls(){
   const games=[ALL_GAMES,...DATA.map(g=>g.name)];
   const years=[ALL_YEARS,...new Set(MONTHS.map(m=>m.slice(0,4)))];

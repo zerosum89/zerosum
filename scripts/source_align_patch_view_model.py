@@ -149,7 +149,8 @@ def main() -> int:
             if status == 200 and old_body:
                 item["body_summary"] = []
                 item["domain_tags"] = []
-                item["primary_category"] = []
+                item.pop("primary_category", None)
+                item.pop("patch_category", None)
                 item["update_units"] = []
                 item["source_section_extractor_status"] = "missing_cleared"
                 item["source_section_extractor_rule"] = "source_section_extractor_v2"
@@ -190,7 +191,8 @@ def main() -> int:
 
         item["body_summary"] = new_body
         item["domain_tags"] = listify(preview.get("domain_tags"))
-        item["primary_category"] = listify(preview.get("domain_tags"))[:2]
+        item.pop("primary_category", None)
+        item.pop("patch_category", None)
         item["update_units"] = preview.get("units", [])
         item["source_section_extractor_status"] = "repaired"
         item["source_section_extractor_rule"] = "source_section_extractor_v2"

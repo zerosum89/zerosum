@@ -1,11 +1,32 @@
 {
   "schema_version": "patch_view_model.v1",
-  "generated_at": "2026-06-17T11:14:05.328109+09:00",
+  "generated_at": "2026-06-18T20:57:32.924806+09:00",
   "source": "notion_db",
   "workflow_version": "github_actions_v093",
   "display_data_version": "patch_view_model.v110_guarded_patch_view_model",
   "major_policy_version": "major_policy_v106_auto_from_body_summary",
   "items": [
+    {
+      "game": "Odin_KR",
+      "actual_date": "2026-06-17",
+      "title": "26.06.17 | 패치노트",
+      "source_url": "https://cafe.daum.net/odin/DEH7/260",
+      "body_summary": [
+        "PvP/전쟁: 서버 침공전이 6/3 10:00~23:59 일정으로 진행됩니다.",
+        "이벤트/보상: 신규 이벤트가 추가되어 기간제 참여 보상과 지원 혜택이 갱신됩니다.",
+        "상점/BM: 신규 상품 구성이 추가되어 상점 판매 항목이 갱신됩니다."
+      ],
+      "domain_tags": [
+        "PvP/전쟁",
+        "이벤트/보상",
+        "상점/BM"
+      ],
+      "patch_category": [
+        "대형 콘텐츠"
+      ],
+      "importance_decision": "normal",
+      "highlight_sentence_candidates": []
+    },
     {
       "game": "Odin_KR",
       "actual_date": "2026-06-10",

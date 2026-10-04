@@ -618,10 +618,18 @@ function normalizeExpense(r,i){
   const shares=Object.fromEntries((r.shares||[]).map(x=>[x.participant_id,Number(x.ratio)||0]));
   const krw=r.actual_krw_amount ?? r.converted_krw_amount ?? (r.currency==='KRW'?r.amount_minor:0) ?? 0;
   const people=(r.shares||[]).map(x=>pnameRaw(x.participant_id)).filter(Boolean).join(' · ');
-  const items=(r.line_items||[]).map(x=>({
-    name:x.name||'', qty:x.quantity??null,
-    foreign:fmtForeign(x.currency||r.currency,x.amount_minor), krw:x.actual_krw_amount ?? x.converted_krw_amount ?? (((x.currency||r.currency)==='KRW') ? x.amount_minor : null)
-  }));
+  const items=(r.line_items||[]).map(x=>{
+    const currency=x.currency||r.currency;
+    let itemKrw=x.actual_krw_amount ?? x.converted_krw_amount ?? null;
+    if(itemKrw==null && currency==='KRW') itemKrw=x.amount_minor;
+    if(itemKrw==null && currency==='VND' && r.fx?.krw_per_vnd!=null && x.amount_minor!=null){
+      itemKrw=Math.round(Number(x.amount_minor)*Number(r.fx.krw_per_vnd));
+    }
+    return {
+      name:x.name||'', qty:x.quantity??null,
+      foreign:fmtForeign(currency,x.amount_minor), krw:itemKrw
+    };
+  });
   return {
     id:r.expense_id||`ROW-${i+1}`, no:i+1,
     date:(r.occurred_date||'').replace(/^2026-/, '').replace('-', '/'), time:r.occurred_time||'',
@@ -633,6 +641,12 @@ function normalizeExpense(r,i){
     note:Array.isArray(r.notes)?r.notes.join(' · '):(r.notes||''),
     amount_state:r.actual_krw_amount!=null||r.currency==='KRW'?'confirmed':(r.converted_krw_amount!=null?'converted':'unconfirmed')
   };
+}
+function fmtItemAmount(x){
+  if(x.foreign && x.krw!=null) return `${x.foreign} (${won(x.krw)})`;
+  if(x.foreign) return x.foreign;
+  if(x.krw!=null) return won(x.krw);
+  return '';
 }
 function pnameRaw(id){return P.find(p=>p.id===id)?.name||id||''}
 const L=(HANDOFF.ledger||[]).filter(r=>r.status==='approved').map(normalizeExpense);
@@ -854,12 +868,12 @@ function renderDetails(){
   tb.innerHTML=rows.map((r,i)=>`<tr>
     <td>${r.no??i+1}</td><td>${esc(r.date||'')}</td><td>${esc(r.time||'')}</td><td>${esc(r.category||'')}</td><td><b>${esc(r.title||'')}</b></td>
     <td class="money">${won(r.krw)}${r.foreign?`<span class="submoney">${esc(r.foreign)}</span>`:''}</td>
-    <td class="items">${(r.items||[]).length?(r.items||[]).map(x=>`<div>${esc(x.name)}${x.qty!=null?' / '+esc(x.qty):''}${x.foreign?' / '+esc(x.foreign):''}</div>`).join(''):'—'}</td>
+    <td class="items">${(r.items||[]).length?(r.items||[]).map(x=>`<div>${esc(x.name)}${x.qty!=null?' / '+esc(x.qty):''}${fmtItemAmount(x)?' / '+esc(fmtItemAmount(x)):''}</div>`).join(''):'—'}</td>
     <td>${esc(r.people||'')}</td><td>${esc(pname(r.payer))}</td><td>${esc(r.method_label||r.method||'')}</td>
     <td>${r.settled?'완료':'미정산'}</td><td>${r.allocation==='shared'?'공동':'개인'}</td><td>${esc(r.note||'')} ${r.amount_state?`<span class="data-state ${r.amount_state}">${r.amount_state==='confirmed'?'확정':'환산'}</span>`:''}</td>
   </tr>`).join('');
   ml.innerHTML=rows.map((r,i)=>`<details class="receipt"><summary><div class="receipt-top"><div><div class="receipt-name">${esc(r.title||'')}</div><div class="receipt-meta">${esc(r.date||'')} ${esc(r.time||'')} · ${esc(pname(r.payer))} · ${r.allocation==='shared'?'공동':'개인'}</div></div><div class="receipt-amount">${won(r.krw)}</div></div></summary>
-    <div class="receipt-body"><dl><dt>유형</dt><dd>${esc(r.category||'')}</dd><dt>결제수단</dt><dd>${esc(r.method_label||r.method||'')}</dd><dt>정산</dt><dd>${r.settled?'완료':'미정산'}</dd><dt>인원 기준</dt><dd>${esc(r.people||'')}</dd><dt>개별 품목</dt><dd>${(r.items||[]).length?(r.items||[]).map(x=>`<div>${esc(x.name)}${x.qty!=null?' / '+esc(x.qty):''}${x.foreign?' / '+esc(x.foreign):''}</div>`).join(''):'—'}</dd><dt>비고</dt><dd>${esc(r.note||'')}</dd></dl></div>
+    <div class="receipt-body"><dl><dt>유형</dt><dd>${esc(r.category||'')}</dd><dt>결제수단</dt><dd>${esc(r.method_label||r.method||'')}</dd><dt>정산</dt><dd>${r.settled?'완료':'미정산'}</dd><dt>인원 기준</dt><dd>${esc(r.people||'')}</dd><dt>개별 품목</dt><dd>${(r.items||[]).length?(r.items||[]).map(x=>`<div>${esc(x.name)}${x.qty!=null?' / '+esc(x.qty):''}${fmtItemAmount(x)?' / '+esc(fmtItemAmount(x)):''}</div>`).join(''):'—'}</dd><dt>비고</dt><dd>${esc(r.note||'')}</dd></dl></div>
   </details>`).join('');
 }
 

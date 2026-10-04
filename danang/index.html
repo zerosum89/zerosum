@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f5f7">
+<title>2026 다낭 · 후에 여행</title>
+<style>
+:root{
+  --bg:#f4f5f7;--panel:#fff;--panel2:#f8f9fb;--ink:#17191d;--muted:#737983;--line:#e3e6ea;
+  --accent:#2359d6;--accent-soft:#eaf0ff;--settle:#c2412d;--settle-soft:#fff0ec;--ok:#157347;
+  --shadow:0 10px 30px rgba(20,26,38,.05);--r:18px
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR","Apple SD Gothic Neo",sans-serif;line-height:1.45}
+button,input,select{font:inherit}
+button{color:inherit}
+.app{max-width:1120px;margin:0 auto;padding:18px 16px 60px}
+.header{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:var(--shadow)}
+.header h1{font-size:28px;letter-spacing:-.04em;margin:0}
+.header .period{color:var(--muted);font-size:13px;margin-top:5px}
+.trip-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+.trip-summary .cell{border:1px solid var(--line);border-radius:14px;padding:12px 13px;background:var(--panel2)}
+.trip-summary .k{font-size:11px;color:var(--muted)}
+.trip-summary .v{font-weight:800;font-size:13px;margin-top:4px}
+.global-tabs{position:sticky;top:0;z-index:30;display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:8px;margin:14px 0;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(12px);border-radius:15px}
+.global-tabs button,.subtabs button,.date-tab,.filter-btn{border:1px solid var(--line);background:var(--panel);border-radius:11px;padding:10px 12px;cursor:pointer;font-weight:750}
+.global-tabs button.active,.subtabs button.active{background:var(--ink);border-color:var(--ink);color:#fff}
+.view{display:none}.view.active{display:block}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:18px 2px 10px}
+.section-head h2{margin:0;font-size:18px}.section-head .minor{font-size:11px;color:var(--muted)}
+.date-tabs{display:flex;gap:8px;overflow:auto;padding:2px 0 10px;scrollbar-width:none}
+.date-tabs::-webkit-scrollbar{display:none}
+.date-tab{flex:0 0 auto;min-width:78px;text-align:center;color:#525963}
+.date-tab b{display:block;font-size:13px}.date-tab span{font-size:10px;color:var(--muted)}
+.date-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.date-tab.active span{color:#dbe5ff}
+.day{display:none}.day.active{display:block}
+.day-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.day-title{display:flex;justify-content:space-between;gap:12px;padding:17px 18px;border-bottom:1px solid var(--line)}
+.day-title h3{margin:0;font-size:20px;letter-spacing:-.03em}.day-title p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.status{display:inline-flex;align-items:center;height:27px;padding:0 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:10px;font-weight:850;white-space:nowrap}
+.status.rest{background:#eef8f1;color:var(--ok)}.status.plan{background:#f2f3f5;color:#626872}
+.route{margin:13px 15px 0;padding:13px;border:1px solid var(--line);border-radius:14px;background:var(--panel2)}
+.route-label{font-size:10px;color:var(--muted);font-weight:800;margin-bottom:10px}
+.route-line{display:flex;align-items:center;gap:8px;overflow:auto}
+.stop{display:flex;align-items:center;gap:7px;white-space:nowrap;font-size:12px;font-weight:800}
+.stop .pin{width:29px;height:29px;border-radius:9px;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center}
+.leg{display:flex;align-items:center;gap:6px;min-width:75px;color:var(--muted);font-size:10px;white-space:nowrap}
+.leg:before{content:"";height:2px;flex:1;background:#cfd4da;border-radius:2px}
+.timeline{padding:8px 17px 17px}
+.event{display:grid;grid-template-columns:58px 18px 1fr;gap:8px;position:relative;padding:12px 0}
+.time{font-size:12px;font-weight:850;color:#4e5560;padding-top:2px}
+.rail{position:relative;display:flex;justify-content:center}
+.rail:before{content:"";position:absolute;top:15px;bottom:-17px;width:2px;background:#e2e5e9}
+.event:last-child .rail:before{display:none}
+.dot{width:11px;height:11px;border-radius:50%;background:var(--accent);border:3px solid var(--accent-soft);margin-top:4px;z-index:1}
+.event.rest .dot{background:var(--ok);border-color:#e1f3e7}
+.evt h4{margin:0;font-size:14px}.evt p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.chip{font-size:10px;border:1px solid var(--line);background:var(--panel2);padding:4px 7px;border-radius:999px;color:#616872}
+
+/* Expense shell */
+.expense-shell{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:15px}
+.expense-title{font-size:23px;font-weight:850;letter-spacing:-.035em;margin:2px 2px 13px}
+.subtabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:15px}
+.subview{display:none}.subview.active{display:block}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.kpi{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--panel2)}
+.kpi .k{font-size:11px;color:var(--muted)}.kpi .v{font-size:23px;font-weight:850;letter-spacing:-.04em;margin-top:6px}
+.kpi .s{font-size:10px;color:var(--muted);margin-top:4px}
+.settlement-box{margin-top:10px;border:1px solid #f0d1c8;background:var(--settle-soft);border-radius:16px;padding:16px;cursor:pointer}
+.settlement-box .label{font-size:11px;color:#8f5143;font-weight:800}.settlement-lines{display:grid;gap:8px;margin-top:9px}
+.transfer{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.transfer .who{font-size:14px;font-weight:800}.transfer .amount{font-size:20px;font-weight:900;color:var(--settle);letter-spacing:-.04em}
+.calc-detail{display:none;margin-top:13px;padding-top:13px;border-top:1px solid #efc9bf}.calc-detail.open{display:block}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.calc-cell{background:rgba(255,255,255,.72);border:1px solid #f0d7d0;border-radius:11px;padding:10px}
+.calc-cell .k{font-size:10px;color:#84645d}.calc-cell .v{font-size:13px;font-weight:800;margin-top:4px}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.chart-card{border:1px solid var(--line);border-radius:15px;padding:14px;background:var(--panel)}
+.chart-card.full{grid-column:1/-1}.chart-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.chart-head h3{font-size:13px;margin:0}.chart-head .toggle{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:2px}
+.toggle button{border:0;background:transparent;border-radius:7px;padding:5px 7px;font-size:10px;cursor:pointer;color:var(--muted)}
+.toggle button.active{background:var(--panel);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.chart{height:220px;position:relative}.chart svg{width:100%;height:100%;overflow:visible}
+.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:12px;background:var(--panel2);border-radius:11px}
+.tooltip{position:fixed;z-index:99;pointer-events:none;background:#111827;color:#fff;border-radius:10px;padding:8px 10px;font-size:10px;line-height:1.45;box-shadow:0 10px 30px rgba(0,0,0,.2);display:none;max-width:220px}
+.person-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:10px}
+.person{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--panel2)}
+.person h3{font-size:14px;margin:0 0 10px}.metric-row{display:flex;justify-content:space-between;gap:12px;font-size:11px;padding:5px 0;border-bottom:1px solid #eceef1}
+.metric-row:last-child{border-bottom:0}.metric-row span{color:var(--muted)}.metric-row b.positive{color:var(--ok)}.metric-row b.negative{color:var(--settle)}
+.detail-toolbar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+.search{flex:1 1 220px;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:9px 11px;min-width:0}
+.filter-btn{padding:8px 10px;font-size:10px}.filter-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.desktop-table{border:1px solid var(--line);border-radius:13px;overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:1180px}
+th{position:sticky;top:0;background:var(--panel2);color:#606772;text-align:left;font-size:10px;padding:10px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:top}
+.money{font-weight:850;white-space:nowrap}.submoney{display:block;font-size:9px;color:var(--muted);font-weight:500;margin-top:2px}
+.items div{margin-bottom:4px}.mobile-list{display:none}.receipt{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:8px;overflow:hidden}
+.receipt summary{list-style:none;cursor:pointer;padding:12px}.receipt summary::-webkit-details-marker{display:none}
+.receipt-top{display:flex;justify-content:space-between;gap:12px}.receipt-name{font-size:12px;font-weight:800}.receipt-meta{font-size:10px;color:var(--muted);margin-top:3px}.receipt-amount{font-size:14px;font-weight:900;white-space:nowrap}
+.receipt-body{border-top:1px solid var(--line);padding:11px;background:var(--panel2);font-size:10px}.receipt-body dl{display:grid;grid-template-columns:78px 1fr;gap:6px;margin:0}.receipt-body dt{color:var(--muted)}.receipt-body dd{margin:0}
+.no-data{padding:28px;text-align:center;color:var(--muted);font-size:12px}
+.data-state{font-size:10px;padding:3px 6px;border-radius:999px;background:#eef1f4;color:#59606a}
+.data-state.confirmed{background:#edf7f1;color:#167347}.data-state.converted{background:#fff7e8;color:#9a6200}
+.validation-error{display:none;background:#fff3f1;border:1px solid #f1c9c2;color:#8f2d1e;border-radius:12px;padding:12px;font-size:11px;margin-bottom:10px}
+.validation-error.show{display:block}
+
+@media(max-width:820px){
+  .app{padding:12px 12px 40px}.header{padding:18px;border-radius:19px}.header h1{font-size:24px}
+  .trip-summary{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr 1fr}.charts{grid-template-columns:1fr}.chart-card.full{grid-column:auto}
+  .person-cards{grid-template-columns:1fr}.calc-grid{grid-template-columns:1fr 1fr}.desktop-table{display:none}.mobile-list{display:block}
+}
+@media(max-width:460px){
+  .day-title h3{font-size:18px}.event{grid-template-columns:51px 16px 1fr}.expense-shell{padding:12px}.kpi .v{font-size:19px}
+  .subtabs button{font-size:12px;padding:9px 6px}.calc-grid{grid-template-columns:1fr 1fr}
+}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#111315;--panel:#191b1e;--panel2:#202327;--ink:#f4f5f7;--muted:#a2a8b1;--line:#33373d;--accent:#4d7df3;--accent-soft:#223255;--settle:#ff8068;--settle-soft:#34201c;--ok:#55b983;--shadow:none}
+  .settlement-box{border-color:#5b342c}.calc-cell{background:rgba(0,0,0,.12);border-color:#52322d}.global-tabs{background:rgba(17,19,21,.92)}
+  .track{background:#33373d}.tooltip{background:#f3f4f6;color:#111827}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="header">
+    <h1>다낭 · 후에 여행</h1>
+    <div class="period">2026.10.04(일) — 10.10(토)</div>
+    <div class="trip-summary">
+      <div class="cell"><div class="k">출국</div><div class="v">OZ755 · 10/4 18:50</div></div>
+      <div class="cell"><div class="k">귀국</div><div class="v">OZ756 · 10/9 23:00</div></div>
+      <div class="cell"><div class="k">숙소</div><div class="v">Wink → Marriott → Wink</div></div>
+      <div class="cell"><div class="k">주요 일정</div><div class="v">10/6 후에 왕궁 투어</div></div>
+    </div>
+  </header>
+
+  <nav class="global-tabs">
+    <button class="active" data-view="schedule">일정</button>
+    <button data-view="expense">지출</button>
+  </nav>
+
+  <section id="schedule" class="view active">
+    <div class="section-head"><h2>날짜별 일정</h2></div>
+    <div class="date-tabs">
+      <button class="date-tab active" data-day="d1004"><b>10/4</b><span>일 · 출국</span></button>
+      <button class="date-tab" data-day="d1005"><b>10/5</b><span>월 · 이동</span></button>
+      <button class="date-tab" data-day="d1006"><b>10/6</b><span>화 · 후에</span></button>
+      <button class="date-tab" data-day="d1007"><b>10/7</b><span>수 · 휴식</span></button>
+      <button class="date-tab" data-day="d1008"><b>10/8</b><span>목 · 휴식</span></button>
+      <button class="date-tab" data-day="d1009"><b>10/9</b><span>금 · 귀국</span></button>
+      <button class="date-tab" data-day="d1010"><b>10/10</b><span>토 · 도착</span></button>
+    </div>
+
+    <article id="d1004" class="day active"><div class="day-card">
+      <div class="day-title"><div><h3>10월 4일 · 인천 → 다낭</h3><p>OZ755 탑승 · 다낭 도착 후 예약 차량 이동</p></div><span class="status">확정</span></div>
+      <div class="route"><div class="route-label">이동 동선</div><div class="route-line">
+        <div class="stop"><span class="pin">ICN</span>인천공항</div><div class="leg">4시간 45분</div>
+        <div class="stop"><span class="pin">DAD</span>다낭공항</div><div class="leg">약 15–20분</div>
+        <div class="stop"><span class="pin">H</span>Wink Danang Centre</div>
+      </div></div>
+      <div class="timeline">
+        <div class="event"><div class="time">18:50</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>인천공항 출발 · OZ755</h4><p>아시아나항공 · ICN → DAD</p><div class="chips"><span class="chip">A320</span><span class="chip">이코노미 S</span></div></div></div>
+        <div class="event"><div class="time">21:35</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>다낭 국제공항 도착</h4><p>현지시간 기준. 입국심사·수하물 수령.</p></div></div>
+        <div class="event"><div class="time">도착 후</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>예약 차량 · 공항 → 윙크 다낭센터</h4><p>OZ755 도착편 연계 픽업.</p><div class="chips"><span class="chip">16인승</span><span class="chip">약 3.8–3.9km</span><span class="chip">약 15–20분</span></div></div></div>
+        <div class="event"><div class="time">22:30~</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>Wink Hotel Danang Centre 체크인</h4><p>레이트 체크인 · 조식 포함.</p></div></div>
+      </div>
+    </div></article>
+
+    <article id="d1005" class="day"><div class="day-card">
+      <div class="day-title"><div><h3>10월 5일 · 윙크 → 메리어트</h3><p>오전 휴식 후 예약 차량으로 리조트 이동</p></div><span class="status">확정</span></div>
+      <div class="route"><div class="route-label">이동 동선</div><div class="route-line">
+        <div class="stop"><span class="pin">H</span>Wink Danang Centre</div><div class="leg">10.7km · 약 20분</div>
+        <div class="stop"><span class="pin">R</span>Danang Marriott Resort & Spa</div>
+      </div></div>
+      <div class="timeline">
+        <div class="event rest"><div class="time">오전</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>윙크 조식 · 휴식</h4></div></div>
+        <div class="event"><div class="time">14:30</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>예약 차량 출발</h4><p>Wink Hotel Danang Centre → Danang Marriott Resort & Spa</p><div class="chips"><span class="chip">16인승</span></div></div></div>
+        <div class="event"><div class="time">14:50~</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>다낭 메리어트 도착</h4><p>교통 상황에 따라 이동시간 변동 가능.</p></div></div>
+        <div class="event rest"><div class="time">15:00~</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>풀빌라 체크인 · 리조트 휴식</h4><p>10월 9일 11:00까지 투숙.</p></div></div>
+      </div>
+    </div></article>
+
+    <article id="d1006" class="day"><div class="day-card">
+      <div class="day-title"><div><h3>10월 6일 · 후에 왕궁 투어</h3><p>다낭 리조트 지역 픽업·드롭</p></div><span class="status">예약 완료</span></div>
+      <div class="route"><div class="route-label">이동 동선</div><div class="route-line">
+        <div class="stop"><span class="pin">R</span>Marriott</div><div class="leg">투어 차량</div>
+        <div class="stop"><span class="pin">HUE</span>후에</div><div class="leg">투어 차량</div>
+        <div class="stop"><span class="pin">R</span>Marriott</div>
+      </div></div>
+      <div class="timeline">
+        <div class="event"><div class="time">전일 안내</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>픽업 시간 확인</h4><p>정확한 픽업 시각은 투어 안내 메시지 기준.</p></div></div>
+        <div class="event"><div class="time">종일</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>후에 왕궁 투어</h4><p>다낭 출발 → 후에 관광 → 다낭 복귀.</p></div></div>
+        <div class="event rest"><div class="time">저녁</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>메리어트 복귀</h4></div></div>
+      </div>
+    </div></article>
+
+    <article id="d1007" class="day"><div class="day-card">
+      <div class="day-title"><div><h3>10월 7일 · 리조트 휴식</h3><p>Danang Marriott Resort & Spa</p></div><span class="status rest">휴식</span></div>
+      <div class="timeline"><div class="event rest"><div class="time">종일</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>리조트 휴식</h4><p>풀빌라 · 수영장 · 해변 중심 자유 일정.</p></div></div></div>
+    </div></article>
+
+    <article id="d1008" class="day"><div class="day-card">
+      <div class="day-title"><div><h3>10월 8일 · 리조트 휴식</h3><p>Danang Marriott Resort & Spa</p></div><span class="status rest">휴식</span></div>
+      <div class="timeline"><div class="event rest"><div class="time">종일</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>리조트 휴식</h4><p>별도 관광 일정 없이 리조트 중심 자유 일정.</p></div></div></div>
+    </div></article>
+
+    <article id="d1009" class="day"><div class="day-card">
+      <div class="day-title"><div><h3>10월 9일 · 체크아웃 → 귀국</h3><p>윙크에서 휴식 후 공항 이동 · OZ756</p></div><span class="status">항공·차량 확정</span></div>
+      <div class="route"><div class="route-label">이동 동선</div><div class="route-line">
+        <div class="stop"><span class="pin">R</span>Marriott</div><div class="leg">시내 이동</div>
+        <div class="stop"><span class="pin">H</span>Wink Danang Centre</div><div class="leg">예약 차량</div>
+        <div class="stop"><span class="pin">DAD</span>다낭공항</div>
+      </div></div>
+      <div class="timeline">
+        <div class="event"><div class="time">11:00</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>메리어트 체크아웃</h4></div></div>
+        <div class="event rest"><div class="time">오후</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>윙크 다낭센터 · 휴식 / 시내 일정</h4><p>짐 정리·휴식 후 저녁까지 자유시간.</p></div></div>
+        <div class="event"><div class="time">20:30</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>예약 차량 · 윙크 → 다낭공항</h4><p>16인승 · 약 15–20분 예상.</p></div></div>
+        <div class="event"><div class="time">23:00</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>다낭 출발 · OZ756</h4><p>아시아나항공 · DAD → ICN</p><div class="chips"><span class="chip">A320</span><span class="chip">이코노미 V</span></div></div></div>
+      </div>
+    </div></article>
+
+    <article id="d1010" class="day"><div class="day-card">
+      <div class="day-title"><div><h3>10월 10일 · 인천 도착</h3><p>여행 종료</p></div><span class="status">확정</span></div>
+      <div class="timeline"><div class="event"><div class="time">05:55</div><div class="rail"><span class="dot"></span></div><div class="evt"><h4>인천공항 도착 · OZ756</h4><p>한국시간 기준.</p></div></div></div>
+    </div></article>
+  </section>
+
+  <section id="expense" class="view">
+    <div class="expense-shell">
+      <div class="expense-title">다낭 여행 지출</div>
+      <nav class="subtabs">
+        <button class="active" data-sub="dashboard">대시보드</button>
+        <button data-sub="settlement">정산</button>
+        <button data-sub="details">상세 지출</button>
+      </nav>
+
+      <div id="validationError" class="validation-error"></div>
+
+      <section id="dashboard" class="subview active">
+        <div class="kpis">
+          <div class="kpi"><div class="k">전체 여행 지출</div><div class="v" id="kTotal">₩0</div><div class="s" id="kCount">0건</div></div>
+          <div class="kpi"><div class="k">현재 미정산</div><div class="v" id="kUnsettled">₩0</div><div class="s" id="kPending">0건</div></div>
+          <div class="kpi"><div class="k">공동 지출</div><div class="v" id="kShared">₩0</div><div class="s">공동 귀속</div></div>
+          <div class="kpi"><div class="k">개인 지출</div><div class="v" id="kPersonal">₩0</div><div class="s">개인 귀속</div></div>
+        </div>
+
+        <div class="settlement-box" id="settlementBox">
+          <div class="label">현재 정산 결과</div>
+          <div class="settlement-lines" id="settlementLines"></div>
+          <div class="calc-detail" id="calcDetail"></div>
+        </div>
+
+        <div class="charts">
+          <div class="chart-card">
+            <div class="chart-head"><h3>지출 유형별 비중</h3></div>
+            <div class="chart" id="categoryChart"></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-head"><h3>날짜별 지출</h3></div>
+            <div class="chart" id="dateChart"></div>
+          </div>
+          <div class="chart-card full">
+            <div class="chart-head">
+              <h3>인원별 금액</h3>
+              <div class="toggle"><button class="active" data-personmode="burden">부담 기준</button><button data-personmode="paid">결제 기준</button></div>
+            </div>
+            <div class="chart" id="personChart"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="settlement" class="subview">
+        <div class="settlement-box">
+          <div class="label">최종 송금 계획</div>
+          <div class="settlement-lines" id="settlementPlan"></div>
+        </div>
+        <div class="person-cards" id="personCards"></div>
+      </section>
+
+      <section id="details" class="subview">
+        <div class="detail-toolbar">
+          <input id="searchInput" class="search" type="search" placeholder="상호명 또는 품목명 검색">
+          <button class="filter-btn active" data-filter="all">전체</button>
+          <button class="filter-btn" data-filter="unsettled">미정산</button>
+          <button class="filter-btn" data-filter="shared">공동</button>
+          <button class="filter-btn" data-filter="personal">개인</button>
+          <button class="filter-btn" data-filter="cash">현금</button>
+          <button class="filter-btn" data-filter="card">카드</button>
+        </div>
+        <div class="desktop-table">
+          <table>
+            <thead><tr><th>No.</th><th>날짜</th><th>시간</th><th>유형</th><th>항목</th><th>총합 금액</th><th>개별 품목</th><th>인원 기준</th><th>결제자</th><th>결제수단</th><th>정산</th><th>정산 귀속</th><th>비고</th></tr></thead>
+            <tbody id="detailTable"></tbody>
+          </table>
+        </div>
+        <div class="mobile-list" id="mobileList"></div>
+      </section>
+    </div>
+  </section>
+</div>
+<div class="tooltip" id="tooltip"></div>
+
+<script id="ledgerData" type="application/json">
+{
+  "participants": [
+    {"id":"P01","name":"본인"},
+    {"id":"P02","name":"영진이 형"},
+    {"id":"P03","name":"교수님"}
+  ],
+  "ledger": []
+}
+</script>
+
+<script>
+const DB=JSON.parse(document.getElementById('ledgerData').textContent);
+const P=DB.participants;
+const L=DB.ledger;
+const won=n=>'₩'+Math.round(Number(n)||0).toLocaleString('ko-KR');
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const pname=id=>P.find(p=>p.id===id)?.name||id||'미확인';
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const EPS=.5;
+
+function validateData(){
+  const errors=[]; const ids=new Set(); const participantIds=new Set(P.map(x=>x.id));
+  for(const r of L){
+    if(!r.id) errors.push('지출 ID 누락');
+    if(ids.has(r.id)) errors.push(`중복 ID: ${r.id}`); ids.add(r.id);
+    if(r.krw==null || Number.isNaN(Number(r.krw))) errors.push(`${r.id}: 총액 누락`);
+    if(!participantIds.has(r.payer)) errors.push(`${r.id}: 결제자 누락`);
+    if(!r.allocation) errors.push(`${r.id}: 정산 귀속 누락`);
+    if(!r.shares || Math.abs(sum(Object.values(r.shares).map(Number))-1)>1e-6) errors.push(`${r.id}: 부담 비율 합계 오류`);
+    if(r.itemization_complete){
+      const itemSum=sum((r.items||[]).map(x=>Number(x.krw||0)));
+      if(Math.abs(itemSum-Number(r.krw||0))>EPS) errors.push(`${r.id}: 품목 합계 불일치`);
+    }
+  }
+  const a=aggregate();
+  if(Math.abs(sum(Object.values(a.burden))-a.total)>EPS) errors.push('참가자별 부담액 합계 오류');
+  const netSum=sum(P.map(p=>a.paid[p.id]-a.burden[p.id]));
+  if(Math.abs(netSum)>EPS) errors.push('정산 차액 총합 오류');
+  const transfers=makeTransfers(a);
+  const sent=sum(transfers.map(x=>x.amount));
+  const debt=sum(P.map(p=>Math.max(0,a.burden[p.id]-a.paid[p.id])));
+  if(Math.abs(sent-debt)>EPS) errors.push('최종 송금 결과 합계 오류');
+  return errors;
+}
+
+function aggregate(){
+  const paid=Object.fromEntries(P.map(p=>[p.id,0]));
+  const burden=Object.fromEntries(P.map(p=>[p.id,0]));
+  const sharedBurden=Object.fromEntries(P.map(p=>[p.id,0]));
+  const personalBurden=Object.fromEntries(P.map(p=>[p.id,0]));
+  const byCategory={},byDate={};
+  let total=0,unsettled=0,shared=0,personal=0,pending=0;
+  for(const r of L){
+    const amt=Number(r.krw)||0; total+=amt; paid[r.payer]=(paid[r.payer]||0)+amt;
+    if(!r.settled){unsettled+=amt;pending++}
+    if(r.allocation==='shared') shared+=amt; else personal+=amt;
+    for(const p of P){
+      const v=amt*Number(r.shares?.[p.id]||0); burden[p.id]+=v;
+      if(r.allocation==='shared') sharedBurden[p.id]+=v; else personalBurden[p.id]+=v;
+    }
+    byCategory[r.category]=(byCategory[r.category]||0)+amt;
+    const dk=r.date||'사전결제'; byDate[dk]=(byDate[dk]||0)+amt;
+  }
+  return {total,unsettled,shared,personal,pending,paid,burden,sharedBurden,personalBurden,byCategory,byDate};
+}
+
+function makeTransfers(a){
+  const creditors=[],debtors=[];
+  for(const p of P){
+    const net=(a.paid[p.id]||0)-(a.burden[p.id]||0);
+    if(net>EPS) creditors.push({id:p.id,amt:net});
+    if(net<-EPS) debtors.push({id:p.id,amt:-net});
+  }
+  creditors.sort((x,y)=>y.amt-x.amt); debtors.sort((x,y)=>y.amt-x.amt);
+  const out=[]; let i=0,j=0;
+  while(i<debtors.length&&j<creditors.length){
+    const v=Math.min(debtors[i].amt,creditors[j].amt);
+    if(v>EPS) out.push({from:debtors[i].id,to:creditors[j].id,amount:v});
+    debtors[i].amt-=v;creditors[j].amt-=v;
+    if(debtors[i].amt<=EPS)i++; if(creditors[j].amt<=EPS)j++;
+  }
+  return out;
+}
+
+function renderSettlement(a){
+  const tx=makeTransfers(a);
+  const html=tx.length?tx.map(t=>`<div class="transfer"><div class="who">${esc(pname(t.from))} → ${esc(pname(t.to))}</div><div class="amount">${won(t.amount)}</div></div>`).join('')
+    :`<div class="transfer"><div class="who">${L.length?'추가 송금 없음':'등록된 지출 없음'}</div></div>`;
+  document.getElementById('settlementLines').innerHTML=html;
+  document.getElementById('settlementPlan').innerHTML=html;
+  document.getElementById('calcDetail').innerHTML=P.map(p=>{
+    const diff=a.paid[p.id]-a.burden[p.id];
+    return `<div class="calc-grid">
+      <div class="calc-cell"><div class="k">참가자</div><div class="v">${esc(p.name)}</div></div>
+      <div class="calc-cell"><div class="k">실제 결제</div><div class="v">${won(a.paid[p.id])}</div></div>
+      <div class="calc-cell"><div class="k">최종 부담</div><div class="v">${won(a.burden[p.id])}</div></div>
+      <div class="calc-cell"><div class="k">차액</div><div class="v">${diff>=0?'+':''}${won(diff)}</div></div>
+    </div>`;
+  }).join('<div style="height:7px"></div>');
+  document.getElementById('personCards').innerHTML=P.map(p=>{
+    const diff=a.paid[p.id]-a.burden[p.id];
+    return `<div class="person"><h3>${esc(p.name)}</h3>
+      <div class="metric-row"><span>실제 결제</span><b>${won(a.paid[p.id])}</b></div>
+      <div class="metric-row"><span>최종 부담</span><b>${won(a.burden[p.id])}</b></div>
+      <div class="metric-row"><span>차액</span><b class="${diff>0?'positive':diff<0?'negative':''}">${diff>=0?'+':''}${won(diff)}</b></div>
+      <div class="metric-row"><span>공동비</span><b>${won(a.sharedBurden[p.id])}</b></div>
+      <div class="metric-row"><span>개인비</span><b>${won(a.personalBurden[p.id])}</b></div>
+      <div class="metric-row"><span>정산 상태</span><b>${Math.abs(diff)<=EPS?'정산 균형':diff>0?'받을 금액 있음':'보낼 금액 있음'}</b></div>
+    </div>`;
+  }).join('');
+}
+
+const tooltip=document.getElementById('tooltip');
+function tipShow(e,html){tooltip.innerHTML=html;tooltip.style.display='block';tipMove(e)}
+function tipMove(e){tooltip.style.left=Math.min(window.innerWidth-230,e.clientX+12)+'px';tooltip.style.top=Math.max(8,e.clientY-18)+'px'}
+function tipHide(){tooltip.style.display='none'}
+
+function emptyChart(el){el.innerHTML='<div class="empty-chart">등록된 지출 없음</div>'}
+
+function renderCategory(a){
+  const el=document.getElementById('categoryChart'), entries=Object.entries(a.byCategory);
+  if(!entries.length)return emptyChart(el);
+  const total=sum(entries.map(x=>x[1])),cx=105,cy=105,r=70,sw=28,circ=2*Math.PI*r;
+  let offset=0; const colors=['#2359d6','#6b8ee8','#91a9e9','#b3c3ec','#5b6472','#8a919b'];
+  const arcs=entries.map(([name,v],i)=>{
+    const frac=v/total, dash=frac*circ, gap=circ-dash, o=-offset*circ;
+    offset+=frac;
+    return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colors[i%colors.length]}" stroke-width="${sw}" stroke-dasharray="${dash} ${gap}" stroke-dashoffset="${o}" transform="rotate(-90 ${cx} ${cy})" data-tip="${esc(name)}|${v}|${(frac*100).toFixed(1)}"/>`;
+  }).join('');
+  const legend=entries.map(([name,v],i)=>`<div style="display:flex;align-items:center;gap:6px;font-size:10px"><span style="width:8px;height:8px;border-radius:50%;background:${colors[i%colors.length]}"></span><span style="flex:1">${esc(name)}</span><b>${won(v)}</b></div>`).join('');
+  el.innerHTML=`<div style="display:grid;grid-template-columns:210px 1fr;gap:8px;height:100%;align-items:center"><svg viewBox="0 0 210 210">${arcs}<text x="105" y="100" text-anchor="middle" font-size="11" fill="currentColor">전체</text><text x="105" y="121" text-anchor="middle" font-size="15" font-weight="800" fill="currentColor">${won(total)}</text></svg><div style="display:grid;gap:7px">${legend}</div></div>`;
+  el.querySelectorAll('circle[data-tip]').forEach(n=>{
+    n.onmousemove=e=>{const [name,v,pct]=n.dataset.tip.split('|');tipShow(e,`<b>${name}</b><br>${won(v)} · ${pct}%`)};
+    n.onmouseleave=tipHide;
+  });
+}
+
+function dateOrder(k){if(k==='사전결제')return 0;const m=k.match(/(\d{1,2})\/(\d{1,2})/);return m?Number(m[1])*100+Number(m[2]):9999}
+function renderBars(elId,entries,labeler){
+  const el=document.getElementById(elId);if(!entries.length)return emptyChart(el);
+  const max=Math.max(...entries.map(x=>x[1]),1),W=520,H=210,pad=32,bw=(W-pad*2)/entries.length*.62,gap=(W-pad*2)/entries.length;
+  const bars=entries.map(([k,v],i)=>{
+    const h=(H-60)*v/max,x=pad+i*gap+(gap-bw)/2,y=H-35-h;
+    return `<g data-tip="${esc(k)}|${v}"><rect x="${x}" y="${y}" width="${bw}" height="${h}" rx="5" fill="#2359d6"></rect><text x="${x+bw/2}" y="${H-15}" text-anchor="middle" font-size="10" fill="currentColor">${esc(labeler(k))}</text></g>`;
+  }).join('');
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${bars}</svg>`;
+  el.querySelectorAll('g[data-tip]').forEach(n=>{n.onmousemove=e=>{const [k,v]=n.dataset.tip.split('|');tipShow(e,`<b>${k}</b><br>${won(v)}`)};n.onmouseleave=tipHide});
+}
+
+function renderPerson(a,mode='burden'){
+  const entries=P.map(p=>[p.name,a[mode][p.id]||0]);renderBars('personChart',entries,k=>k);
+}
+
+function renderKpi(a){
+  document.getElementById('kTotal').textContent=won(a.total);
+  document.getElementById('kUnsettled').textContent=won(a.unsettled);
+  document.getElementById('kShared').textContent=won(a.shared);
+  document.getElementById('kPersonal').textContent=won(a.personal);
+  document.getElementById('kCount').textContent=L.length+'건';
+  document.getElementById('kPending').textContent=a.pending+'건';
+}
+
+let currentFilter='all';
+function rowMatches(r,q){
+  const text=[r.title,r.note,...(r.items||[]).map(x=>x.name)].join(' ').toLowerCase();
+  if(q&&!text.includes(q))return false;
+  if(currentFilter==='unsettled'&&r.settled)return false;
+  if(currentFilter==='shared'&&r.allocation!=='shared')return false;
+  if(currentFilter==='personal'&&r.allocation!=='personal')return false;
+  if(currentFilter==='cash'&&r.method!=='cash')return false;
+  if(currentFilter==='card'&&r.method!=='card')return false;
+  return true;
+}
+function renderDetails(){
+  const q=document.getElementById('searchInput').value.trim().toLowerCase();
+  const rows=L.filter(r=>rowMatches(r,q));
+  const tb=document.getElementById('detailTable'), ml=document.getElementById('mobileList');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="13" class="no-data">등록된 지출 없음</td></tr>';ml.innerHTML='<div class="no-data">등록된 지출 없음</div>';return}
+  tb.innerHTML=rows.map((r,i)=>`<tr>
+    <td>${r.no??i+1}</td><td>${esc(r.date||'')}</td><td>${esc(r.time||'')}</td><td>${esc(r.category||'')}</td><td><b>${esc(r.title||'')}</b></td>
+    <td class="money">${won(r.krw)}${r.foreign?`<span class="submoney">${esc(r.foreign)}</span>`:''}</td>
+    <td class="items">${(r.items||[]).length?(r.items||[]).map(x=>`<div>${esc(x.name)}${x.qty!=null?' / '+esc(x.qty):''}${x.foreign?' / '+esc(x.foreign):''}</div>`).join(''):'—'}</td>
+    <td>${esc(r.people||'')}</td><td>${esc(pname(r.payer))}</td><td>${esc(r.method_label||r.method||'')}</td>
+    <td>${r.settled?'완료':'미정산'}</td><td>${r.allocation==='shared'?'공동':'개인'}</td><td>${esc(r.note||'')} ${r.amount_state?`<span class="data-state ${r.amount_state}">${r.amount_state==='confirmed'?'확정':'환산'}</span>`:''}</td>
+  </tr>`).join('');
+  ml.innerHTML=rows.map((r,i)=>`<details class="receipt"><summary><div class="receipt-top"><div><div class="receipt-name">${esc(r.title||'')}</div><div class="receipt-meta">${esc(r.date||'')} ${esc(r.time||'')} · ${esc(pname(r.payer))} · ${r.allocation==='shared'?'공동':'개인'}</div></div><div class="receipt-amount">${won(r.krw)}</div></div></summary>
+    <div class="receipt-body"><dl><dt>유형</dt><dd>${esc(r.category||'')}</dd><dt>결제수단</dt><dd>${esc(r.method_label||r.method||'')}</dd><dt>정산</dt><dd>${r.settled?'완료':'미정산'}</dd><dt>인원 기준</dt><dd>${esc(r.people||'')}</dd><dt>개별 품목</dt><dd>${(r.items||[]).length?(r.items||[]).map(x=>`<div>${esc(x.name)}${x.qty!=null?' / '+esc(x.qty):''}${x.foreign?' / '+esc(x.foreign):''}</div>`).join(''):'—'}</dd><dt>비고</dt><dd>${esc(r.note||'')}</dd></dl></div>
+  </details>`).join('');
+}
+
+function boot(){
+  const errors=validateData();
+  if(errors.length){
+    const e=document.getElementById('validationError');e.classList.add('show');e.innerHTML='<b>데이터 검증 필요</b><br>'+errors.map(esc).join('<br>');
+    return;
+  }
+  const a=aggregate(); renderKpi(a); renderSettlement(a); renderCategory(a);
+  renderBars('dateChart',Object.entries(a.byDate).sort((x,y)=>dateOrder(x[0])-dateOrder(y[0])),k=>k);
+  renderPerson(a,'burden'); renderDetails();
+
+  document.getElementById('settlementBox').onclick=()=>document.getElementById('calcDetail').classList.toggle('open');
+  document.querySelectorAll('[data-personmode]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-personmode]').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderPerson(a,b.dataset.personmode)});
+}
+
+document.querySelectorAll('.global-tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.global-tabs button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.view).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})});
+document.querySelectorAll('.date-tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.date-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.day').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.day).classList.add('active')});
+document.querySelectorAll('.subtabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.subtabs button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.subview').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.sub).classList.add('active')});
+document.querySelectorAll('.filter-btn').forEach(b=>b.onclick=()=>{document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');currentFilter=b.dataset.filter;renderDetails()});
+document.getElementById('searchInput').addEventListener('input',renderDetails);
+boot();
+</script>
+</body>
+</html>

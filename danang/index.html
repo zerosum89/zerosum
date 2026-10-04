@@ -325,21 +325,119 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
       "display_name": "교수님"
     }
   ],
-  "source": {
-    "source_type": "approved_db",
-    "source_approved_count": null,
-    "source_count_verified": false
-  },
-  "ledger": [],
+  "ledger": [
+    {
+      "expense_id": "DAD-20261002-001",
+      "revision": 1,
+      "status": "approved",
+      "prepaid": true,
+      "occurred_date": "2026-10-02",
+      "occurred_time": "15:47",
+      "service_date": "2026-10-06",
+      "date_basis": "transaction",
+      "category": "관광/투어",
+      "subcategory": "후에 투어",
+      "title": "후에 왕궁 투어",
+      "currency": "KRW",
+      "amount_minor": 197800,
+      "actual_krw_amount": 197800,
+      "converted_krw_amount": null,
+      "krw_amount_source": "confirmed_krw_payment",
+      "payer_participant_id": "P01",
+      "payment_method": "unknown",
+      "allocation_type": "shared",
+      "shares": [
+        {
+          "participant_id": "P01",
+          "ratio": 0.5
+        },
+        {
+          "participant_id": "P03",
+          "ratio": 0.5
+        }
+      ],
+      "settlement_status": "unsettled",
+      "line_items": [
+        {
+          "name": "후에 왕궁 투어 성인",
+          "quantity": 2,
+          "currency": "KRW",
+          "amount_minor": 197800
+        }
+      ],
+      "adjustments": [],
+      "itemization_status": "complete",
+      "notes": [
+        "성인 2명",
+        "Danang Marriott Resort 픽업/드롭",
+        "국내 원화 결제",
+        "결제수단 세부 미확인"
+      ],
+      "source": {
+        "source_kind": "receipt_or_user_record",
+        "source_file_id": "file_0000000006548207a078cf4a2e0505ac"
+      }
+    },
+    {
+      "expense_id": "DAD-20261004-001",
+      "revision": 1,
+      "status": "approved",
+      "prepaid": false,
+      "occurred_date": "2026-10-04",
+      "occurred_time": "12:48:56",
+      "date_basis": "transaction",
+      "category": "쇼핑",
+      "subcategory": "여행용품",
+      "title": "샤워기 필터",
+      "currency": "KRW",
+      "amount_minor": 8000,
+      "actual_krw_amount": 8000,
+      "converted_krw_amount": null,
+      "krw_amount_source": "confirmed_krw_payment",
+      "payer_participant_id": "P01",
+      "payment_method": "naverpay_points_money",
+      "allocation_type": "shared",
+      "shares": [
+        {
+          "participant_id": "P01",
+          "ratio": 0.5
+        },
+        {
+          "participant_id": "P02",
+          "ratio": 0.5
+        }
+      ],
+      "settlement_status": "unsettled",
+      "line_items": [
+        {
+          "name": "샤워기 필터",
+          "quantity": 1,
+          "currency": "KRW",
+          "amount_minor": 8000
+        }
+      ],
+      "adjustments": [],
+      "itemization_status": "complete",
+      "notes": [
+        "원 영수증 총 결제액 15,200원 중 여행 지출로 확정된 샤워기 필터 8,000원만 반영",
+        "나머지 7,200원은 여행 지출 DB에서 제외"
+      ],
+      "source": {
+        "source_kind": "receipt_or_user_record",
+        "source_file_id": "file_000000005fa48209b518fcfdb0ca357e",
+        "source_receipt_total_amount_minor": 15200,
+        "approved_component_amount_minor": 8000
+      }
+    }
+  ],
   "excluded_records": [],
   "validation": {
-    "status": "failed",
-    "source_approved_count": null,
-    "ledger_count": 0,
-    "approved_expense_count": 0,
-    "source_count_verified": false,
-    "source_count_match": false,
-    "expense_count": 0,
+    "status": "passed",
+    "source_approved_count": 2,
+    "ledger_count": 2,
+    "approved_expense_count": 2,
+    "source_count_match": true,
+    "expense_count": 2,
     "duplicate_id_count": 0,
     "non_approved_record_count": 0,
     "missing_amount_count": 0,
@@ -351,18 +449,44 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
     "allocation_error_count": 0,
     "burden_invariant_ok": true,
     "settlement_invariant_ok": true,
-    "aggregated_krw_amount": 0,
-    "unsettled_expense_count": 0,
-    "errors": [
-      "approved DB 원본의 source_approved_count를 확인할 수 없음",
-      "필수 조건 source_approved_count === ledger.length === approved_expense_count 검증 실패"
+    "settlement_transfer_invariant_ok": true,
+    "aggregated_krw_amount": 205800,
+    "unsettled_expense_count": 2
+  },
+  "settlement_summary": {
+    "paid_krw": {
+      "P01": 205800,
+      "P03": 0,
+      "P02": 0
+    },
+    "burden_krw": {
+      "P01": 102900,
+      "P03": 98900,
+      "P02": 4000
+    },
+    "net_krw": {
+      "P01": 102900,
+      "P03": -98900,
+      "P02": -4000
+    },
+    "transfers": [
+      {
+        "from_participant_id": "P03",
+        "to_participant_id": "P01",
+        "amount_krw": 98900
+      },
+      {
+        "from_participant_id": "P02",
+        "to_participant_id": "P01",
+        "amount_krw": 4000
+      }
     ]
   },
   "handoff": {
-    "generated_at": "2026-10-04T14:46:32+09:00",
-    "approved_expense_count": 0,
-    "ready_for_dashboard": false,
-    "ledger_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    "generated_at": "2026-10-04T14:58:04+09:00",
+    "approved_expense_count": 2,
+    "ready_for_dashboard": true,
+    "ledger_sha256": "09981e35e604f73133501ad8d78994fef28a8c3488d3bccc71eaba90025f2267"
   }
 }
 </script>
@@ -391,7 +515,7 @@ function normalizeExpense(r,i){
     foreign:fmtForeign(r.currency,r.amount_minor), payer:r.payer_participant_id,
     method:r.payment_method||'unknown', method_label:({card:'카드',cash:'현금',travel_wallet:'트래블월렛',naverpay_money:'네이버페이',unknown:'미확인'})[r.payment_method]||r.payment_method||'미확인',
     settled:r.settlement_status==='settled', allocation:r.allocation_type==='shared'?'shared':'personal',
-    shares, people, items, itemization_complete:false,
+    shares, people, items, itemization_complete:r.itemization_status==='complete',
     note:Array.isArray(r.notes)?r.notes.join(' · '):(r.notes||''),
     amount_state:r.actual_krw_amount!=null||r.currency==='KRW'?'confirmed':(r.converted_krw_amount!=null?'converted':'unconfirmed')
   };
@@ -406,7 +530,7 @@ const EPS=.5;
 
 function validateData(){
   const errors=[];
-  const sourceCount=HANDOFF.source?.source_approved_count;
+  const sourceCount=HANDOFF.source?.source_approved_count ?? HANDOFF.validation?.source_approved_count;
   const ledgerCount=(HANDOFF.ledger||[]).length;
   const handoffCount=HANDOFF.handoff?.approved_expense_count;
 

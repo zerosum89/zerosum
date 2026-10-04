@@ -379,23 +379,102 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
       }
     },
     {
-      "expense_id": "DAD-20261004-001",
+      "expense_id": "DAD-20261004-002",
       "revision": 1,
       "status": "approved",
       "prepaid": false,
       "occurred_date": "2026-10-04",
-      "occurred_time": "12:48:56",
+      "occurred_time": "23:33",
       "date_basis": "transaction",
-      "category": "쇼핑",
-      "subcategory": "여행용품",
-      "title": "샤워기 필터",
-      "currency": "KRW",
-      "amount_minor": 8000,
-      "actual_krw_amount": 8000,
-      "converted_krw_amount": null,
-      "krw_amount_source": "confirmed_krw_payment",
-      "payer_participant_id": "P01",
-      "payment_method": "naverpay_points_money",
+      "category": "식비",
+      "subcategory": "식당",
+      "title": "PHỞ BẮC HẢI 식사",
+      "currency": "VND",
+      "amount_minor": 730000,
+      "actual_krw_amount": null,
+      "converted_krw_amount": 37960,
+      "krw_amount_source": "fixed_fx_conversion",
+      "fx": {
+        "rate_basis": "100 VND = 5.20 KRW",
+        "krw_per_vnd": 0.052
+      },
+      "payer_participant_id": "P03",
+      "payment_method": "unknown",
+      "allocation_type": "personal",
+      "shares": [
+        {
+          "participant_id": "P03",
+          "ratio": 1
+        }
+      ],
+      "settlement_status": "settled",
+      "people_basis": "8인 합계",
+      "attendee_count": 8,
+      "line_items": [
+        {
+          "name": "PHỞ BÒ ĐẶC BIỆT(특선 소고기 쌀국수)",
+          "quantity": 7,
+          "currency": "VND",
+          "amount_minor": 455000
+        },
+        {
+          "name": "RAU MUỐNG XÀO TỎI(모닝글로리 볶음)",
+          "quantity": 2,
+          "currency": "VND",
+          "amount_minor": 100000
+        },
+        {
+          "name": "BIA TIGER(타이거 맥주)",
+          "quantity": 5,
+          "currency": "VND",
+          "amount_minor": 125000
+        },
+        {
+          "name": "Nước Ép(과일 주스)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 35000
+        },
+        {
+          "name": "PEPSI(펩시)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 15000
+        }
+      ],
+      "adjustments": [],
+      "itemization_status": "complete",
+      "notes": [
+        "8명 식사",
+        "교수님이 전액 부담하는 식사로 추가 정산 없음"
+      ],
+      "source": {
+        "source_kind": "receipt_or_user_record",
+        "source_file_id": "file_00000000dab0820b9d5f27be33928150"
+      }
+    },
+    {
+      "expense_id": "DAD-20261004-003",
+      "revision": 1,
+      "status": "approved",
+      "prepaid": false,
+      "occurred_date": "2026-10-04",
+      "occurred_time": "23:46:52",
+      "date_basis": "transaction",
+      "category": "식료품",
+      "subcategory": "편의점",
+      "title": "V MINI MART 구매",
+      "currency": "VND",
+      "amount_minor": 76000,
+      "actual_krw_amount": null,
+      "converted_krw_amount": 3952,
+      "krw_amount_source": "fixed_fx_conversion",
+      "fx": {
+        "rate_basis": "100 VND = 5.20 KRW",
+        "krw_per_vnd": 0.052
+      },
+      "payer_participant_id": "P02",
+      "payment_method": "card_visa",
       "allocation_type": "shared",
       "shares": [
         {
@@ -408,36 +487,56 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
         }
       ],
       "settlement_status": "unsettled",
+      "people_basis": "2인 정산",
       "line_items": [
         {
-          "name": "샤워기 필터",
+          "name": "Bia Tiger Crystal (bạc) 330ml(타이거 크리스탈 맥주 330ml)",
           "quantity": 1,
-          "currency": "KRW",
-          "amount_minor": 8000
+          "currency": "VND",
+          "amount_minor": 23000
+        },
+        {
+          "name": "Bia Larue vàng 330ml(라루 옐로우 맥주 330ml)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 17000
+        },
+        {
+          "name": "BIA TIGER XANH 330ML(타이거 그린 맥주 330ml)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 20000
+        },
+        {
+          "name": "Nước suối Aquafina 500ml(아쿠아피나 생수 500ml)",
+          "quantity": 2,
+          "currency": "VND",
+          "amount_minor": 16000
         }
       ],
       "adjustments": [],
       "itemization_status": "complete",
       "notes": [
-        "원 영수증 총 결제액 15,200원 중 여행 지출로 확정된 샤워기 필터 8,000원만 반영",
-        "나머지 7,200원은 여행 지출 DB에서 제외"
+        "본인과 영진이 형 50:50 부담",
+        "카드 결제 영수증 총액 76,000 VND"
       ],
       "source": {
         "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_000000005fa48209b518fcfdb0ca357e",
-        "source_receipt_total_amount_minor": 15200,
-        "approved_component_amount_minor": 8000
+        "source_file_id": "file_000000006144820bb2e8b722ab8f0926",
+        "supporting_file_ids": [
+          "file_00000000ac5881faaa125ce414d761a2"
+        ]
       }
     }
   ],
   "excluded_records": [],
   "validation": {
     "status": "passed",
-    "source_approved_count": 2,
-    "ledger_count": 2,
-    "approved_expense_count": 2,
+    "source_approved_count": 3,
+    "ledger_count": 3,
+    "approved_expense_count": 3,
     "source_count_match": true,
-    "expense_count": 2,
+    "expense_count": 3,
     "duplicate_id_count": 0,
     "non_approved_record_count": 0,
     "missing_amount_count": 0,
@@ -450,43 +549,58 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
     "burden_invariant_ok": true,
     "settlement_invariant_ok": true,
     "settlement_transfer_invariant_ok": true,
-    "aggregated_krw_amount": 205800,
+    "aggregated_krw_amount": 239712,
     "unsettled_expense_count": 2
   },
   "settlement_summary": {
     "paid_krw": {
-      "P01": 205800,
-      "P03": 0,
-      "P02": 0
+      "P01": 197800,
+      "P02": 3952,
+      "P03": 37960
     },
     "burden_krw": {
-      "P01": 102900,
-      "P03": 98900,
-      "P02": 4000
+      "P01": 100876,
+      "P02": 1976,
+      "P03": 136860
     },
     "net_krw": {
-      "P01": 102900,
-      "P03": -98900,
-      "P02": -4000
+      "P01": 96924,
+      "P02": 1976,
+      "P03": -98900
+    },
+    "unsettled_paid_krw": {
+      "P01": 197800,
+      "P02": 3952,
+      "P03": 0
+    },
+    "unsettled_burden_krw": {
+      "P01": 100876,
+      "P02": 1976,
+      "P03": 98900
+    },
+    "unsettled_net_krw": {
+      "P01": 96924,
+      "P02": 1976,
+      "P03": -98900
     },
     "transfers": [
       {
         "from_participant_id": "P03",
         "to_participant_id": "P01",
-        "amount_krw": 98900
+        "amount_krw": 96924
       },
       {
-        "from_participant_id": "P02",
-        "to_participant_id": "P01",
-        "amount_krw": 4000
+        "from_participant_id": "P03",
+        "to_participant_id": "P02",
+        "amount_krw": 1976
       }
     ]
   },
   "handoff": {
-    "generated_at": "2026-10-04T14:58:04+09:00",
-    "approved_expense_count": 2,
+    "generated_at": "2026-10-05T02:40:40+09:00",
+    "approved_expense_count": 3,
     "ready_for_dashboard": true,
-    "ledger_sha256": "09981e35e604f73133501ad8d78994fef28a8c3488d3bccc71eaba90025f2267"
+    "ledger_sha256": "a78ad637b35c06945851bc741a8d02d194e16ea0379d8353bfb3e71eb2343676"
   }
 }
 </script>
@@ -548,8 +662,10 @@ function validateData(){
     if(!r.allocation) errors.push(`${r.id}: 정산 귀속 누락`);
     if(!r.shares || Math.abs(sum(Object.values(r.shares).map(Number))-1)>1e-6) errors.push(`${r.id}: 부담 비율 합계 오류`);
     if(r.itemization_complete){
-      const itemSum=sum((r.items||[]).map(x=>Number(x.krw||0)));
-      if(Math.abs(itemSum-Number(r.krw||0))>EPS) errors.push(`${r.id}: 품목 합계 불일치`);
+      const raw=(HANDOFF.ledger||[]).find(x=>x.expense_id===r.id);
+      const itemSum=sum((raw?.line_items||[]).map(x=>Number(x.amount_minor||0)));
+      const adjSum=sum((raw?.adjustments||[]).map(x=>Number(x.amount_minor||0)));
+      if(raw && Math.abs((itemSum+adjSum)-Number(raw.amount_minor||0))>EPS) errors.push(`${r.id}: 품목 합계 불일치`);
     }
   }
 

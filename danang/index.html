@@ -305,19 +305,85 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
 
 <script id="ledgerData" type="application/json">
 {
+  "schema_version": "1.0",
+  "trip": {
+    "name": "2026 다낭 여행",
+    "start_date": "2026-10-04",
+    "end_date": "2026-10-10"
+  },
   "participants": [
-    {"id":"P01","name":"본인"},
-    {"id":"P02","name":"영진이 형"},
-    {"id":"P03","name":"교수님"}
+    {
+      "participant_id": "P01",
+      "display_name": "본인"
+    },
+    {
+      "participant_id": "P02",
+      "display_name": "영진이 형"
+    },
+    {
+      "participant_id": "P03",
+      "display_name": "교수님"
+    }
   ],
-  "ledger": []
+  "ledger": [],
+  "excluded_records": [],
+  "validation": {
+    "status": "passed",
+    "expense_count": 0,
+    "duplicate_id_count": 0,
+    "non_approved_record_count": 0,
+    "missing_amount_count": 0,
+    "missing_payer_count": 0,
+    "invalid_payer_count": 0,
+    "missing_allocation_count": 0,
+    "invalid_share_participant_count": 0,
+    "itemization_error_count": 0,
+    "allocation_error_count": 0,
+    "burden_invariant_ok": true,
+    "settlement_invariant_ok": true,
+    "aggregated_krw_amount": 0,
+    "unsettled_expense_count": 0
+  },
+  "handoff": {
+    "generated_at": "2026-10-04T14:35:45+09:00",
+    "approved_expense_count": 0,
+    "ready_for_dashboard": true,
+    "ledger_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  }
 }
 </script>
 
 <script>
-const DB=JSON.parse(document.getElementById('ledgerData').textContent);
-const P=DB.participants;
-const L=DB.ledger;
+const HANDOFF=JSON.parse(document.getElementById('ledgerData').textContent);
+const P=(HANDOFF.participants||[]).map(p=>({id:p.participant_id,name:p.display_name}));
+const currencyDecimals={KRW:0,VND:0,JPY:0,USD:2,EUR:2};
+function fmtForeign(currency,minor){
+  if(currency==null||minor==null||currency==='KRW') return '';
+  const d=currencyDecimals[currency]??2, value=Number(minor)/(10**d);
+  return `${currency} ${value.toLocaleString('ko-KR',{minimumFractionDigits:d,maximumFractionDigits:d})}`;
+}
+function normalizeExpense(r,i){
+  const shares=Object.fromEntries((r.shares||[]).map(x=>[x.participant_id,Number(x.ratio)||0]));
+  const krw=r.actual_krw_amount ?? r.converted_krw_amount ?? (r.currency==='KRW'?r.amount_minor:0) ?? 0;
+  const people=(r.shares||[]).map(x=>pnameRaw(x.participant_id)).filter(Boolean).join(' · ');
+  const items=(r.line_items||[]).map(x=>({
+    name:x.name||'', qty:x.quantity??null,
+    foreign:fmtForeign(x.currency||r.currency,x.amount_minor), krw:x.actual_krw_amount??x.converted_krw_amount??null
+  }));
+  return {
+    id:r.expense_id||`ROW-${i+1}`, no:i+1,
+    date:(r.occurred_date||'').replace(/^2026-/, '').replace('-', '/'), time:r.occurred_time||'',
+    category:r.category||'기타', title:r.title||'', krw:Number(krw)||0,
+    foreign:fmtForeign(r.currency,r.amount_minor), payer:r.payer_participant_id,
+    method:r.payment_method||'unknown', method_label:({card:'카드',cash:'현금',travel_wallet:'트래블월렛',naverpay_money:'네이버페이',unknown:'미확인'})[r.payment_method]||r.payment_method||'미확인',
+    settled:r.settlement_status==='settled', allocation:r.allocation_type==='shared'?'shared':'personal',
+    shares, people, items, itemization_complete:false,
+    note:Array.isArray(r.notes)?r.notes.join(' · '):(r.notes||''),
+    amount_state:r.actual_krw_amount!=null||r.currency==='KRW'?'confirmed':(r.converted_krw_amount!=null?'converted':'unconfirmed')
+  };
+}
+function pnameRaw(id){return P.find(p=>p.id===id)?.name||id||''}
+const L=(HANDOFF.ledger||[]).filter(r=>r.status==='approved').map(normalizeExpense);
 const won=n=>'₩'+Math.round(Number(n)||0).toLocaleString('ko-KR');
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 const pname=id=>P.find(p=>p.id===id)?.name||id||'미확인';
@@ -325,7 +391,10 @@ const sum=a=>a.reduce((x,y)=>x+y,0);
 const EPS=.5;
 
 function validateData(){
-  const errors=[]; const ids=new Set(); const participantIds=new Set(P.map(x=>x.id));
+  const errors=[];
+  if(HANDOFF.validation?.status!=='passed') errors.push('전달 DB 검증 상태가 PASS가 아님');
+  if(HANDOFF.handoff?.ready_for_dashboard!==true) errors.push('전달 DB가 대시보드 갱신 준비 상태가 아님');
+  const ids=new Set(); const participantIds=new Set(P.map(x=>x.id));
   for(const r of L){
     if(!r.id) errors.push('지출 ID 누락');
     if(ids.has(r.id)) errors.push(`중복 ID: ${r.id}`); ids.add(r.id);

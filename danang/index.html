@@ -506,7 +506,7 @@ function normalizeExpense(r,i){
   const people=(r.shares||[]).map(x=>pnameRaw(x.participant_id)).filter(Boolean).join(' · ');
   const items=(r.line_items||[]).map(x=>({
     name:x.name||'', qty:x.quantity??null,
-    foreign:fmtForeign(x.currency||r.currency,x.amount_minor), krw:x.actual_krw_amount??x.converted_krw_amount??null
+    foreign:fmtForeign(x.currency||r.currency,x.amount_minor), krw:x.actual_krw_amount ?? x.converted_krw_amount ?? (((x.currency||r.currency)==='KRW') ? x.amount_minor : null)
   }));
   return {
     id:r.expense_id||`ROW-${i+1}`, no:i+1,

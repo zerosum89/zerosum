@@ -721,8 +721,44 @@ function makeTransfers(a){
   return out;
 }
 
+
+function makeDisplayTransfers(){
+  const owe={};
+  const add=(from,to,amount)=>{
+    if(!from||!to||from===to||amount<=EPS) return;
+    owe[from]??={};
+    owe[from][to]=(owe[from][to]||0)+amount;
+  };
+
+  for(const r of L){
+    if(r.settled) continue;
+    const amt=Number(r.krw)||0;
+    for(const p of P){
+      const ratio=Number(r.shares?.[p.id]||0);
+      if(p.id!==r.payer && ratio>0) add(p.id,r.payer,amt*ratio);
+    }
+  }
+
+  const out=[];
+  const seen=new Set();
+  for(const a of P){
+    for(const b of P){
+      if(a.id===b.id) continue;
+      const pair=[a.id,b.id].sort().join('|');
+      if(seen.has(pair)) continue;
+      seen.add(pair);
+      const ab=owe[a.id]?.[b.id]||0;
+      const ba=owe[b.id]?.[a.id]||0;
+      const net=ab-ba;
+      if(net>EPS) out.push({from:a.id,to:b.id,amount:net});
+      else if(net<-EPS) out.push({from:b.id,to:a.id,amount:-net});
+    }
+  }
+  return out;
+}
+
 function renderSettlement(a){
-  const tx=makeTransfers(a);
+  const tx=makeDisplayTransfers();
   const html=tx.length?tx.map(t=>`<div class="transfer"><div class="who">${esc(pname(t.from))} → ${esc(pname(t.to))}</div><div class="amount">${won(t.amount)}</div></div>`).join('')
     :`<div class="transfer"><div class="who">${L.length?'추가 송금 없음':'등록된 지출 없음'}</div></div>`;
   document.getElementById('settlementLines').innerHTML=html;

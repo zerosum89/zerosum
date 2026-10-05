@@ -776,7 +776,12 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
 </script>
 
 <script>
-const HANDOFF=JSON.parse(document.getElementById('ledgerData').textContent);
+async function appMain(){
+let HANDOFF=JSON.parse(document.getElementById('ledgerData').textContent);
+try{
+  const response=await fetch('./danang_expense_handoff.json',{cache:'no-store'});
+  if(response.ok) HANDOFF=await response.json();
+}catch(e){}
 const P=(HANDOFF.participants||[]).map(p=>({id:p.participant_id,name:p.display_name}));
 const currencyDecimals={KRW:0,VND:0,JPY:0,USD:2,EUR:2};
 function fmtForeign(currency,minor){
@@ -1095,6 +1100,8 @@ document.querySelectorAll('.subtabs button').forEach(b=>b.onclick=()=>{document.
 document.querySelectorAll('.filter-btn').forEach(b=>b.onclick=()=>{document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');currentFilter=b.dataset.filter;renderDetails()});
 document.getElementById('searchInput').addEventListener('input',renderDetails);
 boot();
+}
+appMain();
 </script>
 </body>
 </html>

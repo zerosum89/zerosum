@@ -1,0 +1,469 @@
+{
+  "schema_version": "1.0",
+  "trip": {
+    "name": "2026 다낭 여행",
+    "start_date": "2026-10-04",
+    "end_date": "2026-10-10"
+  },
+  "participants": [
+    {
+      "participant_id": "P01",
+      "display_name": "준성"
+    },
+    {
+      "participant_id": "P02",
+      "display_name": "영진이 형"
+    },
+    {
+      "participant_id": "P03",
+      "display_name": "교수님"
+    }
+  ],
+  "ledger": [
+    {
+      "expense_id": "DAD-20261002-001",
+      "revision": 1,
+      "status": "approved",
+      "prepaid": true,
+      "occurred_date": "2026-10-02",
+      "occurred_time": "15:47",
+      "service_date": "2026-10-06",
+      "date_basis": "transaction",
+      "category": "관광/투어",
+      "subcategory": "후에 투어",
+      "title": "후에 왕궁 투어",
+      "currency": "KRW",
+      "amount_minor": 197800,
+      "actual_krw_amount": 197800,
+      "converted_krw_amount": null,
+      "krw_amount_source": "confirmed_krw_payment",
+      "payer_participant_id": "P01",
+      "payment_method": "unknown",
+      "allocation_type": "shared",
+      "shares": [
+        {
+          "participant_id": "P01",
+          "ratio": 0.5
+        },
+        {
+          "participant_id": "P03",
+          "ratio": 0.5
+        }
+      ],
+      "settlement_status": "unsettled",
+      "line_items": [
+        {
+          "name": "후에 왕궁 투어 성인",
+          "quantity": 2,
+          "currency": "KRW",
+          "amount_minor": 197800
+        }
+      ],
+      "adjustments": [],
+      "itemization_status": "complete",
+      "notes": [
+        "성인 2명",
+        "Danang Marriott Resort 픽업/드롭",
+        "국내 원화 결제",
+        "결제수단 세부 미확인"
+      ],
+      "source": {
+        "source_kind": "receipt_or_user_record",
+        "source_file_id": "file_0000000006548207a078cf4a2e0505ac"
+      }
+    },
+    {
+      "expense_id": "DAD-20261004-002",
+      "revision": 1,
+      "status": "approved",
+      "prepaid": false,
+      "occurred_date": "2026-10-04",
+      "occurred_time": "23:33",
+      "date_basis": "transaction",
+      "category": "식비",
+      "subcategory": "식당",
+      "title": "PHỞ BẮC HẢI 식사",
+      "currency": "VND",
+      "amount_minor": 730000,
+      "actual_krw_amount": null,
+      "converted_krw_amount": 37960,
+      "krw_amount_source": "fixed_fx_conversion",
+      "fx": {
+        "rate_basis": "100 VND = 5.20 KRW",
+        "krw_per_vnd": 0.052
+      },
+      "payer_participant_id": "P03",
+      "payment_method": "unknown",
+      "allocation_type": "personal",
+      "shares": [
+        {
+          "participant_id": "P03",
+          "ratio": 1.0
+        }
+      ],
+      "settlement_status": "settled",
+      "people_basis": "8인 합계",
+      "attendee_count": 8,
+      "line_items": [
+        {
+          "name": "PHỞ BÒ ĐẶC BIỆT(특선 소고기 쌀국수)",
+          "quantity": 7,
+          "currency": "VND",
+          "amount_minor": 455000,
+          "converted_krw_amount": 23660
+        },
+        {
+          "name": "RAU MUỐNG XÀO TỎI(모닝글로리 볶음)",
+          "quantity": 2,
+          "currency": "VND",
+          "amount_minor": 100000,
+          "converted_krw_amount": 5200
+        },
+        {
+          "name": "BIA TIGER(타이거 맥주)",
+          "quantity": 5,
+          "currency": "VND",
+          "amount_minor": 125000,
+          "converted_krw_amount": 6500
+        },
+        {
+          "name": "Nước Ép(과일 주스)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 35000,
+          "converted_krw_amount": 1820
+        },
+        {
+          "name": "PEPSI(펩시)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 15000,
+          "converted_krw_amount": 780
+        }
+      ],
+      "adjustments": [],
+      "itemization_status": "complete",
+      "notes": [
+        "8명 식사",
+        "교수님이 전액 부담하는 식사로 추가 정산 없음"
+      ],
+      "source": {
+        "source_kind": "receipt_or_user_record",
+        "source_file_id": "file_00000000dab0820b9d5f27be33928150"
+      }
+    },
+    {
+      "expense_id": "DAD-20261004-003",
+      "revision": 1,
+      "status": "approved",
+      "prepaid": false,
+      "occurred_date": "2026-10-04",
+      "occurred_time": "23:46:52",
+      "date_basis": "transaction",
+      "category": "식료품",
+      "subcategory": "편의점",
+      "title": "V MINI MART 구매",
+      "currency": "VND",
+      "amount_minor": 76000,
+      "actual_krw_amount": null,
+      "converted_krw_amount": 3952,
+      "krw_amount_source": "fixed_fx_conversion",
+      "fx": {
+        "rate_basis": "100 VND = 5.20 KRW",
+        "krw_per_vnd": 0.052
+      },
+      "payer_participant_id": "P02",
+      "payment_method": "card_visa",
+      "allocation_type": "shared",
+      "shares": [
+        {
+          "participant_id": "P01",
+          "ratio": 0.5
+        },
+        {
+          "participant_id": "P02",
+          "ratio": 0.5
+        }
+      ],
+      "settlement_status": "unsettled",
+      "people_basis": "2인 정산",
+      "line_items": [
+        {
+          "name": "Bia Tiger Crystal (bạc) 330ml(타이거 크리스탈 맥주 330ml)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 23000,
+          "converted_krw_amount": 1196
+        },
+        {
+          "name": "Bia Larue vàng 330ml(라루 옐로우 맥주 330ml)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 17000,
+          "converted_krw_amount": 884
+        },
+        {
+          "name": "BIA TIGER XANH 330ML(타이거 그린 맥주 330ml)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 20000,
+          "converted_krw_amount": 1040
+        },
+        {
+          "name": "Nước suối Aquafina 500ml(아쿠아피나 생수 500ml)",
+          "quantity": 2,
+          "currency": "VND",
+          "amount_minor": 16000,
+          "converted_krw_amount": 832
+        }
+      ],
+      "adjustments": [],
+      "itemization_status": "complete",
+      "notes": [
+        "준성과 영진이 형 50:50 부담",
+        "카드 결제 영수증 총액 76,000 VND"
+      ],
+      "source": {
+        "source_kind": "receipt_or_user_record",
+        "source_file_id": "file_000000006144820bb2e8b722ab8f0926",
+        "supporting_file_ids": [
+          "file_00000000ac5881faaa125ce414d761a2"
+        ]
+      }
+    },
+    {
+      "expense_id": "DAD-20261005-001",
+      "revision": 1,
+      "status": "approved",
+      "prepaid": false,
+      "occurred_date": "2026-10-05",
+      "occurred_time": null,
+      "date_basis": "user_record",
+      "category": "기타",
+      "subcategory": "마사지",
+      "title": "팜스파 발 마사지 60분",
+      "currency": "VND",
+      "amount_minor": 400000,
+      "actual_krw_amount": null,
+      "converted_krw_amount": 20800,
+      "krw_amount_source": "fixed_fx_conversion",
+      "fx": {
+        "rate_basis": "100 VND = 5.20 KRW",
+        "krw_per_vnd": 0.052
+      },
+      "payer_participant_id": "P01",
+      "payment_method": "cash",
+      "allocation_type": "shared",
+      "shares": [
+        {
+          "participant_id": "P01",
+          "ratio": 0.5
+        },
+        {
+          "participant_id": "P02",
+          "ratio": 0.5
+        }
+      ],
+      "settlement_status": "settled",
+      "people_basis": "2인 정산",
+      "line_items": [
+        {
+          "name": "발 마사지 60분",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 400000,
+          "converted_krw_amount": 20800
+        }
+      ],
+      "adjustments": [],
+      "itemization_status": "complete",
+      "notes": [
+        "현금 결제",
+        "준성과 영진이 형 50:50 부담",
+        "결제 시간 미확인",
+        "정산 완료"
+      ],
+      "source": {
+        "source_kind": "user_record",
+        "source_url": "https://maps.app.goo.gl/a9dgzse3gswuJQ2s7"
+      }
+    },
+    {
+      "expense_id": "DAD-20261005-002",
+      "revision": 1,
+      "status": "approved",
+      "prepaid": false,
+      "occurred_date": "2026-10-05",
+      "occurred_time": "12:53",
+      "date_basis": "transaction",
+      "category": "식비",
+      "subcategory": "카페",
+      "title": "onestarcoffee 망고 코코 스무디",
+      "currency": "VND",
+      "amount_minor": 50000,
+      "actual_krw_amount": null,
+      "converted_krw_amount": 2600,
+      "krw_amount_source": "fixed_fx_conversion",
+      "fx": {
+        "rate_basis": "100 VND = 5.20 KRW",
+        "krw_per_vnd": 0.052
+      },
+      "payer_participant_id": "P01",
+      "payment_method": "unknown",
+      "allocation_type": "personal",
+      "shares": [
+        {
+          "participant_id": "P01",
+          "ratio": 1.0
+        }
+      ],
+      "settlement_status": "settled",
+      "people_basis": "1인",
+      "line_items": [
+        {
+          "name": "Mango Cocosmoothie(망고 코코 스무디)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 50000,
+          "converted_krw_amount": 2600
+        }
+      ],
+      "adjustments": [],
+      "itemization_status": "complete",
+      "notes": [
+        "준성 개인용",
+        "준성 결제"
+      ],
+      "source": {
+        "source_kind": "receipt_or_user_record",
+        "source_file_id": "file_00000000ee4881faba205b8900d473c9"
+      }
+    },
+    {
+      "expense_id": "DAD-20261005-003",
+      "revision": 1,
+      "status": "approved",
+      "prepaid": false,
+      "occurred_date": "2026-10-05",
+      "occurred_time": "12:57",
+      "date_basis": "transaction",
+      "category": "식비",
+      "subcategory": "카페",
+      "title": "onestarcoffee 코코넛 커피",
+      "currency": "VND",
+      "amount_minor": 55000,
+      "actual_krw_amount": null,
+      "converted_krw_amount": 2860,
+      "krw_amount_source": "fixed_fx_conversion",
+      "fx": {
+        "rate_basis": "100 VND = 5.20 KRW",
+        "krw_per_vnd": 0.052
+      },
+      "payer_participant_id": "P02",
+      "payment_method": "unknown",
+      "allocation_type": "personal",
+      "shares": [
+        {
+          "participant_id": "P02",
+          "ratio": 1.0
+        }
+      ],
+      "settlement_status": "settled",
+      "people_basis": "1인",
+      "line_items": [
+        {
+          "name": "Coconut Coffee(코코넛 커피)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 55000,
+          "converted_krw_amount": 2860
+        }
+      ],
+      "adjustments": [],
+      "itemization_status": "complete",
+      "notes": [
+        "영진이 형 개인용",
+        "영진이 형 결제"
+      ],
+      "source": {
+        "source_kind": "receipt_or_user_record",
+        "source_file_id": "file_0000000045c081fa9fa5e212f93e6083"
+      }
+    }
+  ],
+  "excluded_records": [],
+  "validation": {
+    "status": "passed",
+    "source_approved_count": 6,
+    "ledger_count": 6,
+    "approved_expense_count": 6,
+    "source_count_match": true,
+    "expense_count": 6,
+    "duplicate_id_count": 0,
+    "non_approved_record_count": 0,
+    "missing_amount_count": 0,
+    "missing_payer_count": 0,
+    "invalid_payer_count": 0,
+    "missing_allocation_count": 0,
+    "invalid_share_participant_count": 0,
+    "itemization_error_count": 0,
+    "allocation_error_count": 0,
+    "line_item_conversion_error_count": 0,
+    "line_item_conversion_rounding_delta_krw": 0,
+    "burden_invariant_ok": true,
+    "settlement_invariant_ok": true,
+    "settlement_transfer_invariant_ok": true,
+    "aggregated_krw_amount": 265972,
+    "unsettled_expense_count": 2
+  },
+  "settlement_summary": {
+    "paid_krw": {
+      "P01": 221200,
+      "P02": 6812,
+      "P03": 37960
+    },
+    "burden_krw": {
+      "P01": 113876,
+      "P02": 15236,
+      "P03": 136860
+    },
+    "net_krw": {
+      "P01": 107324,
+      "P02": -8424,
+      "P03": -98900
+    },
+    "unsettled_paid_krw": {
+      "P01": 197800,
+      "P02": 3952,
+      "P03": 0
+    },
+    "unsettled_burden_krw": {
+      "P01": 100876,
+      "P02": 1976,
+      "P03": 98900
+    },
+    "unsettled_net_krw": {
+      "P01": 96924,
+      "P02": 1976,
+      "P03": -98900
+    },
+    "transfers": [
+      {
+        "from_participant_id": "P03",
+        "to_participant_id": "P01",
+        "amount_krw": 96924
+      },
+      {
+        "from_participant_id": "P03",
+        "to_participant_id": "P02",
+        "amount_krw": 1976
+      }
+    ]
+  },
+  "handoff": {
+    "generated_at": "2026-10-05T16:04:34+09:00",
+    "approved_expense_count": 6,
+    "ready_for_dashboard": true,
+    "ledger_sha256": "149af2a70d24185c5892fd659a2332cc1bb7e03c25f9c7674b0ee1fbcd6fffe6"
+  }
+}

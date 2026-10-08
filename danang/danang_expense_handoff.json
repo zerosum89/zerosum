@@ -542,16 +542,168 @@
         "source_kind": "receipt_or_user_record",
         "source_file_id": "file_00000000e26081f4b8d0e13b67989c4d"
       }
+    },
+    {
+      "expense_id": "DAD-20261007-001",
+      "revision": 1,
+      "status": "approved",
+      "prepaid": false,
+      "occurred_date": "2026-10-07",
+      "occurred_time": null,
+      "date_basis": "user_record",
+      "category": "식비",
+      "subcategory": "식당",
+      "title": "저녁 식사",
+      "currency": "VND",
+      "amount_minor": 2479000,
+      "actual_krw_amount": null,
+      "converted_krw_amount": 128908,
+      "krw_amount_source": "fixed_fx_conversion",
+      "fx": {
+        "rate_basis": "100 VND = 5.20 KRW",
+        "krw_per_vnd": 0.052
+      },
+      "payer_participant_id": "P03",
+      "payment_method": "unknown",
+      "allocation_type": "personal",
+      "shares": [
+        {
+          "participant_id": "P03",
+          "ratio": 1.0
+        }
+      ],
+      "settlement_status": "settled",
+      "people_basis": "5인 식사",
+      "attendee_count": 5,
+      "line_items": [
+        {
+          "name": "Tiger crystal(타이거 크리스탈 맥주)",
+          "quantity": 4,
+          "currency": "VND",
+          "amount_minor": 208000,
+          "converted_krw_amount": 10816
+        },
+        {
+          "name": "Rau muống xào chay(공심채 볶음)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 95000,
+          "converted_krw_amount": 4940
+        },
+        {
+          "name": "Sò Dương Nướng Sốt Sa Tế(조개 사테소스 구이)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 350000,
+          "converted_krw_amount": 18200
+        },
+        {
+          "name": "Gỏi cuốn tôm trứng muối lớn(새우·소금달걀 월남쌈)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 185000,
+          "converted_krw_amount": 9620
+        },
+        {
+          "name": "Bắp hoa om xì dầu(소고기 사태 간장조림)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 320000,
+          "converted_krw_amount": 16640
+        },
+        {
+          "name": "Bò nướng tảng sốt mè rang(통소고기 구이·참깨소스)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 350000,
+          "converted_krw_amount": 18200
+        },
+        {
+          "name": "Gỏi rong bưởi xí muội(해초·자몽 샐러드)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 209000,
+          "converted_krw_amount": 10868
+        },
+        {
+          "name": "Cơm chiên trứng(계란볶음밥)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 175000,
+          "converted_krw_amount": 9100
+        },
+        {
+          "name": "Ấm trà nhài(자스민차 한 주전자)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 92000,
+          "converted_krw_amount": 4784
+        },
+        {
+          "name": "Tiger(타이거 맥주)",
+          "quantity": 2,
+          "currency": "VND",
+          "amount_minor": 84000,
+          "converted_krw_amount": 4368
+        },
+        {
+          "name": "Cơm trắng(흰쌀밥)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 42000,
+          "converted_krw_amount": 2184
+        },
+        {
+          "name": "Bánh xèo miền Trung(중부식 반쎄오)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 110000,
+          "converted_krw_amount": 5720
+        },
+        {
+          "name": "Ba rọi chấm mắm nêm(삼겹살·맘넴 소스)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 160000,
+          "converted_krw_amount": 8320
+        },
+        {
+          "name": "Phở tái nạm(희귀고기·양지 쌀국수)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 99000,
+          "converted_krw_amount": 5148
+        },
+        {
+          "name": "Tặng Carame(서비스 캐러멜)",
+          "quantity": 1,
+          "currency": "VND",
+          "amount_minor": 0,
+          "converted_krw_amount": 0
+        }
+      ],
+      "adjustments": [],
+      "itemization_status": "complete",
+      "notes": [
+        "참석: 화영이 형네 2명, 영진이 형, 준성, 교수님",
+        "교수님이 전액 부담한 식사",
+        "추가 정산 없음",
+        "결제수단 미확인"
+      ],
+      "source": {
+        "source_kind": "receipt_or_user_record",
+        "source_file_id": "file_000000002ec8820ba6245fff2d86fd19"
+      }
     }
   ],
   "excluded_records": [],
   "validation": {
     "status": "passed",
-    "source_approved_count": 8,
-    "ledger_count": 8,
-    "approved_expense_count": 8,
+    "source_approved_count": 9,
+    "ledger_count": 9,
+    "approved_expense_count": 9,
     "source_count_match": true,
-    "expense_count": 8,
+    "expense_count": 9,
     "duplicate_id_count": 0,
     "non_approved_record_count": 0,
     "missing_amount_count": 0,
@@ -566,18 +718,18 @@
     "burden_invariant_ok": true,
     "settlement_invariant_ok": true,
     "settlement_transfer_invariant_ok": true,
-    "aggregated_krw_amount": 292887,
+    "aggregated_krw_amount": 421795,
     "unsettled_expense_count": 4
   },
   "settlement_summary": {
     "paid_krw": {
       "P01": 221200,
-      "P03": 37960,
+      "P03": 166868,
       "P02": 33727
     },
     "burden_krw": {
       "P01": 127334,
-      "P03": 136860,
+      "P03": 265768,
       "P02": 28693
     },
     "net_krw": {
@@ -614,9 +766,9 @@
     ]
   },
   "handoff": {
-    "generated_at": "2026-10-05T22:03:57+09:00",
-    "approved_expense_count": 8,
+    "generated_at": "2026-10-08T20:54:23+09:00",
+    "approved_expense_count": 9,
     "ready_for_dashboard": true,
-    "ledger_sha256": "ed0aef574dfe82e0e86ff7aee0dca973f0112c36c320baa54c420a0004764937"
+    "ledger_sha256": "307d8204d3a3184c43d17aa0765e189bbc4f7190038a316501b1e4d35a196e03"
   }
 }

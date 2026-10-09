@@ -60,17 +60,7 @@
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "성인 2명",
-        "Danang Marriott Resort 픽업/드롭",
-        "국내 원화 결제",
-        "결제수단 세부 미확인"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_0000000006548207a078cf4a2e0505ac"
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-20261004-002",
@@ -142,15 +132,7 @@
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "8명 식사",
-        "교수님이 전액 부담하는 식사로 추가 정산 없음"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_00000000dab0820b9d5f27be33928150"
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-20261004-003",
@@ -218,18 +200,7 @@
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "준성과 영진이 형 50:50 부담",
-        "카드 결제 영수증 총액 76,000 VND"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_000000006144820bb2e8b722ab8f0926",
-        "supporting_file_ids": [
-          "file_00000000ac5881faaa125ce414d761a2"
-        ]
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-20261005-002",
@@ -272,15 +243,7 @@
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "준성 개인용",
-        "준성 결제"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_00000000ee4881faba205b8900d473c9"
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-20261005-003",
@@ -323,15 +286,7 @@
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "영진이 형 개인용",
-        "영진이 형 결제"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_0000000045c081fa9fa5e212f93e6083"
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-20261005-004",
@@ -414,21 +369,7 @@
           "converted_krw_amount": 759
         }
       ],
-      "itemization_status": "complete",
-      "notes": [
-        "영진이 형 결제",
-        "준성과 영진이 형 50:50 부담",
-        "영수증 상품합계 365,000 VND",
-        "카드 결제금액 379,600 VND",
-        "카드 결제 수수료 4% = 14,600 VND"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_0000000088e081faae77a893c18dd3e7",
-        "supporting_file_ids": [
-          "file_0000000013f081fa84bb9eef50e63fa1"
-        ]
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-20261005-005",
@@ -475,16 +416,7 @@
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "영진이 형 결제",
-        "준성과 영진이 형 50:50 부담",
-        "결제수단 세부 미확인"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_00000000e26081f4b8d0e13b67989c4d"
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-20261005-001",
@@ -531,17 +463,7 @@
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "현금 결제",
-        "준성과 영진이 형 50:50 부담",
-        "결제 시간 미확인",
-        "정산 완료"
-      ],
-      "source": {
-        "source_kind": "user_record",
-        "source_url": "https://maps.app.goo.gl/a9dgzse3gswuJQ2s7"
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-20261007-002",
@@ -585,16 +507,7 @@
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "이용: 준성, 교수님",
-        "준성이 전액 부담",
-        "추가 정산 없음"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_0000000068a081fab71c4125bac32622"
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-20261007-001",
@@ -736,18 +649,7 @@
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "가게: Nhà hàng Madame Lân(마담 란)",
-        "참석: 화영이 형네 2명, 영진이 형, 준성, 교수님",
-        "교수님이 전액 부담한 식사",
-        "추가 정산 없음",
-        "결제수단 미확인"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_000000002ec8820ba6245fff2d86fd19"
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-20261009-001",
@@ -791,16 +693,7 @@
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "준성 개인 음료",
-        "준성이 현금 결제"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_00000000bca08209bfc4f7d73300fd2f",
-        "receipt_total_amount_minor": 105000
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-20261009-003",
@@ -844,16 +737,7 @@
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "교수님 개인 음료",
-        "준성이 현금 결제"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_00000000bca08209bfc4f7d73300fd2f",
-        "receipt_total_amount_minor": 105000
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-20261009-004",
@@ -901,16 +785,7 @@
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "이용: 준성, 교수님",
-        "준성이 현금 결제",
-        "준성 50% / 교수님 50% 부담"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_00000000c0e48208901529e59b1fe69f"
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-20261009-005",
@@ -953,15 +828,7 @@
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "준성 개인 음료",
-        "준성 현금 결제"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_0000000013848211b3d8dd667a09a302"
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-20261009-006",
@@ -997,30 +864,23 @@
       "line_items": [
         {
           "name": "Cafe Dừa(코코넛 커피)",
-          "quantity": 1,          "currency": "VND",
+          "quantity": 1,
+          "currency": "VND",
           "amount_minor": 49000,
           "converted_krw_amount": 2548
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "준성 개인 음료",
-        "준성 현금 결제"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_0000000003108207a328dbd6f03df334"
-      }
+      "itemization_status": "complete"
     },
     {
       "expense_id": "DAD-ILOVEBANHMI-001",
-      "revision": 2,
+      "revision": 3,
       "status": "approved",
       "prepaid": false,
-      "occurred_date": null,
-      "occurred_time": null,
-      "date_basis": "user_record",
+      "occurred_date": "2026-10-09",
+      "occurred_time": "14:03",
+      "date_basis": "photo_timestamp",
       "category": "식비",
       "subcategory": "식당",
       "title": "I Love Bánh mì(아이러브반미) 식사",
@@ -1065,34 +925,115 @@
         }
       ],
       "adjustments": [],
-      "itemization_status": "complete",
-      "notes": [
-        "교수님에게 빌린 현금 보유 상태에서 준성이 결제",
-        "준성 50% / 교수님 50% 부담"
-      ],
-      "source": {
-        "source_kind": "receipt_or_user_record",
-        "source_file_id": "file_00000000e188820780cfc6a8da464da8"
-      }
-    }
-  ],
-  "excluded_records": [
+      "itemization_status": "complete"
+    },
     {
-      "expense_id": "DAD-20261009-002",
-      "status": "replaced",
-      "reason": "merged_into_DAD-20261009-001",
-      "notes": [
-        "CARO 코코넛 커피 55,000 VND 전체를 준성 결제로 단순화"
-      ]
+      "expense_id": "DAD-20261009-007",
+      "revision": 1,
+      "status": "approved",
+      "prepaid": false,
+      "occurred_date": "2026-10-09",
+      "occurred_time": "17:55",
+      "date_basis": "receipt",
+      "category": "교통",
+      "subcategory": "Grab",
+      "title": "Wink 호텔 → 마담 란 차량 이동",
+      "currency": "VND",
+      "amount_minor": 37440,
+      "actual_krw_amount": null,
+      "converted_krw_amount": 1947,
+      "krw_amount_source": "fixed_fx",
+      "fx": {
+        "rate_basis": "100 VND = 5.20 KRW",
+        "krw_per_vnd": 0.052
+      },
+      "payer_participant_id": "P01",
+      "payment_method": "card_visa",
+      "allocation_type": "shared",
+      "shares": [
+        {
+          "participant_id": "P01",
+          "ratio": 0.5
+        },
+        {
+          "participant_id": "P03",
+          "ratio": 0.5
+        }
+      ],
+      "settlement_status": "unsettled",
+      "people_basis": "user_confirmed",
+      "attendee_count": 2,
+      "line_items": [
+        {
+          "name": "Cước xe(차량 운임)",
+          "amount_minor": 36000,
+          "converted_krw_amount": 1872,
+          "currency": "VND"
+        }
+      ],
+      "adjustments": [
+        {
+          "name": "Phí thanh toán quốc tế(해외 결제 수수료)",
+          "amount_minor": 1440,
+          "converted_krw_amount": 75,
+          "currency": "VND"
+        }
+      ],
+      "itemization_status": "complete"
+    },
+    {
+      "expense_id": "DAD-20261009-008",
+      "revision": 1,
+      "status": "approved",
+      "prepaid": false,
+      "occurred_date": "2026-10-09",
+      "occurred_time": "19:46",
+      "date_basis": "receipt",
+      "category": "쇼핑",
+      "subcategory": "LOTTE Mart DA NANG(롯데마트 다낭점)",
+      "title": "준성 개인 구매",
+      "currency": "VND",
+      "amount_minor": 838500,
+      "actual_krw_amount": null,
+      "converted_krw_amount": 43602,
+      "krw_amount_source": "fixed_fx",
+      "fx": {
+        "rate_basis": "100 VND = 5.20 KRW",
+        "krw_per_vnd": 0.052
+      },
+      "payer_participant_id": "P01",
+      "payment_method": "cash",
+      "allocation_type": "personal",
+      "shares": [
+        {
+          "participant_id": "P01",
+          "ratio": 1
+        }
+      ],
+      "settlement_status": "settled",
+      "people_basis": "user_confirmed",
+      "attendee_count": 1,
+      "line_items": [
+        {
+          "name": "KDR SENS MULTICARE 100G(센스 멀티케어 100g)",
+          "quantity": 15,
+          "unit_amount_minor": 55900,
+          "amount_minor": 838500,
+          "converted_krw_amount": 43602,
+          "currency": "VND"
+        }
+      ],
+      "adjustments": [],
+      "itemization_status": "complete"
     }
   ],
   "validation": {
     "status": "passed",
-    "source_approved_count": 16,
-    "ledger_count": 16,
-    "approved_expense_count": 16,
+    "source_approved_count": 18,
+    "ledger_count": 18,
+    "approved_expense_count": 18,
     "source_count_match": true,
-    "expense_count": 16,
+    "expense_count": 18,
     "duplicate_id_count": 0,
     "non_approved_record_count": 0,
     "missing_amount_count": 0,
@@ -1109,65 +1050,67 @@
     "settlement_invariant_ok": true,
     "settlement_adjustment_invariant_ok": true,
     "settlement_transfer_invariant_ok": true,
-    "aggregated_krw_amount": 451549,
-    "unsettled_expense_count": 7,
+    "aggregated_krw_amount": 497098,
+    "unsettled_expense_count": 8,
     "unsettled_settlement_adjustment_count": 1,
-    "settled_cash_transfer_count": 2
+    "settled_cash_transfer_count": 2,
+    "rounding_records": []
   },
   "settlement_summary": {
     "paid_krw": {
+      "P01": 296503,
       "P02": 33727,
-      "P03": 166868,
-      "P01": 250954
+      "P03": 166868
     },
     "burden_krw": {
+      "P01": 193214,
       "P02": 28693,
-      "P03": 274218,
-      "P01": 148638
+      "P03": 275191
     },
     "net_krw": {
+      "P01": 103289,
       "P02": 5034,
-      "P03": -107350,
-      "P01": 102316
+      "P03": -108323
     },
     "unsettled_paid_krw": {
+      "P01": 214047,
       "P02": 30867,
-      "P03": 0,
-      "P01": 212100
+      "P03": 0
     },
     "unsettled_burden_krw": {
+      "P01": 121158,
       "P02": 15433,
-      "P03": 107350,
-      "P01": 120184
+      "P03": 108323
     },
     "unsettled_net_before_adjustments_krw": {
+      "P01": 92889,
       "P02": 15434,
-      "P03": -107350,
-      "P01": 91916
+      "P03": -108323
     },
     "unsettled_net_krw": {
+      "P01": 86753,
       "P02": 5970,
-      "P03": -91750,
-      "P01": 85780
+      "P03": -92723
     },
     "transfers": [
       {
         "from_participant_id": "P03",
-        "to_participant_id": "P02",
-        "amount_krw": 5970
+        "to_participant_id": "P01",
+        "amount_krw": 86753
       },
       {
         "from_participant_id": "P03",
-        "to_participant_id": "P01",
-        "amount_krw": 85780
+        "to_participant_id": "P02",
+        "amount_krw": 5970
       }
     ]
   },
   "handoff": {
-    "generated_at": "2026-10-09T23:06:01+09:00",
-    "approved_expense_count": 16,
+    "generated_at": "2026-10-10T00:05:23+09:00",
+    "approved_expense_count": 18,
     "ready_for_dashboard": true,
-    "ledger_sha256": "ca2d21e6340707eb09cfc26d1228f0556cc9d68329c1289edaf59521402f7a00"
+    "ledger_sha256": "91bd3cfdd45edb287429e719b711900257ee0f6c71077249b5e17ca15f7beca8",
+    "canonical_revision": 17
   },
   "settlement_adjustments": [
     {
@@ -1182,11 +1125,7 @@
         "krw_per_vnd": 0.052
       },
       "lender_participant_id": "P03",
-      "borrower_participant_id": "P01",
-      "notes": [
-        "교수님이 준성에게 빌려준 현금 300,000 VND",
-        "여행 지출 총액에는 포함하지 않고 최종 정산에만 반영"
-      ]
+      "borrower_participant_id": "P01"
     },
     {
       "adjustment_id": "DAD-SETTLEMENT-P01-P02-001",
@@ -1202,11 +1141,7 @@
       "from_participant_id": "P01",
       "to_participant_id": "P02",
       "affects_expense_total": false,
-      "affects_settlement": true,
-      "notes": [
-        "준성이 영진이 형에게 현금 200,000 VND 전달",
-        "여행 지출 총액에는 포함하지 않고 최종 정산에 반영"
-      ]
+      "affects_settlement": true
     },
     {
       "adjustment_id": "DAD-SETTLEMENT-P02-P01-001",
@@ -1222,11 +1157,74 @@
       "from_participant_id": "P02",
       "to_participant_id": "P01",
       "affects_expense_total": false,
-      "affects_settlement": true,
-      "notes": [
-        "영진이 형이 준성에게 현금 18,000 VND 전달",
-        "여행 지출 총액에는 포함하지 않고 최종 정산에 반영"
-      ]
+      "affects_settlement": true
     }
-  ]
+  ],
+  "allocation_krw": {
+    "DAD-20261002-001": {
+      "P01": 98900,
+      "P03": 98900
+    },
+    "DAD-20261004-002": {
+      "P03": 37960
+    },
+    "DAD-20261004-003": {
+      "P01": 1976,
+      "P02": 1976
+    },
+    "DAD-20261005-002": {
+      "P01": 2600
+    },
+    "DAD-20261005-003": {
+      "P02": 2860
+    },
+    "DAD-20261005-004": {
+      "P01": 9870,
+      "P02": 9869
+    },
+    "DAD-20261005-005": {
+      "P01": 3588,
+      "P02": 3588
+    },
+    "DAD-20261005-001": {
+      "P01": 10400,
+      "P02": 10400
+    },
+    "DAD-20261007-002": {
+      "P01": 8382
+    },
+    "DAD-20261007-001": {
+      "P03": 128908
+    },
+    "DAD-20261009-001": {
+      "P01": 2860
+    },
+    "DAD-20261009-003": {
+      "P03": 2600
+    },
+    "DAD-20261009-004": {
+      "P01": 2600,
+      "P03": 2600
+    },
+    "DAD-20261009-005": {
+      "P01": 1664
+    },
+    "DAD-20261009-006": {
+      "P01": 2548
+    },
+    "DAD-ILOVEBANHMI-001": {
+      "P01": 3250,
+      "P03": 3250
+    },
+    "DAD-20261009-007": {
+      "P01": 974,
+      "P03": 973
+    },
+    "DAD-20261009-008": {
+      "P01": 43602
+    }
+  },
+  "allocation_policy": "largest remainder, ties follow shares array order; whole KRW per expense",
+  "document_role": "deployment_view_generated_from_local_canonical"
 }
+

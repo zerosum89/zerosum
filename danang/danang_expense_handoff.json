@@ -1094,23 +1094,23 @@
     },
     "transfers": [
       {
-        "from_participant_id": "P03",
-        "to_participant_id": "P01",
-        "amount_krw": 86753
+        "from_participant_id": "P01",
+        "to_participant_id": "P02",
+        "amount_krw": 5970
       },
       {
         "from_participant_id": "P03",
-        "to_participant_id": "P02",
-        "amount_krw": 5970
+        "to_participant_id": "P01",
+        "amount_krw": 92723
       }
     ]
   },
   "handoff": {
-    "generated_at": "2026-10-10T00:19:28+09:00",
+    "generated_at": "2026-10-10T00:24:58+09:00",
     "approved_expense_count": 18,
     "ready_for_dashboard": true,
     "ledger_sha256": "91bd3cfdd45edb287429e719b711900257ee0f6c71077249b5e17ca15f7beca8",
-    "canonical_revision": 18
+    "canonical_revision": 19
   },
   "settlement_adjustments": [
     {
@@ -1231,6 +1231,7 @@
     }
   },
   "allocation_policy": "largest remainder, ties follow shares array order; whole KRW per expense",
+  "settlement_policy": "preserve original participant pairs; offset only between the same two participants; no third-party routing",
   "document_role": "deployment_view_generated_from_local_canonical"
 }
 

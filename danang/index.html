@@ -297,6 +297,7 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
           </table>
         </div>
         <div class="mobile-list" id="mobileList"></div>
+        <section id="cashTransfers" style="margin-top:24px"></section>
       </section>
     </div>
   </section>
@@ -1792,8 +1793,31 @@ function rowMatches(r,q){
   if(currentFilter==='card'&&r.method!=='card')return false;
   return true;
 }
+function renderCashTransfers(q){
+  const rows=(HANDOFF.settlement_adjustments||[]).map(r=>({
+    id:r.adjustment_id,
+    from:r.type==='loan'?r.lender_participant_id:r.from_participant_id,
+    to:r.type==='loan'?r.borrower_participant_id:r.to_participant_id,
+    kind:r.type==='loan'?'현금 대여':'정산금 전달',
+    date:r.occurred_date||'일자 미확인',
+    amount:r.actual_krw_amount??r.converted_krw_amount??r.amount_minor,
+    foreign:fmtForeign(r.currency,r.amount_minor),
+    status:r.type==='loan'?(r.status==='settled'?'상환 완료':'상환 미완료'):'전달 완료',
+    unsettled:r.type==='loan'&&r.status==='unsettled'
+  })).filter(r=>{
+    if(!['all','cash','unsettled'].includes(currentFilter))return false;
+    if(currentFilter==='unsettled'&&!r.unsettled)return false;
+    return !q||[r.kind,pname(r.from),pname(r.to),'현금'].join(' ').toLowerCase().includes(q);
+  });
+  const el=document.getElementById('cashTransfers');
+  if(!rows.length){el.innerHTML='';return;}
+  el.innerHTML=`<h3>현금 주고받은 내역</h3><p style="font-size:12px;color:var(--muted)">여행 지출 합계에서 제외하며, 최종 정산에 반영합니다.</p>
+    <div class="desktop-table"><table><thead><tr><th>날짜</th><th>유형</th><th>보낸 사람</th><th>받은 사람</th><th>금액</th><th>상태</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r.date)}</td><td>${esc(r.kind)}</td><td>${esc(pname(r.from))}</td><td>${esc(pname(r.to))}</td><td class="money">${esc(r.foreign)}<span class="submoney">${won(r.amount)}</span></td><td>${esc(r.status)}</td></tr>`).join('')}</tbody></table></div>
+    <div class="mobile-list">${rows.map(r=>`<details class="receipt"><summary><div class="receipt-top"><div><div class="receipt-name">${esc(pname(r.from))} → ${esc(pname(r.to))}</div><div class="receipt-meta">${esc(r.kind)} · ${esc(r.status)}</div></div><div class="receipt-amount">${esc(r.foreign)}</div></div></summary><div class="receipt-body"><dl><dt>날짜</dt><dd>${esc(r.date)}</dd><dt>원화 환산</dt><dd>${won(r.amount)}</dd><dt>지출 합계</dt><dd>제외 · 최종 정산에 반영</dd></dl></div></details>`).join('')}</div>`;
+}
 function renderDetails(){
   const q=document.getElementById('searchInput').value.trim().toLowerCase();
+  renderCashTransfers(q);
   const rows=L.filter(r=>rowMatches(r,q));
   const tb=document.getElementById('detailTable'), ml=document.getElementById('mobileList');
   if(!rows.length){tb.innerHTML='<tr><td colspan="13" class="no-data">등록된 지출 없음</td></tr>';ml.innerHTML='<div class="no-data">등록된 지출 없음</div>';return}
@@ -1810,6 +1834,7 @@ function renderDetails(){
 }
 
 function renderInvalidState(){
+  document.getElementById('cashTransfers').innerHTML='';
   document.getElementById('kTotal').textContent='—';
   document.getElementById('kUnsettled').textContent='—';
   document.getElementById('kShared').textContent='—';

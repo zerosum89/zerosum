@@ -20,8 +20,8 @@
     },
     {
       "participant_id": "P04",
-      "display_name": "화영이 형",
-      "household_label": "화영이 형네(2명)",
+      "display_name": "화영이형네(2명)",
+      "household_label": "화영이형네(2명)",
       "member_count": 2
     },
     {
@@ -1087,7 +1087,7 @@
         }
       ],
       "settlement_status": "unsettled",
-      "people_basis": "화영이 형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
+      "people_basis": "화영이형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
       "attendee_count": 7,
       "line_items": [
         {
@@ -1149,7 +1149,7 @@
         }
       ],
       "settlement_status": "unsettled",
-      "people_basis": "화영이 형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
+      "people_basis": "화영이형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
       "attendee_count": 7,
       "line_items": [
         {
@@ -1211,7 +1211,7 @@
         }
       ],
       "settlement_status": "unsettled",
-      "people_basis": "화영이 형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
+      "people_basis": "화영이형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
       "attendee_count": 7,
       "line_items": [
         {
@@ -1273,7 +1273,7 @@
         }
       ],
       "settlement_status": "unsettled",
-      "people_basis": "화영이 형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
+      "people_basis": "화영이형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
       "attendee_count": 7,
       "line_items": [
         {
@@ -1335,7 +1335,7 @@
         }
       ],
       "settlement_status": "unsettled",
-      "people_basis": "화영이 형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
+      "people_basis": "화영이형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
       "attendee_count": 7,
       "line_items": [
         {
@@ -1459,7 +1459,7 @@
         }
       ],
       "settlement_status": "unsettled",
-      "people_basis": "화영이 형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
+      "people_basis": "화영이형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
       "attendee_count": 7,
       "line_items": [
         {
@@ -1569,7 +1569,7 @@
         }
       ],
       "settlement_status": "unsettled",
-      "people_basis": "화영이 형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
+      "people_basis": "화영이형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
       "attendee_count": 7,
       "line_items": [
         {
@@ -1707,7 +1707,7 @@
         }
       ],
       "settlement_status": "unsettled",
-      "people_basis": "화영이 형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
+      "people_basis": "화영이형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
       "attendee_count": 7,
       "line_items": [
         {
@@ -1889,11 +1889,11 @@
     ]
   },
   "handoff": {
-    "generated_at": "2026-10-13T23:19:53+09:00",
+    "generated_at": "2026-10-14T01:19:46+09:00",
     "approved_expense_count": 26,
     "ready_for_dashboard": true,
-    "ledger_sha256": "5e79baa9a0ac2d4d073967acdc88371ed31bb67f158e38e1ecfd1e03c9140e41",
-    "canonical_revision": 20
+    "ledger_sha256": "452f9792c153cd9a0ae97bec39c7e7df83bf61ec3b413bf2a32197b557ef7220",
+    "canonical_revision": 21
   },
   "settlement_adjustments": [
     {

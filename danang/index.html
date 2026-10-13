@@ -258,7 +258,7 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
           </div>
           <div class="chart-card full">
             <div class="chart-head">
-              <h3>인원별 금액</h3>
+              <h3 id="personChartTitle">인원별 부담액</h3>
               <div class="toggle"><button class="active" data-personmode="burden">부담 기준</button><button data-personmode="paid">결제 기준</button></div>
             </div>
             <div class="chart" id="personChart"></div>
@@ -2615,6 +2615,7 @@ function renderBars(elId,entries,labeler){
 }
 
 function renderPerson(a,mode='burden'){
+  document.getElementById('personChartTitle').textContent=mode==='paid'?'인원별 결제액':'인원별 부담액';
   const entries=P.map(p=>[p.name,a[mode][p.id]||0]);renderBars('personChart',entries,k=>k);
 }
 

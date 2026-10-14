@@ -102,8 +102,6 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
 .receipt-top{display:flex;justify-content:space-between;gap:12px}.receipt-name{font-size:12px;font-weight:800}.receipt-meta{font-size:10px;color:var(--muted);margin-top:3px}.receipt-amount{font-size:14px;font-weight:900;white-space:nowrap}
 .receipt-body{border-top:1px solid var(--line);padding:11px;background:var(--panel2);font-size:10px}.receipt-body dl{display:grid;grid-template-columns:78px 1fr;gap:6px;margin:0}.receipt-body dt{color:var(--muted)}.receipt-body dd{margin:0}
 .no-data{padding:28px;text-align:center;color:var(--muted);font-size:12px}
-.data-state{font-size:10px;padding:3px 6px;border-radius:999px;background:#eef1f4;color:#59606a}
-.data-state.confirmed{background:#edf7f1;color:#167347}.data-state.converted{background:#fff7e8;color:#9a6200}
 .validation-error{display:none;background:#fff3f1;border:1px solid #f1c9c2;color:#8f2d1e;border-radius:12px;padding:12px;font-size:11px;margin-bottom:10px}
 .validation-error.show{display:block}
 
@@ -2513,7 +2511,6 @@ function normalizeExpense(r,i){
     settled:r.settlement_status==='settled', allocation:r.allocation_type==='shared'?'shared':'personal',
     shares, allocated:HANDOFF.allocation_krw?.[r.expense_id], people, items, itemization_complete:r.itemization_status==='complete',
     note:[Array.isArray(r.notes)?r.notes.join(' · '):(r.notes||''),r.itemization_note||''].filter(Boolean).join(' · '),
-    amount_state:r.actual_krw_amount!=null||r.currency==='KRW'?'confirmed':(r.converted_krw_amount!=null?'converted':'unconfirmed')
   };
 }
 function fmtItemAmount(x){
@@ -2767,7 +2764,7 @@ function renderDetails(){
     <td class="money">${won(r.krw)}${r.foreign?`<span class="submoney">${esc(r.foreign)}</span>`:''}</td>
     <td class="items">${(r.items||[]).length?(r.items||[]).map(x=>`<div>${esc(x.name)}${x.qty!=null?' / '+esc(x.qty):''}${fmtItemAmount(x)?' / '+esc(fmtItemAmount(x)):''}</div>`).join(''):'—'}</td>
     <td>${esc(r.people||'')}</td><td>${esc(pname(r.payer))}</td><td>${esc(r.method_label||r.method||'')}</td>
-    <td>${r.settled?'완료':'미정산'}</td><td>${r.allocation==='shared'?'공동':'개인'}</td><td>${esc(r.note||'')} ${r.amount_state?`<span class="data-state ${r.amount_state}">${r.amount_state==='confirmed'?'확정':'환산'}</span>`:''}</td>
+    <td>${r.settled?'완료':'미정산'}</td><td>${r.allocation==='shared'?'공동':'개인'}</td><td>${esc(r.note||'')}</td>
   </tr>`).join('');
   ml.innerHTML=rows.map((r,i)=>`<details class="receipt"><summary><div class="receipt-top"><div><div class="receipt-name">${esc(r.title||'')}</div><div class="receipt-meta">${esc(r.date||'')} ${esc(r.time||'')} · ${esc(pname(r.payer))} · ${r.allocation==='shared'?'공동':'개인'}</div></div><div class="receipt-amount">${won(r.krw)}</div></div></summary>
     <div class="receipt-body"><dl><dt>유형</dt><dd>${esc(r.category||'')}</dd><dt>결제수단</dt><dd>${esc(r.method_label||r.method||'')}</dd><dt>정산</dt><dd>${r.settled?'완료':'미정산'}</dd><dt>인원 기준</dt><dd>${esc(r.people||'')}</dd><dt>개별 품목</dt><dd>${(r.items||[]).length?(r.items||[]).map(x=>`<div>${esc(x.name)}${x.qty!=null?' / '+esc(x.qty):''}${fmtItemAmount(x)?' / '+esc(fmtItemAmount(x)):''}</div>`).join(''):'—'}</dd><dt>비고</dt><dd>${esc(r.note||'')}</dd></dl></div>

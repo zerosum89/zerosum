@@ -59,7 +59,11 @@ button{color:inherit}
 /* Expense shell */
 .expense-shell{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:15px}
 .expense-title{font-size:23px;font-weight:850;letter-spacing:-.035em;margin:2px 2px 13px}
-.subtabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:15px}
+.subtabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:15px}
+.offset-intro{color:var(--muted);font-size:12px;margin:0 0 14px}
+.offset-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:14px}
+.offset-metric{border:1px solid var(--line);border-radius:12px;background:var(--panel2);padding:12px}.offset-metric span{display:block;font-size:11px;color:var(--muted)}.offset-metric strong{display:block;font-size:20px;margin-top:5px}
+.offset-proof{border:1px solid var(--line);border-radius:13px;padding:14px;margin-top:14px;background:var(--panel2)}.offset-proof summary{cursor:pointer;font-weight:800;font-size:14px}.offset-proof h4{font-size:13px;margin:18px 0 8px}.offset-proof p,.offset-proof li{font-size:12px;line-height:1.7}.offset-scroll{overflow:auto}.offset-table{min-width:590px}.offset-step{padding:10px 0;border-bottom:1px solid var(--line)}
 .subview{display:none}.subview.active{display:block}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
 .kpi{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--panel2)}
@@ -122,6 +126,7 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
   .person-cards{grid-template-columns:1fr}.calc-grid{grid-template-columns:1fr 1fr}.desktop-table{display:none}.mobile-list{display:block}
 }
 @media(max-width:460px){
+  .subtabs{grid-template-columns:repeat(2,1fr)}.offset-metrics{grid-template-columns:1fr}.offset-metric strong{font-size:19px}
   .header .period{font-size:10px}
   .day-title h3{font-size:18px}.event{grid-template-columns:51px 16px 1fr}.expense-shell{padding:12px}.kpi .v{font-size:19px}
   .subtabs button{font-size:12px;padding:9px 6px}.calc-grid{grid-template-columns:1fr 1fr}
@@ -237,6 +242,7 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
       <nav class="subtabs">
         <button class="active" data-sub="dashboard">대시보드</button>
         <button data-sub="settlement">정산</button>
+        <button data-sub="simplification">상계 처리 결과</button>
         <button data-sub="details">상세 지출</button>
       </nav>
 
@@ -281,6 +287,12 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
           <div class="settlement-lines" id="settlementPlan"></div>
         </div>
         <div class="person-cards" id="personCards"></div>
+      </section>
+
+      <section id="simplification" class="subview">
+        <h3 style="margin:2px 0 8px">상계 처리 결과</h3>
+        <p class="offset-intro">받을 돈과 보낼 돈을 전체 순액으로 정리한 별도 송금안입니다. 기존 정산은 원래 거래 관계대로 유지합니다. 실제 입출금을 기록한 결과는 아닙니다.</p>
+        <div id="simplificationResult"></div>
       </section>
 
       <section id="details" class="subview">
@@ -2761,6 +2773,71 @@ function makeDisplayTransfers(){
   return (HANDOFF.settlement_summary?.transfers||[]).map(t=>({from:t.from_participant_id,to:t.to_participant_id,amount:t.amount_krw}));
 }
 
+function simplifyDebts(entries){
+  const active=entries.filter(e=>e.net!==0);
+  if(active.some(e=>!Number.isInteger(e.net))||active.reduce((a,e)=>a+e.net,0)!==0)throw new Error('정산 순액 불일치');
+  const n=active.length,full=(1<<n)-1;
+  const totals=Array(full+1).fill(0);
+  for(let mask=1;mask<=full;mask++)for(let i=0;i<n;i++)if(mask&(1<<i))totals[mask]+=active[i].net;
+  const memo=new Map([[0,[]]]);
+  function partition(mask){
+    if(memo.has(mask))return memo.get(mask);
+    let best=[];const first=mask&-mask;
+    for(let sub=mask;sub;sub=(sub-1)&mask){
+      if(!(sub&first)||totals[sub]!==0)continue;
+      const candidate=[sub,...partition(mask^sub)];
+      if(candidate.length>best.length)best=candidate;
+    }
+    memo.set(mask,best);return best;
+  }
+  const groups=partition(full),transfers=[],steps=[];
+  for(const mask of groups){
+    const members=active.filter((e,i)=>mask&(1<<i));
+    const debtors=members.filter(e=>e.net<0).map(e=>({id:e.id,left:-e.net})).sort((a,b)=>b.left-a.left);
+    const creditors=members.filter(e=>e.net>0).map(e=>({id:e.id,left:e.net})).sort((a,b)=>b.left-a.left);
+    let i=0,j=0;
+    while(i<debtors.length&&j<creditors.length){
+      const d=debtors[i],c=creditors[j],amount=Math.min(d.left,c.left);
+      transfers.push({from:d.id,to:c.id,amount});
+      steps.push({from:d.id,to:c.id,amount,debtBefore:d.left,creditBefore:c.left,debtAfter:d.left-amount,creditAfter:c.left-amount});
+      d.left-=amount;c.left-=amount;if(!d.left)i++;if(!c.left)j++;
+    }
+  }
+  const balance=Object.fromEntries(entries.map(e=>[e.id,0]));
+  for(const t of transfers){balance[t.from]-=t.amount;balance[t.to]+=t.amount;}
+  const minimum=n-groups.length;
+  if(transfers.length!==minimum||entries.some(e=>balance[e.id]!==e.net))throw new Error('상계 결과 검증 실패');
+  return {transfers,steps,minimum,activeCount:n,groups:groups.map(mask=>active.filter((e,i)=>mask&(1<<i)).map(e=>e.id))};
+}
+function renderSimplification(){
+  const original=makeDisplayTransfers();
+  const rows=P.map(p=>{
+    const incoming=sum(original.filter(t=>t.to===p.id).map(t=>t.amount));
+    const outgoing=sum(original.filter(t=>t.from===p.id).map(t=>t.amount));
+    return {id:p.id,incoming,outgoing,net:incoming-outgoing};
+  });
+  const result=simplifyDebts(rows);
+  const originalTotal=sum(original.map(t=>t.amount)),simpleTotal=sum(result.transfers.map(t=>t.amount));
+  const senders=[...new Set(result.transfers.map(t=>t.from))];
+  const plans=senders.map(id=>{
+    const ts=result.transfers.filter(t=>t.from===id);
+    return `<section class="sender-card"><div class="sender-card-head"><h3>${esc(pname(id))}</h3><div class="sender-total"><span>보낼 총액</span><strong>${won(sum(ts.map(t=>t.amount)))}</strong></div></div>${ts.map(t=>`<div class="transfer"><div class="who">${esc(pname(t.to))}에게</div><div class="amount">${won(t.amount)}</div></div>`).join('')}</section>`;
+  }).join('');
+  document.getElementById('simplificationResult').innerHTML=`
+    <div class="offset-metrics"><div class="offset-metric"><span>송금 횟수</span><strong>${original.length}회 → ${result.transfers.length}회</strong></div><div class="offset-metric"><span>송금 금액 합계</span><strong>${won(originalTotal)} → ${won(simpleTotal)}</strong></div><div class="offset-metric"><span>최소 송금 횟수 검증</span><strong>${result.minimum}회 · 통과</strong></div></div>
+    <div class="sender-groups">${plans||'<div class="sender-empty">추가 송금 없음</div>'}</div>
+    <details class="offset-proof" open><summary>계산 과정과 근거</summary>
+      <h4>1. 기존 정산에서 사람별 순액 계산</h4><p>순액 = 받을 금액 − 보낼 금액. 양수는 받을 돈, 음수는 보낼 돈입니다. 이미 반영한 현금 전달과 대여금 차감까지 포함된 기존 정산 결과를 사용하므로, 같은 금액을 다시 차감하지 않습니다.</p>
+      <div class="offset-scroll"><table class="offset-table"><thead><tr><th>정산 대상</th><th>받을 금액</th><th>보낼 금액</th><th>정산 순액</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(pname(r.id))}</td><td>${won(r.incoming)}</td><td>${won(r.outgoing)}</td><td>${r.net>0?'+':''}${won(r.net)}</td></tr>`).join('')}</tbody></table></div>
+      <p>순액 합계: ${won(sum(rows.map(r=>r.net)))}. 최종 받을 돈과 보낼 돈이 일치합니다.</p>
+      <h4>2. 송금 횟수를 최소화하는 묶음 찾기</h4><p>총액 기준 채무 단순화(Simplification of Debts)를 적용합니다. 잔액이 0원이 아닌 ${result.activeCount}개 정산 단위의 모든 조합을 확인하여, 순액 합계가 0원인 독립 묶음을 최대 ${result.groups.length}개 찾았습니다. 두 가구는 각각 하나의 정산 단위로 취급합니다.</p>
+      <p>${result.groups.map((group,i)=>`${i+1}번 묶음: ${group.map(id=>esc(pname(id))).join(' · ')}`).join('<br>')}</p>
+      <p>한 묶음의 k개 정산 단위를 연결하려면 최소 k−1회 송금이 필요합니다. 따라서 전체 최소 횟수는 ${result.activeCount} − ${result.groups.length} = <b>${result.minimum}회</b>입니다. 찾은 송금안이 이 횟수와 일치하므로 최소임을 확인했습니다.</p>
+      <h4>3. 순액을 순서대로 맞추기</h4><p>각 묶음에서 큰 잔액부터 맞춥니다. 한 번에 보낼 금액은 ‘보낼 잔액’과 ‘받을 잔액’ 중 작은 금액입니다.</p>
+      ${result.steps.map((s,i)=>`<div class="offset-step"><b>${i+1}. ${esc(pname(s.from))} → ${esc(pname(s.to))} ${won(s.amount)}</b><p>송금 전: 보낼 잔액 ${won(s.debtBefore)} · 받을 잔액 ${won(s.creditBefore)}<br>송금 후: 보낼 잔액 ${won(s.debtAfter)} · 받을 잔액 ${won(s.creditAfter)}</p></div>`).join('')}
+      <h4>4. 최종 결과 검증</h4><p>모든 정산 잔액을 0원으로 맞추었고, 사람별 받을 금액−보낼 금액은 기존 정산과 동일합니다. 송금 금액 합계가 줄어든 ${won(originalTotal-simpleTotal)}은 중간 왕복 전달을 줄인 금액이며, 여행 지출이나 개인 부담액의 감소가 아닙니다. 이 송금안을 사용하면 기존 정산 송금안과 중복 실행하지 않습니다.</p>
+    </details>`;
+}
 let selectedSender='all';
 function renderSenderTransfers(){
   const tx=makeDisplayTransfers();
@@ -2946,7 +3023,7 @@ function boot(){
     renderInvalidState();
     return;
   }
-  const a=aggregate(); renderKpi(a); renderSettlement(a); renderCategory(a);
+  const a=aggregate(); renderKpi(a); renderSettlement(a); renderSimplification(); renderCategory(a);
   renderBars('dateChart',Object.entries(a.byDate).sort((x,y)=>dateOrder(x[0])-dateOrder(y[0])),k=>k);
   renderPerson(a,'burden'); renderDetails();
 

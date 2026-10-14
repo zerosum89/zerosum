@@ -1843,15 +1843,75 @@
       "unitemized_amount_minor": 1366900,
       "reported_product_kind_count": 17,
       "reported_product_quantity": 20
+    },
+    {
+      "expense_id": "DAD-LOTTE-P02-SHARED-001",
+      "revision": 1,
+      "status": "approved",
+      "prepaid": false,
+      "occurred_date": null,
+      "occurred_time": "",
+      "date_display": "미확인",
+      "date_basis": "user_requested_unknown",
+      "category": "식료품",
+      "subcategory": "마트",
+      "title": "롯데마트 공동경비(영진이 형 결제)",
+      "currency": "VND",
+      "amount_minor": 400000,
+      "actual_krw_amount": null,
+      "converted_krw_amount": 20800,
+      "krw_amount_source": "fixed_fx_conversion",
+      "fx": {
+        "rate_basis": "100 VND = 5.20 KRW",
+        "krw_per_vnd": 0.052
+      },
+      "payer_participant_id": "P02",
+      "payment_method": "unknown",
+      "allocation_type": "shared",
+      "shares": [
+        {
+          "participant_id": "P01",
+          "ratio": 0.14285714285714285,
+          "person_count": 1
+        },
+        {
+          "participant_id": "P02",
+          "ratio": 0.14285714285714285,
+          "person_count": 1
+        },
+        {
+          "participant_id": "P03",
+          "ratio": 0.14285714285714285,
+          "person_count": 1
+        },
+        {
+          "participant_id": "P04",
+          "ratio": 0.2857142857142857,
+          "person_count": 2
+        },
+        {
+          "participant_id": "P05",
+          "ratio": 0.2857142857142857,
+          "person_count": 2
+        }
+      ],
+      "settlement_status": "unsettled",
+      "attendee_count": 7,
+      "people_basis": "준성 · 영진이 형 · 교수님 · 화영이형네(2명) · 기용이네(2명), 총 7인 1/N",
+      "line_items": [],
+      "adjustments": [],
+      "itemization_status": "partial",
+      "unitemized_amount_minor": 400000,
+      "itemization_note": "첨부 금액 794,600 VND 중 공동경비 400,000 VND만 반영. 개별 품목은 이미지에 없어 미확인."
     }
   ],
   "validation": {
     "status": "passed",
-    "source_approved_count": 27,
-    "ledger_count": 27,
-    "approved_expense_count": 27,
+    "source_approved_count": 28,
+    "ledger_count": 28,
+    "approved_expense_count": 28,
     "source_count_match": true,
-    "expense_count": 27,
+    "expense_count": 28,
     "duplicate_id_count": 0,
     "non_approved_record_count": 0,
     "missing_amount_count": 0,
@@ -1868,69 +1928,69 @@
     "settlement_invariant_ok": true,
     "settlement_adjustment_invariant_ok": true,
     "settlement_transfer_invariant_ok": true,
-    "aggregated_krw_amount": 847304,
-    "unsettled_expense_count": 17,
+    "aggregated_krw_amount": 868104,
+    "unsettled_expense_count": 18,
     "unsettled_settlement_adjustment_count": 0,
     "settled_cash_transfer_count": 2,
     "rounding_records": [],
-    "incomplete_itemization_count": 1,
+    "incomplete_itemization_count": 2,
     "offset_applied_adjustment_count": 1
   },
   "settlement_summary": {
     "paid_krw": {
       "P01": 296503,
-      "P02": 33727,
+      "P02": 54527,
       "P03": 166868,
       "P04": 279101,
       "P05": 71105
     },
     "burden_krw": {
-      "P01": 243246,
-      "P02": 78725,
-      "P03": 325218,
-      "P04": 100058,
-      "P05": 100057
+      "P01": 246218,
+      "P02": 81696,
+      "P03": 328189,
+      "P04": 106001,
+      "P05": 106000
     },
     "net_krw": {
-      "P01": 53257,
-      "P02": -44998,
-      "P03": -158350,
-      "P04": 179043,
-      "P05": -28952
+      "P01": 50285,
+      "P02": -27169,
+      "P03": -161321,
+      "P04": 173100,
+      "P05": -34895
     },
     "unsettled_paid_krw": {
       "P01": 214047,
-      "P02": 30867,
+      "P02": 51667,
       "P03": 0,
       "P04": 279101,
       "P05": 71105
     },
     "unsettled_burden_krw": {
-      "P01": 171190,
-      "P02": 65465,
-      "P03": 158350,
-      "P04": 100058,
-      "P05": 100057
+      "P01": 174162,
+      "P02": 68436,
+      "P03": 161321,
+      "P04": 106001,
+      "P05": 106000
     },
     "unsettled_net_before_adjustments_krw": {
-      "P01": 42857,
-      "P02": -34598,
-      "P03": -158350,
-      "P04": 179043,
-      "P05": -28952
+      "P01": 39885,
+      "P02": -16769,
+      "P03": -161321,
+      "P04": 173100,
+      "P05": -34895
     },
     "unsettled_net_krw": {
-      "P01": 36721,
-      "P02": -44062,
-      "P03": -142750,
-      "P04": 179043,
-      "P05": -28952
+      "P01": 33749,
+      "P02": -26233,
+      "P03": -145721,
+      "P04": 173100,
+      "P05": -34895
     },
     "transfers": [
       {
         "from_participant_id": "P01",
         "to_participant_id": "P02",
-        "amount_krw": 5970
+        "amount_krw": 8942
       },
       {
         "from_participant_id": "P03",
@@ -1948,14 +2008,19 @@
         "amount_krw": 10158
       },
       {
+        "from_participant_id": "P03",
+        "to_participant_id": "P02",
+        "amount_krw": 2971
+      },
+      {
         "from_participant_id": "P02",
         "to_participant_id": "P04",
-        "amount_krw": 39874
+        "amount_krw": 33931
       },
       {
         "from_participant_id": "P02",
         "to_participant_id": "P05",
-        "amount_krw": 10158
+        "amount_krw": 4215
       },
       {
         "from_participant_id": "P03",
@@ -1975,11 +2040,11 @@
     ]
   },
   "handoff": {
-    "generated_at": "2026-10-14T09:52:14+09:00",
-    "approved_expense_count": 27,
+    "generated_at": "2026-10-14T10:49:58+09:00",
+    "approved_expense_count": 28,
     "ready_for_dashboard": true,
-    "ledger_sha256": "773a2a5629324756319aaea87553c3bcdeeab9324b444dbd0307577c51e0b53e",
-    "canonical_revision": 23
+    "ledger_sha256": "ab184c277a7c1497f4b4df27baeee26928b0d67af3b63ce2c4bff5ce9068cf1b",
+    "canonical_revision": 24
   },
   "settlement_adjustments": [
     {
@@ -2162,6 +2227,13 @@
       "P03": 10158,
       "P04": 20316,
       "P05": 20315
+    },
+    "DAD-LOTTE-P02-SHARED-001": {
+      "P01": 2972,
+      "P02": 2971,
+      "P03": 2971,
+      "P04": 5943,
+      "P05": 5943
     }
   },
   "allocation_policy": "largest remainder, ties follow shares array order; whole KRW per expense",

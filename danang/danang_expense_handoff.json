@@ -1774,15 +1774,84 @@
         "rate_basis": "100 VND = 5.20 KRW",
         "krw_per_vnd": 0.052
       }
+    },
+    {
+      "expense_id": "DAD-LOTTE-SHARED-001",
+      "revision": 1,
+      "status": "approved",
+      "prepaid": true,
+      "occurred_date": null,
+      "occurred_time": "",
+      "date_display": "사전 결제",
+      "date_basis": "payment_datetime_unavailable",
+      "category": "식료품",
+      "subcategory": "마트",
+      "title": "롯데마트 온라인 공동 주문",
+      "currency": "VND",
+      "amount_minor": 1367400,
+      "actual_krw_amount": null,
+      "converted_krw_amount": 71105,
+      "krw_amount_source": "fixed_fx_conversion",
+      "fx": {
+        "rate_basis": "100 VND = 5.20 KRW",
+        "krw_per_vnd": 0.052
+      },
+      "payer_participant_id": "P05",
+      "payment_method": "unknown",
+      "allocation_type": "shared",
+      "shares": [
+        {
+          "participant_id": "P01",
+          "ratio": 0.14285714285714285,
+          "person_count": 1
+        },
+        {
+          "participant_id": "P02",
+          "ratio": 0.14285714285714285,
+          "person_count": 1
+        },
+        {
+          "participant_id": "P03",
+          "ratio": 0.14285714285714285,
+          "person_count": 1
+        },
+        {
+          "participant_id": "P04",
+          "ratio": 0.2857142857142857,
+          "person_count": 2
+        },
+        {
+          "participant_id": "P05",
+          "ratio": 0.2857142857142857,
+          "person_count": 2
+        }
+      ],
+      "settlement_status": "unsettled",
+      "attendee_count": 7,
+      "people_basis": "화영이형네(2명) · 기용이네(2명) · 영진이 형 · 준성 · 교수님, 총 7인 1/N",
+      "line_items": [
+        {
+          "name": "Túi ni lông(비닐봉투)",
+          "currency": "VND",
+          "amount_minor": 500,
+          "converted_krw_amount": 26
+        }
+      ],
+      "adjustments": [],
+      "itemization_status": "partial",
+      "itemization_note": "상품 17종·20개: 개별 상품명과 금액 확인 필요. 비닐봉투 500 VND 포함 총액은 승인됨.",
+      "unitemized_amount_minor": 1366900,
+      "reported_product_kind_count": 17,
+      "reported_product_quantity": 20
     }
   ],
   "validation": {
     "status": "passed",
-    "source_approved_count": 26,
-    "ledger_count": 26,
-    "approved_expense_count": 26,
+    "source_approved_count": 27,
+    "ledger_count": 27,
+    "approved_expense_count": 27,
     "source_count_match": true,
-    "expense_count": 26,
+    "expense_count": 27,
     "duplicate_id_count": 0,
     "non_approved_record_count": 0,
     "missing_amount_count": 0,
@@ -1799,11 +1868,12 @@
     "settlement_invariant_ok": true,
     "settlement_adjustment_invariant_ok": true,
     "settlement_transfer_invariant_ok": true,
-    "aggregated_krw_amount": 776199,
-    "unsettled_expense_count": 16,
+    "aggregated_krw_amount": 847304,
+    "unsettled_expense_count": 17,
     "unsettled_settlement_adjustment_count": 1,
     "settled_cash_transfer_count": 2,
-    "rounding_records": []
+    "rounding_records": [],
+    "incomplete_itemization_count": 1
   },
   "settlement_summary": {
     "paid_krw": {
@@ -1811,49 +1881,49 @@
       "P02": 33727,
       "P03": 166868,
       "P04": 279101,
-      "P05": 0
+      "P05": 71105
     },
     "burden_krw": {
-      "P01": 233088,
-      "P02": 68567,
-      "P03": 315060,
-      "P04": 79742,
-      "P05": 79742
+      "P01": 243246,
+      "P02": 78725,
+      "P03": 325218,
+      "P04": 100058,
+      "P05": 100057
     },
     "net_krw": {
-      "P01": 63415,
-      "P02": -34840,
-      "P03": -148192,
-      "P04": 199359,
-      "P05": -79742
+      "P01": 53257,
+      "P02": -44998,
+      "P03": -158350,
+      "P04": 179043,
+      "P05": -28952
     },
     "unsettled_paid_krw": {
       "P01": 214047,
       "P02": 30867,
       "P03": 0,
       "P04": 279101,
-      "P05": 0
+      "P05": 71105
     },
     "unsettled_burden_krw": {
-      "P01": 161032,
-      "P02": 55307,
-      "P03": 148192,
-      "P04": 79742,
-      "P05": 79742
+      "P01": 171190,
+      "P02": 65465,
+      "P03": 158350,
+      "P04": 100058,
+      "P05": 100057
     },
     "unsettled_net_before_adjustments_krw": {
-      "P01": 53015,
-      "P02": -24440,
-      "P03": -148192,
-      "P04": 199359,
-      "P05": -79742
+      "P01": 42857,
+      "P02": -34598,
+      "P03": -158350,
+      "P04": 179043,
+      "P05": -28952
     },
     "unsettled_net_krw": {
-      "P01": 46879,
-      "P02": -33904,
-      "P03": -132592,
-      "P04": 199359,
-      "P05": -79742
+      "P01": 36721,
+      "P02": -44062,
+      "P03": -142750,
+      "P04": 179043,
+      "P05": -28952
     },
     "transfers": [
       {
@@ -1872,9 +1942,19 @@
         "amount_krw": 39874
       },
       {
+        "from_participant_id": "P01",
+        "to_participant_id": "P05",
+        "amount_krw": 10158
+      },
+      {
         "from_participant_id": "P02",
         "to_participant_id": "P04",
         "amount_krw": 39874
+      },
+      {
+        "from_participant_id": "P02",
+        "to_participant_id": "P05",
+        "amount_krw": 10158
       },
       {
         "from_participant_id": "P03",
@@ -1882,18 +1962,23 @@
         "amount_krw": 39869
       },
       {
+        "from_participant_id": "P03",
+        "to_participant_id": "P05",
+        "amount_krw": 10158
+      },
+      {
         "from_participant_id": "P05",
         "to_participant_id": "P04",
-        "amount_krw": 79742
+        "amount_krw": 59426
       }
     ]
   },
   "handoff": {
-    "generated_at": "2026-10-14T01:19:46+09:00",
-    "approved_expense_count": 26,
+    "generated_at": "2026-10-14T09:47:35+09:00",
+    "approved_expense_count": 27,
     "ready_for_dashboard": true,
-    "ledger_sha256": "452f9792c153cd9a0ae97bec39c7e7df83bf61ec3b413bf2a32197b557ef7220",
-    "canonical_revision": 21
+    "ledger_sha256": "773a2a5629324756319aaea87553c3bcdeeab9324b444dbd0307577c51e0b53e",
+    "canonical_revision": 22
   },
   "settlement_adjustments": [
     {
@@ -2067,6 +2152,13 @@
       "P03": 4798,
       "P04": 9595,
       "P05": 9595
+    },
+    "DAD-LOTTE-SHARED-001": {
+      "P01": 10158,
+      "P02": 10158,
+      "P03": 10158,
+      "P04": 20316,
+      "P05": 20315
     }
   },
   "allocation_policy": "largest remainder, ties follow shares array order; whole KRW per expense",

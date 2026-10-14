@@ -2171,10 +2171,11 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
     "settlement_transfer_invariant_ok": true,
     "aggregated_krw_amount": 847304,
     "unsettled_expense_count": 17,
-    "unsettled_settlement_adjustment_count": 1,
+    "unsettled_settlement_adjustment_count": 0,
     "settled_cash_transfer_count": 2,
     "rounding_records": [],
-    "incomplete_itemization_count": 1
+    "incomplete_itemization_count": 1,
+    "offset_applied_adjustment_count": 1
   },
   "settlement_summary": {
     "paid_krw": {
@@ -2275,17 +2276,17 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
     ]
   },
   "handoff": {
-    "generated_at": "2026-10-14T09:47:35+09:00",
+    "generated_at": "2026-10-14T09:52:14+09:00",
     "approved_expense_count": 27,
     "ready_for_dashboard": true,
     "ledger_sha256": "773a2a5629324756319aaea87553c3bcdeeab9324b444dbd0307577c51e0b53e",
-    "canonical_revision": 22
+    "canonical_revision": 23
   },
   "settlement_adjustments": [
     {
       "adjustment_id": "DAD-LOAN-P03-P01-001",
       "type": "loan",
-      "status": "unsettled",
+      "status": "offset_applied",
       "currency": "VND",
       "amount_minor": 300000,
       "converted_krw_amount": 15600,
@@ -2296,7 +2297,9 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
       "lender_participant_id": "P03",
       "borrower_participant_id": "P01",
       "occurred_date": "2026-10-10",
-      "date_basis": "user_confirmed"
+      "date_basis": "user_confirmed",
+      "settlement_method": "offset_against_receivable",
+      "status_display": "정산 차감 반영"
     },
     {
       "adjustment_id": "DAD-SETTLEMENT-P01-P02-001",
@@ -2573,7 +2576,7 @@ function validateData(){
       const adjusted=Object.fromEntries(P.map(p=>[p.id,paid[p.id]-burden[p.id]]));
       for(const x of HANDOFF.settlement_adjustments||[]){
         const amount=x.actual_krw_amount??x.converted_krw_amount??x.amount_minor;
-        if(x.type==='loan'&&x.status==='unsettled'){
+        if(x.type==='loan'&&['unsettled','offset_applied'].includes(x.status)){
           adjusted[x.lender_participant_id]+=amount; adjusted[x.borrower_participant_id]-=amount;
         }else if(x.type==='settlement_payment'&&x.status==='settled'){
           adjusted[x.from_participant_id]+=amount; adjusted[x.to_participant_id]-=amount;
@@ -2740,7 +2743,7 @@ function renderCashTransfers(q){
     date:r.occurred_date||'일자 미확인',
     amount:r.actual_krw_amount??r.converted_krw_amount??r.amount_minor,
     foreign:fmtForeign(r.currency,r.amount_minor),
-    status:r.type==='loan'?(r.status==='settled'?'상환 완료':'상환 미완료'):'전달 완료',
+    status:r.type==='loan'?(r.status==='offset_applied'?'정산 차감 반영':r.status==='settled'?'현금 상환 완료':'상환 미완료'):'전달 완료',
     unsettled:r.type==='loan'&&r.status==='unsettled'
   })).filter(r=>{
     if(!['all','cash','unsettled'].includes(currentFilter))return false;

@@ -84,6 +84,18 @@ button{color:inherit}
 .sender-card .transfer{padding:8px 0}.sender-card .transfer .who{font-size:13px}.sender-card .transfer .amount{font-size:17px}
 .sender-empty{color:var(--muted);font-size:12px;padding:8px 0}
 .calc-detail{display:none;margin-top:13px;padding-top:13px;border-top:1px solid #efc9bf}.calc-detail.open{display:block}
+.calculation-evidence{margin-top:14px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.calculation-evidence>summary{cursor:pointer;padding:14px 16px;font-weight:800;font-size:14px}
+.evidence-body{padding:0 16px 16px;line-height:1.8;font-size:13px;overflow-wrap:anywhere}
+.evidence-body h3{font-size:16px;margin:23px 0 9px}.evidence-body h4{font-size:14px;margin:0 0 6px}
+.evidence-body p{margin:7px 0}.evidence-intro{padding:13px;border-radius:12px;background:var(--accent-soft)}
+.evidence-models{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+.evidence-model,.evidence-record,.evidence-pair{border:1px solid var(--line);border-radius:12px;padding:13px;background:var(--panel2);min-width:0}
+.evidence-model strong{display:block}.evidence-model p{font-size:12px}.evidence-record,.evidence-pair{margin:10px 0}
+.evidence-record .evidence-meta{color:var(--muted);font-size:11px}.evidence-items{margin-top:8px;font-size:12px}.evidence-items summary{cursor:pointer;font-weight:700}
+.evidence-record>summary{cursor:pointer;display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-weight:750}.evidence-record>summary strong{white-space:nowrap;color:var(--accent)}
+.evidence-items ul{padding-left:19px}.evidence-items li{margin:4px 0}.evidence-limit{color:var(--muted);font-size:12px}
+@media(max-width:460px){.evidence-models{grid-template-columns:1fr}.evidence-body{padding:0 12px 12px}}
 .calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .calc-cell{background:rgba(255,255,255,.72);border:1px solid #f0d7d0;border-radius:11px;padding:10px}
 .calc-cell .k{font-size:10px;color:#84645d}.calc-cell .v{font-size:13px;font-weight:800;margin-top:4px}
@@ -286,6 +298,10 @@ td{padding:10px;border-bottom:1px solid #eef0f2;font-size:11px;vertical-align:to
           <div class="label">최종 송금 계획</div>
           <div class="settlement-lines" id="settlementPlan"></div>
         </div>
+        <details class="calculation-evidence" id="calculationEvidence">
+          <summary>계산 근거</summary>
+          <div class="evidence-body" id="calculationEvidenceBody"></div>
+        </details>
         <div class="person-cards" id="personCards"></div>
       </section>
 
@@ -2856,9 +2872,106 @@ function renderSenderTransfers(){
     };
   }
 }
+function evidenceAllocation(row){
+  const amount=row.actual_krw_amount??row.converted_krw_amount??row.amount_minor;
+  const shares=row.shares||[];
+  let denominator=1;
+  for(;denominator<=1000;denominator++){
+    if(shares.every(s=>Math.abs(s.ratio*denominator-Math.round(s.ratio*denominator))<1e-8))break;
+  }
+  if(denominator>1000)throw new Error('계산 근거의 분담 비율 확인 필요');
+  const numerators=shares.map(s=>Math.round(s.ratio*denominator));
+  const portions=numerators.map(n=>Math.floor(amount*n/denominator));
+  const remainders=numerators.map(n=>(amount*n)%denominator);
+  const extra=amount-sum(portions);
+  for(const i of portions.map((_,i)=>i).sort((i,j)=>remainders[j]-remainders[i]||i-j).slice(0,extra))portions[i]++;
+  return {amount,denominator,numerators,portions};
+}
+function renderCalculationEvidence(){
+  const el=document.getElementById('calculationEvidenceBody');
+  const rows=HANDOFF.ledger||[],cash=HANDOFF.settlement_adjustments||[];
+  const cashSignature=cash.map(x=>[x.adjustment_id,x.type,x.status,x.amount_minor,x.converted_krw_amount,x.lender_participant_id||x.from_participant_id,x.borrower_participant_id||x.to_participant_id]);
+  const reviewed=HANDOFF.handoff?.canonical_revision===26&&HANDOFF.handoff?.ledger_sha256==='16b5ff42e1a02c39c3dcab0af86579972a7e4dc1ff2b116f1c2e466eca540a32'&&JSON.stringify(cashSignature)===JSON.stringify([
+    ['DAD-LOAN-P03-P01-001','loan','offset_applied',300000,15600,'P03','P01'],
+    ['DAD-SETTLEMENT-P01-P02-001','settlement_payment','settled',200000,10400,'P01','P02'],
+    ['DAD-SETTLEMENT-P02-P01-001','settlement_payment','settled',18000,936,'P02','P01']
+  ]);
+  const paid=Object.fromEntries(P.map(p=>[p.id,0])),burden={...paid},unpaid={...paid},unburden={...paid};
+  const obligations={},adjustments={};
+  const add=(target,from,to,amount)=>{if(from!==to)target[from+'|'+to]=(target[from+'|'+to]||0)+amount;};
+  let records='';
+  try{
+    records=rows.map((r,index)=>{
+      const calc=evidenceAllocation(r),amount=calc.amount,payer=r.payer_participant_id,settled=r.settlement_status==='settled';
+      paid[payer]+=amount;
+      const allocations=r.shares.map((s,i)=>{
+        const value=calc.portions[i];burden[s.participant_id]+=value;
+        if(!settled){unburden[s.participant_id]+=value;add(obligations,s.participant_id,payer,value);}
+        if(value!==HANDOFF.allocation_krw?.[r.expense_id]?.[s.participant_id])throw new Error('지출별 배분액 대조 실패');
+        return {id:s.participant_id,value,ratio:calc.numerators[i]===calc.denominator?'전액':calc.numerators[i]+'/'+calc.denominator};
+      });
+      if(!settled)unpaid[payer]+=amount;
+      const foreign=fmtForeign(r.currency,r.amount_minor);
+      const amountExplanation=r.currency==='VND'?(r.actual_krw_amount!=null?
+        `${esc(foreign)}의 고정 환산액은 ${won(r.converted_krw_amount)}이지만, 실제 카드 원화 승인액 ${won(amount)}을 정산에 사용했습니다.`:
+        `${esc(foreign)}에 1동당 ${r.fx.krw_per_vnd}원을 적용하고 반올림해 ${won(amount)}으로 계산했습니다.`):
+        `원화 거래이므로 결제액 ${won(amount)}을 그대로 사용했습니다.`;
+      const splitExplanation=allocations.length===1?`${esc(pname(allocations[0].id))}의 전액 부담입니다.`:
+        `부담액은 ${allocations.map(x=>`${esc(pname(x.id))} ${won(x.value)} (${x.ratio})`).join(', ')}입니다.${r.shares.every(s=>s.person_count!=null)?` 총 ${sum(r.shares.map(s=>s.person_count))}명 몫으로 나누며, 두 가구는 각각 2명 몫입니다.`:''}`;
+      const rowDebts=allocations.filter(x=>x.id!==payer&&x.value>0);
+      const debtExplanation=settled?(rowDebts.length?'이 건은 이미 정산 완료로 기록되어 있으므로 위 부담액을 남은 송금에 다시 넣지 않습니다.':'결제자와 부담자가 같아 이 건에서 추가 송금은 발생하지 않습니다.'):
+        rowDebts.map(x=>`${esc(pname(x.id))}이 ${esc(pname(payer))}에게 ${won(x.value)}을 보낼 채무가 발생합니다.`).join(' ');
+      const items=[...(r.line_items||[]),...(r.adjustments||[])];
+      const itemSum=sum(items.map(x=>Number(x.amount_minor||0))),complete=r.itemization_status==='complete';
+      const itemExplanation=complete?`개별 품목과 조정 ${items.length}개의 합계는 ${r.currency==='KRW'?won(itemSum):esc(fmtForeign(r.currency,itemSum))}으로 거래 총액과 일치합니다.`:
+        '개별 품목 정보가 미완성인 건입니다. 확인된 거래 총액과 분담만 계산했고, 미확인 품목이나 가격은 추정하지 않았습니다.';
+      const date=r.date_display||r.occurred_date||'미확인';
+      return `<details class="evidence-record" data-evidence-row="${index+1}"><summary><span>${index+1}. ${esc(r.title)}</span><strong>${won(amount)}</strong></summary><div class="evidence-meta">${esc(date)}${r.occurred_time?' '+esc(r.occurred_time):''} · ${settled?'정산 완료':'미정산'}</div><p>${esc(pname(payer))}이 결제했습니다. ${amountExplanation}</p><p>${splitExplanation}${allocations.length>1&&amount%calc.denominator?' 원 단위로 나눈 뒤 남는 금액은 소수 잔여가 큰 순서로, 동률이면 확정된 분담자 순서로 배분했습니다.':''}</p><p>${debtExplanation}</p><p class="evidence-limit">${itemExplanation}</p>${items.length?`<details class="evidence-items"><summary>개별 품목과 조정 ${items.length}개 보기</summary><ul>${items.map(x=>{
+        const currency=x.currency||r.currency,foreignItem=fmtForeign(currency,x.amount_minor);
+        const value=x.actual_krw_amount??x.converted_krw_amount??(currency==='KRW'?x.amount_minor:null);
+        return `<li>${esc(x.name)}${x.quantity!=null?' · '+x.quantity+'개':''}${foreignItem?' · '+esc(foreignItem):''}${value!=null?' · '+won(value):''}</li>`;
+      }).join('')}</ul>${r.actual_krw_amount!=null&&r.currency==='VND'?'<p>품목 원화는 고정 환율로 환산한 참고액입니다. 정산에는 위 실제 카드 원화 총액을 적용합니다.</p>':''}</details>`:''}</details>`;
+    }).join('');
+    const cashNarrative=cash.map(a=>{
+      const value=a.actual_krw_amount??a.converted_krw_amount??a.amount_minor;
+      if(a.type==='loan'&&['unsettled','offset_applied'].includes(a.status)){
+        add(adjustments,a.borrower_participant_id,a.lender_participant_id,value);
+        return `<p>${esc(pname(a.lender_participant_id))}이 ${esc(pname(a.borrower_participant_id))}에게 빌려준 ${esc(fmtForeign(a.currency,a.amount_minor))}은 ${won(value)}입니다. 이 대여 채무를 두 사람 사이의 반대 방향 지출 채무와 상계해, ${esc(pname(a.lender_participant_id))}이 보낼 금액에서 한 번 차감했습니다. 별도 현금 상환을 기록한 것은 아닙니다.</p>`;
+      }
+      if(a.type==='settlement_payment'&&a.status==='settled'){
+        add(adjustments,a.from_participant_id,a.to_participant_id,-value);
+        return `<p>${esc(pname(a.from_participant_id))}이 ${esc(pname(a.to_participant_id))}에게 실제 전달한 ${esc(fmtForeign(a.currency,a.amount_minor))}은 ${won(value)}입니다. 전달한 방향의 미정산 채무에서 이 금액을 한 번 차감했습니다.</p>`;
+      }
+      return `<p>${esc(a.status)} 상태의 현금 기록 ${won(value)}은 확정된 반영 규칙에 따라 처리합니다.</p>`;
+    }).join('');
+    const tx=makeDisplayTransfers();
+    const pairs=tx.map(t=>{
+      const direct=obligations[t.from+'|'+t.to]||0,reverse=obligations[t.to+'|'+t.from]||0;
+      const adjustment=(adjustments[t.from+'|'+t.to]||0)-(adjustments[t.to+'|'+t.from]||0);
+      const base=direct-reverse;
+      if(base+adjustment!==t.amount)throw new Error('관계별 정산 근거 대조 실패');
+      return `<article class="evidence-pair"><h4>${esc(pname(t.from))} → ${esc(pname(t.to))} ${won(t.amount)}</h4><p>미정산 지출에서 발생한 이 방향의 채무 ${won(direct)}에서 반대 방향 채무 ${won(reverse)}을 빼면 ${won(base)}입니다.${adjustment?` 현금 조정 ${adjustment>0?'+':'−'}${won(Math.abs(adjustment))}을 반영하면 ${won(t.amount)}이 남습니다.`:` 현금 조정이 없어 이 금액이 최종 송금액입니다.`}</p></article>`;
+    }).join('');
+    const nets=Object.fromEntries(P.map(p=>[p.id,0]));
+    for(const t of tx){nets[t.from]-=t.amount;nets[t.to]+=t.amount;}
+    const simplified=simplifyDebts(P.map(p=>({id:p.id,net:nets[p.id]})));
+    const totals=`${rows.length}건의 여행 지출 ${won(sum(Object.values(paid)))}은 각자의 부담액 합계와 같습니다. 정산 완료 ${rows.filter(r=>r.settlement_status==='settled').length}건은 전체 지출에 포함하되 남은 송금에서는 제외했습니다. 미정산 ${rows.filter(r=>r.settlement_status!=='settled').length}건만의 결제액·부담액 합계는 각각 ${won(sum(Object.values(unpaid)))}입니다.`;
+    const itemCount=sum(rows.map(r=>(r.line_items||[]).length+(r.adjustments||[]).length));
+    el.innerHTML=`<div class="evidence-intro"><strong>${reviewed?'두 모델 전건 교차 검토 · 계산 PASS':'현재 기록의 계산 근거 · 두 모델 재검토 필요'}</strong><p>${reviewed?'2026년 10월 14일, 버전 26의 상세 지출 30건과 품목·조정 86개를 확인했습니다. 두 모델이 별도로 계산한 결과는 일치했고, 불일치는 0건이었습니다. 두 모델의 같은 계산을 아래 하나의 설명으로 정리했습니다.':'아래 설명은 현재 승인 지출로 다시 계산했습니다. Codex와 Claude의 전건 검토는 버전 26에 대한 결과이며, 이후 변경된 현재 기록까지 검토됐다는 의미는 아닙니다.'}</p></div>
+      <div class="evidence-models"><div class="evidence-model"><strong>Codex의 계산 과정</strong><p>상세 지출 각 행을 승인 기록과 연결하고, 거래별 원화·개별 품목·확정 비율로 각자의 부담액을 다시 계산했습니다. 완료 상태와 현금 조정을 적용한 뒤 관계별 송금과 전체 순액을 대조했습니다.</p></div><div class="evidence-model"><strong>Claude의 독립 계산 과정</strong><p>공개 상세 지출의 표시를 추출한 30행·13개 열과 품목·조정 86개를 읽었습니다. 기존 계산된 배분액과 정산 요약을 사용하지 않고 정수·분수로 새로 계산한 뒤, 기존 정산과 상계 결과를 비교했습니다. 사이트 직접 탐색과 영수증 이미지 원본 대조는 하지 않았습니다.</p></div></div>
+      <h3>1. 정산에 사용하는 규칙</h3><p>외화는 1 VND당 0.052원으로 거래별 반올림합니다. 실제 카드 원화 승인액이 있으면 그 금액을 우선합니다. 공동비는 각 기록의 확정 비율을 적용하고, 원 단위 잔여 금액까지 배분합니다. 교수님이 제외된 6인 공동경비는 준성·영진이 형 각 1명, 화영이형네·기용이네 각 2명 몫입니다. 다른 두 사람 분담이나 개인 귀속은 각 기록대로 유지합니다.</p>
+      <h3>2. 지출 ${rows.length}건을 한 건씩 계산</h3><p>각 기록에서 먼저 결제액을 정하고, 각자의 부담액을 나눈 뒤 누가 결제자에게 보낼 돈이 있는지 확인합니다. 기록된 품목·조정은 총 ${itemCount}개입니다.</p>${records}
+      <h3>3. 지출 전체와 미정산만 따로 합산</h3><p>${totals}</p>${P.map(p=>`<p><b>${esc(p.name)}</b>의 전체 결제는 ${won(paid[p.id])}, 전체 부담은 ${won(burden[p.id])}입니다. 그중 미정산 기록만 보면 결제 ${won(unpaid[p.id])}, 부담 ${won(unburden[p.id])}이므로 현금 조정 전 순액은 ${unpaid[p.id]-unburden[p.id]>=0?'+':''}${won(unpaid[p.id]-unburden[p.id])}입니다.</p>`).join('')}
+      <h3>4. 현금 ${cash.length}건을 한 번씩 반영</h3><p>현금 주고받은 내역은 여행 지출 총액에 더하지 않습니다. 두 사람 사이의 정산 잔액에만 반영합니다.</p>${cashNarrative}
+      <h3>5. 원래 거래 관계별 최종 정산</h3><p>같은 두 사람 사이의 채무끼리만 상계한 결과입니다. 제삼자에게 송금하도록 관계를 바꾸지 않습니다.</p>${pairs}<p>총 ${tx.length}회, 송금액 합계 ${won(sum(tx.map(t=>t.amount)))}입니다.</p>
+      <h3>6. 별도 상계 결과까지 확인</h3><p>${P.map(p=>`${esc(p.name)} ${nets[p.id]>=0?'+':''}${won(nets[p.id])}`).join(', ')}의 순액을 보존합니다. 양수는 받을 돈, 음수는 보낼 돈입니다. 합이 0인 묶음을 최대 ${simplified.groups.length}개로 나눠 최소 ${simplified.activeCount}−${simplified.groups.length}=${simplified.minimum}회 송금으로 정리했습니다. 구체적인 송금과 단계별 잔액은 ‘상계 처리 결과’ 탭에서 확인할 수 있습니다. 두 송금안을 함께 실행하지 않습니다.</p>
+      <h3>확인하지 못한 범위</h3><p class="evidence-limit">품목 미완성 ${rows.filter(r=>r.itemization_status!=='complete').length}건은 거래 총액과 분담까지만 검증했습니다. 실제 영수증·카드 이미지의 진위나 이용자 정보는 이번 교차 검토에서 대조하지 않았으며, 사용자 확정 내용을 기준으로 계산했습니다. 영수증 총액 안의 가맹점·Grab 수수료는 포함하고 별도 카드 수수료는 제외했습니다. 발마사지 정산과 같은 금액의 현금 전달이 별개의 실제 거래인지는 원본 확인 대상입니다. 계산 일치와 원본 확인을 구분합니다.</p>`;
+  }catch(error){el.innerHTML='<p>현재 기록과 계산 근거가 일치하지 않아 설명을 보류합니다. '+esc(error.message)+'</p>';}
+}
 function renderSettlement(a){
   const tx=makeDisplayTransfers();
   renderSenderTransfers();
+  renderCalculationEvidence();
   document.getElementById('calcDetail').innerHTML=P.map(p=>{
     const diff=HANDOFF.settlement_summary.unsettled_net_krw[p.id];
     return `<div class="calc-grid">
@@ -3001,6 +3114,7 @@ function renderInvalidState(){
   document.getElementById('settlementLines').innerHTML=state;
   document.getElementById('settlementPlan').innerHTML=state;
   document.getElementById('calcDetail').innerHTML='';
+  document.getElementById('calculationEvidenceBody').innerHTML='<p>승인 지출 검증을 통과한 후 계산 근거를 표시합니다.</p>';
 
   ['categoryChart','dateChart','personChart'].forEach(id=>{
     document.getElementById(id).innerHTML='<div class="empty-chart">DB 검증 완료 후 표시</div>';

@@ -1870,10 +1870,11 @@
     "settlement_transfer_invariant_ok": true,
     "aggregated_krw_amount": 847304,
     "unsettled_expense_count": 17,
-    "unsettled_settlement_adjustment_count": 1,
+    "unsettled_settlement_adjustment_count": 0,
     "settled_cash_transfer_count": 2,
     "rounding_records": [],
-    "incomplete_itemization_count": 1
+    "incomplete_itemization_count": 1,
+    "offset_applied_adjustment_count": 1
   },
   "settlement_summary": {
     "paid_krw": {
@@ -1974,17 +1975,17 @@
     ]
   },
   "handoff": {
-    "generated_at": "2026-10-14T09:47:35+09:00",
+    "generated_at": "2026-10-14T09:52:14+09:00",
     "approved_expense_count": 27,
     "ready_for_dashboard": true,
     "ledger_sha256": "773a2a5629324756319aaea87553c3bcdeeab9324b444dbd0307577c51e0b53e",
-    "canonical_revision": 22
+    "canonical_revision": 23
   },
   "settlement_adjustments": [
     {
       "adjustment_id": "DAD-LOAN-P03-P01-001",
       "type": "loan",
-      "status": "unsettled",
+      "status": "offset_applied",
       "currency": "VND",
       "amount_minor": 300000,
       "converted_krw_amount": 15600,
@@ -1995,7 +1996,9 @@
       "lender_participant_id": "P03",
       "borrower_participant_id": "P01",
       "occurred_date": "2026-10-10",
-      "date_basis": "user_confirmed"
+      "date_basis": "user_confirmed",
+      "settlement_method": "offset_against_receivable",
+      "status_display": "정산 차감 반영"
     },
     {
       "adjustment_id": "DAD-SETTLEMENT-P01-P02-001",

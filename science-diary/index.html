@@ -140,6 +140,26 @@ td .ex{font-family:var(--f-body);font-size:11px;color:var(--warm);border:1px sol
 .trend-info{min-height:1.4em;margin:6px 0 0;font-size:13px;color:var(--soft);font-family:var(--f-mono)}
 .note-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 
+/* why */
+.why{margin-top:16px}
+.why-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:22px;align-items:start}
+.why-ctx{margin:12px 0 0;font-size:13.5px;color:var(--soft)}
+.why-sum{margin:6px 0 12px;font-size:17px;font-weight:600;line-height:1.5;background:linear-gradient(transparent 58%,var(--marker-2) 58%);display:inline;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.why-sum.idle{background:none;color:var(--soft);font-weight:500;font-size:15px}
+.why-steps{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:0;counter-reset:w}
+.why-steps li{position:relative;padding:0 0 14px 40px;counter-increment:w;max-width:70ch}
+.why-steps li::before{content:counter(w);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--blue-2);color:var(--blue);font-weight:700;font-size:13px}
+.why-steps li:not(:last-child)::after{content:"";position:absolute;left:12.5px;top:28px;bottom:2px;width:1.5px;background:var(--rule)}
+.why-h{margin:0 0 10px;font-size:15px}
+.pat{border-left:3px solid var(--blue);padding:2px 0 2px 12px;margin-bottom:12px}
+.pat b{display:block;font-size:14.5px;margin-bottom:2px}
+.pat span{font-size:14px;color:var(--soft)}
+.why-pred{margin:6px 0 0;padding:10px 12px;border-radius:10px;background:var(--paper);font-size:14px}
+.why-pred.ok{background:var(--blue-2)}
+tbody tr{cursor:pointer}
+tbody tr:hover td{background:var(--paper)}
+tbody tr.sel td{background:var(--blue-2)}
+
 /* diary */
 .diary{margin-top:16px}
 .diary-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px;align-items:start}
@@ -174,7 +194,7 @@ footer{padding-block:28px 40px;color:var(--soft);font-size:13px}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
 @media (max-width:980px){.topics{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:920px){.lab-grid,.diary-grid,.guide-grid,.predict{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:920px){.lab-grid,.diary-grid,.guide-grid,.predict,.why-grid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:560px){.topics{grid-template-columns:repeat(2,minmax(0,1fr))}.panel{padding:13px}.question{font-size:16px}}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 </style>
@@ -235,8 +255,26 @@ footer{padding-block:28px 40px;color:var(--soft);font-size:13px}
     </section>
   </div>
 
+  <section class="panel why" aria-labelledby="h-why">
+    <h3 class="step-title" id="h-why"><span class="num">4</span>결과 풀이 <small>왜 그렇게 됐는지 원인을 따라가요</small></h3>
+    <div class="why-grid">
+      <div>
+        <div class="seg" id="why-src" role="group" aria-label="풀이할 결과"></div>
+        <p class="why-ctx" id="why-ctx"></p>
+        <p class="why-sum" id="why-sum"></p>
+        <ol class="why-steps" id="why-steps"></ol>
+      </div>
+      <div>
+        <h4 class="why-h">기록에서 찾은 규칙</h4>
+        <div id="why-pattern"></div>
+        <p class="why-pred" id="why-pred"></p>
+      </div>
+    </div>
+    <div class="actions"><button class="btn" id="btn-why-diary" type="button">이 풀이를 일기 설명 칸에 옮기기</button></div>
+  </section>
+
   <section class="panel diary" aria-labelledby="h-diary">
-    <h3 class="step-title" id="h-diary"><span class="num">4</span>일기 쓰기 <small>설명과 알게 된 점은 내 말로 써요</small></h3>
+    <h3 class="step-title" id="h-diary"><span class="num">5</span>일기 쓰기 <small>설명과 알게 된 점은 내 말로 써요</small></h3>
     <div class="diary-grid">
       <div class="writing">
         <div>
@@ -328,13 +366,14 @@ function rrect(ctx, x, y, w, h, r){
 function fsz(W){ return Math.max(11, Math.min(13, W / 46)); }
 
 /* ================= 0. 빨대 위 공 ================= */
+const STRAW_BALLS = {
+  styro:    { d: 0.02, m: 0.000126, cd: 0.47, label: '스티로폼 공' },
+  paper:    { d: 0.03, m: 0.0005,   cd: 0.6,  label: '종이 뭉치 공' },
+  pingpong: { d: 0.04, m: 0.0027,   cd: 0.47, label: '탁구공' }
+};
 function createStraw(P){
   const D = 0.006, CORE = 6 * D, JK = RHO_AIR * Math.PI * (D / 2) ** 2;
-  const BALLS = {
-    styro:    { d: 0.02, m: 0.000126, cd: 0.47, label: '스티로폼 공' },
-    paper:    { d: 0.03, m: 0.0005,   cd: 0.6,  label: '종이 뭉치 공' },
-    pingpong: { d: 0.04, m: 0.0027,   cd: 0.47, label: '탁구공' }
-  };
+  const BALLS = STRAW_BALLS;
   let ball, hAvg, parts = [], spawn = 0, contact = false, F = {}, lay = null, t = 0;
   const dir = () => { const th = P.tilt * Math.PI / 180; return [Math.sin(th), Math.cos(th)]; };
   const field = sa => ({ vc: sa < CORE ? P.v0 : P.v0 * CORE / sa, bw: Math.max(0.0035, 0.098 * sa) });
@@ -1148,6 +1187,198 @@ const TOPICS = [
   }
 ];
 
+/* ================= 결과 풀이 (원인 · 규칙 · 예상 확인) ================= */
+const f1 = v => (Math.round(v * 10) / 10).toString();
+function linfit(xs, ys){ const n = xs.length, mx = xs.reduce((a, b) => a + b, 0) / n, my = ys.reduce((a, b) => a + b, 0) / n; let sxy = 0, sxx = 0; xs.forEach((x, i) => { sxy += (x - mx) * (ys[i] - my); sxx += (x - mx) ** 2; }); if(!sxx) return null; const a = sxy / sxx; return { a, b: my - a * mx }; }
+function groupBy(rows, keyf){ const m = new Map(); rows.forEach(r => { const k = keyf(r); if(!m.has(k)) m.set(k, []); m.get(k).push(r); }); return m; }
+function increasing(pairs){ pairs = pairs.slice().sort((a, b) => a[0] - b[0]); for(let i = 1; i < pairs.length; i++) if(pairs[i][1] <= pairs[i - 1][1]) return false; return pairs.length >= 2; }
+
+const WHY = {
+  straw: {
+    why(r){
+      const b = Object.values(STRAW_BALLS).find(x => x.label === r.ball) || STRAW_BALLS.styro;
+      const A = Math.PI * (b.d / 2) ** 2, vneed = Math.sqrt(b.m * G / (0.5 * RHO_AIR * b.cd * A)), g = (b.m * 1000).toFixed(2);
+      const JK = RHO_AIR * Math.PI * 0.003 ** 2, jg = JK * r.v0 * r.v0 / G * 1000, vmin = Math.sqrt(b.m * G / (0.9 * JK));
+      if(r.h != null){
+        const steps = [
+          `빨대에서 나온 바람(${r.v0} m/s)은 위로 올라갈수록 옆으로 퍼지면서 느려져요. 빨대 끝 3.6 cm까지는 거의 그대로이고, 그보다 멀어지면 거리에 반비례해서 약해져요.`,
+          `바람은 공 아래쪽에 부딪혀 그곳의 압력을 높이고, 그 힘으로 공을 밀어 올려요. ${b.label}(${g} g)을 받치려면 공에 닿는 바람이 약 ${vneed.toFixed(1)} m/s는 되어야 해요.`,
+          `바람이 ${r.v0} m/s에서 ${vneed.toFixed(1)} m/s로 약해지는 곳이 약 ${r.h} cm 높이예요. 공이 그보다 내려오면 바람이 세서 다시 밀려 올라가고, 더 올라가면 바람이 약해서 다시 내려와요. 그래서 그 높이에 멈춰요.`
+        ];
+        steps.push(r.tilt > 0
+          ? `빨대를 ${r.tilt}° 기울여도 떠 있는 건 ‘가운데로 당기는 힘’ 덕분이에요. 공이 바람 기둥 밖으로 밀리면 기둥 쪽 공기가 더 빠르게 흘러 압력이 낮아지고, 반대쪽의 높은 압력이 공을 다시 밀어 넣어요.`
+          : '공이 옆으로 살짝 밀려도 돌아오는 건, 바람 기둥 쪽 공기가 더 빠르게 흘러 압력이 낮아지고 반대쪽의 높은 압력이 공을 가운데로 밀어 주기 때문이에요.');
+        return { sum: `바람이 미는 힘과 공의 무게가 같아지는 높이(${r.h} cm)에서 공이 멈췄어요.`, steps };
+      }
+      if(r.state === '안 뜸') return { sum: `바람이 ${b.label}의 무게를 이기지 못했어요.`, steps: [
+        `빨대 구멍(지름 6 mm)에서 ${r.v0} m/s로 나오는 바람이 낼 수 있는 힘은 모두 합쳐도 약 ${jg.toFixed(2)} g 무게예요.`,
+        `${b.label}은 ${g} g이라서 바람이 전부 공에 닿아도 들어 올리지 못해요. 이 공은 적어도 약 ${vmin.toFixed(0)} m/s로 불어야 떠요.`,
+        '바람이 미는 힘은 바람 속도의 제곱에 비례해요. 바람을 2배로 세게 불면 힘은 4배가 돼요.' ] };
+      return { sum: '공이 바람 기둥에서 벗어나 떨어졌어요.', steps: [
+        r.tilt > 0 ? `빨대를 ${r.tilt}° 기울이면 공의 무게 일부가 공을 바람 기둥 밖으로 끌어내는 쪽으로 작용해요.` : '공이 바람 기둥 밖으로 밀려났어요.',
+        '가운데로 당기는 힘(압력 차이)은 공이 바람 기둥 가까이에 있을 때만 생겨요. 무게가 옆으로 끄는 힘이 이 힘보다 커지면 공은 붙잡히지 못하고 떨어져요.',
+        '시뮬레이터에서는 20~25°쯤이 한계예요. 바람을 세게 해도 한계 각도는 크게 늘지 않아요.' ] };
+    },
+    pattern(rows){
+      const out = [], ok = rows.filter(r => r.h != null);
+      groupBy(ok, r => r.ball + '|' + r.tilt).forEach((g, key) => {
+        const vs = [...new Set(g.map(r => r.v0))]; if(vs.length < 2) return;
+        const k = g.reduce((s, r) => s + r.h / r.v0, 0) / g.length;
+        out.push({ head: `${key.split('|')[0]}: 바람 세기와 높이가 거의 비례해요 (높이 ≈ 바람 세기 × ${k.toFixed(2)})`, body: '공이 멈추는 곳은 늘 ‘공에 닿는 바람 속도’가 같은 곳이에요. 바람은 거리에 반비례해서 약해지니, 처음 바람을 2배로 하면 그 속도가 되는 곳도 2배 멀어져요.' });
+      });
+      const sameV = groupBy(ok, r => r.v0 + '|' + r.tilt);
+      for(const [key, g] of sameV){ const balls = [...new Set(g.map(r => r.ball))]; if(balls.length >= 2){ const srt = g.slice().sort((a, b) => b.h - a.h); out.push({ head: `같은 바람(${key.split('|')[0]} m/s)에서 ${srt.map(r => `${r.ball} ${r.h}cm`).join(', ')}`, body: '무거운 공일수록 더 센 바람이 있어야 무게를 받칠 수 있어서, 바람이 센 빨대 가까이(낮은 곳)에서 멈춰요.' }); break; } }
+      const tiltG = groupBy(rows, r => r.ball + '|' + r.v0);
+      for(const [, g] of tiltG){ const ts = [...new Set(g.map(r => r.tilt))]; if(ts.length >= 2){ const fl = g.filter(r => r.h == null && r.tilt > 0).map(r => r.tilt), up = g.filter(r => r.h != null).map(r => r.tilt); if(fl.length && up.length){ out.push({ head: `${Math.max(...up)}°까지는 떠 있고 ${Math.min(...fl)}°에서는 떨어졌어요`, body: '기울일수록 무게가 공을 옆으로 끄는 힘이 커져요. 가운데로 당기는 힘의 최대치를 넘으면 떨어져요.' }); break; } } }
+      return out;
+    },
+    answer: { correct: '더 높이 뜬다', ready: rows => { for(const [, g] of groupBy(rows.filter(r => r.h != null), r => r.ball + '|' + r.tilt)) if(new Set(g.map(r => r.v0)).size >= 2) return true; return false; } }
+  },
+
+  cup: {
+    why(r){
+      const f = r.fill / 100, hw = f * 10, ha = (1 - f) * 10, w = (0.28 * f).toFixed(2);
+      const base = '바깥 공기는 종이를 아래에서 위로 약 1013 hPa의 압력으로 눌러요. 컵 입구(지름 7 cm) 넓이에 걸리는 힘은 약 39 kg 무게예요.';
+      const mesh = r.cover === '양파망(그물)';
+      if(r.result === '버팀'){
+        const steps = [base];
+        if(r.pin == null) steps.push(`물이 가득 차서 컵 안에 공기가 없어요. 안에서 종이를 누르는 것은 물 무게(약 ${w} kg)뿐이라 바깥 공기의 힘이 훨씬 커요. 물은 거의 줄어들지 않으니 종이도 처지지 않아요.`);
+        else {
+          const diff = (P0 / 100 - r.pin).toFixed(1);
+          steps.push(`컵 안에는 물 ${f1(hw)} cm와 공기 ${f1(ha)} cm가 있어요. 물 무게 때문에 종이가 ${r.sag} mm 아주 조금 처지면, 안쪽 공기가 차지하는 공간이 살짝 넓어져 압력이 ${r.pin} hPa로 ${diff} hPa 낮아져요.`);
+          steps.push(`바깥(1013.3 hPa)과 안쪽 공기(${r.pin} hPa)의 압력 차이 ${diff} hPa가 물기둥 ${f1(hw)} cm의 무게를 딱 받쳐 줘서 균형이 맞아요.`);
+        }
+        steps.push(mesh ? '그물 구멍마다 얇은 물 막이 생겨요(표면장력). 이 막이 공기가 들어오는 것을 막아 줘요.' : '종이와 컵 가장자리 사이의 틈은 물이 막아 줘서 공기가 새어 들어오지 못해요.');
+        if(r.tilt > 0 && !mesh) steps.push(`공기는 모든 방향에서 똑같이 누르기 때문에 ${r.tilt}° 기울여도 버텨요.`);
+        return { sum: '바깥 공기가 미는 힘이 컵 안쪽에서 누르는 힘보다 커서 물이 쏟아지지 않았어요.', steps };
+      }
+      const causes = {
+        '구멍 뚫린 종이': ['구멍으로 바깥 공기가 컵 안으로 들어갔어요.', '안쪽 압력이 바깥 압력과 같아져서 압력 차이가 사라졌어요.', '종이를 받쳐 주던 힘이 없어지니 물 무게만 남아 쏟아졌어요.'],
+        '얇은 휴지': ['처음에는 압력 차이가 물을 받쳐 줬어요.', '하지만 휴지가 물을 먹고 약해져 찢어졌고, 그 틈으로 공기가 들어갔어요.', '압력 차이가 있어도 덮개가 버티지 못하면 물이 쏟아져요.'],
+        '양파망(그물)': ['그물 구멍마다 생긴 얇은 물 막(표면장력)이 공기를 막고 있었어요.', `그물을 ${r.tilt}° 기울이자 물 막이 깨지면서 공기가 들어갔어요.`, '공기가 들어오면 압력 차이가 사라져 물이 쏟아져요.'],
+        '두꺼운 종이': ['압력 차이는 계속 물을 받쳐 주고 있었어요.', '하지만 오래 지나자 종이가 물을 먹어 흐물흐물해졌어요.', '종이가 늘어지며 틈이 생기자 공기가 들어가 쏟아졌어요.']
+      };
+      const steps = r.fill < 3
+        ? ['컵에 물이 거의 없어서 종이와 컵 사이 틈을 막아 줄 물이 없어요.', '공기가 자유롭게 드나드니 안팎의 압력이 같아요.', '압력 차이가 없으니 종이는 자기 무게 때문에 떨어져요. 물은 ‘마개’ 역할도 하고 있었던 거예요.']
+        : (causes[r.cover] || ['공기가 컵 안으로 들어가 압력 차이가 사라졌어요.']);
+      return { sum: '컵 안으로 공기가 들어가 안팎의 압력 차이가 사라지자 물이 쏟아졌어요.', steps: [base].concat(steps) };
+    },
+    pattern(rows){
+      const out = [];
+      groupBy(rows.filter(r => r.result === '버팀' && isNum(r.sag) && r.tilt === 0), r => r.cover).forEach((g, cover) => {
+        const fills = [...new Set(g.map(r => r.fill))]; if(fills.length < 3) return;
+        const mx = g.reduce((a, b) => b.sag > a.sag ? b : a);
+        out.push({ head: `${cover}: 종이 처짐은 물이 ${mx.fill}%일 때 가장 컸어요 (${mx.sag} mm)`, body: '처짐은 ‘물 높이 × 공기 높이’에 비례해요. 물이 많으면 받칠 무게는 크지만 공기가 적어서 조금만 늘어나도 압력이 많이 떨어지고, 물이 적으면 받칠 무게가 작아요. 그래서 가득 찼을 때와 거의 없을 때 모두 처짐이 작아요.' });
+      });
+      const covers = groupBy(rows.filter(r => r.fill >= 3), r => r.cover);
+      if(covers.size >= 2){
+        const held = [], fell = [];
+        covers.forEach((g, c) => (g.some(r => r.result === '버팀') ? held : fell).push(c));
+        if(held.length && fell.length) out.push({ head: `버틴 덮개: ${held.join(', ')} · 쏟아진 덮개: ${fell.join(', ')}`, body: '공기가 들어갈 길(구멍, 찢어진 틈, 깨진 물 막)이 생기면 실패했어요. 물을 받친 것이 종이의 접착력이 아니라 공기의 압력이라는 증거예요.' });
+      }
+      return out;
+    },
+    answer: { correct: '가득 찼을 때처럼 버틴다', ready: rows => rows.some(r => r.fill >= 30 && r.fill <= 70 && (r.cover === '두꺼운 종이' || r.cover === '플라스틱 판') && r.tilt === 0) }
+  },
+
+  candle: {
+    why(r){
+      if(r.heat !== '보통') return { sum: `공기가 데워지지 않으면 물은 ${r.rise}%밖에 올라오지 않아요.`, steps: [
+        `촛불이 ${r.burn}초 동안 타면서 산소를 써서 이산화탄소와 수증기를 만들었어요.`,
+        '산소 알갱이 3개가 쓰일 때 이산화탄소 알갱이 2개가 생겨요. 그래서 기체가 줄어드는 양은 쓰인 산소의 1/3쯤뿐이에요. 수증기는 식으면서 물방울이 돼요.',
+        '게다가 불은 산소가 약 16%만 남아도 꺼져요. 그래서 산소 때문에 줄어드는 공기는 전체의 1~2%뿐이에요.',
+        '‘가상 실험’을 끄고 같은 조건으로 비교해 보세요. 물이 많이 올라오는 진짜 원인을 알 수 있어요.' ] };
+      const Tk = r.Tmax + 273.15, esc = (1 - T0 / Tk) * 100, expand = (Tk / T0 - 1) * 100, heat = Math.min(r.rise, esc), chem = Math.max(0, r.rise - esc);
+      return { sum: `데워졌던 공기가 일부 빠져나간 뒤 식어서 줄어들었고, 그 빈자리로 물이 ${r.rise}% 올라왔어요.`, steps: [
+        `컵을 덮자 초 ${r.N}개가 컵 속 공기를 ${r.Tmax}°C까지 데웠어요. 공기는 20°C일 때보다 부피가 ${expand.toFixed(0)}% 늘어나려고 했어요.`,
+        `컵 안에는 더 늘어날 자리가 없으니, 늘어난 공기가 컵 입구 아래로 보글보글 빠져나갔어요. 컵 속 공기의 약 ${esc.toFixed(0)}%가 나갔어요.`,
+        `산소가 약 16%까지 줄자 ${r.burn}초 만에 불이 꺼졌어요. 산소가 0%가 된 게 아니에요.`,
+        `불이 꺼지고 남은 공기가 다시 20°C로 식으면서 부피가 줄었어요. 줄어든 만큼 바깥 대기압이 접시의 물을 컵 안으로 밀어 넣어 ${r.riseMl} mL가 올라왔어요.`,
+        `올라온 물 ${r.rise}% 가운데 약 ${heat.toFixed(0)}%는 빠져나간 공기 때문이고, 산소가 쓰여서 줄어든 몫은 ${chem.toFixed(1)}%쯤이에요.` ] };
+    },
+    pattern(rows){
+      const out = [], normal = rows.filter(r => r.heat === '보통');
+      groupBy(normal, r => r.Vml).forEach((g, V) => {
+        const byN = [...groupBy(g, r => r.N).values()].map(x => x[x.length - 1]).sort((a, b) => a.N - b.N); if(byN.length < 2) return;
+        const a = byN[0], z = byN[byN.length - 1];
+        if(z.rise > a.rise) out.push({ head: `컵 ${V} mL: 초가 많을수록 물이 더 올라와요 (${byN.map(r => `${r.N}개 ${r.rise}%`).join(' → ')})`, body: `컵 속 산소의 양은 똑같은데 결과가 달라요. 초가 많으면 공기가 더 뜨거워져(${a.Tmax}°C → ${z.Tmax}°C) 더 많이 빠져나가기 때문이에요. 산소만이 원인이라면 초 개수와 상관없이 비슷해야 해요.` });
+        if(z.burn < a.burn) out.push({ head: `초가 많을수록 불이 빨리 꺼져요 (${a.burn}초 → ${z.burn}초)`, body: '여러 개가 함께 산소를 쓰니 불이 꺼지는 산소 농도(약 16%)에 더 빨리 닿아요.' });
+      });
+      const virt = rows.filter(r => r.heat !== '보통');
+      if(virt.length && normal.length){ const v = virt[virt.length - 1], n = normal.find(r => r.N === v.N && r.Vml === v.Vml) || normal[0]; out.push({ head: `데우는 효과를 빼면 ${n.rise}% → ${v.rise}%`, body: '공기가 데워졌다 식는 효과가 물이 올라오는 가장 큰 원인이라는 것을 보여 줘요.' }); }
+      return out;
+    },
+    answer: { correct: '더 많이 올라온다', ready: rows => { for(const [, g] of groupBy(rows.filter(r => r.heat === '보통'), r => r.Vml)) if(new Set(g.map(r => r.N)).size >= 2) return true; return false; } }
+  },
+
+  syringe: {
+    why(r){
+      const ratio = 30 / r.V, F = (r.P * 1000 - P0) * Math.PI * 0.0115 ** 2 / G;
+      const steps = [
+        '마개로 막혀 있어서 주사기 속 공기 알갱이 수는 처음(30 mL일 때)과 똑같아요. 온도도 그대로예요.',
+        r.V < 30 ? `피스톤을 밀어 공간을 ${r.V} mL로 좁히면, 같은 수의 알갱이가 좁은 곳에서 움직이니 벽에 부딪히는 횟수가 ${ratio.toFixed(2)}배로 늘어요.`
+          : r.V > 30 ? `피스톤을 당겨 공간을 ${r.V} mL로 넓히면, 알갱이들이 넓게 퍼져서 벽에 부딪히는 횟수가 ${ratio.toFixed(2)}배로 줄어요.`
+          : '피스톤이 처음 자리에 있어서 안쪽 공기는 바깥 공기와 같은 압력이에요.',
+        r.V === 30 ? `알갱이가 벽을 미는 것이 압력이에요. 지금 압력 × 부피 = ${r.PV}이에요. 피스톤을 움직여도 이 값이 그대로인지 확인해 봐요(보일 법칙).` : `알갱이가 벽을 미는 것이 압력이니, 압력도 101.3 kPa에서 ${r.P} kPa로 ${ratio.toFixed(2)}배가 됐어요. 압력 × 부피 = ${r.PV}로 처음과 같아요(보일 법칙).`
+      ];
+      if(F > 0.1) steps.push(`안쪽 압력이 바깥 공기보다 ${(r.P - 101.3).toFixed(1)} kPa 높아서, 피스톤을 약 ${F.toFixed(1)} kg 무게의 힘으로 계속 밀고 있어야 해요. 손을 놓으면 피스톤이 튕겨 나와요.`);
+      if(F < -0.1) steps.push(`안쪽 압력이 바깥 공기보다 ${(101.3 - r.P).toFixed(1)} kPa 낮아서, 피스톤을 약 ${(-F).toFixed(1)} kg 무게의 힘으로 계속 당기고 있어야 해요. 손을 놓으면 바깥 공기가 피스톤을 밀어 넣어요.`);
+      return { sum: r.V === 30 ? '처음 상태 그대로라 압력은 바깥 공기와 같아요.' : `부피가 처음의 ${(r.V / 30).toFixed(2)}배가 되자 압력은 ${ratio.toFixed(2)}배가 됐어요.`, steps };
+    },
+    pattern(rows){
+      if(new Set(rows.map(r => r.V)).size < 2) return [];
+      const pv = rows.map(r => r.PV), mn = Math.min(...pv), mx = Math.max(...pv);
+      if((mx - mn) / mx > 0.03) return [];
+      return [{ head: `압력 × 부피가 늘 같아요 (약 ${Math.round((mn + mx) / 2)})`, body: '부피를 1/2로 하면 압력은 2배, 부피를 2배로 하면 압력은 1/2배가 돼요. 이런 관계를 반비례라고 해요. 부피-압력 그래프는 곡선이고, 가로축을 1/부피로 바꾸면 원점을 지나는 직선이 돼요.' }];
+    },
+    answer: { correct: '2배가 된다', ready: rows => new Set(rows.map(r => r.V)).size >= 2 }
+  },
+
+  balloon: {
+    why(r){
+      const d = r.Tg - 20, steps = [
+        d >= 0 ? `병 속 공기가 ${r.Tw}°C 물에서 열을 받아 ${r.Tg}°C가 됐어요.` : `병 속 공기가 ${r.Tw}°C 물에 열을 빼앗겨 ${r.Tg}°C가 됐어요.`,
+        d >= 0 ? '데워진 공기 알갱이는 더 빠르게 움직이며 병 벽과 풍선을 더 세게, 더 자주 밀어요. 풍선은 늘어날 수 있으니 공기가 차지하는 공간이 넓어져요.'
+               : '식은 공기 알갱이는 느려져서 안쪽에서 미는 힘이 약해져요. 바깥 공기가 미는 힘이 더 세서 공기가 차지하는 공간이 줄어요.',
+        `20°C에서 500 mL였던 공기는 1°C마다 약 1.7 mL(500 ÷ 293)씩 변해요. ${Math.abs(d).toFixed(1)}°C × 1.7 ≈ ${Math.abs(r.Vb).toFixed(1)} mL만큼 ${d >= 0 ? '늘었어요' : '줄었어요'}.`
+      ];
+      if(r.Vb < -1) steps.push('공기가 줄어든 만큼 생긴 빈자리로 바깥 대기압이 풍선을 밀어 넣어서, 풍선이 병 속으로 뒤집혀 들어갔어요.');
+      if(r.Vb > 1) steps.push('늘어난 공기가 갈 곳은 풍선뿐이라 풍선이 부풀었어요. 병을 거꾸로 넣어도 똑같이 부풀어요.');
+      return { sum: d > 0.5 ? `공기가 데워져 부피가 ${r.Vb} mL 늘어나서 풍선이 부풀었어요.` : d < -0.5 ? `공기가 식어 부피가 ${(-r.Vb).toFixed(1)} mL 줄어들어서 풍선이 병 안으로 빨려 들어갔어요.` : '공기 온도가 처음(20°C)과 같아서 풍선은 그대로예요.', steps };
+    },
+    pattern(rows){
+      if(new Set(rows.map(r => r.Tg)).size < 2) return [];
+      const fit = linfit(rows.map(r => r.Tg), rows.map(r => r.V)); if(!fit || !fit.a) return [];
+      return [{ head: `온도가 1°C 오를 때마다 부피가 약 ${fit.a.toFixed(2)} mL씩 늘어요`, body: `그래프가 곧은 직선이에요. 이 선을 왼쪽으로 늘리면 약 ${(-fit.b / fit.a).toFixed(0)}°C에서 부피가 0이 돼요. 이 온도(약 −273°C)를 절대 영도라고 해요. 실제 공기는 그 전에 액체가 되지만, 과학자들은 이 규칙으로 가장 낮은 온도를 알아냈어요.` }];
+    },
+    answer: { correct: '쪼그라들어 병 안으로 빨려 들어간다', ready: rows => rows.some(r => r.Tg < 15) }
+  },
+
+  diver: {
+    why(r){
+      const buoy = 2.1 + r.Va, crit = P0 * (r.Va0 / 1.3 - 1) / 1000, steps = [];
+      if(r.dP > 0.05) steps.push(`병을 누르자 병 속 압력이 ${r.dP} kPa 높아졌어요. 물은 거의 줄어들지 않으니 이 압력이 물을 통해 스포이트 속 공기까지 그대로 전해져요(파스칼 원리).`, `눌린 공기는 ${r.Va0} mL에서 ${r.Va} mL로 줄었고, 줄어든 만큼 물이 스포이트 안으로 들어왔어요.`);
+      else steps.push(`병을 누르지 않아서 스포이트 속 공기는 ${r.Va} mL 그대로예요.`);
+      steps.push(`잠수부를 뜨게 하는 힘(부력)은 잠수부가 밀어낸 물의 무게예요. 스포이트 몸(2.1 mL)과 공기(${r.Va} mL)만큼 물을 밀어내니 약 ${buoy.toFixed(2)} g이에요. 잠수부 무게는 3.40 g이에요.`);
+      if(buoy >= 3.4) steps.push(`뜨는 힘이 무게보다 ${(buoy - 3.4).toFixed(2)} g 커서 ${r.state === '떠 있음' ? '떠 있어요' : '위로 올라가요'}.`);
+      else steps.push(`뜨는 힘이 무게보다 ${(3.4 - buoy).toFixed(2)} g 작아져서 가라앉아요.` + (r.state === '바닥' ? ' 깊이 내려갈수록 물이 누르는 압력(수압)이 더해져 공기가 더 줄어드니, 한 번 가라앉기 시작하면 바닥까지 내려가요.' : ''));
+      steps.push(r.Va0 > 1.3 ? `가라앉으려면 공기가 1.3 mL보다 작아져야 해요. 처음 공기가 ${r.Va0} mL라면 약 ${crit.toFixed(1)} kPa보다 세게 눌러야 해요${crit > 40 ? '. 손으로 누를 수 있는 40 kPa보다 커서 가라앉히기 어려워요' : ''}.` : `처음 공기가 ${r.Va0} mL로 1.3 mL보다 적어서 누르지 않아도 가라앉아요.`);
+      const sum = buoy >= 3.4 ? (r.dP > 0.05 ? '눌렀지만 공기가 아직 충분해서 뜨는 힘이 무게보다 커요.' : '스포이트 속 공기 덕분에 뜨는 힘이 무게보다 커서 떠 있어요.') : (r.dP > 0.05 ? '눌린 공기가 줄어들어 뜨는 힘이 무게보다 작아져서 가라앉았어요.' : '처음부터 공기가 적어 뜨는 힘이 무게보다 작아요.');
+      return { sum, steps };
+    },
+    pattern(rows){
+      const out = [], g = rows.filter(r => isNum(r.sinkP));
+      const by = [...groupBy(g, r => r.Va0).values()].map(x => x[x.length - 1]);
+      if(by.length >= 2){ const fit = linfit(by.map(r => r.Va0), by.map(r => r.sinkP)); if(fit && fit.a > 0) out.push({ head: `처음 공기가 많을수록 더 세게 눌러야 가라앉아요 (0.1 mL마다 약 ${(fit.a * 0.1).toFixed(1)} kPa 더)`, body: '잠수부는 공기가 1.3 mL까지 줄어야 가라앉아요. 처음 공기가 많으면 그만큼 더 많이 눌러서 줄여야 하기 때문이에요.' }); }
+      const never = rows.filter(r => r.sinkP == null && r.dP >= 39).map(r => r.Va0);
+      if(never.length) out.push({ head: `처음 공기 ${Math.min(...never)} mL 이상은 끝까지 눌러도 안 가라앉았어요`, body: '공기를 1.3 mL까지 줄이려면 손으로 누를 수 있는 것보다 큰 압력이 필요해요. 그래서 스포이트에 물을 넣어 “겨우 뜨게” 맞추는 게 중요해요.' });
+      return out;
+    },
+    answer: { correct: '줄어든다', ready: rows => rows.some(r => r.dP > 1) }
+  }
+};
+TOPICS.forEach(t => Object.assign(t, WHY[t.id]));
+
 function runFor(sim, secs, dt = 0.02){ for(let x = 0; x < secs; x += dt) sim.update(dt); }
 
 /* ================= storage ================= */
@@ -1158,7 +1389,7 @@ const store = {
 
 /* ================= app ================= */
 const cv = $('#sim'), ctx = cv.getContext('2d'), gcv = $('#graph'), gctx = gcv.getContext('2d');
-let cur = { t: null, sim: null, P: null, data: null }, W = 600, H = 420, GW = 400, GH = 260;
+let cur = { t: null, sim: null, P: null, data: null, whySel: 'live' }, W = 600, H = 420, GW = 400, GH = 260;
 const api = { setParam };
 
 function topicOf(id){ return TOPICS.find(t => t.id === id) || TOPICS[1]; }
@@ -1182,9 +1413,10 @@ function select(id){
   cur.t = t; cur.P = {}; t.params.forEach(p => cur.P[p.id] = p.value);
   cur.sim = t.create(cur.P, api);
   cur.data = Object.assign({ rows: [], predict: '', reason: '', explain: '', learned: '' }, store.get(t.id) || {});
+  cur.whySel = cur.data.rows.length ? cur.data.rows.length - 1 : 'live';
   renderNav();
   $('#t-concept').textContent = t.concept; $('#t-title').textContent = t.title; $('#t-question').innerHTML = t.question;
-  renderPredict(); renderActions(); renderControls(); renderVars(); buildReadouts(); renderTable(); setupGraph(); renderDiaryInputs(); renderDiary(); renderGuide();
+  renderPredict(); renderActions(); renderControls(); renderVars(); buildReadouts(); renderTable(); setupGraph(); renderDiaryInputs(); renderDiary(); renderGuide(); renderWhy();
   resize();
 }
 
@@ -1193,7 +1425,7 @@ function renderPredict(){
   const box = $('#p-choices'); box.innerHTML = '';
   t.predict.choices.forEach(c => {
     const b = el('button', 'chip', c); b.type = 'button'; b.setAttribute('aria-pressed', String(cur.data.predict === c));
-    b.onclick = () => { cur.data.predict = cur.data.predict === c ? '' : c; save(); renderPredict(); renderDiary(); };
+    b.onclick = () => { cur.data.predict = cur.data.predict === c ? '' : c; save(); renderPredict(); renderDiary(); renderWhy(); };
     box.append(b);
   });
   const r = $('#p-reason'); r.value = cur.data.reason || '';
@@ -1260,8 +1492,8 @@ function updateReadouts(){
 function record(){
   const m = cur.sim.measure(); if(!m) return;
   if(m.error){ toast(m.error); return; }
-  cur.data.rows.push(Object.assign({}, m, { auto: false }));
-  save(); renderTable(); drawGraph(); renderDiary(); toast(`기록했어요 (${cur.data.rows.length}번째)`);
+  cur.data.rows.push(Object.assign({}, m, { auto: false })); cur.whySel = cur.data.rows.length - 1;
+  save(); renderTable(); drawGraph(); renderDiary(); renderWhy(); toast(`기록했어요 (${cur.data.rows.length}번째)`);
 }
 function autoSweep(){
   const t = cur.t; if(!t.sweep) return;
@@ -1272,7 +1504,8 @@ function autoSweep(){
     t.sweep.run(s, P2);
     const m = s.measure(); if(m && !m.error){ cur.data.rows.push(Object.assign({}, m, { auto: true })); n++; }
   }
-  save(); renderTable(); drawGraph(); renderDiary(); toast(`예시 기록 ${n}개를 추가했어요. ‘예시’ 표시가 붙어요.`);
+  if(n) cur.whySel = cur.data.rows.length - 1;
+  save(); renderTable(); drawGraph(); renderDiary(); renderWhy(); toast(`예시 기록 ${n}개를 추가했어요. ‘예시’ 표시가 붙어요.`);
 }
 function fmtCell(c, v){
   if(v == null || v === '') return '—';
@@ -1292,7 +1525,11 @@ function renderTable(){
     if(r.auto){ td0.append(el('span', 'ex', '예시')); } td0.append(document.createTextNode(String(i + 1))); tr.append(td0);
     cols.forEach(c => tr.append(el('td', c.cat || c.txt ? 'txt' : '', fmtCell(c, r[c.k]))));
     const tdd = el('td'), del = el('button', 'del', '×'); del.type = 'button'; del.setAttribute('aria-label', `${i + 1}번 기록 지우기`);
-    del.onclick = () => { cur.data.rows.splice(i, 1); save(); renderTable(); drawGraph(); renderDiary(); };
+    del.onclick = e => { e.stopPropagation(); cur.data.rows.splice(i, 1); if(cur.whySel === i) cur.whySel = 'live'; else if(cur.whySel !== 'live' && cur.whySel > i) cur.whySel--; save(); renderTable(); drawGraph(); renderDiary(); renderWhy(); };
+    if(cur.whySel === i) tr.classList.add('sel');
+    tr.tabIndex = 0; tr.title = '이 기록의 풀이 보기';
+    tr.onclick = () => { cur.whySel = i; renderTable(); renderWhy(); };
+    tr.onkeydown = e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); tr.onclick(); } };
     tdd.append(del); tr.append(tdd); body.append(tr);
   });
   tb.append(body); box.append(tb);
@@ -1412,6 +1649,49 @@ $('#btn-copy').onclick = () => {
   try{ navigator.clipboard.writeText(text).then(() => { pl.hidden = true; toast('일기 초안을 복사했어요'); }, fallback); }catch(e){ fallback(); }
 };
 
+/* ---------- why ---------- */
+function currentWhy(){
+  if(cur.whySel !== 'live'){
+    const r = cur.data.rows[cur.whySel];
+    if(r) return Object.assign({ ctx: `기록 #${cur.whySel + 1}: ${cur.t.rowText(r)}` }, cur.t.why(r));
+    cur.whySel = 'live';
+  }
+  const m = cur.sim.measure();
+  if(!m || m.error) return { ctx: '지금 실험', sum: (m && m.error ? m.error + ' ' : '') + '결과가 나오면 원인을 풀이해 줄게요.', steps: [], idle: true };
+  return Object.assign({ ctx: `지금 실험: ${cur.t.rowText(m)}` }, cur.t.why(m));
+}
+let whyKey = '';
+function renderWhy(force = true){
+  const w = currentWhy(), key = JSON.stringify([cur.t.id, cur.whySel, w.ctx, w.sum, w.steps]);
+  if(!force && key === whyKey) return; whyKey = key;
+  const src = $('#why-src'); src.innerHTML = '';
+  const mk = (label, sel, fn) => { const b = el('button', '', label); b.type = 'button'; b.setAttribute('aria-pressed', String(sel)); b.onclick = fn; src.append(b); };
+  mk('지금 실험', cur.whySel === 'live', () => { cur.whySel = 'live'; renderTable(); renderWhy(); });
+  if(cur.data.rows.length) mk(cur.whySel === 'live' ? '기록 고르기 (표에서 줄을 눌러요)' : `기록 #${cur.whySel + 1}`, cur.whySel !== 'live', () => { if(cur.whySel === 'live'){ cur.whySel = cur.data.rows.length - 1; renderTable(); renderWhy(); } });
+  $('#why-ctx').textContent = w.ctx;
+  const sum = $('#why-sum'); sum.textContent = w.sum; sum.classList.toggle('idle', !!w.idle);
+  const ol = $('#why-steps'); ol.innerHTML = ''; w.steps.forEach(s => ol.append(el('li', '', s)));
+  $('#btn-why-diary').disabled = !!w.idle;
+  // patterns
+  const rows = cur.data.rows, pats = rows.length ? cur.t.pattern(rows) : [], pb = $('#why-pattern'); pb.innerHTML = '';
+  if(pats.length) pats.forEach(p => { const d = el('div', 'pat'); d.append(el('b', '', p.head), el('span', '', p.body)); pb.append(d); });
+  else pb.append(el('p', 'why-ctx', rows.length < 2 ? '조건을 하나만 바꿔 가며 2개 이상 기록하면, 기록 사이의 규칙을 풀이해 줘요.' : '아직 뚜렷한 규칙이 안 보여요. 바꾸는 조건을 하나로 정하고, 나머지는 같게 해서 더 기록해 봐요.'));
+  const pr = $('#why-pred'), a = cur.t.answer, mine = cur.data.predict;
+  pr.classList.remove('ok');
+  if(!mine) pr.textContent = '예상하기에서 보기를 고르면, 기록과 비교해 줄게요.';
+  else if(!a.ready(rows)) pr.textContent = `내 예상: “${mine}”. 기록이 더 쌓이면 맞았는지 알려 줄게요.`;
+  else if(mine === a.correct){ pr.textContent = `내 예상 “${mine}” → 기록과 맞았어요! 왼쪽 풀이로 왜 그런지 확인해 봐요.`; pr.classList.add('ok'); }
+  else pr.textContent = `내 예상 “${mine}” → 기록에서는 “${a.correct}”로 나왔어요. 왜 다른지 풀이를 읽고 생각해 봐요.`;
+}
+$('#btn-why-diary').onclick = () => {
+  const w = currentWhy(); if(w.idle) return;
+  const pats = cur.data.rows.length ? cur.t.pattern(cur.data.rows) : [];
+  const text = [w.sum].concat(w.steps).join(' ') + (pats.length ? ' ' + pats.map(p => p.head + '.').join(' ') : '');
+  const ex = $('#w-explain'); ex.value = ex.value.trim() ? ex.value.trim() + '\n' + text : text;
+  cur.data.explain = ex.value; save(); renderDiary();
+  toast('설명 칸에 옮겼어요. 아이 말로 짧게 고쳐 써 보세요.');
+};
+
 /* ---------- guide ---------- */
 function renderGuide(){
   const n = cur.t.notes, box = $('#guide-body'); box.innerHTML = '';
@@ -1434,10 +1714,11 @@ function resize(){
   gcv.width = Math.round(GW * dpr); gcv.height = Math.round(GH * dpr); gcv.style.height = GH + 'px'; gctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   drawGraph();
 }
-let last = 0, lastRO = 0;
+let last = 0, lastRO = 0, lastWhy = 0;
 function frame(ts){
   const dt = Math.min(0.05, last ? (ts - last) / 1000 : 0.016); last = ts;
-  if(cur.sim){ cur.sim.update(dt); cur.sim.draw(ctx, W, H); if(ts - lastRO > 120){ lastRO = ts; updateReadouts(); } }
+  if(cur.sim){ cur.sim.update(dt); cur.sim.draw(ctx, W, H); if(ts - lastRO > 120){ lastRO = ts; updateReadouts(); }
+    if(cur.whySel === 'live' && ts - lastWhy > 500){ lastWhy = ts; renderWhy(false); } }
   requestAnimationFrame(frame);
 }
 function canvasPt(e){ const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
@@ -1451,7 +1732,7 @@ $('#btn-clear').onclick = () => {
   const b = $('#btn-clear');
   if(!cur.data.rows.length){ toast('지울 기록이 없어요'); return; }
   if(Date.now() - clearArm > 3000){ clearArm = Date.now(); b.textContent = '한 번 더 누르면 지워요'; setTimeout(() => b.textContent = '기록 모두 지우기', 3000); return; }
-  cur.data.rows = []; save(); renderTable(); drawGraph(); renderDiary(); b.textContent = '기록 모두 지우기'; clearArm = 0; toast('기록을 모두 지웠어요');
+  cur.data.rows = []; cur.whySel = 'live'; save(); renderTable(); drawGraph(); renderDiary(); renderWhy(); b.textContent = '기록 모두 지우기'; clearArm = 0; toast('기록을 모두 지웠어요');
 };
 
 readColors();
